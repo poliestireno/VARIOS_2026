@@ -1,0 +1,655 @@
+<title>Primeros componentes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #E4572E;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #FF8A5C;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #F2764C;
+      --accent-ink: #17110D;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #F2764C;
+    --accent-ink: #17110D;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top {
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.08rem;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  section.block {
+    margin-top: 44px;
+  }
+
+  h2.block-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+
+  .checklist {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow);
+  }
+
+  .checklist li {
+    list-style: none;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 15px;
+  }
+
+  .checklist ul { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+
+  .checklist svg {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    color: var(--accent-2);
+  }
+
+  .learn-list {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .learn-list li {
+    list-style: none;
+    padding-left: 20px;
+    position: relative;
+    color: var(--ink);
+  }
+
+  .learn-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  p { margin: 0 0 14px; }
+  p:last-child { margin-bottom: 0; }
+
+  .prose p { margin: 0 0 14px; }
+
+  .step {
+    display: flex;
+    gap: 18px;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .step:first-of-type { border-top: none; padding-top: 0; }
+
+  .step-chip {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-body { flex: 1; min-width: 0; }
+
+  .step h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 4px 0 8px;
+  }
+
+  .step p {
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+
+  .step p.small {
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+
+  .term {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+
+  .term-bar span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--code-line);
+  }
+
+  .term pre {
+    margin: 0;
+    padding: 14px 16px 16px;
+    overflow-x: auto;
+  }
+
+  .term code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13.6px;
+    line-height: 1.7;
+    color: var(--code-ink);
+  }
+
+  .term .prompt { color: var(--code-muted); }
+  .term .cmt { color: var(--code-muted); }
+  .term .hl { color: var(--code-accent); }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .code-panel .term-bar { }
+
+  .code-panel pre {
+    margin: 0;
+    padding: 16px 18px 18px;
+    overflow-x: auto;
+  }
+
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+
+  .code-panel .tag { color: var(--accent-2); }
+  .code-panel .str { color: #C9D96B; }
+  .code-panel .kw { color: var(--code-accent); }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .prop { color: #8FB8FF; }
+  .code-panel .hl { color: var(--code-accent); }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+
+  .checkpoint p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .substep {
+    display: flex;
+    gap: 14px;
+    margin: 18px 0 0 16px;
+    padding-left: 16px;
+    border-left: 2px solid var(--line-soft);
+  }
+
+  .substep-chip {
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: var(--line-soft);
+    color: var(--muted);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 11.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .substep h4 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.98rem;
+    font-weight: 600;
+    margin: 2px 0 6px;
+  }
+
+  .substep p {
+    margin: 0 0 8px;
+    font-size: 14.5px;
+    color: var(--ink);
+  }
+
+  .substep .code-panel, .substep .term {
+    margin: 10px 0;
+  }
+
+  details.full-code {
+    margin-top: 16px;
+  }
+
+  details.full-code summary {
+    cursor: pointer;
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--accent-2);
+    list-style: none;
+  }
+
+  details.full-code summary::-webkit-details-marker { display: none; }
+
+  details.full-code summary::before {
+    content: "▸ ";
+  }
+
+  details.full-code[open] summary::before {
+    content: "▾ ";
+  }
+
+  .trouble {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .trouble-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .trouble-item .q {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    margin: 0 0 6px;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .trouble-item .q::before {
+    content: "?";
+    font-family: "IBM Plex Mono", monospace;
+    color: var(--accent-2);
+    font-weight: 500;
+  }
+
+  .trouble-item p {
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--muted);
+  }
+
+  .trouble-item p + p { margin-top: 8px; }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .step { transition: none; }
+  }
+</style>
+
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">Sesión 5 de 24 &middot; Bloque 2: React</span>
+    <h1>Primeros componentes</h1>
+    <p class="lede">La idea central de React: la interfaz no se dibuja a mano, se calcula a partir de los datos. Hoy escribes tus primeros componentes y aprendes a leerlos como lo hace React.</p>
+    <div class="meta-row">
+      <span class="meta-chip">2 horas</span>
+      <span class="meta-chip">Sesión 5/24</span>
+      <span class="meta-chip">JSX + componentes</span>
+    </div>
+  </header>
+
+  <section class="block prose">
+    <p>Hasta ahora, para cambiar algo en una página has manipulado el DOM a mano: <code class="inline">document.querySelector</code>, <code class="inline">.innerHTML</code>, <code class="inline">.appendChild</code>. Funciona, pero a partir de cierto tamaño se vuelve imposible de seguir &mdash; demasiados sitios donde el HTML puede quedar desincronizado con los datos.</p>
+    <p>React cambia la pregunta. En vez de describir <em>los pasos</em> para modificar la pantalla, describes <em>cómo debería verse</em> para unos datos concretos, y es React quien decide qué tocar del DOM real. Todo lo de hoy es React normal, corriendo en el navegador, sin nada especial de móvil &mdash; ese salto llega más adelante, en el siguiente bloque. Por ahora, es HTML, JavaScript y una forma distinta de pensar la interfaz.</p>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Qué vas a aprender</h2>
+    <ul class="learn-list">
+      <li>Qué es JSX y en qué se diferencia de verdad de escribir HTML.</li>
+      <li>Cómo crear un componente funcional y cómo le llegan datos desde fuera (props).</li>
+      <li>Cómo convertir un array de datos en una lista de componentes en pantalla, y por qué React exige la prop <code class="inline">key</code>.</li>
+    </ul>
+  </section>
+
+  <section class="block prose">
+    <h2 class="block-title">JSX: por qué no es HTML</h2>
+    <p>JSX se parece a HTML pero es JavaScript puro por debajo: cada etiqueta se convierte en una llamada a función que crea un objeto describiendo esa pieza de interfaz. Esto tiene consecuencias muy concretas al escribirlo.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">function</span> <span class="tag">Saludo</span>() {
+  <span class="kw">const</span> nombre = <span class="str">"Ana"</span>;
+  <span class="kw">const</span> esDeManana = <span class="kw">new</span> Date().getHours() &lt; <span class="hl">12</span>;
+
+  <span class="kw">return</span> (
+    &lt;<span class="tag">div</span> <span class="prop">className</span>=<span class="str">"saludo"</span>&gt;
+      &lt;<span class="tag">h2</span>&gt;Hola, {nombre}&lt;/<span class="tag">h2</span>&gt;
+      &lt;<span class="tag">p</span>&gt;{esDeManana ? <span class="str">"Buenos días"</span> : <span class="str">"Buenas tardes"</span>}&lt;/<span class="tag">p</span>&gt;
+    &lt;/<span class="tag">div</span>&gt;
+  );
+}</code></pre>
+    </div>
+    <p>Tres diferencias que se notan desde la primera línea: se usa <code class="inline">className</code> en lugar de <code class="inline">class</code> (porque <code class="inline">class</code> es palabra reservada en JavaScript), los atributos van en camelCase (<code class="inline">onClick</code>, no <code class="inline">onclick</code>), y cualquier <code class="inline">{'{ }'}</code> abre una ventana a JavaScript de verdad: puedes meter una variable, una operación, una llamada a función o un condicional corto &mdash; pero no una sentencia como un <code class="inline">if</code> completo, solo expresiones que devuelven un valor.</p>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Un componente solo puede devolver una raíz
+      </div>
+      <p>Si necesitas dos elementos hermanos, tienen que ir envueltos en un contenedor. Si no quieres añadir un <code class="inline">div</code> de más solo para eso, usa un fragmento vacío: <code class="inline">&lt;&gt;...&lt;/&gt;</code>.</p>
+    </div>
+  </section>
+
+  <section class="block prose">
+    <h2 class="block-title">Componentes funcionales y props</h2>
+    <p>Un componente en React es, literalmente, una función que devuelve JSX. Por convención empieza en mayúscula &mdash; así React distingue <code class="inline">&lt;div&gt;</code> (una etiqueta del navegador) de <code class="inline">&lt;TarjetaPerfil&gt;</code> (tu componente).</p>
+    <p>Las <strong>props</strong> son la forma en la que un componente recibe datos desde fuera: se escriben como atributos al usarlo, y le llegan a la función como un único objeto, que casi siempre se desestructura directamente en los parámetros.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">function</span> <span class="tag">TarjetaPerfil</span>({ nombre, rol }) {
+  <span class="kw">return</span> (
+    &lt;<span class="tag">div</span> <span class="prop">className</span>=<span class="str">"tarjeta"</span>&gt;
+      &lt;<span class="tag">h3</span>&gt;{nombre}&lt;/<span class="tag">h3</span>&gt;
+      &lt;<span class="tag">p</span>&gt;{rol}&lt;/<span class="tag">p</span>&gt;
+    &lt;/<span class="tag">div</span>&gt;
+  );
+}
+
+<span class="com">// se usa como si fuera una etiqueta más</span>
+&lt;<span class="tag">TarjetaPerfil</span> <span class="prop">nombre</span>=<span class="str">"Marta López"</span> <span class="prop">rol</span>=<span class="str">"Diseñadora UX"</span> /&gt;</code></pre>
+    </div>
+    <p>Un detalle importante: las props son de solo lectura. <code class="inline">TarjetaPerfil</code> nunca debería reasignar <code class="inline">nombre</code> o <code class="inline">rol</code> &mdash; si necesita cambiar algo con el tiempo, eso es <strong>estado</strong>, y lo veremos en la próxima sesión.</p>
+  </section>
+
+  <section class="block prose">
+    <h2 class="block-title">Listas con .map() y la prop key</h2>
+    <p>Casi nunca vas a escribir tres <code class="inline">&lt;TarjetaPerfil /&gt;</code> a mano: normalmente parten de un array de datos, y ese array se transforma en un array de elementos JSX con <code class="inline">.map()</code>, exactamente igual que transformarías cualquier otro array en JavaScript.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">const</span> personas = [
+  { id: <span class="hl">1</span>, nombre: <span class="str">"Marta López"</span>, rol: <span class="str">"Diseñadora UX"</span> },
+  { id: <span class="hl">2</span>, nombre: <span class="str">"Carlos Ruiz"</span>, rol: <span class="str">"Desarrollador backend"</span> },
+  { id: <span class="hl">3</span>, nombre: <span class="str">"Elena Gómez"</span>, rol: <span class="str">"Product manager"</span> },
+];
+
+<span class="kw">function</span> <span class="tag">ListaPerfiles</span>() {
+  <span class="kw">return</span> (
+    &lt;<span class="tag">div</span> <span class="prop">className</span>=<span class="str">"lista"</span>&gt;
+      {personas.map((persona) =&gt; (
+        &lt;<span class="tag">TarjetaPerfil</span>
+          <span class="prop">key</span>={persona.id}
+          <span class="prop">nombre</span>={persona.nombre}
+          <span class="prop">rol</span>={persona.rol}
+        /&gt;
+      ))}
+    &lt;/<span class="tag">div</span>&gt;
+  );
+}</code></pre>
+    </div>
+    <p>React necesita <code class="inline">key</code> para saber qué elemento es cuál entre un render y el siguiente: sin ella, si la lista cambia de orden o pierde un elemento en el medio, React puede confundir dos tarjetas distintas y arrastrar estado o inputs al elemento equivocado. La <code class="inline">key</code> debe ser algo estable y único &mdash; un id de verdad, nunca algo que se recalcule cada vez (como <code class="inline">Math.random()</code>) ni, salvo listas totalmente estáticas, la posición en el array.</p>
+    <div class="checkpoint">
+      <div class="checkpoint-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        La idea que se queda de hoy
+      </div>
+      <p>Un componente es una función que devuelve JSX. Los datos entran por props y fluyen de fuera hacia dentro. Una lista de datos se convierte en una lista de componentes con <code class="inline">.map()</code>, y cada uno necesita una <code class="inline">key</code> propia.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Práctica: fichas de equipo</h2>
+
+    <div class="step">
+      <div class="step-chip">1</div>
+      <div class="step-body">
+        <h3>Crea el componente <code class="inline">TarjetaPerfil</code></h3>
+        <p>Debe recibir por props al menos <code class="inline">nombre</code> y <code class="inline">rol</code>, y mostrarlos dentro de algo de estructura (un <code class="inline">div</code> con una clase te vale para darle estilo después).</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">2</div>
+      <div class="step-body">
+        <h3>Prepara un array de datos</h3>
+        <p>Crea un array con 3 o 4 objetos <code class="inline">{'{ id, nombre, rol }'}</code>, con datos inventados de un equipo de trabajo.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">3</div>
+      <div class="step-body">
+        <h3>Renderiza la lista con .map()</h3>
+        <p>En tu componente principal, recorre el array con <code class="inline">.map()</code> y devuelve una <code class="inline">TarjetaPerfil</code> por cada persona, sin olvidar la <code class="inline">key</code>.</p>
+        <div class="checkpoint">
+          <div class="checkpoint-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Deberías ver esto
+          </div>
+          <p>Tantas tarjetas en pantalla como personas en el array, y ningún aviso amarillo en la consola sobre <code class="inline">key</code>.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">4</div>
+      <div class="step-body">
+        <h3>Dale un mínimo de estilo</h3>
+        <p>Con CSS normal (una clase <code class="inline">.tarjeta</code> te sirve): borde, espaciado interior, quizá una disposición en fila con <code class="inline">display: flex</code> y <code class="inline">gap</code> para que las tarjetas queden una junto a otra.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Reto extra
+      </div>
+      <p>Añade una prop <code class="inline">foto</code> con una URL y muestra una <code class="inline">&lt;img&gt;</code> en la tarjeta (búscate avatares de prueba en <code class="inline">https://i.pravatar.cc/150?img=N</code>).</p>
+      <p>Añade una prop booleana <code class="inline">destacado</code> y, cuando sea <code class="inline">true</code>, muestra una estrella ⭐ junto al nombre usando un <code class="inline">{'{destacado && <span>⭐</span>}'}</code> dentro del JSX.</p>
+    </div>
+  </section>
+
+  <footer class="end">
+    Siguiente sesión: hacemos que estas tarjetas reaccionen a lo que hace el usuario &mdash; estado, clics y renderizado condicional.
+  </footer>
+
+</div>
