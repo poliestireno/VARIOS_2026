@@ -1,0 +1,792 @@
+<title>Fundamentos del lenguaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #E4572E;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #FF8A5C;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #F2764C;
+      --accent-ink: #17110D;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #F2764C;
+    --accent-ink: #17110D;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top {
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.08rem;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  section.block {
+    margin-top: 44px;
+  }
+
+  h2.block-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+
+  section.block p {
+    margin: 0 0 14px;
+  }
+
+  section.block ul {
+    margin: 0 0 14px;
+    padding-left: 22px;
+  }
+
+  section.block li {
+    margin-bottom: 6px;
+  }
+
+  h3.option-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: var(--ink);
+    margin: 40px 0 4px;
+  }
+
+  .checklist {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow);
+  }
+
+  .checklist li {
+    list-style: none;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 15px;
+    margin-bottom: 0;
+  }
+
+  .checklist ul { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+
+  .checklist svg {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    color: var(--accent-2);
+  }
+
+  .learn-list {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .learn-list li {
+    list-style: none;
+    padding-left: 20px;
+    position: relative;
+    color: var(--ink);
+    margin-bottom: 0;
+  }
+
+  .learn-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .step {
+    display: flex;
+    gap: 18px;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .step:first-of-type { border-top: none; padding-top: 0; }
+
+  .step-chip {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-body { flex: 1; min-width: 0; }
+
+  .step h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 4px 0 8px;
+  }
+
+  .step p {
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+
+  .step p.small {
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+
+  .term {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+
+  .term-bar span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--code-line);
+  }
+
+  .term pre {
+    margin: 0;
+    padding: 14px 16px 16px;
+    overflow-x: auto;
+  }
+
+  .term code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13.6px;
+    line-height: 1.7;
+    color: var(--code-ink);
+  }
+
+  .term .prompt { color: var(--code-muted); }
+  .term .cmt { color: var(--code-muted); }
+  .term .hl { color: var(--code-accent); }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .code-panel .term-bar { }
+
+  .code-panel pre {
+    margin: 0;
+    padding: 16px 18px 18px;
+    overflow-x: auto;
+  }
+
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+
+  .code-panel .tag { color: var(--accent-2); }
+  .code-panel .str { color: #C9D96B; }
+  .code-panel .kw { color: var(--code-accent); }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .prop { color: #8FB8FF; }
+  .code-panel .hl { color: var(--code-accent); }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+
+  .checkpoint p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .substep {
+    display: flex;
+    gap: 14px;
+    margin: 18px 0 0 16px;
+    padding-left: 16px;
+    border-left: 2px solid var(--line-soft);
+  }
+
+  .substep-chip {
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: var(--line-soft);
+    color: var(--muted);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 11.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .substep h4 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.98rem;
+    font-weight: 600;
+    margin: 2px 0 6px;
+  }
+
+  .substep p {
+    margin: 0 0 8px;
+    font-size: 14.5px;
+    color: var(--ink);
+  }
+
+  .substep .code-panel, .substep .term {
+    margin: 10px 0;
+  }
+
+  details.full-code {
+    margin-top: 16px;
+  }
+
+  details.full-code summary {
+    cursor: pointer;
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--accent-2);
+    list-style: none;
+  }
+
+  details.full-code summary::-webkit-details-marker { display: none; }
+
+  details.full-code summary::before {
+    content: "▸ ";
+  }
+
+  details.full-code[open] summary::before {
+    content: "▾ ";
+  }
+
+  .trouble {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .trouble-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .trouble-item .q {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    margin: 0 0 6px;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .trouble-item .q::before {
+    content: "?";
+    font-family: "IBM Plex Mono", monospace;
+    color: var(--accent-2);
+    font-weight: 500;
+  }
+
+  .trouble-item p {
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--muted);
+  }
+
+  .trouble-item p + p { margin-top: 8px; }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .step { transition: none; }
+  }
+</style>
+
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">Sesión 1 de 24 &middot; Bloque 1: JavaScript</span>
+    <h1>Fundamentos del lenguaje</h1>
+    <p class="lede">Ejecutar código, guardar datos en variables y tomar decisiones con condicionales: las tres piezas mínimas con las que está construido cualquier programa, incluida una app de React Native.</p>
+    <div class="meta-row">
+      <span class="meta-chip">2 horas</span>
+      <span class="meta-chip">Sesión 1/24</span>
+      <span class="meta-chip">Sin instalar nada</span>
+    </div>
+  </header>
+
+  <section class="block">
+    <h2 class="block-title">Antes de empezar</h2>
+    <p>Hoy no vamos a instalar ningún proyecto ni tocar React Native todavía. Vamos a escribir JavaScript &ldquo;a pelo&rdquo;, en el sitio más simple posible, para centrarnos solo en el lenguaje. Sirven dos herramientas, cualquiera de las dos:</p>
+    <div class="checklist">
+      <ul>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span><strong>La consola del navegador:</strong> abre Chrome o Firefox, pulsa <code class="inline">F12</code> (o clic derecho &rarr; &ldquo;Inspeccionar&rdquo;), y ve a la pestaña <strong>Console</strong>. Escribes una línea, pulsas Enter, ves el resultado al instante.</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span><strong>Node.js en una terminal:</strong> si ya lo instalaste para Expo, escribe <code class="inline">node</code> en una terminal y entrarás en un modo interactivo idéntico en espíritu a la consola del navegador.</span>
+        </li>
+      </ul>
+    </div>
+    <p style="margin-top:14px;">Todo el código de esta sesión funciona igual en los dos sitios. Usa el que te resulte más cómodo.</p>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Variables: let y const</h2>
+    <p>Una <strong>variable</strong> es una caja con nombre donde guardas un dato para usarlo más adelante. En JavaScript moderno hay dos formas de crearlas: <code class="inline">let</code>, para valores que van a cambiar, y <code class="inline">const</code>, para valores que no.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">const</span> nombreCurso = <span class="str">"React Native"</span>;
+nombreCurso = <span class="str">"Otro nombre"</span>;
+<span class="com">// ❌ TypeError: Assignment to constant variable.</span>
+
+<span class="kw">let</span> intentos = <span class="hl">0</span>;
+intentos = intentos + <span class="hl">1</span>;
+<span class="com">// ✅ funciona: "intentos" ahora vale 1</span></code></pre>
+    </div>
+    <p>La regla práctica es simple: empieza siempre por <code class="inline">const</code>. Si el código te obliga a reasignar esa variable más adelante, cámbiala a <code class="inline">let</code>. Declarar algo como <code class="inline">const</code> no es solo una preferencia de estilo &mdash; es una promesa que el propio lenguaje comprueba por ti: si tú o un compañero de equipo la reasignáis por error, JavaScript avisa con un error antes de que el bug llegue más lejos.</p>
+    <p>Es posible que veas código antiguo (o tutoriales viejos) usando una tercera palabra, <code class="inline">var</code>. Hoy se considera obsoleta, y es importante entender por qué:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">if</span> (<span class="kw">true</span>) {
+  <span class="kw">var</span> x = <span class="hl">10</span>;
+}
+console.log(x); <span class="com">// 10 -> "var" se escapa del bloque { }</span>
+
+<span class="kw">if</span> (<span class="kw">true</span>) {
+  <span class="kw">let</span> y = <span class="hl">10</span>;
+}
+console.log(y); <span class="com">// ❌ ReferenceError: y is not defined</span></code></pre>
+    </div>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Por qué evitar var
+      </div>
+      <p><code class="inline">let</code> y <code class="inline">const</code> respetan los bloques <code class="inline">{ }</code> &mdash; una variable creada dentro de un <code class="inline">if</code> o un bucle solo existe ahí dentro. <code class="inline">var</code> ignora esos límites y &ldquo;se escapa&rdquo;, lo que en programas grandes provoca bugs muy difíciles de rastrear: una variable que crees local en realidad está pisando otra con el mismo nombre en otra parte del archivo.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Tipos de datos primitivos</h2>
+    <p>Cada valor en JavaScript tiene un <strong>tipo</strong>. Hoy nos interesan tres, los que vas a usar constantemente:</p>
+    <ul>
+      <li><code class="inline">number</code> &mdash; cualquier número, entero o decimal: <code class="inline">32</code>, <code class="inline">3.5</code>, <code class="inline">-8</code>. No existe un tipo separado para decimales.</li>
+      <li><code class="inline">string</code> &mdash; texto, entre comillas simples, dobles o invertidas: <code class="inline">"Ana"</code>, <code class="inline">'Ana'</code>.</li>
+      <li><code class="inline">boolean</code> &mdash; solo dos valores posibles: <code class="inline">true</code> o <code class="inline">false</code>. Es el tipo que usan las decisiones.</li>
+    </ul>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">let</span> edad = <span class="hl">32</span>;             <span class="com">// number</span>
+<span class="kw">let</span> nombre = <span class="str">"Ana"</span>;        <span class="com">// string</span>
+<span class="kw">let</span> esEstudiante = <span class="kw">true</span>;   <span class="com">// boolean</span>
+
+console.log(<span class="kw">typeof</span> edad);          <span class="com">// "number"</span>
+console.log(<span class="kw">typeof</span> nombre);        <span class="com">// "string"</span>
+console.log(<span class="kw">typeof</span> esEstudiante);  <span class="com">// "boolean"</span></code></pre>
+    </div>
+    <p><code class="inline">typeof</code> es un operador que te dice el tipo de cualquier valor &mdash; muy útil cuando algo no se comporta como esperas y quieres comprobar qué tipo de dato tienes realmente entre manos.</p>
+    <p>Los <code class="inline">string</code> se pueden unir con <code class="inline">+</code>, y JavaScript convierte automáticamente los números a texto cuando hace falta:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">let</span> mensaje = <span class="str">"Tienes "</span> + edad + <span class="str">" años"</span>;
+console.log(mensaje); <span class="com">// "Tienes 32 años"</span></code></pre>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Operadores: aritméticos y de comparación</h2>
+    <p>Los <strong>operadores aritméticos</strong> hacen cálculos, igual que en una calculadora:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code>console.log(<span class="hl">5</span> + <span class="hl">3</span>);   <span class="com">// 8   -> suma</span>
+console.log(<span class="hl">10</span> - <span class="hl">4</span>);  <span class="com">// 6   -> resta</span>
+console.log(<span class="hl">3</span> * <span class="hl">4</span>);   <span class="com">// 12  -> multiplicación</span>
+console.log(<span class="hl">10</span> % <span class="hl">3</span>);  <span class="com">// 1   -> resto de la división (módulo)</span>
+console.log(<span class="hl">2</span> ** <span class="hl">3</span>);  <span class="com">// 8   -> potencia (2 elevado a 3)</span></code></pre>
+    </div>
+    <p>El <strong>módulo</strong> (<code class="inline">%</code>) es el que menos se usa fuera de clase y el más importante para lo que viene: te dice el resto que sobra al dividir. Es la herramienta clásica para saber si un número es par (<code class="inline">n % 2 === 0</code>) o múltiplo de otro &mdash; la usaremos en la sesión 2.</p>
+    <p>Los <strong>operadores de comparación</strong> devuelven siempre un <code class="inline">boolean</code>: <code class="inline">true</code> o <code class="inline">false</code>. Aquí está la trampa más común del lenguaje:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code>console.log(<span class="str">"5"</span> == <span class="hl">5</span>);   <span class="com">// true  -> compara solo el VALOR, convierte tipos</span>
+console.log(<span class="str">"5"</span> === <span class="hl">5</span>);  <span class="com">// false -> compara VALOR Y TIPO, sin convertir nada</span>
+
+console.log(<span class="hl">5</span> > <span class="hl">3</span>);    <span class="com">// true</span>
+console.log(<span class="hl">5</span> &gt;= <span class="hl">5</span>);   <span class="com">// true</span>
+console.log(<span class="hl">5</span> !== <span class="str">"5"</span>); <span class="com">// true -> tipos distintos, "!==" es lo opuesto a "==="</span></code></pre>
+    </div>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Usa siempre === y !==
+      </div>
+      <p><code class="inline">==</code> convierte tipos antes de comparar, y esas conversiones tienen resultados poco intuitivos: <code class="inline">0 == false</code> es <code class="inline">true</code>, y <code class="inline">"" == false</code> también. <code class="inline">===</code> nunca convierte nada, así que se comporta exactamente como esperas. Norma de la clase: <code class="inline">===</code> y <code class="inline">!==</code> siempre, <code class="inline">==</code> y <code class="inline">!=</code> nunca.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Condicionales: if / else</h2>
+    <p>Un condicional ejecuta un bloque de código <strong>solo si</strong> una condición es verdadera (<code class="inline">true</code>). Con <code class="inline">else if</code> encadenas más condiciones, y <code class="inline">else</code> es el caso por defecto, el que se ejecuta si ninguna de las anteriores se cumplió.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">let</span> temperatura = <span class="hl">38</span>;
+
+<span class="kw">if</span> (temperatura &gt;= <span class="hl">38</span>) {
+  console.log(<span class="str">"Tienes fiebre"</span>);
+} <span class="kw">else if</span> (temperatura &gt;= <span class="hl">37</span>) {
+  console.log(<span class="str">"Febrícula"</span>);
+} <span class="kw">else</span> {
+  console.log(<span class="str">"Temperatura normal"</span>);
+}
+<span class="com">// -> "Tienes fiebre"</span></code></pre>
+    </div>
+    <p>JavaScript evalúa las condiciones <strong>en orden, de arriba a abajo</strong>, y ejecuta el primer bloque cuya condición sea verdadera; el resto se ignora, aunque también serían ciertas. Por eso el orden importa: si aquí pusiéramos primero <code class="inline">temperatura &gt;= 37</code>, una fiebre de 38&deg; se clasificaría (mal) como febrícula.</p>
+    <div class="checkpoint">
+      <div class="checkpoint-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        Compruébalo tú
+      </div>
+      <p>Cambia <code class="inline">temperatura</code> a <code class="inline">36</code> y vuelve a ejecutar las tres líneas del <code class="inline">if</code>. Debería imprimir <code class="inline">"Temperatura normal"</code>.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Práctica</h2>
+    <p>Elige <strong>uno</strong> de los dos ejercicios &mdash; los dos usan exactamente lo visto hoy: variables, tipos y <code class="inline">if</code>/<code class="inline">else</code>. Escribe el código en la consola del navegador o en <code class="inline">node</code>, paso a paso.</p>
+
+    <h3 class="option-title">Opción A &mdash; Clasificador de edad</h3>
+
+    <div class="step">
+      <div class="step-chip">A1</div>
+      <div class="step-body">
+        <h3>Declara la variable</h3>
+        <p>Crea una variable con la edad que quieras clasificar. La usaremos como entrada de todo el ejercicio.</p>
+        <div class="code-panel">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code><span class="kw">let</span> edad = <span class="hl">24</span>; <span class="com">// cambia este número para probar otros casos</span></code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">A2</div>
+      <div class="step-body">
+        <h3>Escribe la cadena de decisiones</h3>
+        <p>Tres categorías: menor de edad, adulto, y mayor (65 años o más).</p>
+        <div class="code-panel">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code><span class="kw">if</span> (edad &lt; <span class="hl">18</span>) {
+  console.log(<span class="str">"Eres menor de edad"</span>);
+} <span class="kw">else if</span> (edad &lt; <span class="hl">65</span>) {
+  console.log(<span class="str">"Eres adulto"</span>);
+} <span class="kw">else</span> {
+  console.log(<span class="str">"Eres mayor"</span>);
+}</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">A3</div>
+      <div class="step-body">
+        <h3>Pruébalo con varios valores</h3>
+        <p>Cambia el número de <code class="inline">edad</code> del paso A1 y vuelve a ejecutar el bloque <code class="inline">if</code> del paso A2 para cada uno de estos valores: <code class="inline">0</code>, <code class="inline">17</code>, <code class="inline">18</code>, <code class="inline">40</code>, <code class="inline">64</code>, <code class="inline">65</code>, <code class="inline">90</code>.</p>
+        <div class="checkpoint">
+          <div class="checkpoint-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Fíjate especialmente en
+          </div>
+          <p><code class="inline">17</code> debe dar &ldquo;menor de edad&rdquo; y <code class="inline">18</code> debe dar &ldquo;adulto&rdquo;: es el caso límite que revela si el operador (<code class="inline">&lt;</code> frente a <code class="inline">&lt;=</code>) está bien elegido.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Reto extra
+      </div>
+      <p>Añade más categorías: bebé (menos de 2 años), niño (menos de 12), adolescente (menos de 18). Necesitarás más de un <code class="inline">else if</code> encadenado &mdash; y pensar bien el orden.</p>
+    </div>
+
+    <h3 class="option-title">Opción B &mdash; Calculadora de IMC</h3>
+
+    <div class="step">
+      <div class="step-chip">B1</div>
+      <div class="step-body">
+        <h3>Declara peso y altura</h3>
+        <p>El Índice de Masa Corporal necesita dos datos: el peso en kilogramos y la altura en metros.</p>
+        <div class="code-panel">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code><span class="kw">let</span> peso = <span class="hl">70</span>;     <span class="com">// kilogramos</span>
+<span class="kw">let</span> altura = <span class="hl">1.75</span>; <span class="com">// metros</span></code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">B2</div>
+      <div class="step-body">
+        <h3>Calcula el IMC</h3>
+        <p>La fórmula es peso dividido entre la altura al cuadrado. Usa el operador de potencia que vimos antes.</p>
+        <div class="code-panel">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code><span class="kw">let</span> imc = peso / (altura ** <span class="hl">2</span>);
+console.log(imc); <span class="com">// 22.857142857142858</span></code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">B3</div>
+      <div class="step-body">
+        <h3>Clasifica el resultado</h3>
+        <p>Usa las cuatro franjas estándar de la OMS.</p>
+        <div class="code-panel">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code><span class="kw">if</span> (imc &lt; <span class="hl">18.5</span>) {
+  console.log(<span class="str">"Bajo peso"</span>);
+} <span class="kw">else if</span> (imc &lt; <span class="hl">25</span>) {
+  console.log(<span class="str">"Peso normal"</span>);
+} <span class="kw">else if</span> (imc &lt; <span class="hl">30</span>) {
+  console.log(<span class="str">"Sobrepeso"</span>);
+} <span class="kw">else</span> {
+  console.log(<span class="str">"Obesidad"</span>);
+}
+<span class="com">// -> "Peso normal"</span></code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">B4</div>
+      <div class="step-body">
+        <h3>Redondea el resultado</h3>
+        <p>22.857142857142858 no es un número para enseñarle a nadie. <code class="inline">toFixed(1)</code> lo redondea a un decimal y lo convierte en texto, listo para mostrar.</p>
+        <div class="code-panel">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code>console.log(<span class="str">"Tu IMC es "</span> + imc.toFixed(<span class="hl">1</span>));
+<span class="com">// -> "Tu IMC es 22.9"</span></code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Reto extra
+      </div>
+      <p>Cambia <code class="inline">peso</code> y <code class="inline">altura</code> por tus propios datos (o inventados) y comprueba el resultado. Si trabajas en el navegador, prueba a pedir los datos con <code class="inline">prompt("¿Cuál es tu peso en kg?")</code> en vez de escribirlos a mano &mdash; <code class="inline">prompt()</code> siempre devuelve texto, así que necesitarás convertirlo con <code class="inline">Number(...)</code> antes de calcular.</p>
+    </div>
+  </section>
+
+  <footer class="end">
+    Siguiente sesión: funciones y bucles &mdash; para dejar de repetir código a mano.
+  </footer>
+
+</div>

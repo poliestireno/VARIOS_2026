@@ -1,0 +1,743 @@
+<title>Funciones y bucles</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #E4572E;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #FF8A5C;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #F2764C;
+      --accent-ink: #17110D;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #F2764C;
+    --accent-ink: #17110D;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top {
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.08rem;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  section.block {
+    margin-top: 44px;
+  }
+
+  h2.block-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+
+  section.block p {
+    margin: 0 0 14px;
+  }
+
+  section.block ul {
+    margin: 0 0 14px;
+    padding-left: 22px;
+  }
+
+  section.block li {
+    margin-bottom: 6px;
+  }
+
+  h3.option-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: var(--ink);
+    margin: 40px 0 4px;
+  }
+
+  .checklist {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow);
+  }
+
+  .checklist li {
+    list-style: none;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 15px;
+    margin-bottom: 0;
+  }
+
+  .checklist ul { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+
+  .checklist svg {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    color: var(--accent-2);
+  }
+
+  .learn-list {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .learn-list li {
+    list-style: none;
+    padding-left: 20px;
+    position: relative;
+    color: var(--ink);
+    margin-bottom: 0;
+  }
+
+  .learn-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .step {
+    display: flex;
+    gap: 18px;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .step:first-of-type { border-top: none; padding-top: 0; }
+
+  .step-chip {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-body { flex: 1; min-width: 0; }
+
+  .step h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 4px 0 8px;
+  }
+
+  .step p {
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+
+  .step p.small {
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+
+  .term {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+
+  .term-bar span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--code-line);
+  }
+
+  .term pre {
+    margin: 0;
+    padding: 14px 16px 16px;
+    overflow-x: auto;
+  }
+
+  .term code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13.6px;
+    line-height: 1.7;
+    color: var(--code-ink);
+  }
+
+  .term .prompt { color: var(--code-muted); }
+  .term .cmt { color: var(--code-muted); }
+  .term .hl { color: var(--code-accent); }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .code-panel .term-bar { }
+
+  .code-panel pre {
+    margin: 0;
+    padding: 16px 18px 18px;
+    overflow-x: auto;
+  }
+
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+
+  .code-panel .tag { color: var(--accent-2); }
+  .code-panel .str { color: #C9D96B; }
+  .code-panel .kw { color: var(--code-accent); }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .prop { color: #8FB8FF; }
+  .code-panel .hl { color: var(--code-accent); }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+
+  .checkpoint p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .substep {
+    display: flex;
+    gap: 14px;
+    margin: 18px 0 0 16px;
+    padding-left: 16px;
+    border-left: 2px solid var(--line-soft);
+  }
+
+  .substep-chip {
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: var(--line-soft);
+    color: var(--muted);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 11.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .substep h4 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.98rem;
+    font-weight: 600;
+    margin: 2px 0 6px;
+  }
+
+  .substep p {
+    margin: 0 0 8px;
+    font-size: 14.5px;
+    color: var(--ink);
+  }
+
+  .substep .code-panel, .substep .term {
+    margin: 10px 0;
+  }
+
+  details.full-code {
+    margin-top: 16px;
+  }
+
+  details.full-code summary {
+    cursor: pointer;
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--accent-2);
+    list-style: none;
+  }
+
+  details.full-code summary::-webkit-details-marker { display: none; }
+
+  details.full-code summary::before {
+    content: "▸ ";
+  }
+
+  details.full-code[open] summary::before {
+    content: "▾ ";
+  }
+
+  .trouble {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .trouble-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .trouble-item .q {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    margin: 0 0 6px;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .trouble-item .q::before {
+    content: "?";
+    font-family: "IBM Plex Mono", monospace;
+    color: var(--accent-2);
+    font-weight: 500;
+  }
+
+  .trouble-item p {
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--muted);
+  }
+
+  .trouble-item p + p { margin-top: 8px; }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .step { transition: none; }
+  }
+</style>
+
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">Sesión 2 de 24 &middot; Bloque 1: JavaScript</span>
+    <h1>Funciones y bucles</h1>
+    <p class="lede">Dejar de repetir código a mano: empaquetar lógica en funciones que se pueden reutilizar, y repetir tareas con bucles en lugar de copiar y pegar la misma línea diez veces.</p>
+    <div class="meta-row">
+      <span class="meta-chip">2 horas</span>
+      <span class="meta-chip">Sesión 2/24</span>
+      <span class="meta-chip">Sin instalar nada</span>
+    </div>
+  </header>
+
+  <section class="block">
+    <h2 class="block-title">Antes de empezar</h2>
+    <p>Seguimos en la consola del navegador (<code class="inline">F12</code> &rarr; Console) o en <code class="inline">node</code> desde la terminal, igual que la sesión pasada. Hoy el código empieza a tener varias líneas relacionadas entre sí, así que si tu entorno te lo permite, es más cómodo escribirlo primero en un archivo de texto y pegarlo entero en la consola, en vez de línea a línea.</p>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Funciones: declaration vs arrow</h2>
+    <p>Una <strong>función</strong> es un bloque de código con nombre que puedes ejecutar (&ldquo;llamar&rdquo;) tantas veces como quieras, con datos distintos cada vez. Es la herramienta contra la repetición: en vez de escribir la misma lógica varias veces, la escribes una y la invocas.</p>
+    <p>Hay dos formas habituales de escribirlas. La primera es la <strong>function declaration</strong>, la forma clásica:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">function</span> <span class="tag">saludar</span>(nombre) {
+  <span class="kw">return</span> <span class="str">"Hola, "</span> + nombre;
+}
+
+console.log(saludar(<span class="str">"Marta"</span>)); <span class="com">// "Hola, Marta"</span></code></pre>
+    </div>
+    <p>La segunda es la <strong>arrow function</strong> (función flecha), más compacta, y hoy la forma más habitual en código de React y React Native:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">const</span> saludar = (nombre) =&gt; {
+  <span class="kw">return</span> <span class="str">"Hola, "</span> + nombre;
+};
+
+console.log(saludar(<span class="str">"Marta"</span>)); <span class="com">// "Hola, Marta"</span></code></pre>
+    </div>
+    <p>Si el cuerpo de la función es una única línea que devuelve un valor, la arrow function admite una forma aún más corta, sin llaves ni <code class="inline">return</code> &mdash; el resultado de la expresión se devuelve solo:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">const</span> saludar = nombre =&gt; <span class="str">"Hola, "</span> + nombre;
+
+console.log(saludar(<span class="str">"Marta"</span>)); <span class="com">// "Hola, Marta"</span></code></pre>
+    </div>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        ¿Cuál uso?
+      </div>
+      <p>Para funciones sueltas y reutilizables (cálculos, transformaciones de datos), cualquiera de las dos sirve &mdash; muchos equipos prefieren arrow por brevedad. Cuando lleguemos a React Native usarás arrow functions casi siempre, sobre todo para funciones cortas que se pasan como argumento a otra (como veremos con <code class="inline">onPress</code> más adelante). Por ahora, quédate con la idea de que son dos sintaxis distintas para lo mismo.</p>
+    </div>
+    <p>Los datos que entran se llaman <strong>parámetros</strong> (<code class="inline">nombre</code> en el ejemplo), y lo que sale es el <strong>valor de retorno</strong>, la palabra <code class="inline">return</code>. Una función sin <code class="inline">return</code> explícito devuelve <code class="inline">undefined</code>:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">function</span> <span class="tag">sinRetorno</span>() {
+  console.log(<span class="str">"Hago algo, pero no devuelvo nada"</span>);
+}
+
+<span class="kw">let</span> resultado = sinRetorno();
+console.log(resultado); <span class="com">// undefined</span></code></pre>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Bucles: for y while</h2>
+    <p>Un <strong>bucle</strong> repite un bloque de código varias veces. El más común es <code class="inline">for</code>, que tiene tres partes separadas por punto y coma: dónde empieza el contador, hasta cuándo sigue, y cómo avanza en cada vuelta.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">for</span> (<span class="kw">let</span> i = <span class="hl">1</span>; i &lt;= <span class="hl">5</span>; i++) {
+  console.log(i);
+}
+<span class="com">// 1
+// 2
+// 3
+// 4
+// 5</span></code></pre>
+    </div>
+    <p>Léelo así: <code class="inline">let i = 1</code> &mdash; empieza en 1. <code class="inline">i &lt;= 5</code> &mdash; sigue mientras esto sea cierto. <code class="inline">i++</code> &mdash; suma 1 a <code class="inline">i</code> al final de cada vuelta (es una forma corta de <code class="inline">i = i + 1</code>). En cuanto la condición deja de cumplirse, el bucle para.</p>
+    <p><code class="inline">while</code> es más simple: repite mientras una condición sea verdadera, sin la estructura fija del <code class="inline">for</code>. Es útil cuando no sabes de antemano cuántas vueltas hará falta.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">let</span> saldo = <span class="hl">100</span>;
+<span class="kw">let</span> meses = <span class="hl">0</span>;
+
+<span class="kw">while</span> (saldo &gt; <span class="hl">0</span>) {
+  saldo = saldo - <span class="hl">30</span>;
+  meses = meses + <span class="hl">1</span>;
+}
+
+console.log(meses); <span class="com">// 4 -> tras 4 meses, el saldo queda en -20 y el bucle para</span></code></pre>
+    </div>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        El error más típico: el bucle infinito
+      </div>
+      <p>Si la condición del <code class="inline">while</code> nunca deja de ser cierta (por ejemplo, si olvidas la línea <code class="inline">saldo = saldo - 30</code>), el bucle no termina nunca y cuelga la pestaña o la terminal. Si te pasa, en el navegador cierra la pestaña; en <code class="inline">node</code>, pulsa <code class="inline">Ctrl+C</code>. Revisa siempre que algo dentro del bucle acerque la condición hacia <code class="inline">false</code>.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Scope: dentro y fuera de una función</h2>
+    <p>El <strong>scope</strong> (ámbito) determina desde dónde se puede &ldquo;ver&rdquo; una variable. Una variable creada dentro de una función solo existe dentro de esa función &mdash; es invisible fuera, aunque la función ya se haya ejecutado.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">function</span> <span class="tag">calcularDoble</span>(numero) {
+  <span class="kw">const</span> resultado = numero * <span class="hl">2</span>;
+  <span class="kw">return</span> resultado;
+}
+
+console.log(calcularDoble(<span class="hl">5</span>)); <span class="com">// 10</span>
+console.log(resultado); <span class="com">// ❌ ReferenceError: resultado is not defined</span></code></pre>
+    </div>
+    <p>Al revés sí funciona: una función puede leer variables que existan <em>fuera</em> de ella, siempre que hayan sido declaradas antes de que la función se ejecute.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">const</span> impuesto = <span class="hl">0.21</span>;
+
+<span class="kw">function</span> <span class="tag">precioConImpuesto</span>(precioBase) {
+  <span class="kw">return</span> precioBase * (<span class="hl">1</span> + impuesto);
+}
+
+console.log(precioConImpuesto(<span class="hl">100</span>)); <span class="com">// 121</span></code></pre>
+    </div>
+    <p>Esta idea &mdash; que cada función tiene su propio espacio privado de variables, y solo puede &ldquo;asomarse&rdquo; hacia fuera, nunca al revés &mdash; es la razón por la que se pueden escribir funciones cortas y reutilizables sin miedo a que pisen variables de otras partes del programa con el mismo nombre.</p>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Práctica: FizzBuzz</h2>
+    <p>FizzBuzz es el ejercicio clásico para practicar bucles y condicionales a la vez. La regla: recorre los números del 1 al 100. Para cada uno, si es múltiplo de 3 imprime <code class="inline">"Fizz"</code>; si es múltiplo de 5 imprime <code class="inline">"Buzz"</code>; si es múltiplo de ambos imprime <code class="inline">"FizzBuzz"</code>; si no es múltiplo de ninguno, imprime el número tal cual.</p>
+
+    <div class="step">
+      <div class="step-chip">1</div>
+      <div class="step-body">
+        <h3>Monta el bucle vacío</h3>
+        <p>Empieza por el esqueleto: un <code class="inline">for</code> que recorra del 1 al 100 e imprima cada número, sin lógica todavía.</p>
+        <div class="code-panel">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code><span class="kw">for</span> (<span class="kw">let</span> i = <span class="hl">1</span>; i &lt;= <span class="hl">100</span>; i++) {
+  console.log(i);
+}</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">2</div>
+      <div class="step-body">
+        <h3>Detecta los múltiplos con %</h3>
+        <p>Recuerda el operador módulo de la sesión pasada: <code class="inline">i % 3 === 0</code> es cierto exactamente cuando <code class="inline">i</code> es múltiplo de 3, porque no deja resto.</p>
+        <div class="code-panel">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code>console.log(<span class="hl">9</span> % <span class="hl">3</span>);  <span class="com">// 0 -> 9 es múltiplo de 3</span>
+console.log(<span class="hl">10</span> % <span class="hl">3</span>); <span class="com">// 1 -> 10 no lo es</span></code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">3</div>
+      <div class="step-body">
+        <h3>Añade las condiciones, en el orden correcto</h3>
+        <p>El caso &ldquo;múltiplo de ambos&rdquo; tiene que comprobarse <strong>primero</strong>, o nunca se alcanzará: si comprobaras &ldquo;múltiplo de 3&rdquo; antes, un número como 15 entraría ahí y nunca llegaría a la comprobación de &ldquo;ambos&rdquo;.</p>
+        <div class="code-panel">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code><span class="kw">for</span> (<span class="kw">let</span> i = <span class="hl">1</span>; i &lt;= <span class="hl">100</span>; i++) {
+  <span class="kw">if</span> (i % <span class="hl">3</span> === <span class="hl">0</span> &amp;&amp; i % <span class="hl">5</span> === <span class="hl">0</span>) {
+    console.log(<span class="str">"FizzBuzz"</span>);
+  } <span class="kw">else if</span> (i % <span class="hl">3</span> === <span class="hl">0</span>) {
+    console.log(<span class="str">"Fizz"</span>);
+  } <span class="kw">else if</span> (i % <span class="hl">5</span> === <span class="hl">0</span>) {
+    console.log(<span class="str">"Buzz"</span>);
+  } <span class="kw">else</span> {
+    console.log(i);
+  }
+}</code></pre>
+        </div>
+        <p><code class="inline">&amp;&amp;</code> es el operador &ldquo;y&rdquo;: la condición completa solo es cierta si las dos partes lo son.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">4</div>
+      <div class="step-body">
+        <h3>Compruébalo</h3>
+        <div class="checkpoint">
+          <div class="checkpoint-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Deberías ver esto
+          </div>
+          <p>Los primeros quince resultados: <code class="inline">1, 2, Fizz, 4, Buzz, Fizz, 7, 8, Fizz, Buzz, 11, Fizz, 13, 14, FizzBuzz</code>. Si no coincide, revisa primero el orden de tus <code class="inline">if</code>/<code class="inline">else if</code>.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">5</div>
+      <div class="step-body">
+        <h3>Empaquétalo en una función</h3>
+        <p>Ahora que funciona, envuélvelo en una función reutilizable que reciba el límite como parámetro, en vez de dejarlo fijo en 100.</p>
+        <div class="code-panel">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code><span class="kw">function</span> <span class="tag">fizzBuzz</span>(limite) {
+  <span class="kw">for</span> (<span class="kw">let</span> i = <span class="hl">1</span>; i &lt;= limite; i++) {
+    <span class="kw">if</span> (i % <span class="hl">3</span> === <span class="hl">0</span> &amp;&amp; i % <span class="hl">5</span> === <span class="hl">0</span>) {
+      console.log(<span class="str">"FizzBuzz"</span>);
+    } <span class="kw">else if</span> (i % <span class="hl">3</span> === <span class="hl">0</span>) {
+      console.log(<span class="str">"Fizz"</span>);
+    } <span class="kw">else if</span> (i % <span class="hl">5</span> === <span class="hl">0</span>) {
+      console.log(<span class="str">"Buzz"</span>);
+    } <span class="kw">else</span> {
+      console.log(i);
+    }
+  }
+}
+
+fizzBuzz(<span class="hl">20</span>); <span class="com">// ahora puedes llamarla con cualquier límite</span></code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Reto extra &mdash; tablas de multiplicar interactivas
+      </div>
+      <p>Escribe una función <code class="inline">tablaDe(numero)</code> que imprima esa tabla de multiplicar del 1 al 10, con líneas como <code class="inline">"7 x 1 = 7"</code>, <code class="inline">"7 x 2 = 14"</code>&hellip; usando un <code class="inline">for</code> por dentro. Luego, en el navegador, combínala con <code class="inline">prompt()</code> para pedir el número al usuario antes de llamarla: <code class="inline">tablaDe(Number(prompt("¿Tabla de qué número?")))</code>. Como reto encima del reto: haz que también acepte un segundo parámetro opcional con el límite superior de la tabla (por defecto 10).</p>
+    </div>
+  </section>
+
+  <footer class="end">
+    Siguiente sesión: arrays y objetos &mdash; la forma de modelar colecciones de datos, la base de casi toda app real.
+  </footer>
+
+</div>
