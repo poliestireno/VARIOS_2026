@@ -1,0 +1,754 @@
+<title>Composición y proyecto de repaso</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #E4572E;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #FF8A5C;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #F2764C;
+      --accent-ink: #17110D;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #F2764C;
+    --accent-ink: #17110D;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top {
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.08rem;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  section.block {
+    margin-top: 44px;
+  }
+
+  h2.block-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+
+  .checklist {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow);
+  }
+
+  .checklist li {
+    list-style: none;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 15px;
+  }
+
+  .checklist ul { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+
+  .checklist svg {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    color: var(--accent-2);
+  }
+
+  .learn-list {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .learn-list li {
+    list-style: none;
+    padding-left: 20px;
+    position: relative;
+    color: var(--ink);
+  }
+
+  .learn-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  p { margin: 0 0 14px; }
+  p:last-child { margin-bottom: 0; }
+
+  .prose p { margin: 0 0 14px; }
+
+  .step {
+    display: flex;
+    gap: 18px;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .step:first-of-type { border-top: none; padding-top: 0; }
+
+  .step-chip {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-body { flex: 1; min-width: 0; }
+
+  .step h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 4px 0 8px;
+  }
+
+  .step p {
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+
+  .step p.small {
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+
+  .term {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+
+  .term-bar span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--code-line);
+  }
+
+  .term pre {
+    margin: 0;
+    padding: 14px 16px 16px;
+    overflow-x: auto;
+  }
+
+  .term code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13.6px;
+    line-height: 1.7;
+    color: var(--code-ink);
+  }
+
+  .term .prompt { color: var(--code-muted); }
+  .term .cmt { color: var(--code-muted); }
+  .term .hl { color: var(--code-accent); }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .code-panel .term-bar { }
+
+  .code-panel pre {
+    margin: 0;
+    padding: 16px 18px 18px;
+    overflow-x: auto;
+  }
+
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+
+  .code-panel .tag { color: var(--accent-2); }
+  .code-panel .str { color: #C9D96B; }
+  .code-panel .kw { color: var(--code-accent); }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .prop { color: #8FB8FF; }
+  .code-panel .hl { color: var(--code-accent); }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+
+  .checkpoint p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .substep {
+    display: flex;
+    gap: 14px;
+    margin: 18px 0 0 16px;
+    padding-left: 16px;
+    border-left: 2px solid var(--line-soft);
+  }
+
+  .substep-chip {
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: var(--line-soft);
+    color: var(--muted);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 11.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .substep h4 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.98rem;
+    font-weight: 600;
+    margin: 2px 0 6px;
+  }
+
+  .substep p {
+    margin: 0 0 8px;
+    font-size: 14.5px;
+    color: var(--ink);
+  }
+
+  .substep .code-panel, .substep .term {
+    margin: 10px 0;
+  }
+
+  details.full-code {
+    margin-top: 16px;
+  }
+
+  details.full-code summary {
+    cursor: pointer;
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--accent-2);
+    list-style: none;
+  }
+
+  details.full-code summary::-webkit-details-marker { display: none; }
+
+  details.full-code summary::before {
+    content: "▸ ";
+  }
+
+  details.full-code[open] summary::before {
+    content: "▾ ";
+  }
+
+  .trouble {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .trouble-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .trouble-item .q {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    margin: 0 0 6px;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .trouble-item .q::before {
+    content: "?";
+    font-family: "IBM Plex Mono", monospace;
+    color: var(--accent-2);
+    font-weight: 500;
+  }
+
+  .trouble-item p {
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--muted);
+  }
+
+  .trouble-item p + p { margin-top: 8px; }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .step { transition: none; }
+  }
+</style>
+
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">Sesión 8 de 24 &middot; Bloque 2: React</span>
+    <h1>Composición y proyecto de repaso</h1>
+    <p class="lede">Cierras el bloque de React combinando lo de las tres sesiones anteriores &mdash; componentes, props, estado, efectos, formularios &mdash; en una app pequeña pero completa, hecha de varias piezas que hablan entre sí.</p>
+    <div class="meta-row">
+      <span class="meta-chip">2 horas</span>
+      <span class="meta-chip">Sesión 8/24</span>
+      <span class="meta-chip">Composición de componentes</span>
+    </div>
+  </header>
+
+  <section class="block prose">
+    <p>Ninguna app de verdad vive en un único componente gigante. Se construye combinando componentes pequeños, cada uno responsable de una cosa, que se comunican entre sí de una forma muy concreta: los datos bajan por props, y las acciones (lo que ocurre cuando algo pasa) suben también por props, pero en forma de funciones. A eso se le llama <strong>composición</strong>, y es lo que hace que React escale de un contador a una aplicación entera. Seguimos en el navegador, con React normal &mdash; hoy cerramos este bloque.</p>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Qué vas a aprender</h2>
+    <ul class="learn-list">
+      <li>Cómo pasar props a través de varios niveles de componentes, incluyendo funciones que un componente hijo usa para avisar a su padre.</li>
+      <li>Cómo organizar componentes en archivos separados con <code class="inline">import</code> / <code class="inline">export</code>.</li>
+      <li>Cuándo tiene sentido partir un componente en dos (y cuándo no merece la pena).</li>
+    </ul>
+  </section>
+
+  <section class="block prose">
+    <h2 class="block-title">Props a través de varios niveles</h2>
+    <p>Cuando un componente hijo necesita avisar a su padre de que algo ha pasado (un clic, un envío de formulario), el padre le pasa una función por props, y el hijo simplemente la llama en el momento adecuado. El hijo no sabe ni le importa qué hace esa función por dentro &mdash; solo la ejecuta.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">function</span> <span class="tag">App</span>() {
+  <span class="kw">const</span> usuario = { nombre: <span class="str">"Marta"</span>, puntos: <span class="hl">120</span> };
+  <span class="kw">return</span> &lt;<span class="tag">Perfil</span> <span class="prop">usuario</span>={usuario} /&gt;;
+}
+
+<span class="kw">function</span> <span class="tag">Perfil</span>({ usuario }) {
+  <span class="kw">return</span> (
+    &lt;<span class="tag">div</span>&gt;
+      &lt;<span class="tag">Avatar</span> <span class="prop">nombre</span>={usuario.nombre} /&gt;
+      &lt;<span class="tag">Puntuacion</span> <span class="prop">puntos</span>={usuario.puntos} /&gt;
+    &lt;/<span class="tag">div</span>&gt;
+  );
+}
+
+<span class="kw">function</span> <span class="tag">Avatar</span>({ nombre }) {
+  <span class="kw">return</span> &lt;<span class="tag">p</span>&gt;{nombre.charAt(<span class="hl">0</span>)}&lt;/<span class="tag">p</span>&gt;;
+}
+
+<span class="kw">function</span> <span class="tag">Puntuacion</span>({ puntos }) {
+  <span class="kw">return</span> &lt;<span class="tag">p</span>&gt;{puntos} pts&lt;/<span class="tag">p</span>&gt;;
+}</code></pre>
+    </div>
+    <p><code class="inline">App</code> nunca le pasa nada directamente a <code class="inline">Avatar</code> ni a <code class="inline">Puntuacion</code>: <code class="inline">Perfil</code> hace de intermediario, cogiendo el objeto <code class="inline">usuario</code> y repartiendo trozos de él. Ahora, el mismo patrón pero con una función en vez de un dato:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">function</span> <span class="tag">App</span>() {
+  <span class="kw">function</span> <span class="tag">saludar</span>(nombre) {
+    alert(<span class="str">`Hola, </span>${nombre}<span class="str">`</span>);
+  }
+  <span class="kw">return</span> &lt;<span class="tag">Perfil</span> <span class="prop">onSaludar</span>={saludar} /&gt;;
+}
+
+<span class="kw">function</span> <span class="tag">Perfil</span>({ onSaludar }) {
+  <span class="kw">return</span> &lt;<span class="tag">button</span> <span class="prop">onClick</span>={() =&gt; onSaludar(<span class="str">"Marta"</span>)}&gt;Saludar&lt;/<span class="tag">button</span>&gt;;
+}</code></pre>
+    </div>
+    <p>Es la misma idea que ya usaste en la sesión 6 al pasar <code class="inline">onAlternar</code> o <code class="inline">onEliminar</code> a cada tarea de la lista: el dato vive arriba, en el componente que tiene el estado, y las funciones bajan para que los componentes de abajo puedan pedir cambios sin tener acceso directo a ese estado.</p>
+  </section>
+
+  <section class="block prose">
+    <h2 class="block-title">Un archivo por componente</h2>
+    <p>Mientras un componente es pequeño, tenerlo todo en <code class="inline">App.jsx</code> es cómodo. En cuanto un proyecto crece, conviene separar cada componente (o cada grupo de componentes muy relacionados) en su propio archivo, y conectar todo con <code class="inline">import</code> / <code class="inline">export</code>.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="com">// Avatar.jsx</span>
+<span class="kw">export function</span> <span class="tag">Avatar</span>({ nombre }) {
+  <span class="kw">return</span> &lt;<span class="tag">p</span> <span class="prop">className</span>=<span class="str">"avatar"</span>&gt;{nombre.charAt(<span class="hl">0</span>)}&lt;/<span class="tag">p</span>&gt;;
+}
+
+<span class="com">// Perfil.jsx</span>
+<span class="kw">import</span> { Avatar } <span class="kw">from</span> <span class="str">"./Avatar"</span>;
+
+<span class="kw">export function</span> <span class="tag">Perfil</span>({ usuario }) {
+  <span class="kw">return</span> (
+    &lt;<span class="tag">div</span> <span class="prop">className</span>=<span class="str">"perfil"</span>&gt;
+      &lt;<span class="tag">Avatar</span> <span class="prop">nombre</span>={usuario.nombre} /&gt;
+    &lt;/<span class="tag">div</span>&gt;
+  );
+}</code></pre>
+    </div>
+    <p>Cada archivo exporta su componente (con <code class="inline">export</code>, o <code class="inline">export default</code> si es el único que exporta ese archivo) y lo importa quien lo necesite. A cambio de un poco más de navegación entre archivos, ganas que cada uno se entienda solo, sin tener que leer 300 líneas para encontrar un botón.</p>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        ¿Cuándo merece la pena partir un componente en dos?
+      </div>
+      <p>Buenas señales: el componente hace más de una cosa claramente distinta, una parte de él se repite en otro sitio, o tiene tanto JSX que cuesta encontrar la lógica entre medio. Mala señal para partirlo: hacerlo &ldquo;porque sí&rdquo; cuando todo cabe cómodo y no se reutiliza en ningún otro sitio &mdash; la composición ayuda hasta que empieza a ser más indirección que claridad.</p>
+    </div>
+  </section>
+
+  <section class="block prose">
+    <h2 class="block-title">El patrón que vas a usar en el proyecto</h2>
+    <p>El proyecto de hoy sigue un reparto de responsabilidades muy común: un componente &ldquo;de arriba&rdquo; guarda el estado y las funciones que lo modifican, y componentes &ldquo;de abajo&rdquo; solo reciben datos y funciones por props, sin estado propio relevante para la lógica de negocio.</p>
+    <div class="checkpoint">
+      <div class="checkpoint-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        La idea que se queda de hoy
+      </div>
+      <p>Los datos bajan por props, las acciones suben como funciones pasadas por props. El estado vive lo más arriba posible, cerca de donde varios componentes lo necesitan compartir.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Práctica: lista de la compra</h2>
+    <p style="color:var(--muted); font-size:14.5px; margin-bottom:8px;">El proyecto integrador del bloque: añadir productos, marcarlos como comprados, eliminarlos, y ver un contador de progreso. Como mínimo, tres componentes que se comuniquen por props.</p>
+
+    <div class="step">
+      <div class="step-chip">1</div>
+      <div class="step-body">
+        <h3><code class="inline">App</code>: el estado y el contador</h3>
+        <p>El componente principal guarda el array de productos en estado, y calcula cuántos están comprados. Cada producto puede ser <code class="inline">{'{ id, nombre, comprado }'}</code>.</p>
+        <div class="code-panel">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code><span class="kw">function</span> <span class="tag">App</span>() {
+  <span class="kw">const</span> [productos, setProductos] = useState([]);
+
+  <span class="kw">function</span> <span class="tag">anadirProducto</span>(nombre) {
+    <span class="kw">const</span> nuevo = { id: Date.now(), nombre, comprado: <span class="hl">false</span> };
+    setProductos([...productos, nuevo]);
+  }
+
+  <span class="kw">function</span> <span class="tag">alternarComprado</span>(id) {
+    setProductos(
+      productos.map((p) =&gt; (p.id === id ? { ...p, comprado: !p.comprado } : p))
+    );
+  }
+
+  <span class="kw">function</span> <span class="tag">eliminarProducto</span>(id) {
+    setProductos(productos.filter((p) =&gt; p.id !== id));
+  }
+
+  <span class="kw">const</span> comprados = productos.filter((p) =&gt; p.comprado).length;
+
+  <span class="kw">return</span> (
+    &lt;<span class="tag">div</span> <span class="prop">className</span>=<span class="str">"app"</span>&gt;
+      &lt;<span class="tag">h1</span>&gt;Lista de la compra&lt;/<span class="tag">h1</span>&gt;
+      &lt;<span class="tag">p</span>&gt;{comprados} de {productos.length} comprados&lt;/<span class="tag">p</span>&gt;
+      &lt;<span class="tag">FormularioProducto</span> <span class="prop">onAnadir</span>={anadirProducto} /&gt;
+      &lt;<span class="tag">ListaProductos</span>
+        <span class="prop">productos</span>={productos}
+        <span class="prop">onAlternar</span>={alternarComprado}
+        <span class="prop">onEliminar</span>={eliminarProducto}
+      /&gt;
+    &lt;/<span class="tag">div</span>&gt;
+  );
+}</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">2</div>
+      <div class="step-body">
+        <h3><code class="inline">FormularioProducto</code>: solo pide el nombre</h3>
+        <p>Tiene su propio estado local para el texto del input (es un detalle interno suyo, no le importa a <code class="inline">App</code>), y cuando se envía, llama a <code class="inline">onAnadir</code> con el nombre escrito.</p>
+        <div class="code-panel">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code><span class="kw">function</span> <span class="tag">FormularioProducto</span>({ onAnadir }) {
+  <span class="kw">const</span> [texto, setTexto] = useState(<span class="str">""</span>);
+
+  <span class="kw">function</span> <span class="tag">manejarEnvio</span>(e) {
+    e.preventDefault();
+    <span class="kw">if</span> (texto.trim() === <span class="str">""</span>) <span class="kw">return</span>;
+    onAnadir(texto);
+    setTexto(<span class="str">""</span>);
+  }
+
+  <span class="kw">return</span> (
+    &lt;<span class="tag">form</span> <span class="prop">onSubmit</span>={manejarEnvio}&gt;
+      &lt;<span class="tag">input</span>
+        <span class="prop">value</span>={texto}
+        <span class="prop">onChange</span>={(e) =&gt; setTexto(e.target.value)}
+        <span class="prop">placeholder</span>=<span class="str">"Nuevo producto"</span>
+      /&gt;
+      &lt;<span class="tag">button</span> <span class="prop">type</span>=<span class="str">"submit"</span>&gt;Añadir&lt;/<span class="tag">button</span>&gt;
+    &lt;/<span class="tag">form</span>&gt;
+  );
+}</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">3</div>
+      <div class="step-body">
+        <h3><code class="inline">ListaProductos</code> y <code class="inline">Producto</code>: recorrer y delegar</h3>
+        <p><code class="inline">ListaProductos</code> solo recorre el array con <code class="inline">.map()</code> y reparte props a cada <code class="inline">Producto</code>; no tiene lógica propia. <code class="inline">Producto</code> muestra un elemento y llama a las funciones que recibe cuando hace falta.</p>
+        <div class="code-panel">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code><span class="kw">function</span> <span class="tag">ListaProductos</span>({ productos, onAlternar, onEliminar }) {
+  <span class="kw">return</span> (
+    &lt;<span class="tag">ul</span>&gt;
+      {productos.map((p) =&gt; (
+        &lt;<span class="tag">Producto</span>
+          <span class="prop">key</span>={p.id}
+          <span class="prop">producto</span>={p}
+          <span class="prop">onAlternar</span>={onAlternar}
+          <span class="prop">onEliminar</span>={onEliminar}
+        /&gt;
+      ))}
+    &lt;/<span class="tag">ul</span>&gt;
+  );
+}
+
+<span class="kw">function</span> <span class="tag">Producto</span>({ producto, onAlternar, onEliminar }) {
+  <span class="kw">return</span> (
+    &lt;<span class="tag">li</span>&gt;
+      &lt;<span class="tag">span</span>
+        <span class="prop">onClick</span>={() =&gt; onAlternar(producto.id)}
+        <span class="prop">style</span>={{
+          textDecoration: producto.comprado ? <span class="str">"line-through"</span> : <span class="str">"none"</span>,
+        }}
+      &gt;
+        {producto.nombre}
+      &lt;/<span class="tag">span</span>&gt;
+      &lt;<span class="tag">button</span> <span class="prop">onClick</span>={() =&gt; onEliminar(producto.id)}&gt;
+        Eliminar
+      &lt;/<span class="tag">button</span>&gt;
+    &lt;/<span class="tag">li</span>&gt;
+  );
+}</code></pre>
+        </div>
+        <div class="checkpoint">
+          <div class="checkpoint-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Deberías ver esto
+          </div>
+          <p>Puedes añadir productos, marcarlos como comprados haciendo clic en su nombre, eliminarlos, y el contador de arriba (&ldquo;X de Y comprados&rdquo;) se actualiza solo en cada acción, sin que tú lo recalcules a mano en ningún sitio aparte de <code class="inline">App</code>.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">4</div>
+      <div class="step-body">
+        <h3>Separa en archivos</h3>
+        <p>Con los cuatro componentes funcionando en un solo archivo, muévelos a <code class="inline">FormularioProducto.jsx</code>, <code class="inline">ListaProductos.jsx</code> y <code class="inline">Producto.jsx</code>, cada uno con su <code class="inline">export</code>, e impórtalos donde haga falta. <code class="inline">App</code> se queda como el archivo que los conecta a todos.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Reto extra
+      </div>
+      <p>Añade un botón &ldquo;Vaciar comprados&rdquo; en <code class="inline">App</code> que elimine de golpe todos los productos con <code class="inline">comprado: true</code>, usando <code class="inline">.filter()</code>.</p>
+      <p>Guarda la lista en <code class="inline">localStorage</code> con <code class="inline">useEffect</code> cada vez que cambie <code class="inline">productos</code>, y recupérala al cargar la página, para que sobreviva a un refresco del navegador.</p>
+    </div>
+  </section>
+
+  <footer class="end">
+    Con esto se cierra el bloque de React en el navegador. Sesión 9 &mdash; &ldquo;Del navegador al móvil&rdquo; &mdash; es el salto que estabas esperando: los mismos componentes, pero corriendo de verdad en un móvil.
+  </footer>
+
+</div>

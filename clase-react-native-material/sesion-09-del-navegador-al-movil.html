@@ -1,0 +1,659 @@
+<title>Del navegador al móvil</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #E4572E;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #FF8A5C;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #F2764C;
+      --accent-ink: #17110D;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #F2764C;
+    --accent-ink: #17110D;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top {
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.08rem;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  section.block {
+    margin-top: 44px;
+  }
+
+  h2.block-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+
+  .checklist {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow);
+  }
+
+  .checklist li {
+    list-style: none;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 15px;
+  }
+
+  .checklist ul { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+
+  .checklist svg {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    color: var(--accent-2);
+  }
+
+  .learn-list {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .learn-list li {
+    list-style: none;
+    padding-left: 20px;
+    position: relative;
+    color: var(--ink);
+  }
+
+  .learn-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .step {
+    display: flex;
+    gap: 18px;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .step:first-of-type { border-top: none; padding-top: 0; }
+
+  .step-chip {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-body { flex: 1; min-width: 0; }
+
+  .step h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 4px 0 8px;
+  }
+
+  .step p {
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+
+  .step p.small {
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+
+  .term {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+
+  .term-bar span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--code-line);
+  }
+
+  .term pre {
+    margin: 0;
+    padding: 14px 16px 16px;
+    overflow-x: auto;
+  }
+
+  .term code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13.6px;
+    line-height: 1.7;
+    color: var(--code-ink);
+  }
+
+  .term .prompt { color: var(--code-muted); }
+  .term .cmt { color: var(--code-muted); }
+  .term .hl { color: var(--code-accent); }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .code-panel .term-bar { }
+
+  .code-panel pre {
+    margin: 0;
+    padding: 16px 18px 18px;
+    overflow-x: auto;
+  }
+
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+
+  .code-panel .tag { color: var(--accent-2); }
+  .code-panel .str { color: #C9D96B; }
+  .code-panel .kw { color: var(--code-accent); }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .prop { color: #8FB8FF; }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+
+  .checkpoint p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .substep {
+    display: flex;
+    gap: 14px;
+    margin: 18px 0 0 16px;
+    padding-left: 16px;
+    border-left: 2px solid var(--line-soft);
+  }
+
+  .substep-chip {
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: var(--line-soft);
+    color: var(--muted);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 11.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .substep h4 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.98rem;
+    font-weight: 600;
+    margin: 2px 0 6px;
+  }
+
+  .substep p {
+    margin: 0 0 8px;
+    font-size: 14.5px;
+    color: var(--ink);
+  }
+
+  .substep .code-panel, .substep .term {
+    margin: 10px 0;
+  }
+
+  details.full-code {
+    margin-top: 16px;
+  }
+
+  details.full-code summary {
+    cursor: pointer;
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--accent-2);
+    list-style: none;
+  }
+
+  details.full-code summary::-webkit-details-marker { display: none; }
+
+  details.full-code summary::before {
+    content: "▸ ";
+  }
+
+  details.full-code[open] summary::before {
+    content: "▾ ";
+  }
+
+  .trouble {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .trouble-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .trouble-item .q {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    margin: 0 0 6px;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .trouble-item .q::before {
+    content: "?";
+    font-family: "IBM Plex Mono", monospace;
+    color: var(--accent-2);
+    font-weight: 500;
+  }
+
+  .trouble-item p {
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--muted);
+  }
+
+  .trouble-item p + p { margin-top: 8px; }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .step { transition: none; }
+  }
+
+  .compare {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+    margin: 14px 0;
+  }
+
+  .compare-label {
+    display: block;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+
+  .compare-item .code-panel { margin: 0; }
+</style>
+
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">Sesión 9 de 24 &middot; Bloque 3: React Native</span>
+    <h1>Del navegador al móvil</h1>
+    <p class="lede">Ocho sesiones escribiendo React para el navegador. Hoy cambiamos de terreno: mismo lenguaje, mismos hooks, pero un runtime distinto &mdash; el de un teléfono de verdad. Vemos qué se mantiene, qué cambia de nombre y qué desaparece.</p>
+    <div class="meta-row">
+      <span class="meta-chip">2 horas</span>
+      <span class="meta-chip">Sesión 9/24</span>
+      <span class="meta-chip">React Native + Expo</span>
+    </div>
+  </header>
+
+  <section class="block">
+    <h2 class="block-title">Qué vas a ver hoy</h2>
+    <ul class="learn-list">
+      <li>Qué es Expo y por qué te evita instalar Android Studio o Xcode.</li>
+      <li>Qué hace exactamente Expo Go cuando escaneas el QR.</li>
+      <li>Cómo se organiza un proyecto Expo por dentro.</li>
+      <li>Las tres diferencias que más chocan viniendo de React web: <code class="inline">View</code>, <code class="inline">Text</code> y <code class="inline">StyleSheet</code>.</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Expo: la capa que te ahorra Xcode y Android Studio</h2>
+    <p>React Native, usado a pelo, exige herramientas nativas pesadas: <strong>Android Studio</strong> (varios gigas, con su propio SDK y emuladores) para compilar para Android, y un <strong>Mac con Xcode</strong> para compilar para iOS. Si el objetivo fuera solo aprender a construir interfaces con componentes, ese peaje de instalación no aporta nada &mdash; y en un aula donde cada alumno trae un portátil distinto, sería la clase entera perdida en instaladores.</p>
+    <p><strong>Expo</strong> es un conjunto de herramientas construido encima de React Native que se salta ese paso. Te da un proyecto ya configurado, un servidor de desarrollo, y una forma de ejecutar tu app en un móvil real sin compilar nada nativo en tu portátil. Tú escribes JavaScript y JSX; Expo se encarga de empaquetarlo y servirlo. A cambio, no puedes instalar cualquier librería nativa exótica sin pasos extra &mdash; pero para prácticamente todo lo que vamos a construir en este curso, sobra de largo.</p>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Expo Go: la app que ejecuta tu código sin instalarlo</h2>
+    <p><strong>Expo Go</strong> es una app normal, ya publicada en Play Store y App Store, que sabe descargar y ejecutar el JavaScript de tu proyecto sobre la marcha. Cuando lanzas <code class="inline">npm start</code> y escaneas el QR con el móvil, tu teléfono <em>no instala tu app</em>: descarga tu código JS y lo corre dentro de Expo Go, que ya trae compilados los bloques nativos que vas a usar (<code class="inline">View</code>, <code class="inline">Text</code>, <code class="inline">Image</code>&hellip;). Es parecido a abrir una página web, solo que en vez de pintar HTML, pinta componentes nativos de verdad.</p>
+    <p>Esto es justo lo que hace posible el <strong>Fast Refresh</strong>: guardas un cambio en VS Code, el móvil recibe el JS actualizado y se refresca solo, sin recompilar nada nativo ni volver a escanear el QR.</p>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Un límite honesto
+      </div>
+      <p>Si algún día una app necesita una librería nativa que Expo Go no trae de fábrica, hace falta generar un &ldquo;development build&rdquo; propio. Es un escalón más avanzado que queda fuera de este curso &mdash; con lo que trae Expo Go de serie llegamos perfectamente hasta el final.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Cómo se organiza un proyecto Expo</h2>
+    <p>Al crear un proyecto con <code class="inline">create-expo-app</code> obtienes una estructura mínima. Estos son los archivos que realmente importan:</p>
+    <div class="term">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code>mi-primera-app/
+├── App.js            <span class="cmt">← el componente raíz, tu punto de partida</span>
+├── app.json          <span class="cmt">← nombre, icono, orientación de la app</span>
+├── package.json       <span class="cmt">← dependencias y scripts, como en cualquier proyecto Node</span>
+├── assets/            <span class="cmt">← imágenes e iconos que se empaquetan con la app</span>
+│   ├── icon.png
+│   └── splash.png
+└── node_modules/</code></pre>
+    </div>
+    <p><code class="inline">App.js</code> exporta por defecto el componente que arranca todo &mdash; es prácticamente el único archivo que vas a tocar en las próximas sesiones. <code class="inline">package.json</code> es exactamente lo que ya conoces de React web: dependencias y comandos (<code class="inline">npm start</code>, etc). La carpeta <code class="inline">assets/</code> es nueva: ahí van las imágenes que tu app necesita llevar consigo, y las vas a usar en la Sesión 10.</p>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Las tres cosas que más chocan viniendo de la web</h2>
+
+    <p><strong>1. <code class="inline">View</code> en vez de <code class="inline">div</code>.</strong> No hay HTML en React Native &mdash; no hay DOM, ni navegador debajo. <code class="inline">View</code> es el contenedor universal, el equivalente a un <code class="inline">div</code>, pero solo entiende un objeto de estilos, nunca clases CSS.</p>
+    <div class="compare">
+      <div class="compare-item">
+        <span class="compare-label">React (web)</span>
+        <div class="code-panel">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code>&lt;<span class="tag">div</span> <span class="prop">className</span>=<span class="str">"tarjeta"</span>&gt;
+  ...
+&lt;/<span class="tag">div</span>&gt;</code></pre>
+        </div>
+      </div>
+      <div class="compare-item">
+        <span class="compare-label">React Native</span>
+        <div class="code-panel">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code>&lt;<span class="tag">View</span> <span class="prop">style</span>={styles.tarjeta}&gt;
+  ...
+&lt;/<span class="tag">View</span>&gt;</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <p><strong>2. <code class="inline">Text</code> es obligatorio para todo texto.</strong> En la web puedes soltar texto suelto dentro de casi cualquier elemento. En React Native, un texto que no está envuelto en <code class="inline">&lt;Text&gt;</code> directamente <em>revienta la app</em> &mdash; no hay forma de renderizar un carácter sin él.</p>
+    <div class="compare">
+      <div class="compare-item">
+        <span class="compare-label">✗ En React Native, esto falla</span>
+        <div class="code-panel">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code>&lt;<span class="tag">View</span>&gt;
+  Hola mundo
+&lt;/<span class="tag">View</span>&gt;</code></pre>
+        </div>
+      </div>
+      <div class="compare-item">
+        <span class="compare-label">✓ Así sí funciona</span>
+        <div class="code-panel">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code>&lt;<span class="tag">View</span>&gt;
+  &lt;<span class="tag">Text</span>&gt;Hola mundo&lt;/<span class="tag">Text</span>&gt;
+&lt;/<span class="tag">View</span>&gt;</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <p><strong>3. <code class="inline">StyleSheet</code> en vez de CSS.</strong> No hay hojas de estilo, ni selectores, ni cascada, ni herencia entre elementos. Los estilos son objetos de JavaScript: las propiedades van en <code class="inline">camelCase</code> y los tamaños son números simples (dp, &ldquo;density-independent pixels&rdquo;), nunca cadenas con <code class="inline">px</code>.</p>
+    <div class="compare">
+      <div class="compare-item">
+        <span class="compare-label">React (web) &mdash; CSS</span>
+        <div class="code-panel">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code>.tarjeta {
+  background-color: #fff;
+  padding: 16px;
+  border-radius: 8px;
+}</code></pre>
+        </div>
+      </div>
+      <div class="compare-item">
+        <span class="compare-label">React Native &mdash; StyleSheet</span>
+        <div class="code-panel">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code><span class="kw">const</span> styles = StyleSheet.create({
+  tarjeta: {
+    backgroundColor: <span class="str">'#fff'</span>,
+    padding: <span class="hl">16</span>,
+    borderRadius: <span class="hl">8</span>,
+  },
+});</code></pre>
+        </div>
+      </div>
+    </div>
+    <p class="small" style="color:var(--muted); font-size:14.5px;"><code class="inline">StyleSheet.create</code> valida y optimiza ese objeto internamente, pero conceptualmente sigue siendo un objeto JS normal &mdash; nada de cascada: si quieres que un texto dentro de una <code class="inline">View</code> sea blanco, se lo tienes que decir a ese <code class="inline">Text</code> en concreto, ningún estilo &ldquo;baja&rdquo; solo.</p>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Práctica</h2>
+    <p>Hoy la parte práctica no va en esta página: hay una guía completa, paso a paso, que cubre desde crear el proyecto hasta tener un contador funcionando en tu propio móvil. Ábrela ahora y síguela de principio a fin.</p>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3h7v7"></path><path d="M10 14 21 3"></path><path d="M21 14v6a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h6"></path></svg>
+        Guía completa: Contador en Expo
+      </div>
+      <p>Sigue todos los pasos en <a href="contador-en-expo.html">la guía del contador</a> &mdash; crea el proyecto, ábrelo en VS Code, arráncalo y escanéalo con tu móvil, y construye el contador con <code class="inline">useState</code>, <code class="inline">View</code>, <code class="inline">Text</code> y <code class="inline">Pressable</code> aplicando justo lo que hemos visto hoy.</p>
+    </div>
+    <p>Cuando tengas el contador funcionando y tocando la pantalla del móvil de verdad, prueba estos dos retos extra:</p>
+    <ul class="learn-list">
+      <li><strong>Reto 1:</strong> añade un segundo <code class="inline">Pressable</code> con el texto &ldquo;Restar 1&rdquo; que nunca baje del cero (pista: <code class="inline">Math.max(0, contador - 1)</code>).</li>
+      <li><strong>Reto 2:</strong> añade un tercer <code class="inline">Text</code> debajo del número que muestre &ldquo;Es par&rdquo; o &ldquo;Es impar&rdquo; según el valor de <code class="inline">contador</code>.</li>
+    </ul>
+  </section>
+
+  <footer class="end">
+    Siguiente sesión: le damos estilo de verdad a una pantalla completa &mdash; imágenes, botones con estados táctiles y Flexbox al estilo React Native.
+  </footer>
+
+</div>

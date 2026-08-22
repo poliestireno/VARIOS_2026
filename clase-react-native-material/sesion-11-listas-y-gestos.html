@@ -1,0 +1,633 @@
+<title>Listas y gestos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #E4572E;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #FF8A5C;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #F2764C;
+      --accent-ink: #17110D;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #F2764C;
+    --accent-ink: #17110D;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top {
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.08rem;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  section.block {
+    margin-top: 44px;
+  }
+
+  h2.block-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+
+  .checklist {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow);
+  }
+
+  .checklist li {
+    list-style: none;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 15px;
+  }
+
+  .checklist ul { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+
+  .checklist svg {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    color: var(--accent-2);
+  }
+
+  .learn-list {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .learn-list li {
+    list-style: none;
+    padding-left: 20px;
+    position: relative;
+    color: var(--ink);
+  }
+
+  .learn-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .step {
+    display: flex;
+    gap: 18px;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .step:first-of-type { border-top: none; padding-top: 0; }
+
+  .step-chip {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-body { flex: 1; min-width: 0; }
+
+  .step h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 4px 0 8px;
+  }
+
+  .step p {
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+
+  .step p.small {
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+
+  .term {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+
+  .term-bar span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--code-line);
+  }
+
+  .term pre {
+    margin: 0;
+    padding: 14px 16px 16px;
+    overflow-x: auto;
+  }
+
+  .term code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13.6px;
+    line-height: 1.7;
+    color: var(--code-ink);
+  }
+
+  .term .prompt { color: var(--code-muted); }
+  .term .cmt { color: var(--code-muted); }
+  .term .hl { color: var(--code-accent); }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .code-panel .term-bar { }
+
+  .code-panel pre {
+    margin: 0;
+    padding: 16px 18px 18px;
+    overflow-x: auto;
+  }
+
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+
+  .code-panel .tag { color: var(--accent-2); }
+  .code-panel .str { color: #C9D96B; }
+  .code-panel .kw { color: var(--code-accent); }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .prop { color: #8FB8FF; }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+
+  .checkpoint p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .substep {
+    display: flex;
+    gap: 14px;
+    margin: 18px 0 0 16px;
+    padding-left: 16px;
+    border-left: 2px solid var(--line-soft);
+  }
+
+  .substep-chip {
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: var(--line-soft);
+    color: var(--muted);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 11.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .substep h4 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.98rem;
+    font-weight: 600;
+    margin: 2px 0 6px;
+  }
+
+  .substep p {
+    margin: 0 0 8px;
+    font-size: 14.5px;
+    color: var(--ink);
+  }
+
+  .substep .code-panel, .substep .term {
+    margin: 10px 0;
+  }
+
+  details.full-code {
+    margin-top: 16px;
+  }
+
+  details.full-code summary {
+    cursor: pointer;
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--accent-2);
+    list-style: none;
+  }
+
+  details.full-code summary::-webkit-details-marker { display: none; }
+
+  details.full-code summary::before {
+    content: "▸ ";
+  }
+
+  details.full-code[open] summary::before {
+    content: "▾ ";
+  }
+
+  .trouble {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .trouble-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .trouble-item .q {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    margin: 0 0 6px;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .trouble-item .q::before {
+    content: "?";
+    font-family: "IBM Plex Mono", monospace;
+    color: var(--accent-2);
+    font-weight: 500;
+  }
+
+  .trouble-item p {
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--muted);
+  }
+
+  .trouble-item p + p { margin-top: 8px; }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .step { transition: none; }
+  }
+
+  .compare {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+    margin: 14px 0;
+  }
+
+  .compare-label {
+    display: block;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+
+  .compare-item .code-panel { margin: 0; }
+</style>
+
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">Sesión 11 de 24 &middot; Bloque 3: React Native</span>
+    <h1>Listas y gestos</h1>
+    <p class="lede">Dos capacidades que separan una app de juguete de una app de verdad: mostrar cientos de elementos sin que el móvil sufra, y responder al dedo del usuario cuando arrastra por la pantalla. Hoy tocamos <code class="inline">FlatList</code> y <code class="inline">PanResponder</code>.</p>
+    <div class="meta-row">
+      <span class="meta-chip">2 horas</span>
+      <span class="meta-chip">Sesión 11/24</span>
+      <span class="meta-chip">FlatList + PanResponder</span>
+    </div>
+  </header>
+
+  <section class="block">
+    <h2 class="block-title">Qué vas a ver hoy</h2>
+    <ul class="learn-list">
+      <li>Por qué <code class="inline">.map()</code> dentro de un <code class="inline">ScrollView</code> es un mal plan para listas largas.</li>
+      <li><code class="inline">FlatList</code> y su prop <code class="inline">keyExtractor</code>.</li>
+      <li><code class="inline">PanResponder</code>: cómo React Native detecta y sigue un gesto de arrastre, con el código real de la pala de Arcanoid/Pang.</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Por qué no usar .map() dentro de un ScrollView</h2>
+    <p>En React web, renderizar una lista con <code class="inline">array.map()</code> dentro de un contenedor con scroll funciona bien casi siempre, porque el navegador es muy eficiente recortando lo que no se ve. En React Native, un <code class="inline">ScrollView</code> con <code class="inline">.map()</code> hace algo mucho más caro: <strong>crea y monta en memoria los cientos de componentes de golpe</strong>, aunque el usuario solo vaya a ver 6 a la vez.</p>
+    <div class="compare">
+      <div class="compare-item">
+        <span class="compare-label">✗ Todo de golpe, cuesta caro</span>
+        <div class="code-panel">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code>&lt;<span class="tag">ScrollView</span>&gt;
+  {contactos.map(c =&gt; (
+    &lt;<span class="tag">Text</span> <span class="prop">key</span>={c.id}&gt;{c.nombre}&lt;/<span class="tag">Text</span>&gt;
+  ))}
+&lt;/<span class="tag">ScrollView</span>&gt;</code></pre>
+        </div>
+      </div>
+      <div class="compare-item">
+        <span class="compare-label">✓ Solo lo que se ve, y un poco más</span>
+        <div class="code-panel">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code>&lt;<span class="tag">FlatList</span>
+  <span class="prop">data</span>={contactos}
+  <span class="prop">renderItem</span>={({ item }) =&gt; &lt;<span class="tag">Text</span>&gt;{item.nombre}&lt;/<span class="tag">Text</span>&gt;}
+  <span class="prop">keyExtractor</span>={item =&gt; item.id}
+/&gt;</code></pre>
+        </div>
+      </div>
+    </div>
+    <p><code class="inline">FlatList</code> es una lista <strong>virtualizada</strong>: solo mantiene montados los elementos visibles en pantalla más un pequeño margen a cada lado. Cuando haces scroll, va montando lo nuevo y desmontando (o reciclando) lo que sale de vista, en vez de tener los 500 elementos vivos a la vez. Para 5 elementos no notarías diferencia; para 500, es la diferencia entre una app fluida y una que se congela.</p>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">La prop keyExtractor</h2>
+    <p><code class="inline">keyExtractor</code> le dice a <code class="inline">FlatList</code> cómo sacar un identificador único de cada elemento &mdash; cumple el mismo papel que la prop <code class="inline">key</code> que ya usabas en <code class="inline">.map()</code> en React web, solo que aquí es explícita y obligatoria para que la lista funcione bien.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">const</span> contactos = [
+  { id: <span class="str">'1'</span>, nombre: <span class="str">'Ana'</span>, telefono: <span class="str">'600 111 222'</span> },
+  { id: <span class="str">'2'</span>, nombre: <span class="str">'Luis'</span>, telefono: <span class="str">'600 333 444'</span> },
+  <span class="com">// ...</span>
+];
+
+&lt;<span class="tag">FlatList</span>
+  <span class="prop">data</span>={contactos}
+  <span class="prop">keyExtractor</span>={(item) =&gt; item.id}
+  <span class="prop">renderItem</span>={({ item }) =&gt; (
+    &lt;<span class="tag">View</span> <span class="prop">style</span>={styles.fila}&gt;
+      &lt;<span class="tag">Text</span> <span class="prop">style</span>={styles.nombre}&gt;{item.nombre}&lt;/<span class="tag">Text</span>&gt;
+      &lt;<span class="tag">Text</span> <span class="prop">style</span>={styles.subtitulo}&gt;{item.telefono}&lt;/<span class="tag">Text</span>&gt;
+    &lt;/<span class="tag">View</span>&gt;
+  )}
+/&gt;</code></pre>
+    </div>
+    <p>Sin <code class="inline">keyExtractor</code>, <code class="inline">FlatList</code> intenta usar el índice de cada elemento como identificador &mdash; funciona a medias, pero en cuanto la lista se reordena o filtra, React puede confundir un elemento con otro y reutilizar mal las filas. Con datos que tienen un <code class="inline">id</code> propio, dáselo siempre.</p>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">PanResponder: seguir un dedo por la pantalla</h2>
+    <p>Los mini-juegos que ya habéis construido &mdash;Arcanoid y Pang&mdash; mueven la pala arrastrando el dedo por la pantalla. Ese arrastre se captura con <code class="inline">PanResponder</code>, la API de bajo nivel de React Native para gestos táctiles. Este es el código real que usa la pala:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">const</span> panResponder = useRef(
+  PanResponder.create({
+    <span class="com">// Solo capturamos el gesto mientras se juega, para no bloquear los botones.</span>
+    onStartShouldSetPanResponder: () =&gt; juego.estado === <span class="str">'jugando'</span>,
+    onMoveShouldSetPanResponder: () =&gt; juego.estado === <span class="str">'jugando'</span>,
+    onPanResponderMove: (evento) =&gt; {
+      <span class="kw">const</span> x = evento.nativeEvent.locationX;
+      juego.jugadorX = Math.max(<span class="hl">0</span>, Math.min(anchoJuego - ANCHO_JUGADOR, x - ANCHO_JUGADOR / <span class="hl">2</span>));
+      redibujar();
+    },
+  })
+).current;</code></pre>
+    </div>
+    <p>Vamos por partes:</p>
+    <ul class="learn-list">
+      <li><strong><code class="inline">PanResponder.create({ ... })</code></strong> crea el manejador de gestos. Se envuelve en <code class="inline">useRef(...).current</code> para que sea el mismo objeto durante toda la vida del componente &mdash; no tiene sentido recrearlo en cada render.</li>
+      <li><strong><code class="inline">onStartShouldSetPanResponder</code> y <code class="inline">onMoveShouldSetPanResponder</code></strong> son las preguntas que React Native hace antes de &ldquo;entregarte&rdquo; el gesto: &ldquo;¿quieres capturar este toque que empieza?&rdquo; y &ldquo;¿quieres capturar este movimiento?&rdquo;. Devuelven <code class="inline">true</code> o <code class="inline">false</code>. Aquí ambas comprueban <code class="inline">juego.estado === 'jugando'</code>: si el gesto se capturara siempre, arrastrar el dedo sobre un botón dibujado encima del área de juego (como &ldquo;Pausa&rdquo; o &ldquo;Reiniciar&rdquo;) quedaría bloqueado, porque el <code class="inline">PanResponder</code> se habría quedado con el toque antes de que le llegara al botón. Condicionar la captura al estado del juego evita justo eso.</li>
+      <li><strong><code class="inline">onPanResponderMove</code></strong> se dispara en cada movimiento, una vez que el gesto ya fue capturado. <code class="inline">evento.nativeEvent.locationX</code> es la posición horizontal del dedo <em>relativa al elemento tocado</em> (no a la pantalla entera) &mdash; el dato que necesitamos para saber dónde mover la pala.</li>
+      <li><strong>El patrón <code class="inline">Math.max(0, Math.min(límite, valor))</code></strong> es un &ldquo;clamp&rdquo;: obliga a <code class="inline">valor</code> a quedarse entre <code class="inline">0</code> y <code class="inline">límite</code>. Aquí evita que la pala se salga del área de juego por la izquierda (nunca baja de <code class="inline">0</code>) o por la derecha (nunca supera <code class="inline">anchoJuego - ANCHO_JUGADOR</code>). Restar <code class="inline">ANCHO_JUGADOR / 2</code> centra la pala respecto al dedo, en vez de dejar el borde izquierdo pegado a él.</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Práctica</h2>
+
+    <div class="step">
+      <div class="step-chip">1</div>
+      <div class="step-body">
+        <h3>Lista con FlatList</h3>
+        <p>Crea un array con al menos <strong>15 elementos</strong> (contactos, productos, canciones&hellip; lo que prefieras), cada uno con un <code class="inline">id</code>, un nombre y un subtítulo. Muéstralo con <code class="inline">FlatList</code>, con su <code class="inline">keyExtractor</code> correspondiente, y da estilo a cada fila con <code class="inline">StyleSheet</code> (por ejemplo, nombre en negrita arriba, subtítulo atenuado debajo, con un borde inferior fino separando filas).</p>
+        <p class="small">Pista: la prop <code class="inline">ItemSeparatorComponent</code> te deja añadir una línea divisoria entre filas sin tener que meterla dentro de cada <code class="inline">renderItem</code>.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">2</div>
+      <div class="step-body">
+        <h3>Una caja que se arrastra</h3>
+        <p>En una segunda pantalla (o debajo de la lista), construye una &ldquo;pista&rdquo; horizontal &mdash;una <code class="inline">View</code> ancha y baja&mdash; con un cuadrado de color dentro que el usuario pueda arrastrar a izquierda y derecha con el dedo, sin salirse de los bordes de la pista. Reutiliza el patrón de <code class="inline">PanResponder</code> de arriba, simplificado: no necesitas condición de estado de juego, así que <code class="inline">onStartShouldSetPanResponder</code> y <code class="inline">onMoveShouldSetPanResponder</code> pueden devolver <code class="inline">true</code> directamente. Guarda la posición X del cuadrado en un <code class="inline">useState</code>, y en <code class="inline">onPanResponderMove</code> actualízala con el mismo patrón de <code class="inline">Math.max</code>/<code class="inline">Math.min</code> para no salirte del ancho de la pista.</p>
+      </div>
+    </div>
+
+    <p>Reto extra: en la lista de la pista, añade un número que muestre el porcentaje de recorrido del cuadrado (0% pegado a la izquierda, 100% pegado a la derecha), calculado a partir de su posición X y el ancho de la pista.</p>
+  </section>
+
+  <footer class="end">
+    Siguiente sesión: dejamos de tener una sola pantalla &mdash; con React Navigation conectamos varias, con parámetros viajando entre ellas.
+  </footer>
+
+</div>
