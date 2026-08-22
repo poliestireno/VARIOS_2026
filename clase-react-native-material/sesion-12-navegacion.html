@@ -1,0 +1,680 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Navegación</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #E4572E;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #FF8A5C;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #F2764C;
+      --accent-ink: #17110D;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #F2764C;
+    --accent-ink: #17110D;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top {
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.08rem;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  section.block {
+    margin-top: 44px;
+  }
+
+  h2.block-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+
+  .checklist {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow);
+  }
+
+  .checklist li {
+    list-style: none;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 15px;
+  }
+
+  .checklist ul { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+
+  .checklist svg {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    color: var(--accent-2);
+  }
+
+  .learn-list {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .learn-list li {
+    list-style: none;
+    padding-left: 20px;
+    position: relative;
+    color: var(--ink);
+  }
+
+  .learn-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .step {
+    display: flex;
+    gap: 18px;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .step:first-of-type { border-top: none; padding-top: 0; }
+
+  .step-chip {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-body { flex: 1; min-width: 0; }
+
+  .step h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 4px 0 8px;
+  }
+
+  .step p {
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+
+  .step p.small {
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+
+  .term {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+
+  .term-bar span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--code-line);
+  }
+
+  .term pre {
+    margin: 0;
+    padding: 14px 16px 16px;
+    overflow-x: auto;
+  }
+
+  .term code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13.6px;
+    line-height: 1.7;
+    color: var(--code-ink);
+  }
+
+  .term .prompt { color: var(--code-muted); }
+  .term .cmt { color: var(--code-muted); }
+  .term .hl { color: var(--code-accent); }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .code-panel .term-bar { }
+
+  .code-panel pre {
+    margin: 0;
+    padding: 16px 18px 18px;
+    overflow-x: auto;
+  }
+
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+
+  .code-panel .tag { color: var(--accent-2); }
+  .code-panel .str { color: #C9D96B; }
+  .code-panel .kw { color: var(--code-accent); }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .prop { color: #8FB8FF; }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+
+  .checkpoint p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .substep {
+    display: flex;
+    gap: 14px;
+    margin: 18px 0 0 16px;
+    padding-left: 16px;
+    border-left: 2px solid var(--line-soft);
+  }
+
+  .substep-chip {
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: var(--line-soft);
+    color: var(--muted);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 11.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .substep h4 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.98rem;
+    font-weight: 600;
+    margin: 2px 0 6px;
+  }
+
+  .substep p {
+    margin: 0 0 8px;
+    font-size: 14.5px;
+    color: var(--ink);
+  }
+
+  .substep .code-panel, .substep .term {
+    margin: 10px 0;
+  }
+
+  details.full-code {
+    margin-top: 16px;
+  }
+
+  details.full-code summary {
+    cursor: pointer;
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--accent-2);
+    list-style: none;
+  }
+
+  details.full-code summary::-webkit-details-marker { display: none; }
+
+  details.full-code summary::before {
+    content: "▸ ";
+  }
+
+  details.full-code[open] summary::before {
+    content: "▾ ";
+  }
+
+  .trouble {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .trouble-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .trouble-item .q {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    margin: 0 0 6px;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .trouble-item .q::before {
+    content: "?";
+    font-family: "IBM Plex Mono", monospace;
+    color: var(--accent-2);
+    font-weight: 500;
+  }
+
+  .trouble-item p {
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--muted);
+  }
+
+  .trouble-item p + p { margin-top: 8px; }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .step { transition: none; }
+  }
+
+  .compare {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+    margin: 14px 0;
+  }
+
+  .compare-label {
+    display: block;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+
+  .compare-item .code-panel { margin: 0; }
+</style>
+
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">Sesión 12 de 24 &middot; Bloque 3: React Native</span>
+    <h1>Navegación</h1>
+    <p class="lede">Hasta ahora, cada app ha vivido en una sola pantalla. Hoy es donde empiezan a parecerse a las apps de verdad: varias pantallas conectadas, con datos que viajan de una a otra, y una barra de pestañas para las secciones principales.</p>
+    <div class="meta-row">
+      <span class="meta-chip">2 horas</span>
+      <span class="meta-chip">Sesión 12/24</span>
+      <span class="meta-chip">React Navigation</span>
+    </div>
+  </header>
+
+  <section class="block">
+    <h2 class="block-title">Qué vas a ver hoy</h2>
+    <ul class="learn-list">
+      <li>Instalar y configurar React Navigation en un proyecto Expo.</li>
+      <li>Stack Navigator: <code class="inline">navigation.navigate</code>, y pasar/leer parámetros con <code class="inline">route.params</code>.</li>
+      <li>Tab Navigator: cuándo tiene sentido usar pestañas en vez de una pila de pantallas.</li>
+      <li>Cómo combinar ambos: pestañas que, por dentro, contienen su propia pila de pantallas.</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Instalar React Navigation</h2>
+    <p><strong>React Navigation</strong> es la librería estándar para moverse entre pantallas en React Native. No viene incluida por defecto: hay que instalarla, junto con un par de dependencias nativas que necesita por debajo.</p>
+    <div class="term">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="prompt">$</span> npx expo install @react-navigation/native @react-navigation/native-stack
+<span class="prompt">$</span> npx expo install react-native-screens react-native-safe-area-context</code></pre>
+    </div>
+    <p class="small" style="color:var(--muted); font-size:14.5px;">Usamos <code class="inline">npx expo install</code> en vez de <code class="inline">npm install</code> a propósito: Expo conoce qué versión de cada librería es compatible con tu versión de Expo SDK, y ajusta la instalación en consecuencia.</p>
+    <p>Toda la app tiene que quedar envuelta en un único <code class="inline">NavigationContainer</code>, normalmente en <code class="inline">App.js</code>:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">import</span> { NavigationContainer } <span class="kw">from</span> <span class="str">'@react-navigation/native'</span>;
+
+<span class="kw">export default function</span> <span class="tag">App</span>() {
+  <span class="kw">return</span> (
+    &lt;<span class="tag">NavigationContainer</span>&gt;
+      {<span class="com">/* aquí va tu navegador */</span>}
+    &lt;/<span class="tag">NavigationContainer</span>&gt;
+  );
+}</code></pre>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Stack Navigator: pantallas apiladas</h2>
+    <p>Un <strong>Stack Navigator</strong> mantiene las pantallas en una pila: cada vez que navegas &ldquo;hacia delante&rdquo;, apila una pantalla nueva encima; al volver atrás (con el gesto del sistema o el botón de la cabecera), la desapila. Es el patrón natural para flujos tipo &ldquo;lista &rarr; detalle&rdquo;.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">import</span> { createNativeStackNavigator } <span class="kw">from</span> <span class="str">'@react-navigation/native-stack'</span>;
+
+<span class="kw">const</span> Stack = createNativeStackNavigator();
+
+<span class="kw">function</span> <span class="tag">NavegadorProductos</span>() {
+  <span class="kw">return</span> (
+    &lt;<span class="tag">Stack.Navigator</span>&gt;
+      &lt;<span class="tag">Stack.Screen</span> <span class="prop">name</span>=<span class="str">"Lista"</span> <span class="prop">component</span>={PantallaLista} /&gt;
+      &lt;<span class="tag">Stack.Screen</span> <span class="prop">name</span>=<span class="str">"Detalle"</span> <span class="prop">component</span>={PantallaDetalle} /&gt;
+    &lt;/<span class="tag">Stack.Navigator</span>&gt;
+  );
+}</code></pre>
+    </div>
+    <p>Cada <code class="inline">Stack.Screen</code> recibe un <code class="inline">name</code> (el identificador con el que la vas a pedir) y un <code class="inline">component</code> (el componente que se renderiza). React Navigation inyecta automáticamente dos props a cada pantalla: <code class="inline">navigation</code> (para moverte) y <code class="inline">route</code> (para leer con qué te navegaron).</p>
+
+    <h3 style="font-family:'Lexend',sans-serif; font-size:1.05rem; font-weight:600; margin:28px 0 10px;">Navegar y pasar parámetros</h3>
+    <p>Desde la lista, navegas a &ldquo;Detalle&rdquo; pasándole el producto tocado como segundo argumento de <code class="inline">navigate</code>:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">function</span> <span class="tag">PantallaLista</span>({ navigation }) {
+  <span class="kw">return</span> (
+    &lt;<span class="tag">FlatList</span>
+      <span class="prop">data</span>={productos}
+      <span class="prop">keyExtractor</span>={(item) =&gt; item.id}
+      <span class="prop">renderItem</span>={({ item }) =&gt; (
+        &lt;<span class="tag">Pressable</span> <span class="prop">onPress</span>={() =&gt; navigation.navigate(<span class="str">'Detalle'</span>, { producto: item })}&gt;
+          &lt;<span class="tag">Text</span>&gt;{item.nombre}&lt;/<span class="tag">Text</span>&gt;
+        &lt;/<span class="tag">Pressable</span>&gt;
+      )}
+    /&gt;
+  );
+}</code></pre>
+    </div>
+    <p>Y en la pantalla de destino, ese objeto llega dentro de <code class="inline">route.params</code>:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">function</span> <span class="tag">PantallaDetalle</span>({ route }) {
+  <span class="kw">const</span> { producto } = route.params;
+  <span class="kw">return</span> (
+    &lt;<span class="tag">View</span> <span class="prop">style</span>={styles.contenedor}&gt;
+      &lt;<span class="tag">Text</span> <span class="prop">style</span>={styles.titulo}&gt;{producto.nombre}&lt;/<span class="tag">Text</span>&gt;
+      &lt;<span class="tag">Text</span> <span class="prop">style</span>={styles.precio}&gt;{producto.precio} €&lt;/<span class="tag">Text</span>&gt;
+    &lt;/<span class="tag">View</span>&gt;
+  );
+}</code></pre>
+    </div>
+    <p><code class="inline">route.params</code> viaja solo en una dirección, de quien navega a quien recibe &mdash; no hay &ldquo;magia&rdquo; de estado compartido: es literalmente el segundo argumento que le pasaste a <code class="inline">navigate</code>.</p>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Tab Navigator: pestañas para secciones, no para flujos</h2>
+    <p>Un <strong>Tab Navigator</strong> muestra varias pantallas como pestañas fijas (normalmente abajo), todas accesibles en cualquier momento con un toque, sin noción de &ldquo;apilar&rdquo; ni de &ldquo;volver atrás&rdquo;. Úsalo para las <strong>secciones principales</strong> de la app &mdash; sitios a los que el usuario vuelve constantemente&mdash; y reserva el Stack para <strong>flujos de profundización</strong> dentro de cada sección (una lista que lleva a un detalle, un detalle que lleva a un formulario, etc).</p>
+    <div class="term">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="prompt">$</span> npx expo install @react-navigation/bottom-tabs</code></pre>
+    </div>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">import</span> { createBottomTabNavigator } <span class="kw">from</span> <span class="str">'@react-navigation/bottom-tabs'</span>;
+
+<span class="kw">const</span> Tab = createBottomTabNavigator();
+
+<span class="kw">function</span> <span class="tag">App</span>() {
+  <span class="kw">return</span> (
+    &lt;<span class="tag">NavigationContainer</span>&gt;
+      &lt;<span class="tag">Tab.Navigator</span>&gt;
+        &lt;<span class="tag">Tab.Screen</span> <span class="prop">name</span>=<span class="str">"Productos"</span> <span class="prop">component</span>={NavegadorProductos} /&gt;
+        &lt;<span class="tag">Tab.Screen</span> <span class="prop">name</span>=<span class="str">"Ajustes"</span> <span class="prop">component</span>={PantallaAjustes} /&gt;
+      &lt;/<span class="tag">Tab.Navigator</span>&gt;
+    &lt;/<span class="tag">NavigationContainer</span>&gt;
+  );
+}</code></pre>
+    </div>
+    <p>Fíjate en algo importante: la pestaña &ldquo;Productos&rdquo; no apunta a <code class="inline">PantallaLista</code> directamente, sino a <code class="inline">NavegadorProductos</code> &mdash; el Stack Navigator completo que definimos antes. Esto es <strong>anidar navegadores</strong>: un Tab Navigator por fuera, con un Stack Navigator dentro de una de sus pestañas. Así, dentro de &ldquo;Productos&rdquo; puedes navegar de la lista al detalle con normalidad, mientras la barra de pestañas de abajo sigue siempre visible.</p>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Tabs vs Stack, en una frase
+      </div>
+      <p>Si el usuario necesita volver a ese sitio constantemente, es una pestaña. Si es un paso dentro de una tarea que empieza en otro sitio y a la que no se vuelve directamente, es una pantalla en un Stack.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Práctica</h2>
+    <p>Construye una app de <strong>3 pantallas</strong> combinando lo de hoy:</p>
+
+    <div class="step">
+      <div class="step-chip">1</div>
+      <div class="step-body">
+        <h3>Lista de productos (Stack)</h3>
+        <p>Un array de al menos 10 productos (nombre, precio, y opcionalmente una imagen), mostrados con <code class="inline">FlatList</code>. Cada fila, al tocarla, navega a &ldquo;Detalle&rdquo; pasando el producto completo por parámetros.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">2</div>
+      <div class="step-body">
+        <h3>Detalle de producto (Stack)</h3>
+        <p>Lee <code class="inline">route.params</code> y muestra el nombre, precio y demás datos del producto recibido, con su propio estilo vía <code class="inline">StyleSheet</code>. Comprueba que el botón de volver de la cabecera (o el gesto de deslizar desde el borde) te devuelve a la lista.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">3</div>
+      <div class="step-body">
+        <h3>Ajustes (Tab)</h3>
+        <p>Una tercera pantalla simple, accesible desde una segunda pestaña del Tab Navigator &mdash; no forma parte del Stack de productos. Puede ser tan sencilla como un par de <code class="inline">Text</code> con opciones ficticias (&ldquo;Notificaciones&rdquo;, &ldquo;Cuenta&rdquo;&hellip;).</p>
+      </div>
+    </div>
+
+    <p>Monta todo con un <code class="inline">Tab.Navigator</code> como raíz dentro del <code class="inline">NavigationContainer</code>: una pestaña &ldquo;Productos&rdquo; que apunta a tu Stack (Lista + Detalle), y una pestaña &ldquo;Ajustes&rdquo; directa.</p>
+    <p>Reto extra: añade un botón &ldquo;Volver a la lista&rdquo; en la pantalla de Detalle que use <code class="inline">navigation.navigate('Lista')</code> en vez del botón de la cabecera &mdash; y, si te atreves, un tercer parámetro por la URL: pasa solo el <code class="inline">id</code> del producto (no el objeto completo) y busca sus datos en el array desde la pantalla de Detalle.</p>
+  </section>
+
+  <footer class="end">
+    Con esto se cierra el arranque de Bloque 3: de un proyecto vacío a una app con varias pantallas de verdad, navegación y gestos incluidos. Siguiente sesión: entrada de usuario avanzada &mdash; formularios más completos, teclados, validación y otros inputs táctiles.
+  </footer>
+
+</div>
+
+</html>
