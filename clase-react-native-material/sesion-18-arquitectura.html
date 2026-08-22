@@ -1,0 +1,607 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Arquitectura</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #E4572E;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #FF8A5C;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #F2764C;
+      --accent-ink: #17110D;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #F2764C;
+    --accent-ink: #17110D;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top {
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.08rem;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  section.block {
+    margin-top: 44px;
+  }
+
+  h2.block-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+
+  .checklist {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow);
+  }
+
+  .checklist li {
+    list-style: none;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 15px;
+  }
+
+  .checklist ul { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+
+  .checklist svg {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    color: var(--accent-2);
+  }
+
+  .learn-list {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .learn-list li {
+    list-style: none;
+    padding-left: 20px;
+    position: relative;
+    color: var(--ink);
+  }
+
+  .learn-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .step {
+    display: flex;
+    gap: 18px;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .step:first-of-type { border-top: none; padding-top: 0; }
+
+  .step-chip {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-body { flex: 1; min-width: 0; }
+
+  .step h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 4px 0 8px;
+  }
+
+  .step p {
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+
+  .step p.small {
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+
+  .term {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+
+  .term-bar span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--code-line);
+  }
+
+  .term pre {
+    margin: 0;
+    padding: 14px 16px 16px;
+    overflow-x: auto;
+  }
+
+  .term code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13.6px;
+    line-height: 1.7;
+    color: var(--code-ink);
+  }
+
+  .term .prompt { color: var(--code-muted); }
+  .term .cmt { color: var(--code-muted); }
+  .term .hl { color: var(--code-accent); }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .code-panel .term-bar { }
+
+  .code-panel pre {
+    margin: 0;
+    padding: 16px 18px 18px;
+    overflow-x: auto;
+  }
+
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+
+  .code-panel .tag { color: var(--accent-2); }
+  .code-panel .str { color: #C9D96B; }
+  .code-panel .kw { color: var(--code-accent); }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .prop { color: #8FB8FF; }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+
+  .checkpoint p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .substep {
+    display: flex;
+    gap: 14px;
+    margin: 18px 0 0 16px;
+    padding-left: 16px;
+    border-left: 2px solid var(--line-soft);
+  }
+
+  .substep-chip {
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: var(--line-soft);
+    color: var(--muted);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 11.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .substep h4 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.98rem;
+    font-weight: 600;
+    margin: 2px 0 6px;
+  }
+
+  .substep p {
+    margin: 0 0 8px;
+    font-size: 14.5px;
+    color: var(--ink);
+  }
+
+  .substep .code-panel, .substep .term {
+    margin: 10px 0;
+  }
+
+  details.full-code {
+    margin-top: 16px;
+  }
+
+  details.full-code summary {
+    cursor: pointer;
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--accent-2);
+    list-style: none;
+  }
+
+  details.full-code summary::-webkit-details-marker { display: none; }
+
+  details.full-code summary::before {
+    content: "▸ ";
+  }
+
+  details.full-code[open] summary::before {
+    content: "▾ ";
+  }
+
+  .trouble {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .trouble-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .trouble-item .q {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    margin: 0 0 6px;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .trouble-item .q::before {
+    content: "?";
+    font-family: "IBM Plex Mono", monospace;
+    color: var(--accent-2);
+    font-weight: 500;
+  }
+
+  .trouble-item p {
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--muted);
+  }
+
+  .trouble-item p + p { margin-top: 8px; }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .step { transition: none; }
+  }
+</style>
+
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">Sesión 18 de 24 &middot; Bloque 4: Proyecto final</span>
+    <h1>Arquitectura</h1>
+    <p class="lede">Antes de programar a lo loco, hay que sentar las bases: qué pantallas tiene la app, cómo se navega entre ellas y dónde vive cada archivo. Hoy se abre VS Code por primera vez en el proyecto propio, pero solo para montar el esqueleto.</p>
+    <div class="meta-row">
+      <span class="meta-chip">2 horas</span>
+      <span class="meta-chip">Sesión 18/24</span>
+      <span class="meta-chip">Primer código del proyecto</span>
+    </div>
+  </header>
+
+  <section class="block">
+    <h2 class="block-title">Cómo dirigir esta sesión</h2>
+    <p>Cada alumno llega con su propuesta de la sesión 17: nombre, frase, wireframes y funcionalidades mínimas. Hoy esa propuesta se convierte en un proyecto de Expo real, pero todavía sin lógica &mdash; solo pantallas vacías conectadas entre sí. El objetivo no es que se vea bonito ni que haga nada; es que la estructura esté bien puesta antes de que empiece a crecer código dentro.</p>
+    <p>Resiste la tentación de dejar que alguien empiece por la pantalla que más le entusiasma y meta ahí toda la lógica de golpe. Si el esqueleto no está completo y navegable, las siguientes tres sesiones de desarrollo se construyen sobre una base que hay que reordenar a mitad de camino &mdash; y eso siempre cuesta más caro que hacerlo bien hoy.</p>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">De wireframes a lista de pantallas</h2>
+    <p>El primer paso de cada alumno es aburrido a propósito: contar los wireframes de la sesión 17 y convertir cada uno en una entrada de una lista con su nombre técnico (<code class="inline">ListaScreen</code>, <code class="inline">DetalleScreen</code>, <code class="inline">NuevoScreen</code>&hellip;). Después, para cada flecha que conecta dos wireframes, decidir qué tipo de navegación le corresponde &mdash; lo que vieron en la sesión 12:</p>
+    <ul class="learn-list">
+      <li><strong>Stack</strong> cuando una pantalla lleva a otra &ldquo;hacia dentro&rdquo; (lista &rarr; detalle, lista &rarr; formulario nuevo) y hace falta poder volver atrás.</li>
+      <li><strong>Tabs</strong> cuando hay 2&ndash;4 secciones de igual nivel a las que se salta libremente (por ejemplo &ldquo;Recetas&rdquo; y &ldquo;Favoritos&rdquo; como pestañas separadas).</li>
+      <li>La combinación más común en estos proyectos: unas tabs por fuera, y dentro de cada tab un stack propio para entrar en el detalle.</li>
+    </ul>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Si un alumno duda entre stack y tabs
+      </div>
+      <p>Pregunta: &ldquo;¿desde esta pantalla necesitas volver atrás, o simplemente saltar a otra sección?&rdquo;. Volver atrás es stack. Saltar de sección es tabs. La mayoría de proyectos de este nivel no necesitan más de un nivel de tabs.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Estructura de carpetas recomendada</h2>
+    <p>La misma estructura para todos hace que sea mucho más fácil ayudar a cualquiera en cualquier mesa &mdash; sabes dónde mirar sin preguntar. Para un proyecto de este tamaño, esto es suficiente:</p>
+    <div class="term">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code>mi-app/
+  App.js
+  screens/
+    ListaScreen.js
+    DetalleScreen.js
+    NuevoScreen.js
+  components/
+  navigation/
+    AppNavigator.js</code></pre>
+    </div>
+    <p><code class="inline">screens/</code> tiene una pantalla completa por archivo, una por cada entrada de la lista del paso anterior. <code class="inline">components/</code> se queda vacía por ahora &mdash; se va llenando en las sesiones 19 y 20 con piezas que se repiten en más de una pantalla (una tarjeta de item, un botón concreto). <code class="inline">navigation/</code> guarda la configuración de stacks y tabs, separada de <code class="inline">App.js</code> para que este quede como un archivo corto que solo arranca la navegación.</p>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Por qué montar el esqueleto antes que la lógica</h2>
+    <p>Un esqueleto es todas las pantallas ya creadas, cada una con un <code class="inline">&lt;Text&gt;</code> con su propio nombre, y toda la navegación funcionando entre ellas. Nada más. Se puede tocar cada botón de navegación y comprobar que lleva a donde tiene que llevar, sin que exista todavía ni una lista, ni un formulario, ni un solo dato real.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="com">// screens/ListaScreen.js — así de vacía debe estar hoy</span>
+<span class="kw">import</span> { View, Text } <span class="kw">from</span> <span class="str">'react-native'</span>;
+
+<span class="kw">export default function</span> <span class="tag">ListaScreen</span>() {
+  <span class="kw">return</span> (
+    &lt;<span class="tag">View</span>&gt;
+      &lt;<span class="tag">Text</span>&gt;Lista&lt;/<span class="tag">Text</span>&gt;
+    &lt;/<span class="tag">View</span>&gt;
+  );
+}</code></pre>
+    </div>
+    <p>Esto vale la pena por dos motivos. Primero, obliga a decidir toda la navegación de golpe, cuando cambiar de opinión todavía es barato &mdash; renombrar un archivo vacío cuesta nada; reorganizar un stack con lógica ya metida dentro, cuesta una tarde. Segundo, da a cada alumno una app que ya se puede tocar en el móvil desde el primer día, aunque no haga nada &mdash; y eso motiva mucho más que dos sesiones sin ver nada correr.</p>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Práctica de hoy</h2>
+    <div class="step">
+      <div class="step-chip">1</div>
+      <div class="step-body">
+        <h3>Lista de pantallas y navegación</h3>
+        <p class="small">Cada wireframe de la sesión 17 se convierte en una fila: nombre de pantalla &rarr; tipo de navegación que la conecta con las demás (stack, tab, o ambas).</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-chip">2</div>
+      <div class="step-body">
+        <h3>Crear el proyecto y la estructura de carpetas</h3>
+        <p class="small"><code class="inline">npx create-expo-app</code> con el nombre de su app, y dentro las carpetas <code class="inline">screens/</code>, <code class="inline">components/</code> y <code class="inline">navigation/</code> del árbol de arriba.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-chip">3</div>
+      <div class="step-body">
+        <h3>Una pantalla vacía por archivo</h3>
+        <p class="small">Un componente por pantalla, cada uno con un único <code class="inline">&lt;Text&gt;</code> con el nombre de la pantalla &mdash; ni estilos, ni datos, ni lógica todavía.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-chip">4</div>
+      <div class="step-body">
+        <h3>Montar la navegación completa</h3>
+        <p class="small">Stacks y/o tabs de <code class="inline">navigation/AppNavigator.js</code> conectando todas las pantallas, tal como se decidió en el paso 1.</p>
+      </div>
+    </div>
+
+    <div class="checkpoint">
+      <div class="checkpoint-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        Cómo saber si el esqueleto está listo
+      </div>
+      <p>Desde el móvil, con Expo Go, se puede llegar a cada una de las pantallas de la propuesta y volver atrás sin que la app se quede colgada ni falte ninguna. Si falta una pantalla del wireframe o sobra una que no estaba planeada, mejor detectarlo hoy que en la sesión 20.</p>
+    </div>
+  </section>
+
+  <footer class="end">
+    Siguiente sesión: sesión 19, &ldquo;Desarrollo I &mdash; pantallas principales&rdquo; &mdash; sobre este esqueleto empiezan a construirse las pantallas principales, con datos de prueba.
+  </footer>
+
+</div>
+
+</html>

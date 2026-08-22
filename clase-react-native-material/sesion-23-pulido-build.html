@@ -1,0 +1,713 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pulido visual y build</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #E4572E;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #FF8A5C;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #F2764C;
+      --accent-ink: #17110D;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #F2764C;
+    --accent-ink: #17110D;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top {
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.08rem;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  section.block {
+    margin-top: 44px;
+  }
+
+  h2.block-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+
+  .checklist {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow);
+  }
+
+  .checklist li {
+    list-style: none;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 15px;
+  }
+
+  .checklist ul { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+
+  .checklist svg {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    color: var(--accent-2);
+  }
+
+  .learn-list {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .learn-list li {
+    list-style: none;
+    padding-left: 20px;
+    position: relative;
+    color: var(--ink);
+  }
+
+  .learn-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .step {
+    display: flex;
+    gap: 18px;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .step:first-of-type { border-top: none; padding-top: 0; }
+
+  .step-chip {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-body { flex: 1; min-width: 0; }
+
+  .step h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 4px 0 8px;
+  }
+
+  .step p {
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+
+  .step p.small {
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+
+  .term {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+
+  .term-bar span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--code-line);
+  }
+
+  .term pre {
+    margin: 0;
+    padding: 14px 16px 16px;
+    overflow-x: auto;
+  }
+
+  .term code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13.6px;
+    line-height: 1.7;
+    color: var(--code-ink);
+  }
+
+  .term .prompt { color: var(--code-muted); }
+  .term .cmt { color: var(--code-muted); }
+  .term .hl { color: var(--code-accent); }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .code-panel .term-bar { }
+
+  .code-panel pre {
+    margin: 0;
+    padding: 16px 18px 18px;
+    overflow-x: auto;
+  }
+
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+
+  .code-panel .tag { color: var(--accent-2); }
+  .code-panel .str { color: #C9D96B; }
+  .code-panel .kw { color: var(--code-accent); }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .prop { color: #8FB8FF; }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+
+  .checkpoint p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .substep {
+    display: flex;
+    gap: 14px;
+    margin: 18px 0 0 16px;
+    padding-left: 16px;
+    border-left: 2px solid var(--line-soft);
+  }
+
+  .substep-chip {
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: var(--line-soft);
+    color: var(--muted);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 11.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .substep h4 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.98rem;
+    font-weight: 600;
+    margin: 2px 0 6px;
+  }
+
+  .substep p {
+    margin: 0 0 8px;
+    font-size: 14.5px;
+    color: var(--ink);
+  }
+
+  .substep .code-panel, .substep .term {
+    margin: 10px 0;
+  }
+
+  details.full-code {
+    margin-top: 16px;
+  }
+
+  details.full-code summary {
+    cursor: pointer;
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--accent-2);
+    list-style: none;
+  }
+
+  details.full-code summary::-webkit-details-marker { display: none; }
+
+  details.full-code summary::before {
+    content: "▸ ";
+  }
+
+  details.full-code[open] summary::before {
+    content: "▾ ";
+  }
+
+  .trouble {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .trouble-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .trouble-item .q {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    margin: 0 0 6px;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .trouble-item .q::before {
+    content: "?";
+    font-family: "IBM Plex Mono", monospace;
+    color: var(--accent-2);
+    font-weight: 500;
+  }
+
+  .trouble-item p {
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--muted);
+  }
+
+  .trouble-item p + p { margin-top: 8px; }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .step { transition: none; }
+  }
+</style>
+
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">Sesión 23 de 24 &middot; Bloque 4: Proyecto final</span>
+    <h1>Pulido visual y build</h1>
+    <p class="lede">Dejar la app lista para enseñarla fuera del aula: estilos consistentes, icono propio, y una build instalable de verdad &mdash; un APK que funciona sin Expo Go y sin pasar por Google Play.</p>
+    <div class="meta-row">
+      <span class="meta-chip">2 horas</span>
+      <span class="meta-chip">Sesión 23/24</span>
+      <span class="meta-chip">Android APK</span>
+    </div>
+  </header>
+
+  <section class="block">
+    <h2 class="block-title">Antes de empezar</h2>
+    <div class="checklist">
+      <ul>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span>Cada alumno necesita una <strong>cuenta gratuita de Expo</strong> (se crea en <code class="inline">expo.dev</code>). Es distinta de tener Expo Go instalado &mdash; hace falta cuenta para poder mandar builds a la nube.</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span>El proyecto debe arrancar sin errores con <code class="inline">npm start</code> antes de tocar nada de esto &mdash; una build no arregla bugs, solo empaqueta lo que ya hay.</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span>Conviene avisar con antelación de que la build tarda &mdash; se procesa en la nube de Expo, no en el portátil, así que no depende de la potencia de cada máquina, pero sí hay que esperar.</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Checklist de estilos</h2>
+    <p>Antes de tocar la configuración de la build, un repaso rápido de mesa en mesa &mdash; diez minutos, no una sesión entera:</p>
+    <div class="checklist">
+      <ul>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span><strong>Colores consistentes.</strong> Si cada pantalla usa un azul distinto porque se copió y pegó del <code class="inline">StyleSheet</code> de otra, es buen momento para centralizar dos o tres colores base en un solo sitio (un objeto simple, por ejemplo <code class="inline">const colors = { primary: '#2563eb', ... }</code>) y reutilizarlos.</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span><strong>Tamaños de texto legibles.</strong> Texto de cuerpo por debajo de 14&ndash;15px es difícil de leer en un móvil real, sobre todo enseñándolo a distancia en un demo day.</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span><strong>Espaciado con <code class="inline">StyleSheet</code>, no valores sueltos.</strong> Si hay <code class="inline">marginTop: 13</code> y <code class="inline">marginTop: 17</code> en sitios distintos porque &ldquo;quedaba bien&rdquo;, conviene unificar a valores redondos (8, 12, 16, 24) definidos en el <code class="inline">StyleSheet</code> del componente.</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Icono y splash screen</h2>
+    <p>Ambos se configuran en <code class="inline">app.json</code>, en la raíz del proyecto, sin tocar nada de código de las pantallas:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code>{
+  <span class="prop">"expo"</span>: {
+    <span class="prop">"name"</span>: <span class="str">"mi-app"</span>,
+    <span class="prop">"slug"</span>: <span class="str">"mi-app"</span>,
+    <span class="prop">"icon"</span>: <span class="str">"./assets/icon.png"</span>,
+    <span class="prop">"splash"</span>: {
+      <span class="prop">"image"</span>: <span class="str">"./assets/splash.png"</span>,
+      <span class="prop">"resizeMode"</span>: <span class="str">"contain"</span>,
+      <span class="prop">"backgroundColor"</span>: <span class="str">"#ffffff"</span>
+    },
+    <span class="prop">"android"</span>: {
+      <span class="prop">"package"</span>: <span class="str">"com.tunombre.miapp"</span>,
+      <span class="prop">"adaptiveIcon"</span>: {
+        <span class="prop">"foregroundImage"</span>: <span class="str">"./assets/adaptive-icon.png"</span>,
+        <span class="prop">"backgroundColor"</span>: <span class="str">"#ffffff"</span>
+      }
+    }
+  }
+}</code></pre>
+    </div>
+    <p class="small">Basta con sustituir los PNG dentro de <code class="inline">assets/</code> por uno propio (idealmente 1024&times;1024 para el icono, fondo simple). <code class="inline">android.package</code> es obligatorio para poder generar una build de Android &mdash; sigue el formato inverso de dominio, por ejemplo <code class="inline">com.tunombre.miapp</code>, en minúsculas y sin espacios.</p>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        No hace falta diseño profesional
+      </div>
+      <p>Un icono simple hecho en cualquier editor de imágenes en cinco minutos es más que suficiente para el objetivo de hoy. Lo importante es que exista uno propio, no el icono genérico por defecto de Expo.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">EAS Build, paso a paso</h2>
+    <p>EAS (Expo Application Services) es el servicio en la nube de Expo que compila tu proyecto en un APK real, sin necesidad de instalar Android Studio en el portátil. Vamos a generar un <strong>APK instalable directamente</strong>, sin pasar por Google Play.</p>
+
+    <div class="step">
+      <div class="step-chip">1</div>
+      <div class="step-body">
+        <h3>Inicia sesión con la cuenta de Expo</h3>
+        <p>Desde la terminal integrada de VS Code, dentro de la carpeta del proyecto:</p>
+        <div class="term">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code><span class="prompt">$</span> npx eas-cli login</code></pre>
+        </div>
+        <p class="small">Usamos <code class="inline">npx</code> en vez de instalar <code class="inline">eas-cli</code> de forma global: descarga la versión más reciente cada vez, sin depender de qué tenga instalado cada portátil. Pide el email y contraseña de la cuenta creada en <code class="inline">expo.dev</code>.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">2</div>
+      <div class="step-body">
+        <h3>Vincula el proyecto con EAS</h3>
+        <div class="term">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code><span class="prompt">$</span> npx eas-cli init</code></pre>
+        </div>
+        <p>Crea un proyecto en la cuenta de Expo asociado a este código, y guarda su identificador dentro de <code class="inline">app.json</code> (en <code class="inline">extra.eas.projectId</code>). Solo hace falta hacerlo una vez por proyecto.</p>
+        <div class="checkpoint">
+          <div class="checkpoint-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Deberías ver esto
+          </div>
+          <p>Un mensaje confirmando que el proyecto quedó creado y vinculado, con un enlace a su página en <code class="inline">expo.dev</code>.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">3</div>
+      <div class="step-body">
+        <h3>Configura los profiles de build</h3>
+        <div class="term">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code><span class="prompt">$</span> npx eas-cli build:configure</code></pre>
+        </div>
+        <p>Genera un archivo <code class="inline">eas.json</code> en la raíz del proyecto. Un &ldquo;profile&rdquo; es simplemente un preset con nombre: define cómo se genera la build (tipo de archivo, para qué está pensada) sin que tengas que repetir opciones en cada comando. Por defecto trae tres: <code class="inline">development</code>, <code class="inline">preview</code> y <code class="inline">production</code>.</p>
+        <p>Para que <code class="inline">preview</code> genere un APK directamente instalable (en vez del formato <code class="inline">.aab</code> que exige Google Play), edítalo así:</p>
+        <div class="code-panel">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code>{
+  <span class="prop">"cli"</span>: { <span class="prop">"version"</span>: <span class="str">">= 5.9.0"</span> },
+  <span class="prop">"build"</span>: {
+    <span class="prop">"development"</span>: {
+      <span class="prop">"developmentClient"</span>: <span class="hl">true</span>,
+      <span class="prop">"distribution"</span>: <span class="str">"internal"</span>
+    },
+    <span class="prop">"preview"</span>: {
+      <span class="prop">"distribution"</span>: <span class="str">"internal"</span>,
+      <span class="prop">"android"</span>: { <span class="prop">"buildType"</span>: <span class="str">"apk"</span> }
+    },
+    <span class="prop">"production"</span>: {}
+  }
+}</code></pre>
+        </div>
+        <p class="small">Hoy solo nos interesa <code class="inline">preview</code>. <code class="inline">production</code> es para cuando algún día alguien quiera publicar de verdad en las tiendas &mdash; eso queda fuera del alcance del curso.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">4</div>
+      <div class="step-body">
+        <h3>Lanza la build</h3>
+        <div class="term">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code><span class="prompt">$</span> npx eas-cli build --platform android --profile preview</code></pre>
+        </div>
+        <p>El proyecto se sube a los servidores de Expo, donde se compila &mdash; tu portátil no hace el trabajo pesado. Puede tardar <strong>varios minutos</strong> (a veces bastante más si hay cola en el plan gratuito), así que es buen momento para lanzarlo y seguir con otra cosa mientras se procesa.</p>
+        <div class="checkpoint">
+          <div class="checkpoint-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Deberías ver esto
+          </div>
+          <p>La terminal se queda mostrando el progreso de la build (subiendo código, esperando en cola, compilando). Al terminar con éxito, imprime un <strong>enlace directo de descarga</strong> del APK, y también queda visible en el dashboard de <code class="inline">expo.dev</code> del proyecto.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">5</div>
+      <div class="step-body">
+        <h3>Instala el APK en el móvil</h3>
+        <p>Con el enlace que dio la terminal, cada alumno lo abre desde el navegador de su propio móvil (o escanea el QR que EAS también ofrece) y descarga el <code class="inline">.apk</code> directamente.</p>
+        <p>Android bloquea por defecto instalar apps fuera de Google Play. La primera vez pedirá permiso explícito &mdash; algo como &ldquo;Instalar apps desconocidas&rdquo; para el navegador o gestor de archivos usado. Se acepta una vez y ya no se vuelve a preguntar para builds futuras del mismo origen.</p>
+        <div class="checkpoint">
+          <div class="checkpoint-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Deberías ver esto
+          </div>
+          <p>Un icono nuevo en el cajón de apps del móvil, con el icono y nombre configurados en <code class="inline">app.json</code> &mdash; y al abrirla, funciona sola, sin depender de Expo Go ni de que el servidor de <code class="inline">npm start</code> siga encendido.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Si algo falla</h2>
+    <div class="trouble">
+      <div class="trouble-item">
+        <p class="q">La build falla pidiendo un &ldquo;package name&rdquo; de Android</p>
+        <p>Falta <code class="inline">android.package</code> en <code class="inline">app.json</code>. Añádelo (formato <code class="inline">com.tunombre.tuapp</code>) y vuelve a lanzar el comando de build.</p>
+      </div>
+      <div class="trouble-item">
+        <p class="q">La cola tarda mucho</p>
+        <p>El plan gratuito de EAS comparte cola con otros usuarios, así que los tiempos varían &mdash; puede ir de unos minutos a bastante más en horas punta. No es un fallo, es simplemente el orden de la cola. Conviene lanzarlo pronto en la sesión para no depender de que termine justo al final.</p>
+      </div>
+      <div class="trouble-item">
+        <p class="q">El móvil dice que no puede instalar el APK descargado</p>
+        <p>Casi siempre falta activar el permiso &ldquo;Instalar apps desconocidas&rdquo; para la app que se usó para descargarlo (Chrome, gestor de archivos&hellip;). Se activa desde los ajustes de Android que aparecen enlazados en el propio aviso de error.</p>
+      </div>
+      <div class="trouble-item">
+        <p class="q">¿Esto sirve también para iPhone?</p>
+        <p>El mismo flujo con <code class="inline">--platform ios</code> existe, pero instalar en un iPhone fuera de Expo Go requiere una cuenta de desarrollador de Apple (de pago) o pasos adicionales de registro de dispositivo. Para una clase, quedaos con Android: es el camino directo y gratuito.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Práctica</h2>
+    <p>Cada alumno genera una build de prueba instalable (APK) de su propio proyecto usando <code class="inline">eas build --platform android --profile preview</code>, y se la instala en su propio móvil, fuera de Expo Go. Al terminar la sesión, cada uno debería tener la app funcionando como un icono más entre sus apps normales.</p>
+  </section>
+
+  <footer class="end">
+    Siguiente sesión: sesión 24, &ldquo;Demo day&rdquo; &mdash; la última del curso. Con la build ya instalada, cada alumno presenta su proyecto terminado al resto de la clase.
+  </footer>
+
+</div>
+
+</html>
