@@ -1,0 +1,669 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Estado global</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #E4572E;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #FF8A5C;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #F2764C;
+      --accent-ink: #17110D;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #F2764C;
+    --accent-ink: #17110D;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top {
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.08rem;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  section.block {
+    margin-top: 44px;
+  }
+
+  h2.block-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+
+  .checklist {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow);
+  }
+
+  .checklist li {
+    list-style: none;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 15px;
+  }
+
+  .checklist ul { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+
+  .checklist svg {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    color: var(--accent-2);
+  }
+
+  .learn-list {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .learn-list li {
+    list-style: none;
+    padding-left: 20px;
+    position: relative;
+    color: var(--ink);
+  }
+
+  .learn-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .step {
+    display: flex;
+    gap: 18px;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .step:first-of-type { border-top: none; padding-top: 0; }
+
+  .step-chip {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-body { flex: 1; min-width: 0; }
+
+  .step h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 4px 0 8px;
+  }
+
+  .step p {
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+
+  .step p.small {
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+
+  .term {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+
+  .term-bar span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--code-line);
+  }
+
+  .term pre {
+    margin: 0;
+    padding: 14px 16px 16px;
+    overflow-x: auto;
+  }
+
+  .term code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13.6px;
+    line-height: 1.7;
+    color: var(--code-ink);
+  }
+
+  .term .prompt { color: var(--code-muted); }
+  .term .cmt { color: var(--code-muted); }
+  .term .hl { color: var(--code-accent); }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .code-panel .term-bar { }
+
+  .code-panel pre {
+    margin: 0;
+    padding: 16px 18px 18px;
+    overflow-x: auto;
+  }
+
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+
+  .code-panel .tag { color: var(--accent-2); }
+  .code-panel .str { color: #C9D96B; }
+  .code-panel .kw { color: var(--code-accent); }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .prop { color: #8FB8FF; }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+
+  .checkpoint p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .substep {
+    display: flex;
+    gap: 14px;
+    margin: 18px 0 0 16px;
+    padding-left: 16px;
+    border-left: 2px solid var(--line-soft);
+  }
+
+  .substep-chip {
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: var(--line-soft);
+    color: var(--muted);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 11.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .substep h4 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.98rem;
+    font-weight: 600;
+    margin: 2px 0 6px;
+  }
+
+  .substep p {
+    margin: 0 0 8px;
+    font-size: 14.5px;
+    color: var(--ink);
+  }
+
+  .substep .code-panel, .substep .term {
+    margin: 10px 0;
+  }
+
+  details.full-code {
+    margin-top: 16px;
+  }
+
+  details.full-code summary {
+    cursor: pointer;
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--accent-2);
+    list-style: none;
+  }
+
+  details.full-code summary::-webkit-details-marker { display: none; }
+
+  details.full-code summary::before {
+    content: "▸ ";
+  }
+
+  details.full-code[open] summary::before {
+    content: "▾ ";
+  }
+
+  .trouble {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .trouble-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .trouble-item .q {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    margin: 0 0 6px;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .trouble-item .q::before {
+    content: "?";
+    font-family: "IBM Plex Mono", monospace;
+    color: var(--accent-2);
+    font-weight: 500;
+  }
+
+  .trouble-item p {
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--muted);
+  }
+
+  .trouble-item p + p { margin-top: 8px; }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .step { transition: none; }
+  }
+</style>
+
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">Sesión 24 de 26 &middot; Bloque 5: Proyecto final</span>
+    <h1>Estado global y pulido funcional</h1>
+    <p class="lede">Resolver los dolores de cabeza de estado compartido entre pantallas antes de pasar a lo visual. Antes de que un proyecto se vea bonito, tiene que funcionar bien &mdash; hoy toca asegurar lo segundo.</p>
+    <div class="meta-row">
+      <span class="meta-chip">2 horas</span>
+      <span class="meta-chip">Sesión 24/26</span>
+      <span class="meta-chip">Trabajo por proyecto</span>
+    </div>
+  </header>
+
+  <section class="block">
+    <h2 class="block-title">Contexto de la sesión</h2>
+    <p>Después de conectar datos en la sesión 23, es habitual que aparezca un problema nuevo: varias pantallas necesitan el mismo dato. La lista de favoritos se marca en una pantalla, pero hay que mostrarla en otra, y quizás también en una tercera. Esta sesión tiene dos partes bien diferenciadas: primero, quien lo necesite aprende a resolver ese problema con Context API; segundo, todo el mundo &mdash; lo necesite o no &mdash; repasa una checklist funcional antes de pasar a pulir lo visual en la sesión 25.</p>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">El problema: prop drilling</h2>
+    <p>Imagina un proyecto con esta estructura: una pantalla <code class="inline">Lista</code> donde se marca algo como favorito, una pantalla <code class="inline">Detalle</code> que también permite marcarlo, y una pantalla <code class="inline">Favoritos</code> que muestra todos los marcados. Las tres necesitan leer y modificar la misma lista de favoritos.</p>
+    <p>La solución ingenua es guardar esa lista en el componente más alto (por ejemplo <code class="inline">App</code>) y pasarla como prop hacia abajo, pantalla por pantalla, hasta llegar a donde se usa. El problema es que si <code class="inline">Favoritos</code> está tres o cuatro niveles por debajo de donde vive el estado, cada componente intermedio tiene que recibir y reenviar esa prop aunque no le importe en absoluto &mdash; solo la está pasando de largo. A eso se le llama <strong>prop drilling</strong>, y cuanto más crece el proyecto, más frágil se vuelve: mover una pantalla de sitio rompe la cadena de props sin que el error sea obvio.</p>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">La solución: Context API</h2>
+    <p>Context permite que cualquier componente lea (o modifique) un valor compartido directamente, sin que nadie tenga que pasárselo a mano por en medio. Son tres piezas:</p>
+    <ul class="learn-list">
+      <li><code class="inline">createContext()</code> crea el &ldquo;canal&rdquo; compartido.</li>
+      <li>Un <code class="inline">Provider</code> envuelve la parte de la app que necesita acceso, y le da el valor real.</li>
+      <li><code class="inline">useContext()</code> lo lee desde cualquier componente dentro de ese Provider, sin importar cuántos niveles de profundidad haya.</li>
+    </ul>
+
+    <div class="step">
+      <div class="step-chip">1</div>
+      <div class="step-body">
+        <h3>Crea el contexto de favoritos</h3>
+        <p>En un archivo nuevo, por ejemplo <code class="inline">context/FavoritosContext.tsx</code> &mdash; fuera de <code class="inline">app/</code>, porque no es una pantalla:</p>
+        <div class="code-panel">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code><span class="kw">import</span> { createContext, useContext, useState } <span class="kw">from</span> <span class="str">'react'</span>;
+
+<span class="kw">type</span> <span class="tag">Item</span> = { id: <span class="tag">string</span>; nombre: <span class="tag">string</span> };
+
+<span class="kw">type</span> <span class="tag">FavoritosContextType</span> = {
+  favoritos: Item[];
+  agregarFavorito: (item: Item) =&gt; <span class="tag">void</span>;
+  quitarFavorito: (id: <span class="tag">string</span>) =&gt; <span class="tag">void</span>;
+};
+
+<span class="kw">const</span> FavoritosContext = createContext&lt;<span class="tag">FavoritosContextType</span> | <span class="tag">undefined</span>&gt;(<span class="tag">undefined</span>);
+
+<span class="kw">export function</span> <span class="tag">FavoritosProvider</span>({ children }: { children: <span class="tag">React.ReactNode</span> }) {
+  <span class="kw">const</span> [favoritos, setFavoritos] = useState&lt;<span class="tag">Item</span>[]&gt;([]);
+
+  <span class="kw">const</span> agregarFavorito = (item: <span class="tag">Item</span>) =&gt; {
+    setFavoritos((prev) =&gt; [...prev, item]);
+  };
+
+  <span class="kw">const</span> quitarFavorito = (id: <span class="tag">string</span>) =&gt; {
+    setFavoritos((prev) =&gt; prev.filter((f) =&gt; f.id !== id));
+  };
+
+  <span class="kw">return</span> (
+    &lt;<span class="tag">FavoritosContext.Provider</span> <span class="prop">value</span>={{ favoritos, agregarFavorito, quitarFavorito }}&gt;
+      {children}
+    &lt;/<span class="tag">FavoritosContext.Provider</span>&gt;
+  );
+}
+
+<span class="kw">export function</span> <span class="tag">useFavoritos</span>() {
+  <span class="kw">const</span> ctx = useContext(FavoritosContext);
+  <span class="kw">if</span> (!ctx) <span class="kw">throw new</span> Error(<span class="str">'useFavoritos debe usarse dentro de FavoritosProvider'</span>);
+  <span class="kw">return</span> ctx;
+}</code></pre>
+        </div>
+        <p class="small">El estado real (<code class="inline">useState</code>) vive dentro del Provider, en un solo sitio. El tipo <code class="inline">FavoritosContextType</code> es lo que gana TypeScript aquí: en cualquier pantalla que use <code class="inline">useFavoritos()</code>, el editor ya sabe que <code class="inline">favoritos</code> es un array de <code class="inline">Item</code> y que <code class="inline">agregarFavorito</code> espera exactamente uno &mdash; sin tipo, cualquier <code class="inline">undefined</code> del contexto pasaría desapercibido hasta reventar en tiempo de ejecución.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">2</div>
+      <div class="step-body">
+        <h3>Envuelve la app con el Provider</h3>
+        <p>En <code class="inline">app/_layout.tsx</code>, el layout raíz por el que pasan todas las rutas:</p>
+        <div class="code-panel">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code><span class="kw">import</span> { Stack } <span class="kw">from</span> <span class="str">'expo-router'</span>;
+<span class="kw">import</span> { FavoritosProvider } <span class="kw">from</span> <span class="str">'../context/FavoritosContext'</span>;
+
+<span class="kw">export default function</span> <span class="tag">RootLayout</span>() {
+  <span class="kw">return</span> (
+    &lt;<span class="tag">FavoritosProvider</span>&gt;
+      &lt;<span class="tag">Stack</span> /&gt;
+    &lt;/<span class="tag">FavoritosProvider</span>&gt;
+  );
+}</code></pre>
+        </div>
+        <p class="small">Cualquier pantalla dentro de <code class="inline">app/</code> se renderiza a través de este <code class="inline">Stack</code>, así que todas quedan automáticamente dentro del Provider y pueden acceder a los favoritos &mdash; sin importar en qué carpeta o grupo de rutas vivan.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">3</div>
+      <div class="step-body">
+        <h3>Úsalo desde cualquier pantalla</h3>
+        <p>Sin pasar ni una sola prop de por medio, y sin necesitar el objeto completo por parámetro de ruta &mdash; solo el <code class="inline">id</code>:</p>
+        <div class="code-panel">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code><span class="kw">import</span> { useLocalSearchParams } <span class="kw">from</span> <span class="str">'expo-router'</span>;
+<span class="kw">import</span> { Pressable, Text } <span class="kw">from</span> <span class="str">'react-native'</span>;
+<span class="kw">import</span> { useFavoritos } <span class="kw">from</span> <span class="str">'../../context/FavoritosContext'</span>;
+<span class="kw">import</span> { items } <span class="kw">from</span> <span class="str">'../../data/items'</span>;
+
+<span class="kw">export default function</span> <span class="tag">PantallaDetalle</span>() {
+  <span class="kw">const</span> { favoritos, agregarFavorito } = useFavoritos();
+  <span class="kw">const</span> { id } = useLocalSearchParams&lt;{ id: <span class="tag">string</span> }&gt;();
+  <span class="kw">const</span> item = items.find((i) =&gt; i.id === id)!;
+
+  <span class="kw">return</span> (
+    &lt;<span class="tag">Pressable</span> <span class="prop">onPress</span>={() =&gt; agregarFavorito(item)}&gt;
+      &lt;<span class="tag">Text</span>&gt;Marcar como favorito&lt;/<span class="tag">Text</span>&gt;
+    &lt;/<span class="tag">Pressable</span>&gt;
+  );
+}</code></pre>
+        </div>
+        <div class="checkpoint">
+          <div class="checkpoint-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Cómo saber si funcionó
+          </div>
+          <p>Marca un favorito desde la pantalla de detalle y navega a la pantalla de favoritos: debería aparecer ahí sin que hayas tocado ninguna prop de navegación para pasarlo. Si no aparece, revisa que la pantalla esté realmente dentro del <code class="inline">FavoritosProvider</code>, es decir, que <code class="inline">app/_layout.tsx</code> la envuelva.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        ¿Y si el proyecto de alguien no tiene este problema?
+      </div>
+      <p>Perfecto, no hace falta forzar un Context donde no hace falta. Si cada pantalla del proyecto trabaja con sus propios datos y ninguna necesita algo que otra pantalla tiene, <code class="inline">useState</code> local en cada pantalla sigue siendo la opción correcta. Context resuelve un problema concreto (dato compartido entre pantallas), no es un paso obligatorio de todo proyecto.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Checklist funcional antes de pulir lo visual</h2>
+    <p>Independientemente de si un proyecto necesitó Context o no, todos deberían pasar por esta checklist antes de la sesión 25. Es la última oportunidad cómoda para arreglar comportamiento antes de que la atención se vaya a colores y tipografías.</p>
+    <div class="checklist">
+      <ul>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span><strong>¿Maneja listas vacías?</strong> Si un usuario nuevo abre la app y no tiene favoritos, resultados o tareas todavía, ¿ve un mensaje razonable o una pantalla en blanco que parece rota?</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span><strong>¿Hay algún crash conocido?</strong> Cualquier acción que rompa la app (tocar dos veces seguidas un botón, volver atrás en medio de una carga, dejar un campo vacío) tiene que arreglarse ahora, no maquillarse después.</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span><strong>¿Los datos persisten o se pierden al cerrar la app?</strong> Si el proyecto usa AsyncStorage, cerrar del todo la app (no solo minimizarla) y reabrirla no debería borrar nada.</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span><strong>¿Todos los botones hacen algo?</strong> Vale la pena tocar cada botón y cada enlace de navegación una vez, en orden, buscando algo que quedó a medio conectar.</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Práctica</h2>
+    <p>Cada alumno identifica primero si su proyecto tiene datos que varias pantallas necesitan compartir. Si es así, los mueve a un Context siguiendo el patrón de esta sesión. Si no es el caso, dedica el resto de la sesión a corregir los puntos de la checklist funcional. Al terminar, cada proyecto debería sobrevivir a un repaso rápido: abrir todas las pantallas, tocar todos los botones, cerrar y reabrir la app.</p>
+  </section>
+
+  <footer class="end">
+    Siguiente sesión: sesión 25, &ldquo;Pulido visual y build&rdquo; &mdash; con la funcionalidad ya sólida, toca dejar la app lista para enseñarla fuera del aula: estilos, icono y una build instalable de verdad.
+  </footer>
+
+</div>
+
+</html>

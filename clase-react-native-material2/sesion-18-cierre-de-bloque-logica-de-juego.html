@@ -1,0 +1,643 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cierre de bloque: lógica de juego</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #E4572E;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #FF8A5C;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #F2764C;
+      --accent-ink: #17110D;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #F2764C;
+    --accent-ink: #17110D;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top {
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.08rem;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  section.block {
+    margin-top: 44px;
+  }
+
+  h2.block-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+
+  .checklist {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow);
+  }
+
+  .checklist li {
+    list-style: none;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 15px;
+  }
+
+  .checklist ul { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+
+  .checklist svg {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    color: var(--accent-2);
+  }
+
+  .learn-list {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .learn-list li {
+    list-style: none;
+    padding-left: 20px;
+    position: relative;
+    color: var(--ink);
+  }
+
+  .learn-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .step {
+    display: flex;
+    gap: 18px;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .step:first-of-type { border-top: none; padding-top: 0; }
+
+  .step-chip {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-body { flex: 1; min-width: 0; }
+
+  .step h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 4px 0 8px;
+  }
+
+  .step p {
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+
+  .step p.small {
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+
+  .term {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+
+  .term-bar span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--code-line);
+  }
+
+  .term pre {
+    margin: 0;
+    padding: 14px 16px 16px;
+    overflow-x: auto;
+  }
+
+  .term code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13.6px;
+    line-height: 1.7;
+    color: var(--code-ink);
+  }
+
+  .term .prompt { color: var(--code-muted); }
+  .term .cmt { color: var(--code-muted); }
+  .term .hl { color: var(--code-accent); }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .code-panel .term-bar { }
+
+  .code-panel pre {
+    margin: 0;
+    padding: 16px 18px 18px;
+    overflow-x: auto;
+  }
+
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+
+  .code-panel .tag { color: var(--accent-2); }
+  .code-panel .str { color: #C9D96B; }
+  .code-panel .kw { color: var(--code-accent); }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .prop { color: #8FB8FF; }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+
+  .checkpoint p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .substep {
+    display: flex;
+    gap: 14px;
+    margin: 18px 0 0 16px;
+    padding-left: 16px;
+    border-left: 2px solid var(--line-soft);
+  }
+
+  .substep-chip {
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: var(--line-soft);
+    color: var(--muted);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 11.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .substep h4 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.98rem;
+    font-weight: 600;
+    margin: 2px 0 6px;
+  }
+
+  .substep p {
+    margin: 0 0 8px;
+    font-size: 14.5px;
+    color: var(--ink);
+  }
+
+  .substep .code-panel, .substep .term {
+    margin: 10px 0;
+  }
+
+  details.full-code {
+    margin-top: 16px;
+  }
+
+  details.full-code summary {
+    cursor: pointer;
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--accent-2);
+    list-style: none;
+  }
+
+  details.full-code summary::-webkit-details-marker { display: none; }
+
+  details.full-code summary::before {
+    content: "▸ ";
+  }
+
+  details.full-code[open] summary::before {
+    content: "▾ ";
+  }
+
+  .trouble {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .trouble-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .trouble-item .q {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    margin: 0 0 6px;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .trouble-item .q::before {
+    content: "?";
+    font-family: "IBM Plex Mono", monospace;
+    color: var(--accent-2);
+    font-weight: 500;
+  }
+
+  .trouble-item p {
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--muted);
+  }
+
+  .trouble-item p + p { margin-top: 8px; }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .step { transition: none; }
+  }
+</style>
+
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">Sesión 18 de 26 &middot; Bloque 4: React Native</span>
+    <h1>Cierre de bloque: lógica de juego</h1>
+    <p class="lede">Repaso y consolidación antes del proyecto final: comparamos los dos patrones de estado que ya habéis usado sin nombrarlos &mdash;bucle de físicas con <code class="inline">useRef</code> y por-turno con <code class="inline">useState</code>&mdash; para que sepáis identificar cuál toca en cada situación, no solo copiarlo.</p>
+    <div class="meta-row">
+      <span class="meta-chip">2 horas</span>
+      <span class="meta-chip">Sesión 18/26</span>
+      <span class="meta-chip">useRef · useState · bucles de juego</span>
+    </div>
+  </header>
+
+  <section class="block">
+    <h2 class="block-title">Punto de partida</h2>
+    <p>Esta es la última sesión del bloque de React Native antes de arrancar el proyecto final. No hay contenido nuevo de verdad: los juegos de clase &mdash;Arcanoid, Pang, Black Jack, Brisca&mdash; ya usan, cada uno, uno de dos patrones distintos para gestionar su estado. Hoy los ponemos uno al lado del otro, con nombre y con criterio de cuándo usar cada uno, para que la elección deje de ser &ldquo;lo que hizo el profe en ese ejemplo&rdquo; y pase a ser una decisión consciente vuestra.</p>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">1 · Patrón A: bucle en tiempo real con useRef + tick</h2>
+    <p>Un juego de físicas &mdash;una pelota que rebota, una nave que se mueve, colisiones que hay que comprobar 60 veces por segundo&mdash; no se puede modelar con <code class="inline">useState</code> puro para cada posición: cada <code class="inline">setState</code> dispara un re-render de React, y a 60 actualizaciones por segundo eso satura la app en segundos. La solución que ya usasteis en Arcanoid/Pang es esta: el estado real del juego vive en un <code class="inline">useRef</code> (que <strong>no</strong> provoca render al cambiar), y un <code class="inline">useState</code> aparte se usa solo como &ldquo;disparador&rdquo;, para decirle a React &ldquo;vuelve a pintar&rdquo; una vez por frame.</p>
+
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">const</span> juego = useRef(crearEstadoInicial(anchoJuego, altoJuego)).current;
+<span class="kw">const</span> [, setTick] = useState(<span class="hl">0</span>);
+<span class="kw">const</span> redibujar = () =&gt; setTick((n) =&gt; n + <span class="hl">1</span>);
+
+useEffect(() =&gt; {
+  <span class="kw">const</span> id = setInterval(() =&gt; {
+    <span class="kw">if</span> (juego.estado !== <span class="str">'jugando'</span>) <span class="kw">return</span>;
+    actualizarFisica(juego, anchoJuego, altoJuego);
+    redibujar();
+  }, <span class="hl">16</span>);
+  <span class="kw">return</span> () =&gt; clearInterval(id);
+}, [anchoJuego, altoJuego]);</code></pre>
+    </div>
+
+    <p>Fijaos en cada pieza:</p>
+    <ul class="learn-list">
+      <li><code class="inline">useRef(...).current</code> &mdash; guarda el objeto <code class="inline">juego</code> (posiciones, velocidades, vidas&hellip;) en una caja que persiste entre renders pero que React no observa. Mutarlo directamente (<code class="inline">juego.pelota.x += 3</code>) no provoca ningún re-render por sí solo.</li>
+      <li><code class="inline">const [, setTick] = useState(0)</code> &mdash; el guion antes de la coma descarta el valor, porque nunca se lee: <code class="inline">setTick</code> se usa solo por su efecto secundario de forzar un render.</li>
+      <li><code class="inline">setInterval(..., 16)</code> &mdash; 16&thinsp;ms por frame es, aproximadamente, 60 frames por segundo (1000/60 &asymp; 16.67). Cada &ldquo;tick&rdquo; muta el ref y luego pide un único repintado.</li>
+      <li>La comprobación <code class="inline">juego.estado !== 'jugando'</code> es lo que pausa el bucle sin tener que destruir el <code class="inline">setInterval</code>: sigue corriendo, pero no hace nada mientras el juego está pausado o terminado.</li>
+    </ul>
+
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        ¿Por qué no useState para la posición de la pelota?
+      </div>
+      <p>Porque cada <code class="inline">setState</code> agenda un render completo del árbol de componentes. A 60 actualizaciones por segundo eso son miles de renders por minuto para un solo valor que cambia constantemente. El ref evita ese coste: React se entera del cambio solo cuando <code class="inline">redibujar()</code> lo decide, una vez por frame, sin importar cuántas propiedades del objeto <code class="inline">juego</code> hayan mutado mientras tanto.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">2 · Patrón B: useState normal por turno</h2>
+    <p>Un juego por turnos &mdash;Black Jack, Brisca&mdash; es la otra cara de la moneda: no hay nada que actualizar 60 veces por segundo, porque nada cambia hasta que el jugador hace algo. Aquí el patrón de siempre, el que lleváis usando desde la sesión 1, es exactamente el correcto: cada acción del jugador es una llamada a <code class="inline">setState</code>, sin bucle de ningún tipo.</p>
+
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">const</span> [manoJugador, setManoJugador] = useState&lt;<span class="tag">Carta</span>[]&gt;([]);
+<span class="kw">const</span> [estado, setEstado] = useState&lt;<span class="str">'jugando'</span> | <span class="str">'ganado'</span> | <span class="str">'perdido'</span>&gt;(<span class="str">'jugando'</span>);
+
+<span class="kw">const</span> pedirCarta = () =&gt; {
+  <span class="kw">if</span> (estado !== <span class="str">'jugando'</span>) <span class="kw">return</span>;
+  <span class="kw">const</span> nuevaMano = [...manoJugador, baraja.current.pop()];
+  setManoJugador(nuevaMano);
+  <span class="kw">if</span> (calcularTotal(nuevaMano) &gt; <span class="hl">21</span>) {
+    setEstado(<span class="str">'perdido'</span>);
+  }
+};</code></pre>
+    </div>
+
+    <p>Nada de <code class="inline">setInterval</code>, nada de <code class="inline">useRef</code> para el estado del juego: <code class="inline">pedirCarta</code> se ejecuta una vez, cuando el jugador toca el botón, y ese único <code class="inline">setState</code> (o dos, como aquí) es exactamente el coste de renders que hace falta &mdash;ni uno más. Fijaos que <code class="inline">baraja</code> sí es un <code class="inline">useRef</code>: la baraja de cartas mutable (sacar cartas de un mazo) no necesita disparar renders por sí sola, solo el resultado visible (la mano) lo necesita.</p>
+    <p class="small" style="color:var(--muted); font-size:14.5px;"><code class="inline">useState&lt;'jugando' | 'ganado' | 'perdido'&gt;(...)</code> es una unión de literales, de la sesión de TypeScript: <code class="inline">estado</code> solo puede valer una de esas tres cadenas exactas &mdash;si en algún <code class="inline">setEstado</code> escribes <code class="inline">'perdio'</code> por error, el editor te lo marca antes de probarlo en el móvil.</p>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">3 · Cuándo usar cada uno</h2>
+    <div class="checklist">
+      <ul>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span><strong>Patrón A (ref + tick)</strong> cuando hay animación o físicas continuas: algo se mueve, cae, rebota o se comprueba colisión frame a frame, sin que el usuario tenga que tocar nada para que cambie.</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span><strong>Patrón B (useState normal)</strong> cuando el estado solo cambia en respuesta a una acción puntual del usuario: pulsar &ldquo;pedir carta&rdquo;, jugar una ficha, tocar un botón. Un render por acción es barato y perfectamente razonable.</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span>Ambos pueden convivir en el mismo juego: un marcador de puntos por turno (patrón B) encima de un tablero con físicas en tiempo real (patrón A) es perfectamente normal &mdash;lo que importa es no usar B donde hace falta A (rendimiento) ni A donde basta con B (complejidad innecesaria).</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Práctica: añade una función a tu juego</h2>
+    <p>Elegid uno de los cuatro juegos ya vistos en clase &mdash;Arcanoid, Pang, Black Jack o Brisca&mdash; y añadidle una función nueva de vuestra elección. El objetivo de hoy no es el resultado visual: es que identifiquéis con seguridad qué patrón de estado usa el juego que elegisteis, y por qué es el correcto para ese caso.</p>
+
+    <div class="step">
+      <div class="step-chip">1</div>
+      <div class="step-body">
+        <h3>Identificad el patrón antes de tocar código</h3>
+        <p>Abrid el juego elegido y localizad: ¿hay un <code class="inline">setInterval</code> y un <code class="inline">useRef</code> con el estado del juego (patrón A), o solo <code class="inline">useState</code> disparado por <code class="inline">onPress</code> (patrón B)? Escribidlo en una línea antes de seguir.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">2</div>
+      <div class="step-body">
+        <h3>Elegid una función nueva</h3>
+        <p>Algunas ideas, de menor a mayor complejidad:</p>
+        <ul class="learn-list">
+          <li><strong>Marcador de mejor puntuación</strong> con <code class="inline">AsyncStorage</code> (sesión 17): guardar y mostrar el récord entre partidas.</li>
+          <li><strong>Botón de pausa</strong>: en patrón A, cambia <code class="inline">juego.estado</code> a <code class="inline">'pausado'</code> para que el bucle deje de actualizar física sin destruirlo; en patrón B, simplemente deshabilita los botones de acción.</li>
+          <li><strong>Modo &ldquo;difícil&rdquo;</strong>: parámetros distintos (más velocidad en patrón A, reglas más estrictas en patrón B) seleccionables antes de empezar.</li>
+          <li><strong>Contador de partidas jugadas</strong>: un <code class="inline">useState</code> simple que suma uno cada vez que el juego termina, con o sin persistencia.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">3</div>
+      <div class="step-body">
+        <h3>Implementadla respetando el patrón existente</h3>
+        <p>Si el juego usa patrón A, vuestra función nueva no debería añadir un <code class="inline">useState</code> que cambie 60 veces por segundo; si usa patrón B, no deberíais necesitar meter un <code class="inline">setInterval</code> para nada de esto.</p>
+
+        <div class="checkpoint">
+          <div class="checkpoint-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Lo que de verdad se evalúa hoy
+          </div>
+          <p>No la vistosidad del resultado, sino que podáis explicar en voz alta: &ldquo;mi juego usa el patrón X porque Y&rdquo;, y que la función que añadisteis encaje en ese mismo patrón sin forzar nada.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Reto extra
+      </div>
+      <p>Si vuestro juego es de patrón B (Black Jack, Brisca), pensad &mdash;sin necesariamente implementarlo&mdash; qué parte de un futuro añadido sí necesitaría patrón A: por ejemplo, una animación de la carta deslizándose hasta la mano. No hace falta programarlo, solo identificar dónde cambiaría el patrón y por qué.</p>
+    </div>
+  </section>
+
+  <footer class="end">
+    Con esto se cierra el Bloque 4. Próxima sesión: Sesión 19, &ldquo;Definición del proyecto&rdquo; &mdash;arranca el proyecto final.
+  </footer>
+
+</div>
+
+</html>

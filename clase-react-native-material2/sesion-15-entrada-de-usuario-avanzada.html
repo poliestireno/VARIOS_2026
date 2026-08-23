@@ -1,0 +1,741 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Entrada de usuario avanzada</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #E4572E;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #FF8A5C;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #F2764C;
+      --accent-ink: #17110D;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #F2764C;
+    --accent-ink: #17110D;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top {
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.08rem;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  section.block {
+    margin-top: 44px;
+  }
+
+  h2.block-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+
+  .checklist {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow);
+  }
+
+  .checklist li {
+    list-style: none;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 15px;
+  }
+
+  .checklist ul { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+
+  .checklist svg {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    color: var(--accent-2);
+  }
+
+  .learn-list {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .learn-list li {
+    list-style: none;
+    padding-left: 20px;
+    position: relative;
+    color: var(--ink);
+  }
+
+  .learn-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .step {
+    display: flex;
+    gap: 18px;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .step:first-of-type { border-top: none; padding-top: 0; }
+
+  .step-chip {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-body { flex: 1; min-width: 0; }
+
+  .step h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 4px 0 8px;
+  }
+
+  .step p {
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+
+  .step p.small {
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+
+  .term {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+
+  .term-bar span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--code-line);
+  }
+
+  .term pre {
+    margin: 0;
+    padding: 14px 16px 16px;
+    overflow-x: auto;
+  }
+
+  .term code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13.6px;
+    line-height: 1.7;
+    color: var(--code-ink);
+  }
+
+  .term .prompt { color: var(--code-muted); }
+  .term .cmt { color: var(--code-muted); }
+  .term .hl { color: var(--code-accent); }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .code-panel .term-bar { }
+
+  .code-panel pre {
+    margin: 0;
+    padding: 16px 18px 18px;
+    overflow-x: auto;
+  }
+
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+
+  .code-panel .tag { color: var(--accent-2); }
+  .code-panel .str { color: #C9D96B; }
+  .code-panel .kw { color: var(--code-accent); }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .prop { color: #8FB8FF; }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+
+  .checkpoint p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .substep {
+    display: flex;
+    gap: 14px;
+    margin: 18px 0 0 16px;
+    padding-left: 16px;
+    border-left: 2px solid var(--line-soft);
+  }
+
+  .substep-chip {
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: var(--line-soft);
+    color: var(--muted);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 11.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .substep h4 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.98rem;
+    font-weight: 600;
+    margin: 2px 0 6px;
+  }
+
+  .substep p {
+    margin: 0 0 8px;
+    font-size: 14.5px;
+    color: var(--ink);
+  }
+
+  .substep .code-panel, .substep .term {
+    margin: 10px 0;
+  }
+
+  details.full-code {
+    margin-top: 16px;
+  }
+
+  details.full-code summary {
+    cursor: pointer;
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--accent-2);
+    list-style: none;
+  }
+
+  details.full-code summary::-webkit-details-marker { display: none; }
+
+  details.full-code summary::before {
+    content: "▸ ";
+  }
+
+  details.full-code[open] summary::before {
+    content: "▾ ";
+  }
+
+  .trouble {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .trouble-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .trouble-item .q {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    margin: 0 0 6px;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .trouble-item .q::before {
+    content: "?";
+    font-family: "IBM Plex Mono", monospace;
+    color: var(--accent-2);
+    font-weight: 500;
+  }
+
+  .trouble-item p {
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--muted);
+  }
+
+  .trouble-item p + p { margin-top: 8px; }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .step { transition: none; }
+  }
+</style>
+
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">Sesión 15 de 26 &middot; Bloque 4: React Native</span>
+    <h1>Entrada de usuario avanzada</h1>
+    <p class="lede">Formularios que no pelean con el teclado del móvil: <code class="inline">TextInput</code> con sus props clave, un <code class="inline">Modal</code> para diálogos superpuestos y <code class="inline">KeyboardAvoidingView</code> para que el teclado nunca tape el botón que el usuario necesita pulsar.</p>
+    <div class="meta-row">
+      <span class="meta-chip">2 horas</span>
+      <span class="meta-chip">Sesión 15/26</span>
+      <span class="meta-chip">TextInput · Modal · KeyboardAvoidingView</span>
+    </div>
+  </header>
+
+  <section class="block">
+    <h2 class="block-title">Punto de partida</h2>
+    <p>Hasta ahora habéis mostrado datos: listas, tarjetas, gestos. Hoy la app empieza a <strong>recibir</strong> datos del usuario. Es un salto real: aparece el teclado en pantalla, que ocupa media pantalla y se abre y cierra en momentos que React Native no controla directamente. Los tres bloques de hoy &mdash;<code class="inline">TextInput</code>, <code class="inline">Modal</code> y <code class="inline">KeyboardAvoidingView</code>&mdash; son justo las piezas que hacen falta para construir un formulario que funcione bien en un móvil real, no solo en el simulador con el teclado apagado.</p>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">1 · TextInput a fondo</h2>
+    <p><code class="inline">TextInput</code> es el único componente de React Native que captura texto escrito. A diferencia de un <code class="inline">&lt;input&gt;</code> de HTML, no es un elemento &ldquo;tonto&rdquo; que guarda su propio valor: en RN casi siempre lo controlas tú, con estado, exactamente igual que un input controlado en React web.</p>
+
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">import</span> { useState } <span class="kw">from</span> <span class="str">'react'</span>;
+<span class="kw">import</span> { TextInput, StyleSheet } <span class="kw">from</span> <span class="str">'react-native'</span>;
+
+<span class="kw">export default function</span> <span class="tag">CampoNombre</span>() {
+  <span class="kw">const</span> [nombre, setNombre] = useState(<span class="str">''</span>);
+
+  <span class="kw">return</span> (
+    &lt;<span class="tag">TextInput</span>
+      <span class="prop">style</span>={styles.input}
+      <span class="prop">value</span>={nombre}
+      <span class="prop">onChangeText</span>={setNombre}
+      <span class="prop">placeholder</span>=<span class="str">"Escribe tu nombre"</span>
+    /&gt;
+  );
+}</code></pre>
+    </div>
+
+    <p>Cuatro props hacen el 90% del trabajo en clase:</p>
+    <ul class="learn-list">
+      <li><code class="inline">value</code> &mdash; el texto que se muestra, viene siempre del estado. Sin esto el campo funciona &ldquo;no controlado&rdquo; y pierdes el valor cuando quieras leerlo o validarlo.</li>
+      <li><code class="inline">onChangeText</code> &mdash; se dispara con cada pulsación, te da directamente el string nuevo (no un evento como en web). <code class="inline">onChangeText={setNombre}</code> es un atajo válido porque React ya le pasa ese string como único argumento.</li>
+      <li><code class="inline">keyboardType</code> &mdash; cambia el teclado que aparece: <code class="inline">"email-address"</code>, <code class="inline">"numeric"</code>, <code class="inline">"phone-pad"</code>&hellip; No valida nada por sí solo, solo ayuda a escribir más rápido.</li>
+      <li><code class="inline">secureTextEntry</code> &mdash; oculta lo escrito con puntos, para contraseñas.</li>
+    </ul>
+
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code>&lt;<span class="tag">TextInput</span>
+  <span class="prop">style</span>={styles.input}
+  <span class="prop">value</span>={correo}
+  <span class="prop">onChangeText</span>={setCorreo}
+  <span class="prop">placeholder</span>=<span class="str">"correo@ejemplo.com"</span>
+  <span class="prop">keyboardType</span>=<span class="str">"email-address"</span>
+  <span class="prop">autoCapitalize</span>=<span class="str">"none"</span>
+/&gt;
+
+&lt;<span class="tag">TextInput</span>
+  <span class="prop">style</span>={styles.input}
+  <span class="prop">value</span>={clave}
+  <span class="prop">onChangeText</span>={setClave}
+  <span class="prop">placeholder</span>=<span class="str">"Contraseña"</span>
+  <span class="prop">secureTextEntry</span>
+/&gt;</code></pre>
+    </div>
+
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        keyboardType="numeric" no da un número
+      </div>
+      <p><code class="inline">onChangeText</code> siempre entrega un <strong>string</strong>, aunque el teclado sea numérico. Si necesitas el número, conviértelo tú: <code class="inline">Number(texto)</code> al usarlo, nunca al guardarlo en el estado del input.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">2 · El teclado tapa el formulario</h2>
+    <p>Prueba esto en tu móvil: un formulario con dos o tres campos y un botón &ldquo;Guardar&rdquo; al final, en la parte baja de la pantalla. En Android puede que el sistema mueva la pantalla solo; en iOS, casi nunca &mdash;el teclado sube por encima de todo y el botón queda tapado detrás de él, inalcanzable. React Native no soluciona esto automáticamente: hay que decírselo explícitamente con <code class="inline">KeyboardAvoidingView</code>.</p>
+
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">import</span> { KeyboardAvoidingView, Platform, StyleSheet, ScrollView } <span class="kw">from</span> <span class="str">'react-native'</span>;
+
+&lt;<span class="tag">KeyboardAvoidingView</span>
+  <span class="prop">style</span>={{ flex: <span class="kw">1</span> }}
+  <span class="prop">behavior</span>={Platform.OS === <span class="str">'ios'</span> ? <span class="str">'padding'</span> : <span class="str">'height'</span>}
+&gt;
+  &lt;<span class="tag">ScrollView</span> <span class="prop">contentContainerStyle</span>={styles.formulario}&gt;
+    {<span class="com">/* tus TextInput y el botón de guardar aquí */</span>}
+  &lt;/<span class="tag">ScrollView</span>&gt;
+&lt;/<span class="tag">KeyboardAvoidingView</span>&gt;</code></pre>
+    </div>
+
+    <p><code class="inline">behavior</code> se comporta distinto según la plataforma, por eso se consulta <code class="inline">Platform.OS</code>:</p>
+    <ul class="learn-list">
+      <li><code class="inline">"padding"</code> (iOS) &mdash; añade un relleno inferior del tamaño exacto del teclado, empujando el contenido hacia arriba.</li>
+      <li><code class="inline">"height"</code> (Android) &mdash; suele bastar, porque Android ya gestiona parte del ajuste a nivel de sistema. Si tu app en Android usa <code class="inline">windowSoftInputMode</code> personalizado, puede necesitar <code class="inline">"height"</code> igualmente para casos con <code class="inline">ScrollView</code>.</li>
+    </ul>
+    <p>Envolver el formulario en un <code class="inline">ScrollView</code> dentro del <code class="inline">KeyboardAvoidingView</code> es lo que evita que, en pantallas pequeñas, un campo quede fuera de la vista incluso después de aplicar el ajuste: si no cabe, el usuario puede desplazarse.</p>
+
+    <div class="checkpoint">
+      <div class="checkpoint-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        Cómo comprobarlo de verdad
+      </div>
+      <p>Esto solo se ve en un móvil real (o simulador) con el teclado realmente abierto, nunca leyendo el código. Toca un campo, comprueba que el botón de guardar sigue visible y pulsable sin tener que cerrar antes el teclado.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">3 · Modal: una pantalla flotante</h2>
+    <p><code class="inline">Modal</code> muestra contenido por encima de todo lo demás, sin necesidad de navegación: ideal para diálogos de confirmación, formularios rápidos de &ldquo;crear algo nuevo&rdquo; o detalles que no merecen una pantalla propia en el navegador de la app. Se controla igual que cualquier otro elemento condicional: con un booleano en el estado.</p>
+
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">import</span> { useState } <span class="kw">from</span> <span class="str">'react'</span>;
+<span class="kw">import</span> { Modal, View, Text, Pressable, StyleSheet } <span class="kw">from</span> <span class="str">'react-native'</span>;
+
+<span class="kw">export default function</span> <span class="tag">EjemploModal</span>() {
+  <span class="kw">const</span> [visible, setVisible] = useState(<span class="kw">false</span>);
+
+  <span class="kw">return</span> (
+    &lt;<span class="tag">View</span> <span class="prop">style</span>={styles.container}&gt;
+      &lt;<span class="tag">Pressable</span> <span class="prop">onPress</span>={() =&gt; setVisible(<span class="kw">true</span>)}&gt;
+        &lt;<span class="tag">Text</span>&gt;Abrir formulario&lt;/<span class="tag">Text</span>&gt;
+      &lt;/<span class="tag">Pressable</span>&gt;
+
+      &lt;<span class="tag">Modal</span>
+        <span class="prop">visible</span>={visible}
+        <span class="prop">animationType</span>=<span class="str">"slide"</span>
+        <span class="prop">transparent</span>
+        <span class="prop">onRequestClose</span>={() =&gt; setVisible(<span class="kw">false</span>)}
+      &gt;
+        &lt;<span class="tag">View</span> <span class="prop">style</span>={styles.overlay}&gt;
+          &lt;<span class="tag">View</span> <span class="prop">style</span>={styles.tarjeta}&gt;
+            &lt;<span class="tag">Text</span>&gt;Contenido del modal&lt;/<span class="tag">Text</span>&gt;
+            &lt;<span class="tag">Pressable</span> <span class="prop">onPress</span>={() =&gt; setVisible(<span class="kw">false</span>)}&gt;
+              &lt;<span class="tag">Text</span>&gt;Cerrar&lt;/<span class="tag">Text</span>&gt;
+            &lt;/<span class="tag">Pressable</span>&gt;
+          &lt;/<span class="tag">View</span>&gt;
+        &lt;/<span class="tag">View</span>&gt;
+      &lt;/<span class="tag">Modal</span>&gt;
+    &lt;/<span class="tag">View</span>&gt;
+  );
+}</code></pre>
+    </div>
+
+    <p>Tres detalles que marcan la diferencia entre un modal correcto y uno frustrante de usar:</p>
+    <ul class="learn-list">
+      <li><code class="inline">transparent</code> deja ver el fondo difuminado/oscurecido detrás; sin él, el modal ocupa toda la pantalla con fondo sólido.</li>
+      <li><code class="inline">onRequestClose</code> es obligatorio en Android: es lo que se dispara con el botón físico/gesto de &ldquo;atrás&rdquo;. Si lo omites, ese botón no cerrará el modal.</li>
+      <li>El <code class="inline">overlay</code> (la vista exterior, normalmente con <code class="inline">justifyContent: 'flex-end'</code> o <code class="inline">'center'</code> y un fondo semitransparente) es lo que te da el efecto de tarjeta flotante &mdash;no viene gratis con <code class="inline">Modal</code>, lo dibujas tú.</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Práctica: nueva nota en un modal</h2>
+    <p>Vais a construir un formulario de &ldquo;nueva nota&rdquo; (o &ldquo;nuevo contacto&rdquo;, lo que prefiráis) que se abre dentro de un <code class="inline">Modal</code>, con un campo de texto obligatorio, validación básica y el teclado bien gestionado con <code class="inline">KeyboardAvoidingView</code>.</p>
+
+    <div class="step">
+      <div class="step-chip">1</div>
+      <div class="step-body">
+        <h3>Estado de la lista y del modal</h3>
+        <p>Partid de una lista simple en memoria (con <code class="inline">useState</code>) y un booleano para el modal:</p>
+        <div class="code-panel">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code><span class="kw">type</span> <span class="tag">Nota</span> = { id: <span class="tag">string</span>; texto: <span class="tag">string</span> };
+
+<span class="kw">const</span> [notas, setNotas] = useState&lt;<span class="tag">Nota</span>[]&gt;([]);
+<span class="kw">const</span> [modalVisible, setModalVisible] = useState(<span class="kw">false</span>);
+<span class="kw">const</span> [texto, setTexto] = useState(<span class="str">''</span>);
+<span class="kw">const</span> [error, setError] = useState(<span class="str">''</span>);</code></pre>
+        </div>
+        <p class="small">Como <code class="inline">useState([])</code> arranca con un array vacío, TypeScript no tiene forma de adivinar qué va a contener &mdash; sin el tipo <code class="inline">Nota[]</code> explícito, lo infiere como <code class="inline">never[]</code> y se queja en cuanto intentas meter algo dentro con <code class="inline">setNotas</code>.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">2</div>
+      <div class="step-body">
+        <h3>El botón que abre el modal y la lista</h3>
+        <p>Fuera del modal, un <code class="inline">Pressable</code> &ldquo;+ Nueva nota&rdquo; que hace <code class="inline">setModalVisible(true)</code>, y debajo una <code class="inline">FlatList</code> renderizando <code class="inline">notas</code> (repaso de la sesión 13).</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">3</div>
+      <div class="step-body">
+        <h3>El formulario dentro del modal</h3>
+        <p>Envuelto en <code class="inline">KeyboardAvoidingView</code>, con validación: si el texto está vacío al pulsar &ldquo;Guardar&rdquo;, se muestra un mensaje de error en vez de cerrar el modal.</p>
+        <div class="code-panel">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code><span class="kw">const</span> guardarNota = () =&gt; {
+  <span class="kw">if</span> (texto.trim() === <span class="str">''</span>) {
+    setError(<span class="str">'Escribe algo antes de guardar'</span>);
+    <span class="kw">return</span>;
+  }
+  setNotas([...notas, { id: Date.now().toString(), texto }]);
+  setTexto(<span class="str">''</span>);
+  setError(<span class="str">''</span>);
+  setModalVisible(<span class="kw">false</span>);
+};
+
+&lt;<span class="tag">Modal</span> <span class="prop">visible</span>={modalVisible} <span class="prop">animationType</span>=<span class="str">"slide"</span> <span class="prop">transparent</span>
+  <span class="prop">onRequestClose</span>={() =&gt; setModalVisible(<span class="kw">false</span>)}&gt;
+  &lt;<span class="tag">KeyboardAvoidingView</span>
+    <span class="prop">style</span>={styles.overlay}
+    <span class="prop">behavior</span>={Platform.OS === <span class="str">'ios'</span> ? <span class="str">'padding'</span> : <span class="str">'height'</span>}
+  &gt;
+    &lt;<span class="tag">View</span> <span class="prop">style</span>={styles.tarjeta}&gt;
+      &lt;<span class="tag">TextInput</span>
+        <span class="prop">style</span>={styles.input}
+        <span class="prop">value</span>={texto}
+        <span class="prop">onChangeText</span>={setTexto}
+        <span class="prop">placeholder</span>=<span class="str">"Escribe tu nota"</span>
+      /&gt;
+      {error !== <span class="str">''</span> &amp;&amp; &lt;<span class="tag">Text</span> <span class="prop">style</span>={styles.error}&gt;{error}&lt;/<span class="tag">Text</span>&gt;}
+      &lt;<span class="tag">Pressable</span> <span class="prop">onPress</span>={guardarNota}&gt;
+        &lt;<span class="tag">Text</span>&gt;Guardar&lt;/<span class="tag">Text</span>&gt;
+      &lt;/<span class="tag">Pressable</span>&gt;
+    &lt;/<span class="tag">View</span>&gt;
+  &lt;/<span class="tag">KeyboardAvoidingView</span>&gt;
+&lt;/<span class="tag">Modal</span>&gt;</code></pre>
+        </div>
+        <div class="checkpoint">
+          <div class="checkpoint-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Debería funcionar así
+          </div>
+          <p>Al tocar el campo de texto, el teclado sube y el botón &ldquo;Guardar&rdquo; sigue visible encima de él. Pulsar &ldquo;Guardar&rdquo; con el campo vacío muestra el error sin cerrar el modal; con texto, la nota aparece en la lista y el modal se cierra solo.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Reto extra
+      </div>
+      <p>Añade un segundo campo (por ejemplo &ldquo;categoría&rdquo; o &ldquo;teléfono&rdquo; si hicisteis contactos) con su propia validación, y un botón &ldquo;Cancelar&rdquo; que limpie el formulario y cierre el modal sin guardar nada.</p>
+      <p>Si tenéis tiempo: probad qué pasa si convertís uno de los campos en contraseña de acceso a la nota con <code class="inline">secureTextEntry</code>, solo para practicar la prop &mdash;no hace falta que la app la use de verdad para nada.</p>
+    </div>
+  </section>
+
+  <footer class="end">
+    Próxima sesión: la app va a hablar con el mundo exterior &mdash; consumir una API real desde el móvil con <code class="inline">fetch</code>.
+  </footer>
+
+</div>
+
+</html>

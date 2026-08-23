@@ -1,0 +1,712 @@
+<title>Efectos y formularios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #E4572E;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #FF8A5C;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #F2764C;
+      --accent-ink: #17110D;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #F2764C;
+    --accent-ink: #17110D;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top {
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.08rem;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  section.block {
+    margin-top: 44px;
+  }
+
+  h2.block-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+
+  .checklist {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow);
+  }
+
+  .checklist li {
+    list-style: none;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 15px;
+  }
+
+  .checklist ul { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+
+  .checklist svg {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    color: var(--accent-2);
+  }
+
+  .learn-list {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .learn-list li {
+    list-style: none;
+    padding-left: 20px;
+    position: relative;
+    color: var(--ink);
+  }
+
+  .learn-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  p { margin: 0 0 14px; }
+  p:last-child { margin-bottom: 0; }
+
+  .prose p { margin: 0 0 14px; }
+
+  .step {
+    display: flex;
+    gap: 18px;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .step:first-of-type { border-top: none; padding-top: 0; }
+
+  .step-chip {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-body { flex: 1; min-width: 0; }
+
+  .step h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 4px 0 8px;
+  }
+
+  .step p {
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+
+  .step p.small {
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+
+  .term {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+
+  .term-bar span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--code-line);
+  }
+
+  .term pre {
+    margin: 0;
+    padding: 14px 16px 16px;
+    overflow-x: auto;
+  }
+
+  .term code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13.6px;
+    line-height: 1.7;
+    color: var(--code-ink);
+  }
+
+  .term .prompt { color: var(--code-muted); }
+  .term .cmt { color: var(--code-muted); }
+  .term .hl { color: var(--code-accent); }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .code-panel .term-bar { }
+
+  .code-panel pre {
+    margin: 0;
+    padding: 16px 18px 18px;
+    overflow-x: auto;
+  }
+
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+
+  .code-panel .tag { color: var(--accent-2); }
+  .code-panel .str { color: #C9D96B; }
+  .code-panel .kw { color: var(--code-accent); }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .prop { color: #8FB8FF; }
+  .code-panel .hl { color: var(--code-accent); }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+
+  .checkpoint p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .substep {
+    display: flex;
+    gap: 14px;
+    margin: 18px 0 0 16px;
+    padding-left: 16px;
+    border-left: 2px solid var(--line-soft);
+  }
+
+  .substep-chip {
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: var(--line-soft);
+    color: var(--muted);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 11.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .substep h4 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.98rem;
+    font-weight: 600;
+    margin: 2px 0 6px;
+  }
+
+  .substep p {
+    margin: 0 0 8px;
+    font-size: 14.5px;
+    color: var(--ink);
+  }
+
+  .substep .code-panel, .substep .term {
+    margin: 10px 0;
+  }
+
+  details.full-code {
+    margin-top: 16px;
+  }
+
+  details.full-code summary {
+    cursor: pointer;
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--accent-2);
+    list-style: none;
+  }
+
+  details.full-code summary::-webkit-details-marker { display: none; }
+
+  details.full-code summary::before {
+    content: "▸ ";
+  }
+
+  details.full-code[open] summary::before {
+    content: "▾ ";
+  }
+
+  .trouble {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .trouble-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .trouble-item .q {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    margin: 0 0 6px;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .trouble-item .q::before {
+    content: "?";
+    font-family: "IBM Plex Mono", monospace;
+    color: var(--accent-2);
+    font-weight: 500;
+  }
+
+  .trouble-item p {
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--muted);
+  }
+
+  .trouble-item p + p { margin-top: 8px; }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .step { transition: none; }
+  }
+</style>
+
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">Sesión 9 de 26 &middot; Bloque 3: React</span>
+    <h1>Efectos y formularios</h1>
+    <p class="lede">Dos piezas que te van a acompañar en casi cualquier app real: sincronizar un componente con algo externo (un reloj, un fetch, una suscripción) y capturar con garantías lo que escribe la persona que usa la app.</p>
+    <div class="meta-row">
+      <span class="meta-chip">2 horas</span>
+      <span class="meta-chip">Sesión 9/26</span>
+      <span class="meta-chip">useEffect + formularios</span>
+    </div>
+  </header>
+
+  <section class="block prose">
+    <p>Todo lo que has escrito hasta ahora vive dentro del ciclo normal de render de React: llega un dato, el componente se dibuja, listo. Pero hay cosas que no encajan en ese ciclo &mdash; un temporizador, una petición a un servidor, escuchar un evento del navegador. Son <strong>efectos secundarios</strong>: cosas que un componente necesita hacer además de simplemente devolver JSX. Y hay otra pieza muy relacionada: los formularios, donde React necesita saber en todo momento qué hay escrito en cada campo. Seguimos en el navegador, con React normal.</p>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Qué vas a aprender</h2>
+    <ul class="learn-list">
+      <li>Qué es <code class="inline">useEffect</code>, cuándo se ejecuta y qué papel juega su array de dependencias.</li>
+      <li>El caso de uso más típico: pedir datos a una API en cuanto el componente aparece en pantalla.</li>
+      <li>Cómo construir un formulario controlado, donde cada input está sincronizado con el estado.</li>
+    </ul>
+  </section>
+
+  <section class="block prose">
+    <h2 class="block-title">useEffect: cuándo se ejecuta</h2>
+    <p><code class="inline">useEffect</code> recibe una función y, opcionalmente, un array de dependencias. React ejecuta esa función después de pintar el componente en pantalla, y decide si volver a ejecutarla comparando ese array entre un render y el siguiente.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">import</span> { useEffect, useState } <span class="kw">from</span> <span class="str">"react"</span>;
+
+<span class="kw">function</span> <span class="tag">Reloj</span>() {
+  <span class="kw">const</span> [hora, setHora] = useState(<span class="kw">new</span> Date());
+
+  useEffect(() =&gt; {
+    <span class="kw">const</span> id = setInterval(() =&gt; setHora(<span class="kw">new</span> Date()), <span class="hl">1000</span>);
+    <span class="kw">return</span> () =&gt; clearInterval(id); <span class="com">// limpieza al desmontar</span>
+  }, []);
+
+  <span class="kw">return</span> &lt;<span class="tag">p</span>&gt;{hora.toLocaleTimeString()}&lt;/<span class="tag">p</span>&gt;;
+}</code></pre>
+    </div>
+    <p>El array al final es la clave para leer un <code class="inline">useEffect</code>:</p>
+    <ul class="learn-list">
+      <li><code class="inline">[]</code> (vacío) &mdash; se ejecuta una sola vez, justo después del primer render. Es el caso típico para &ldquo;en cuanto aparezca este componente, haz X&rdquo;.</li>
+      <li><code class="inline">[algoDeEstado]</code> &mdash; se ejecuta después del primer render, y luego cada vez que ese valor concreto cambie.</li>
+      <li>sin array &mdash; se ejecuta después de <em>cada</em> render, algo que rara vez se quiere de verdad.</li>
+    </ul>
+    <p>La función que <code class="inline">return</code> desde dentro del efecto es la <strong>limpieza</strong>: React la ejecuta antes de repetir el efecto o cuando el componente desaparece de pantalla. En el reloj, evita que sigan corriendo intervalos huérfanos.</p>
+  </section>
+
+  <section class="block prose">
+    <h2 class="block-title">El caso de uso estrella: fetch al montar</h2>
+    <p>El uso más habitual de <code class="inline">useEffect</code> es pedir datos a una API en cuanto el componente aparece, algo que ya conoces del bloque de JavaScript &mdash; ahora solo lo conectamos al estado.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">type</span> <span class="tag">Usuario</span> = { id: <span class="tag">number</span>; name: <span class="tag">string</span> };
+
+<span class="kw">function</span> <span class="tag">ListaUsuarios</span>() {
+  <span class="kw">const</span> [usuarios, setUsuarios] = useState&lt;<span class="tag">Usuario</span>[]&gt;([]);
+  <span class="kw">const</span> [cargando, setCargando] = useState(<span class="hl">true</span>);
+
+  useEffect(() =&gt; {
+    fetch(<span class="str">"https://jsonplaceholder.typicode.com/users"</span>)
+      .then((res) =&gt; res.json())
+      .then((datos) =&gt; {
+        setUsuarios(datos);
+        setCargando(<span class="hl">false</span>);
+      });
+  }, []);
+
+  <span class="kw">if</span> (cargando) <span class="kw">return</span> &lt;<span class="tag">p</span>&gt;Cargando&hellip;&lt;/<span class="tag">p</span>&gt;;
+
+  <span class="kw">return</span> (
+    &lt;<span class="tag">ul</span>&gt;
+      {usuarios.map((u) =&gt; (
+        &lt;<span class="tag">li</span> <span class="prop">key</span>={u.id}&gt;{u.name}&lt;/<span class="tag">li</span>&gt;
+      ))}
+    &lt;/<span class="tag">ul</span>&gt;
+  );
+}</code></pre>
+    </div>
+    <p>El patrón de <code class="inline">cargando</code> importa: al principio no hay datos que mostrar todavía, así que el componente renderiza un estado de carga mientras el <code class="inline">fetch</code> está en marcha, y cambia a la lista real en cuanto llega la respuesta.</p>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        La función del efecto nunca es async directamente
+      </div>
+      <p><code class="inline">useEffect(async () =&gt; {'{ ... }'}, [])</code> es un error habitual: una función <code class="inline">async</code> siempre devuelve una promesa, y React espera que el efecto devuelva o nada, o una función de limpieza &mdash; nunca una promesa. Si necesitas <code class="inline">await</code>, define una función async aparte dentro del efecto y llámala.</p>
+    </div>
+  </section>
+
+  <section class="block prose">
+    <h2 class="block-title">Formularios controlados</h2>
+    <p>Un input HTML normal guarda su propio valor internamente, fuera del alcance de React. Un input <strong>controlado</strong> renuncia a esa memoria propia: su <code class="inline">value</code> viene siempre del estado, y cada tecla dispara <code class="inline">onChange</code> para actualizar ese estado. React manda en todo momento.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">function</span> <span class="tag">CampoNombre</span>() {
+  <span class="kw">const</span> [nombre, setNombre] = useState(<span class="str">""</span>);
+
+  <span class="kw">return</span> (
+    &lt;<span class="tag">input</span>
+      <span class="prop">value</span>={nombre}
+      <span class="prop">onChange</span>={(e) =&gt; setNombre(e.target.value)}
+      <span class="prop">placeholder</span>=<span class="str">"Tu nombre"</span>
+    /&gt;
+  );
+}</code></pre>
+    </div>
+    <p>Con esto ganas algo muy valioso: en cualquier momento sabes exactamente qué hay en el campo (para validarlo, para deshabilitar un botón, para mandarlo a un servidor) sin tener que ir a buscarlo al DOM con <code class="inline">document.querySelector</code>.</p>
+    <p>Para un formulario con varios campos, en vez de un <code class="inline">useState</code> por campo suele usarse un único objeto de estado y actualizar una propiedad cada vez, con el patrón de &ldquo;copiar y sobrescribir&rdquo; que ya viste con arrays:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">const</span> [datos, setDatos] = useState({ nombre: <span class="str">""</span>, email: <span class="str">""</span> });
+
+<span class="kw">function</span> <span class="tag">actualizar</span>(campo, valor) {
+  setDatos({ ...datos, [campo]: valor });
+}
+
+<span class="com">// en el JSX</span>
+&lt;<span class="tag">input</span>
+  <span class="prop">value</span>={datos.email}
+  <span class="prop">onChange</span>={(e) =&gt; actualizar(<span class="str">"email"</span>, e.target.value)}
+/&gt;</code></pre>
+    </div>
+    <p><code class="inline">[campo]: valor</code> es una propiedad computada: el nombre de la clave sale de la variable <code class="inline">campo</code> en vez de escribirse literalmente, así una sola función <code class="inline">actualizar</code> sirve para todos los inputs del formulario.</p>
+  </section>
+
+  <section class="block prose">
+    <h2 class="block-title">Validación básica</h2>
+    <p>Validar en React es, sobre todo, guardar los errores también como estado: un objeto donde cada clave es un campo y cada valor (si existe) es el mensaje de error a mostrar.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">function</span> <span class="tag">validar</span>(datos) {
+  <span class="kw">const</span> errores = {};
+  <span class="kw">if</span> (datos.nombre.trim() === <span class="str">""</span>) {
+    errores.nombre = <span class="str">"El nombre es obligatorio"</span>;
+  }
+  <span class="kw">if</span> (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(datos.email)) {
+    errores.email = <span class="str">"El email no tiene un formato válido"</span>;
+  }
+  <span class="kw">if</span> (datos.password.length &lt; <span class="hl">6</span>) {
+    errores.password = <span class="str">"La contraseña debe tener al menos 6 caracteres"</span>;
+  }
+  <span class="kw">return</span> errores;
+}</code></pre>
+    </div>
+    <p>Con eso, el JSX solo tiene que preguntar si hay mensaje para ese campo y, si lo hay, mostrarlo con renderizado condicional &mdash; exactamente el <code class="inline">&amp;&amp;</code> de la sesión pasada.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code>&lt;<span class="tag">input</span>
+  <span class="prop">value</span>={datos.email}
+  <span class="prop">onChange</span>={(e) =&gt; actualizar(<span class="str">"email"</span>, e.target.value)}
+/&gt;
+{errores.email &amp;&amp; &lt;<span class="tag">p</span> <span class="prop">className</span>=<span class="str">"error"</span>&gt;{errores.email}&lt;/<span class="tag">p</span>&gt;}</code></pre>
+    </div>
+    <div class="checkpoint">
+      <div class="checkpoint-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        La idea que se queda de hoy
+      </div>
+      <p><code class="inline">useEffect</code> conecta un componente con algo de fuera de React, y su array de dependencias decide cuándo se repite. Un formulario controlado hace que el estado sea siempre la fuente de verdad de lo que hay escrito, lo que permite validar en cualquier momento.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Práctica: formulario de registro</h2>
+
+    <div class="step">
+      <div class="step-chip">1</div>
+      <div class="step-body">
+        <h3>Monta los tres campos</h3>
+        <p>Un componente <code class="inline">FormularioRegistro</code> con tres inputs controlados: <code class="inline">nombre</code>, <code class="inline">email</code> y <code class="inline">password</code> (este último con <code class="inline">type="password"</code>), todos leyendo de un único objeto de estado.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">2</div>
+      <div class="step-body">
+        <h3>Añade el estado de errores</h3>
+        <p>Un segundo estado, <code class="inline">errores</code>, que empieza como un objeto vacío <code class="inline">{'{}'}</code>.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">3</div>
+      <div class="step-body">
+        <h3>Valida al enviar</h3>
+        <p>En el <code class="inline">onSubmit</code> del <code class="inline">&lt;form&gt;</code> (recuerda llamar a <code class="inline">e.preventDefault()</code> para que el navegador no recargue la página), comprueba: ningún campo vacío, el email con formato válido, y la contraseña con al menos 6 caracteres. Guarda lo que encuentres en <code class="inline">errores</code>.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">4</div>
+      <div class="step-body">
+        <h3>Muestra los mensajes</h3>
+        <p>Debajo de cada input, muestra su mensaje de error correspondiente solo si existe, con <code class="inline">{'{errores.campo && <p>...</p>}'}</code>.</p>
+        <div class="checkpoint">
+          <div class="checkpoint-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Deberías ver esto
+          </div>
+          <p>Si envías el formulario vacío, aparecen los tres mensajes de error. Si corriges los campos uno a uno y vuelves a enviar, los mensajes van desapareciendo. Con los tres campos válidos, el formulario se considera correcto (por ejemplo, con un <code class="inline">alert("Registro correcto")</code>).</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Reto extra
+      </div>
+      <p>Valida en tiempo real: recalcula los errores del campo cada vez que cambie, no solo al enviar.</p>
+      <p>Usa <code class="inline">useEffect</code> para poner el foco automáticamente en el primer campo con error después de intentar enviar el formulario, con una <code class="inline">ref</code> (te la presentamos por encima: <code class="inline">useRef</code> guarda una referencia directa a un elemento del DOM).</p>
+    </div>
+  </section>
+
+  <footer class="end">
+    Siguiente sesión: cerramos el bloque de React combinando varios componentes en un proyecto pequeño y completo.
+  </footer>
+
+</div>

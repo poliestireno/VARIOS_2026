@@ -1,0 +1,606 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Desarrollo I</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #E4572E;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #FF8A5C;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #F2764C;
+      --accent-ink: #17110D;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #F2764C;
+    --accent-ink: #17110D;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top {
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.08rem;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  section.block {
+    margin-top: 44px;
+  }
+
+  h2.block-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+
+  .checklist {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow);
+  }
+
+  .checklist li {
+    list-style: none;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 15px;
+  }
+
+  .checklist ul { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+
+  .checklist svg {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    color: var(--accent-2);
+  }
+
+  .learn-list {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .learn-list li {
+    list-style: none;
+    padding-left: 20px;
+    position: relative;
+    color: var(--ink);
+  }
+
+  .learn-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .step {
+    display: flex;
+    gap: 18px;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .step:first-of-type { border-top: none; padding-top: 0; }
+
+  .step-chip {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-body { flex: 1; min-width: 0; }
+
+  .step h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 4px 0 8px;
+  }
+
+  .step p {
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+
+  .step p.small {
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+
+  .term {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+
+  .term-bar span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--code-line);
+  }
+
+  .term pre {
+    margin: 0;
+    padding: 14px 16px 16px;
+    overflow-x: auto;
+  }
+
+  .term code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13.6px;
+    line-height: 1.7;
+    color: var(--code-ink);
+  }
+
+  .term .prompt { color: var(--code-muted); }
+  .term .cmt { color: var(--code-muted); }
+  .term .hl { color: var(--code-accent); }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .code-panel .term-bar { }
+
+  .code-panel pre {
+    margin: 0;
+    padding: 16px 18px 18px;
+    overflow-x: auto;
+  }
+
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+
+  .code-panel .tag { color: var(--accent-2); }
+  .code-panel .str { color: #C9D96B; }
+  .code-panel .kw { color: var(--code-accent); }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .prop { color: #8FB8FF; }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+
+  .checkpoint p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .substep {
+    display: flex;
+    gap: 14px;
+    margin: 18px 0 0 16px;
+    padding-left: 16px;
+    border-left: 2px solid var(--line-soft);
+  }
+
+  .substep-chip {
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: var(--line-soft);
+    color: var(--muted);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 11.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .substep h4 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.98rem;
+    font-weight: 600;
+    margin: 2px 0 6px;
+  }
+
+  .substep p {
+    margin: 0 0 8px;
+    font-size: 14.5px;
+    color: var(--ink);
+  }
+
+  .substep .code-panel, .substep .term {
+    margin: 10px 0;
+  }
+
+  details.full-code {
+    margin-top: 16px;
+  }
+
+  details.full-code summary {
+    cursor: pointer;
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--accent-2);
+    list-style: none;
+  }
+
+  details.full-code summary::-webkit-details-marker { display: none; }
+
+  details.full-code summary::before {
+    content: "▸ ";
+  }
+
+  details.full-code[open] summary::before {
+    content: "▾ ";
+  }
+
+  .trouble {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .trouble-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .trouble-item .q {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    margin: 0 0 6px;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .trouble-item .q::before {
+    content: "?";
+    font-family: "IBM Plex Mono", monospace;
+    color: var(--accent-2);
+    font-weight: 500;
+  }
+
+  .trouble-item p {
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--muted);
+  }
+
+  .trouble-item p + p { margin-top: 8px; }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .step { transition: none; }
+  }
+</style>
+
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">Sesión 21 de 26 &middot; Bloque 5: Proyecto final</span>
+    <h1>Desarrollo I &mdash; pantallas principales</h1>
+    <p class="lede">La primera de varias sesiones de taller: cada alumno construye sobre su propio esqueleto, a su propio ritmo, y tu trabajo es circular por la clase con seguimiento individual. No hay contenido nuevo que explicar hoy.</p>
+    <div class="meta-row">
+      <span class="meta-chip">2 horas</span>
+      <span class="meta-chip">Sesión 21/26</span>
+      <span class="meta-chip">Taller guiado</span>
+    </div>
+  </header>
+
+  <section class="block">
+    <h2 class="block-title">Cómo dirigir esta sesión</h2>
+    <p>Esta sesión cambia de formato: no hay explicación en la pizarra ni ejemplo compartido. Cada alumno tiene un proyecto distinto en un punto distinto, así que tu tiempo se reparte en rondas cortas por mesa. El riesgo de este formato es previsible &mdash; sin querer, acabas pasando toda la hora con quien más habla o quien está más atascado, y quien va bien en silencio no recibe ni una mirada durante dos horas. Estructura el tiempo para evitarlo.</p>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Cómo estructurar las 2 horas</h2>
+    <div class="step">
+      <div class="step-chip">1</div>
+      <div class="step-body">
+        <h3>Arranque (5&ndash;10 min)</h3>
+        <p class="small">Cada alumno dice en una frase qué pantalla va a construir hoy. No hace falta que lo digan en voz alta a toda la clase &mdash; basta con pasar mesa por mesa y anotarlo. Esto evita que alguien se siente a improvisar sin objetivo y te da un mapa de por dónde vas a tener que pasar.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-chip">2</div>
+      <div class="step-body">
+        <h3>Rondas de mesa (90&ndash;100 min)</h3>
+        <p class="small">10&ndash;15 minutos por alumno o mesa, en bucle durante el resto de la sesión. En cada ronda: qué estaba haciendo, qué ha conseguido, qué le bloquea. Si en 10&ndash;15 minutos no hay nada que desbloquear, sigue a la siguiente mesa &mdash; no hace falta agotar el tiempo si va bien.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-chip">3</div>
+      <div class="step-body">
+        <h3>Aviso de los últimos 15 minutos</h3>
+        <p class="small">Anuncia en voz alta que quedan 15 minutos: a partir de ahora, nadie empieza nada nuevo, solo se deja lo que hay funcionando y guardado. Es la única intervención a toda la clase de la sesión.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-chip">4</div>
+      <div class="step-body">
+        <h3>Cierre (5&ndash;10 min)</h3>
+        <p class="small">Cada alumno prueba su app una vez más en el móvil y dice en una frase qué le falta para la próxima sesión. Sirve de recordatorio para él y de mapa de arranque para ti en la sesión 22.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Preguntas para destrabar a alguien parado</h2>
+    <p>Cuando llegas a una mesa y alguien lleva un rato sin avanzar, no empieces mirando el código &mdash; empieza preguntando. Casi siempre el bloqueo se resuelve solo en cuanto lo verbaliza:</p>
+    <div class="trouble">
+      <div class="trouble-item">
+        <p class="q">¿Qué pantalla estás haciendo?</p>
+        <p>Si duda al responder, el problema no es técnico todavía &mdash; es que no tiene claro el objetivo de los próximos 15 minutos. Vuelve al wireframe de la sesión 19 antes de tocar código.</p>
+      </div>
+      <div class="trouble-item">
+        <p class="q">¿Qué se ve ahora en el móvil, y qué debería verse?</p>
+        <p>Obliga a comparar el estado real contra el esperado en voz alta. Muchas veces el propio alumno detecta la diferencia mientras lo explica, antes de que tú digas nada.</p>
+      </div>
+      <div class="trouble-item">
+        <p class="q">¿Cuál fue lo último que funcionó?</p>
+        <p>Ayuda a acotar dónde está el fallo sin leer todo el archivo de arriba a abajo. Si hace 20 minutos que funcionaba y ahora no, el cambio está entre medias.</p>
+      </div>
+      <div class="trouble-item">
+        <p class="q">¿Con qué datos de prueba estás trabajando?</p>
+        <p>En esta sesión todo es hardcodeado. Si el bloqueo viene de intentar traer datos reales o conectar algo externo, redirige a datos de prueba fijos &mdash; hoy no toca.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Priorizar sin abandonar al resto</h2>
+    <p>Va a haber alguien claramente más retrasado que el resto. Merece más tiempo, pero no toda la sesión: si te quedas 40 minutos en una mesa, el resto de la clase se queda sin rondas. La técnica que funciona es dejar tarea corta y verificable antes de moverte: &ldquo;prueba esto, anota qué pasa, y cuando vuelva en 15 minutos lo miramos juntos&rdquo;. Así nadie se queda completamente parado mientras esperas turno en otra mesa, y tú puedes seguir haciendo rondas normales con el resto.</p>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Señales de alarma</h2>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Alguien se ha metido en un problema demasiado grande para el tiempo que queda
+      </div>
+      <p>Lleva 20 minutos mirando la pantalla sin escribir nada, o ha abierto varios archivos nuevos sin guardar ninguno &mdash; señal de que está dando vueltas sin encontrar por dónde entrar.</p>
+      <p>Está intentando resolver algo con una librería o técnica que no se ha visto en el curso, encontrada buscando por su cuenta &mdash; frénalo ahí: hoy se resuelve con lo que ya sabe, aunque la solución sea menos elegante.</p>
+      <p>El error que tiene en pantalla no tiene relación con lo que dice estar haciendo &mdash; normalmente indica que copió código de un sitio sin entenderlo del todo. Mejor borrar y reconstruir desde lo último que sí entendía.</p>
+      <p>En cualquiera de estos casos, la salida es la misma: reduce el objetivo de hoy a algo mucho más pequeño y concreto, aunque sea menos de lo planeado. Es mejor terminar la sesión con algo pequeño funcionando que con algo grande a medias.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Práctica de hoy (entregable del alumno)</h2>
+    <div class="checklist">
+      <ul>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span><strong>1&ndash;2 pantallas principales implementadas</strong> sobre el esqueleto de la sesión 20 &mdash; las que muestran la información central de la app (la lista principal, o la pantalla de detalle).</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span><strong>Datos de prueba hardcodeados</strong>, un array fijo escrito directamente en el archivo. Nada de API todavía &mdash; eso no aparece en ningún proyecto de este curso.</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span><strong>Visible y probado en el móvil</strong> con Expo Go, no solo &ldquo;compila sin errores&rdquo;.</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <footer class="end">
+    Siguiente sesión: sesión 22, &ldquo;Desarrollo II &mdash; interacción y estado&rdquo; &mdash; las pantallas dejan de ser solo visuales y empiezan a reaccionar a lo que hace el usuario.
+  </footer>
+
+</div>
+
+</html>

@@ -1,0 +1,658 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Datos y persistencia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #E4572E;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #FF8A5C;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #F2764C;
+      --accent-ink: #17110D;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #F2764C;
+    --accent-ink: #17110D;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top {
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.08rem;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  section.block {
+    margin-top: 44px;
+  }
+
+  h2.block-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+
+  .checklist {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow);
+  }
+
+  .checklist li {
+    list-style: none;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 15px;
+  }
+
+  .checklist ul { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+
+  .checklist svg {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    color: var(--accent-2);
+  }
+
+  .learn-list {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .learn-list li {
+    list-style: none;
+    padding-left: 20px;
+    position: relative;
+    color: var(--ink);
+  }
+
+  .learn-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .step {
+    display: flex;
+    gap: 18px;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .step:first-of-type { border-top: none; padding-top: 0; }
+
+  .step-chip {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-body { flex: 1; min-width: 0; }
+
+  .step h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 4px 0 8px;
+  }
+
+  .step p {
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+
+  .step p.small {
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+
+  .term {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+
+  .term-bar span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--code-line);
+  }
+
+  .term pre {
+    margin: 0;
+    padding: 14px 16px 16px;
+    overflow-x: auto;
+  }
+
+  .term code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13.6px;
+    line-height: 1.7;
+    color: var(--code-ink);
+  }
+
+  .term .prompt { color: var(--code-muted); }
+  .term .cmt { color: var(--code-muted); }
+  .term .hl { color: var(--code-accent); }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .code-panel .term-bar { }
+
+  .code-panel pre {
+    margin: 0;
+    padding: 16px 18px 18px;
+    overflow-x: auto;
+  }
+
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+
+  .code-panel .tag { color: var(--accent-2); }
+  .code-panel .str { color: #C9D96B; }
+  .code-panel .kw { color: var(--code-accent); }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .prop { color: #8FB8FF; }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+
+  .checkpoint p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .substep {
+    display: flex;
+    gap: 14px;
+    margin: 18px 0 0 16px;
+    padding-left: 16px;
+    border-left: 2px solid var(--line-soft);
+  }
+
+  .substep-chip {
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: var(--line-soft);
+    color: var(--muted);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 11.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .substep h4 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.98rem;
+    font-weight: 600;
+    margin: 2px 0 6px;
+  }
+
+  .substep p {
+    margin: 0 0 8px;
+    font-size: 14.5px;
+    color: var(--ink);
+  }
+
+  .substep .code-panel, .substep .term {
+    margin: 10px 0;
+  }
+
+  details.full-code {
+    margin-top: 16px;
+  }
+
+  details.full-code summary {
+    cursor: pointer;
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--accent-2);
+    list-style: none;
+  }
+
+  details.full-code summary::-webkit-details-marker { display: none; }
+
+  details.full-code summary::before {
+    content: "▸ ";
+  }
+
+  details.full-code[open] summary::before {
+    content: "▾ ";
+  }
+
+  .trouble {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .trouble-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .trouble-item .q {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    margin: 0 0 6px;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .trouble-item .q::before {
+    content: "?";
+    font-family: "IBM Plex Mono", monospace;
+    color: var(--accent-2);
+    font-weight: 500;
+  }
+
+  .trouble-item p {
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--muted);
+  }
+
+  .trouble-item p + p { margin-top: 8px; }
+
+  table.api-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    font-size: 14px;
+    margin: 14px 0;
+  }
+
+  table.api-table th, table.api-table td {
+    text-align: left;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--line-soft);
+    vertical-align: top;
+  }
+
+  table.api-table th {
+    font-family: "Lexend", sans-serif;
+    font-size: 12.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+    background: var(--line-soft);
+  }
+
+  table.api-table tr:last-child td { border-bottom: none; }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .step { transition: none; }
+  }
+</style>
+
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">Sesión 23 de 26 &middot; Bloque 5: Proyecto final</span>
+    <h1>Datos y persistencia</h1>
+    <p class="lede">Conectar el proyecto con datos reales o persistentes, según lo que cada app necesite. No hay una respuesta única: tu trabajo es ayudar a cada alumno a decidir, caso por caso, antes de que se ponga a teclear.</p>
+    <div class="meta-row">
+      <span class="meta-chip">2 horas</span>
+      <span class="meta-chip">Sesión 23/26</span>
+      <span class="meta-chip">Trabajo por proyecto</span>
+    </div>
+  </header>
+
+  <section class="block">
+    <h2 class="block-title">Contexto de la sesión</h2>
+    <p>A estas alturas cada alumno tiene un esqueleto de app navegable, con pantallas construidas en las sesiones 21 y 22. Lo que falta es que esas pantallas muestren datos que valgan la pena: hoy toca decidir de dónde salen. Esta no es una sesión de contenido nuevo para explicar en la pizarra &mdash; es una sesión de mesas, donde tu rol es pasar proyecto por proyecto ayudando a decidir la fuente de datos correcta y evitando que nadie se atasque eligiendo entre dos opciones válidas.</p>
+    <p>El objetivo no es que todos usen lo mismo. Un proyecto de lista de tareas y un proyecto de buscador de películas necesitan cosas completamente distintas, y eso está bien.</p>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">El árbol de decisión</h2>
+    <p>Antes de tocar código, cada alumno debería poder responder esta pregunta en una frase: <strong>&ldquo;¿los datos de mi app existen fuera de lo que yo mismo escribo dentro de ella?&rdquo;</strong></p>
+    <div class="checklist">
+      <ul>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span><strong>No.</strong> Todo lo que la app guarda lo generó el propio usuario dentro de la app (una lista de tareas, notas, marcadores, ajustes) y solo le importa a él. &rarr; <strong>AsyncStorage</strong>, ya visto en la sesión 17.</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span><strong>Sí.</strong> La app necesita datos que existen independientemente del usuario &mdash; recetas, libros, películas, resultados de algo &mdash; y que no tendría sentido que cada alumno tecleara a mano. &rarr; <strong>API pública</strong>.</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span><strong>Las dos cosas.</strong> Es habitual y está bien: por ejemplo, la app consulta una API de recetas pero guarda en AsyncStorage cuáles marcó el usuario como favoritas. Son dos problemas distintos, no hace falta resolverlos con la misma herramienta.</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">AsyncStorage: cuando basta con recordar</h2>
+    <p>Ya se vio en la sesión 17, así que aquí solo hace falta un recordatorio rápido de mesa en mesa: <code class="inline">AsyncStorage</code> guarda pares clave&ndash;valor como texto (strings) en el propio dispositivo, y sobrevive a cerrar la app. Es la herramienta correcta cuando el dato es <em>del</em> usuario y <em>para</em> el usuario: listas propias, favoritos, configuración, progreso, historial local.</p>
+    <div class="term">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="prompt">$</span> npx expo install @react-native-async-storage/async-storage</code></pre>
+    </div>
+    <p class="small">Si algún alumno ya lo instaló en la sesión 17 para otro ejercicio, no hace falta reinstalarlo: es el mismo paquete para todo el curso.</p>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">APIs públicas: cuando el dato no es tuyo</h2>
+    <p>Para proyectos que necesiten datos externos, recomienda estas tres APIs gratuitas: no requieren backend propio, tienen buena documentación y responden JSON directo, sin capas raras.</p>
+    <table class="api-table">
+      <tr><th>API</th><th>Temática</th><th>Ejemplo de endpoint</th></tr>
+      <tr>
+        <td><strong>TheMealDB</strong></td>
+        <td>Recetas de cocina</td>
+        <td><code class="inline">themealdb.com/api/json/v1/1/search.php?s=pasta</code></td>
+      </tr>
+      <tr>
+        <td><strong>Open Library</strong></td>
+        <td>Libros</td>
+        <td><code class="inline">openlibrary.org/search.json?q=harry+potter</code></td>
+      </tr>
+      <tr>
+        <td><strong>OMDb</strong></td>
+        <td>Películas y series</td>
+        <td><code class="inline">omdbapi.com/?apikey=TU_KEY&amp;s=matrix</code></td>
+      </tr>
+    </table>
+    <p class="small">TheMealDB y Open Library no piden ni clave ni registro para uso básico &mdash; funcionan directo desde el primer <code class="inline">fetch</code>. OMDb sí pide una clave gratuita (se consigue en segundos en <code class="inline">omdbapi.com/apikey.aspx</code>), pero el límite gratuito es generoso para un proyecto de clase.</p>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Si alguien pide usar otra API que ya conoce
+      </div>
+      <p>Adelante, no hace falta ceñirse a esta lista. El único filtro real es: gratuita, sin necesidad de montar un backend propio, y que devuelva JSON sin autenticación compleja (OAuth, servidores intermedios). Si cumple eso, sirve igual.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Manejo de errores y estados de carga</h2>
+    <p>Esta es la parte que más se salta la gente cuando trabaja sola, y la que más conviene insistir hoy: una petición de red real puede tardar, puede fallar, y el móvil puede no tener conexión. Un proyecto que solo contempla &ldquo;todo sale bien&rdquo; se rompe en cuanto se enseña fuera del aula con mala cobertura.</p>
+    <p>El patrón mínimo son tres estados: <strong>cargando</strong>, <strong>error</strong> y <strong>datos listos</strong>. Con <code class="inline">useState</code> y <code class="inline">useEffect</code> es directo:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">const</span> [datos, setDatos] = useState&lt;<span class="tag">any</span>[] | <span class="tag">null</span>&gt;(<span class="hl">null</span>);
+<span class="kw">const</span> [cargando, setCargando] = useState(<span class="hl">true</span>);
+<span class="kw">const</span> [error, setError] = useState&lt;<span class="tag">string</span> | <span class="tag">null</span>&gt;(<span class="hl">null</span>);
+
+useEffect(() =&gt; {
+  fetch(<span class="str">'https://www.themealdb.com/api/json/v1/1/search.php?s=pasta'</span>)
+    .then((res) =&gt; res.json())
+    .then((json) =&gt; setDatos(json.meals))
+    .catch((err) =&gt; setError(err.message))
+    .finally(() =&gt; setCargando(<span class="hl">false</span>));
+}, []);</code></pre>
+    </div>
+    <p class="small" style="color:var(--muted); font-size:14.5px;">Aquí <code class="inline">datos</code> queda como <code class="inline">any[]</code> a propósito: cada proyecto consulta una API distinta, con una forma de respuesta distinta. En cuanto sepáis qué devuelve la vuestra, define un <code class="inline">type</code> propio (como <code class="inline">Post</code> en la sesión 16) y sustituid el <code class="inline">any[]</code> &mdash; el editor os avisará de inmediato de cualquier campo que uséis mal en el <code class="inline">renderItem</code>.</p>
+    <p>Y en el render, cada estado tiene su propia pantalla en vez de dejar hueco en blanco:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">if</span> (cargando) {
+  <span class="kw">return</span> &lt;<span class="tag">ActivityIndicator</span> <span class="prop">size</span>=<span class="str">"large"</span> /&gt;;
+}
+
+<span class="kw">if</span> (error) {
+  <span class="kw">return</span> &lt;<span class="tag">Text</span>&gt;No se pudo cargar: {error}&lt;/<span class="tag">Text</span>&gt;;
+}
+
+<span class="kw">return</span> &lt;<span class="tag">FlatList</span> <span class="prop">data</span>={datos} <span class="prop">renderItem</span>={...} /&gt;;</code></pre>
+    </div>
+    <div class="checkpoint">
+      <div class="checkpoint-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        Para probarlo de verdad, no de mentira
+      </div>
+      <p>Pídeles que activen el modo avión un segundo y vuelvan a abrir la pantalla: si la app se queda en blanco o se cierra sola, falta manejar el error. Es la forma más rápida de detectar el problema sin depender de que la API real falle justo en ese momento.</p>
+    </div>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        &ldquo;¿Y si la API tarda mucho?&rdquo;
+      </div>
+      <p>Con que exista el estado de carga ya está cubierto lo esencial &mdash; el usuario ve un indicador en vez de una pantalla congelada. No hace falta meter un timeout manual para un proyecto de clase; es una mejora opcional, no un requisito de hoy.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Práctica</h2>
+    <p>Cada alumno integra la fuente de datos que decidió (AsyncStorage o una API) en su propio proyecto, con un estado de carga visible en pantalla. Al final de la sesión, cada uno debería poder mostrarte su app con datos reales cargando &mdash; y demostrar que no se rompe si desconecta el wifi.</p>
+  </section>
+
+  <footer class="end">
+    Siguiente sesión: sesión 24, &ldquo;Estado global y pulido funcional&rdquo; &mdash; en cuanto varias pantallas empiecen a necesitar el mismo dato (por ejemplo, esos favoritos guardados hoy), tocará resolver cómo compartirlo sin pasarlo a mano de pantalla en pantalla.
+  </footer>
+
+</div>
+
+</html>

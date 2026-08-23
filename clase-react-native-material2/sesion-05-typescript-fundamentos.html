@@ -1,0 +1,573 @@
+<title>TypeScript: fundamentos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #E4572E;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #FF8A5C;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #F2764C;
+      --accent-ink: #17110D;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #F2764C;
+    --accent-ink: #17110D;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top {
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.08rem;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  section.block {
+    margin-top: 44px;
+  }
+
+  h2.block-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+
+  section.block p {
+    margin: 0 0 14px;
+  }
+
+  section.block ul {
+    margin: 0 0 14px;
+    padding-left: 22px;
+  }
+
+  section.block li {
+    margin-bottom: 6px;
+  }
+
+  .learn-list {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .learn-list li {
+    list-style: none;
+    padding-left: 20px;
+    position: relative;
+    color: var(--ink);
+    margin-bottom: 0;
+  }
+
+  .learn-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .step {
+    display: flex;
+    gap: 18px;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .step:first-of-type { border-top: none; padding-top: 0; }
+
+  .step-chip {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-body { flex: 1; min-width: 0; }
+
+  .step h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 4px 0 8px;
+  }
+
+  .step p {
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+
+  .step p.small {
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .code-panel .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+
+  .code-panel .term-bar span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--code-line);
+  }
+
+  .code-panel pre {
+    margin: 0;
+    padding: 16px 18px 18px;
+    overflow-x: auto;
+  }
+
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+
+  .code-panel .tag { color: var(--accent-2); }
+  .code-panel .str { color: #C9D96B; }
+  .code-panel .kw { color: var(--code-accent); }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .prop { color: #8FB8FF; }
+  .code-panel .hl { color: var(--code-accent); }
+  .code-panel .err { color: #FF6B6B; text-decoration: wavy underline; }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+
+  .checkpoint p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .compare {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+    margin: 14px 0;
+  }
+
+  .compare-label {
+    display: block;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+
+  .compare-item .code-panel { margin: 0; }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+</style>
+
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">Sesión 5 de 26 &middot; Bloque 2: TypeScript</span>
+    <h1>TypeScript: fundamentos</h1>
+    <p class="lede">El mismo JavaScript de las últimas cuatro sesiones, con una capa nueva: le dices a cada dato qué forma tiene, y el editor te avisa <em>mientras escribes</em> si algo no encaja &mdash; antes de que el error llegue a ejecutarse.</p>
+    <div class="meta-row">
+      <span class="meta-chip">2 horas</span>
+      <span class="meta-chip">Sesión 5/26</span>
+      <span class="meta-chip">TypeScript Playground</span>
+    </div>
+  </header>
+
+  <section class="block">
+    <h2 class="block-title">Por qué esto va aquí, antes de React</h2>
+    <p>El proyecto que vais a crear con <code class="inline">create-expo-app</code> viene en TypeScript por defecto &mdash; no es una opción que activáis más adelante si os apetece, es lo que hay desde el primer <code class="inline">npx</code>. Antes de escribir el primer componente, conviene entender qué añade TypeScript sobre el JavaScript que ya domináis, para no aprenderlo a trompicones mientras aparecen los primeros subrayados rojos en el editor.</p>
+    <p>La buena noticia: TypeScript no es un lenguaje nuevo. Es JavaScript con anotaciones de tipo añadidas por encima. Todo lo que sabéis de las cuatro sesiones anteriores &mdash; variables, funciones, arrays, objetos, <code class="inline">async</code>/<code class="inline">await</code> &mdash; sigue funcionando exactamente igual. Hoy solo añadimos una capa de información extra sobre esos mismos datos.</p>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Qué vas a ver hoy</h2>
+    <ul class="learn-list">
+      <li>Qué hace TypeScript realmente, y en qué momento se comprueban los tipos.</li>
+      <li>Tipos básicos: <code class="inline">string</code>, <code class="inline">number</code>, <code class="inline">boolean</code>, arrays y tuplas.</li>
+      <li>Tipar los parámetros y el retorno de una función.</li>
+      <li><code class="inline">type</code> e <code class="inline">interface</code> para describir la forma de un objeto.</li>
+      <li>Tipos unión (<code class="inline">|</code>) y tipos literales, para valores que solo pueden ser unas pocas cosas concretas.</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Qué es TypeScript, en una frase</h2>
+    <p><strong>TypeScript</strong> es JavaScript al que le añades anotaciones de tipo. Un editor con soporte de TypeScript (VS Code lo trae de serie) las lee en tiempo real y te avisa si intentas usar un dato de forma incompatible con su tipo &mdash; <em>antes</em> de ejecutar nada. Al construir la app, esas anotaciones se comprueban una última vez y luego se eliminan por completo: en el móvil no corre ni una sola línea de tipos, corre JavaScript normal y corriente.</p>
+    <div class="compare">
+      <div class="compare-item">
+        <span class="compare-label">JavaScript &mdash; el error aparece al ejecutar</span>
+        <div class="code-panel">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code><span class="kw">function</span> <span class="tag">saludar</span>(nombre) {
+  <span class="kw">return</span> <span class="str">'Hola, '</span> + nombre.toUpperCase();
+}
+
+saludar(<span class="hl">42</span>); <span class="com">// revienta en tiempo de ejecución</span>
+<span class="com">// TypeError: nombre.toUpperCase is not a function</span></code></pre>
+        </div>
+      </div>
+      <div class="compare-item">
+        <span class="compare-label">TypeScript &mdash; el error aparece al escribir</span>
+        <div class="code-panel">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code><span class="kw">function</span> <span class="tag">saludar</span>(nombre: <span class="tag">string</span>) {
+  <span class="kw">return</span> <span class="str">'Hola, '</span> + nombre.toUpperCase();
+}
+
+saludar(<span class="err">42</span>); <span class="com">// el editor lo subraya al momento</span>
+<span class="com">// Argument of type 'number' is not assignable to parameter of type 'string'</span></code></pre>
+        </div>
+      </div>
+    </div>
+    <p>El error de la derecha nunca llega a ejecutarse en el móvil de nadie: lo ves en rojo en VS Code mientras escribes la línea, con el proyecto todavía abierto en tu portátil.</p>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Hoy sin proyecto de Expo
+      </div>
+      <p>Para practicar la sintaxis pura de TypeScript no hace falta el proyecto de la app todavía: usad el <a href="https://www.typescriptlang.org/play" target="_blank" rel="noopener">TypeScript Playground</a> oficial, que compila y subraya errores en el navegador sin instalar nada. Volveréis al proyecto de Expo en la sesión 7, ya escribiendo componentes.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Tipos básicos</h2>
+    <p>La sintaxis es siempre la misma: nombre, dos puntos, tipo. Se anota igual en variables, parámetros de función y propiedades de objeto.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">const</span> nombre: <span class="tag">string</span> = <span class="str">'Ana'</span>;
+<span class="kw">const</span> edad: <span class="tag">number</span> = <span class="hl">27</span>;
+<span class="kw">const</span> activo: <span class="tag">boolean</span> = <span class="kw">true</span>;
+
+<span class="kw">const</span> nombres: <span class="tag">string</span>[] = [<span class="str">'Ana'</span>, <span class="str">'Luis'</span>, <span class="str">'Marta'</span>];
+<span class="kw">const</span> edades: <span class="tag">number</span>[] = [<span class="hl">27</span>, <span class="hl">32</span>, <span class="hl">19</span>];</code></pre>
+    </div>
+    <p>En la práctica, escribiréis muchas menos anotaciones de las que esperáis. TypeScript <strong>infiere</strong> el tipo automáticamente a partir del valor inicial, así que esto de aquí ya está completamente tipado sin escribir <code class="inline">: string</code> en ningún sitio:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">const</span> nombre = <span class="str">'Ana'</span>; <span class="com">// TypeScript ya sabe que esto es un string</span>
+nombre.toUpperCase();  <span class="com">// autocompletado correcto, sin anotar nada</span>
+nombre.<span class="err">toFixed</span>(<span class="hl">2</span>);   <span class="com">// error: toFixed no existe en un string</span></code></pre>
+    </div>
+    <p>La anotación explícita (<code class="inline">: string</code>, <code class="inline">: number</code>&hellip;) hace falta sobre todo cuando <strong>no</strong> hay un valor inicial del que inferir &mdash; el caso más habitual es tipar los parámetros de una función, porque TypeScript no puede adivinar qué le vas a pasar.</p>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Tuplas: arrays de longitud y tipos fijos
+      </div>
+      <p>Un array normal (<code class="inline">string[]</code>) puede tener cualquier longitud. Una <strong>tupla</strong> fija tanto la longitud como el tipo de cada posición: <code class="inline">const punto: [number, number] = [10, 20]</code>. No la usaréis a menudo escribiéndola vosotros, pero es justo la forma que tiene <code class="inline">useState</code> de React por dentro: <code class="inline">[valor, setValor]</code> es una tupla de dos elementos de tipos distintos, no un array normal.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Tipar funciones</h2>
+    <p>Cada parámetro se tipa por separado, y el retorno se anota después de la lista de parámetros. Retomando la calculadora de IMC de la sesión 1:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">function</span> <span class="tag">calcularIMC</span>(peso: <span class="tag">number</span>, altura: <span class="tag">number</span>): <span class="tag">number</span> {
+  <span class="kw">return</span> peso / (altura * altura);
+}
+
+calcularIMC(<span class="hl">70</span>, <span class="hl">1.75</span>);      <span class="com">// 22.857...</span>
+calcularIMC(<span class="hl">70</span>, <span class="err">'1.75'</span>);   <span class="com">// error: '1.75' no es un number</span></code></pre>
+    </div>
+    <p>El <code class="inline">: number</code> después del paréntesis de cierre es el tipo de retorno. En la mayoría de casos podéis omitirlo &mdash; TypeScript infiere el retorno a partir de lo que hay dentro de la función &mdash; pero escribirlo explícitamente es una buena costumbre en funciones que otros compañeros van a usar: documenta la función y, si algún día cambiáis el cuerpo de forma que devuelva otra cosa por error, el editor os avisa inmediatamente.</p>
+    <p>Con <em>arrow functions</em> la sintaxis es la misma, solo cambia dónde se escribe:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">const</span> calcularIMC = (peso: <span class="tag">number</span>, altura: <span class="tag">number</span>): <span class="tag">number</span> =&gt; {
+  <span class="kw">return</span> peso / (altura * altura);
+};</code></pre>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Describir objetos: type e interface</h2>
+    <p>Para un objeto con varias propiedades, anotar cada una suelta sería tedioso y no reutilizable. <code class="inline">type</code> le pone nombre a una forma, para poder usarla en varios sitios:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">type</span> <span class="tag">Alumno</span> = {
+  nombre: <span class="tag">string</span>;
+  edad: <span class="tag">number</span>;
+  aprobado: <span class="tag">boolean</span>;
+};
+
+<span class="kw">const</span> alumno: <span class="tag">Alumno</span> = {
+  nombre: <span class="str">'Marta'</span>,
+  edad: <span class="hl">21</span>,
+  aprobado: <span class="kw">true</span>,
+};
+
+<span class="kw">function</span> <span class="tag">describir</span>(a: <span class="tag">Alumno</span>): <span class="tag">string</span> {
+  <span class="kw">return</span> <span class="str">`${a.nombre} (${a.edad} años)`</span>;
+}</code></pre>
+    </div>
+    <p>Vais a ver <code class="inline">interface</code> por todas partes en ejemplos de React, con una sintaxis casi idéntica:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">interface</span> <span class="tag">Alumno</span> {
+  nombre: <span class="tag">string</span>;
+  edad: <span class="tag">number</span>;
+  aprobado: <span class="tag">boolean</span>;
+}</code></pre>
+    </div>
+    <p>Para lo que vais a necesitar en este curso, son intercambiables &mdash; usad <code class="inline">type</code> por defecto, es el que veréis más en esta guía, y usad <code class="inline">interface</code> si un ejemplo que copiáis de la documentación de una librería ya lo trae así. La diferencia real entre ambos solo importa en proyectos grandes con necesidades avanzadas que no vais a tocar aquí.</p>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Tipos unión y tipos literales</h2>
+    <p>Un tipo <strong>unión</strong> (con <code class="inline">|</code>) dice &ldquo;esto puede ser de este tipo <em>o</em> de este otro&rdquo;. Combinado con <strong>tipos literales</strong> &mdash; un texto exacto usado como tipo, no como valor &mdash; sirve para modelar algo que solo puede tomar unos pocos valores concretos, en vez de cualquier <code class="inline">string</code>:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">type</span> <span class="tag">Estado</span> = <span class="str">'pendiente'</span> | <span class="str">'en curso'</span> | <span class="str">'terminado'</span>;
+
+<span class="kw">function</span> <span class="tag">marcarTarea</span>(estado: <span class="tag">Estado</span>) {
+  console.log(<span class="str">`La tarea está: ${estado}`</span>);
+}
+
+marcarTarea(<span class="str">'en curso'</span>);   <span class="com">// bien</span>
+marcarTarea(<span class="err">'en pausa'</span>);   <span class="com">// error: 'en pausa' no es Estado</span></code></pre>
+    </div>
+    <p>Esto es mucho más seguro que un <code class="inline">string</code> suelto: con <code class="inline">string</code>, un typo como <code class="inline">'pendinte'</code> compila sin problema y falla en silencio en tiempo de ejecución; con el tipo <code class="inline">Estado</code>, ese mismo typo lo detecta el editor al instante.</p>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Práctica</h2>
+    <p>Todo en el <a href="https://www.typescriptlang.org/play" target="_blank" rel="noopener">TypeScript Playground</a>. El objetivo no es escribir código nuevo, sino volver a las sesiones 1 y 3 y añadirles tipos.</p>
+
+    <div class="step">
+      <div class="step-chip">1</div>
+      <div class="step-body">
+        <h3>Tipa la calculadora de IMC</h3>
+        <p>Retoma tu función de la sesión 1 (o la del ejemplo de arriba) y comprueba en el Playground que llamarla con un <code class="inline">string</code> por error produce un subrayado rojo antes incluso de ejecutar nada.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">2</div>
+      <div class="step-body">
+        <h3>Define el tipo Alumno</h3>
+        <p>Un <code class="inline">type Alumno</code> con al menos <code class="inline">nombre</code>, <code class="inline">edad</code> y <code class="inline">nota</code>, y un array <code class="inline">const alumnos: Alumno[]</code> con al menos 5 alumnos &mdash; el mismo ejercicio de la sesión 3, ahora tipado.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">3</div>
+      <div class="step-body">
+        <h3>Tipa una función que filtre</h3>
+        <p>Una función <code class="inline">function aprobados(alumnos: Alumno[]): Alumno[]</code> que devuelva solo los alumnos con <code class="inline">nota</code> mayor o igual a 5, usando <code class="inline">.filter()</code> como en la sesión 3.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">4</div>
+      <div class="step-body">
+        <h3>Añade un tipo unión</h3>
+        <p>Sustituye la propiedad <code class="inline">aprobado: boolean</code> por <code class="inline">estado: 'pendiente' | 'aprobado' | 'suspenso'</code>, y actualiza la función del paso 3 para que filtre por ese nuevo campo.</p>
+        <div class="checkpoint">
+          <div class="checkpoint-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Cómo saber que va bien
+          </div>
+          <p>Escribe <code class="inline">estado: 'aprovado'</code> (con una errata) en algún alumno del array a propósito. El Playground debería subrayarlo en rojo al instante, sin que hayas pulsado ningún botón de &ldquo;ejecutar&rdquo;.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="end">
+    Siguiente sesión: seguimos en TypeScript &mdash; propiedades opcionales, <code class="inline">unknown</code> frente a <code class="inline">any</code>, y cómo tipar los datos que llegan de una API real, justo antes de aplicar todo esto a componentes de React.
+  </footer>
+
+</div>

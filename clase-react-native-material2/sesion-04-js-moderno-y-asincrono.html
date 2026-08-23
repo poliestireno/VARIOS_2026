@@ -1,0 +1,751 @@
+<title>JS moderno y asíncrono</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #E4572E;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #FF8A5C;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #F2764C;
+      --accent-ink: #17110D;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #F2764C;
+    --accent-ink: #17110D;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top {
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.08rem;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  section.block {
+    margin-top: 44px;
+  }
+
+  h2.block-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+
+  section.block p {
+    margin: 0 0 14px;
+  }
+
+  section.block ul {
+    margin: 0 0 14px;
+    padding-left: 22px;
+  }
+
+  section.block li {
+    margin-bottom: 6px;
+  }
+
+  h3.option-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: var(--ink);
+    margin: 40px 0 4px;
+  }
+
+  .checklist {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow);
+  }
+
+  .checklist li {
+    list-style: none;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 15px;
+    margin-bottom: 0;
+  }
+
+  .checklist ul { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+
+  .checklist svg {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    color: var(--accent-2);
+  }
+
+  .learn-list {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .learn-list li {
+    list-style: none;
+    padding-left: 20px;
+    position: relative;
+    color: var(--ink);
+    margin-bottom: 0;
+  }
+
+  .learn-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .step {
+    display: flex;
+    gap: 18px;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .step:first-of-type { border-top: none; padding-top: 0; }
+
+  .step-chip {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-body { flex: 1; min-width: 0; }
+
+  .step h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 4px 0 8px;
+  }
+
+  .step p {
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+
+  .step p.small {
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+
+  .term {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+
+  .term-bar span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--code-line);
+  }
+
+  .term pre {
+    margin: 0;
+    padding: 14px 16px 16px;
+    overflow-x: auto;
+  }
+
+  .term code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13.6px;
+    line-height: 1.7;
+    color: var(--code-ink);
+  }
+
+  .term .prompt { color: var(--code-muted); }
+  .term .cmt { color: var(--code-muted); }
+  .term .hl { color: var(--code-accent); }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .code-panel .term-bar { }
+
+  .code-panel pre {
+    margin: 0;
+    padding: 16px 18px 18px;
+    overflow-x: auto;
+  }
+
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+
+  .code-panel .tag { color: var(--accent-2); }
+  .code-panel .str { color: #C9D96B; }
+  .code-panel .kw { color: var(--code-accent); }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .prop { color: #8FB8FF; }
+  .code-panel .hl { color: var(--code-accent); }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+
+  .checkpoint p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .substep {
+    display: flex;
+    gap: 14px;
+    margin: 18px 0 0 16px;
+    padding-left: 16px;
+    border-left: 2px solid var(--line-soft);
+  }
+
+  .substep-chip {
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: var(--line-soft);
+    color: var(--muted);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 11.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .substep h4 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.98rem;
+    font-weight: 600;
+    margin: 2px 0 6px;
+  }
+
+  .substep p {
+    margin: 0 0 8px;
+    font-size: 14.5px;
+    color: var(--ink);
+  }
+
+  .substep .code-panel, .substep .term {
+    margin: 10px 0;
+  }
+
+  details.full-code {
+    margin-top: 16px;
+  }
+
+  details.full-code summary {
+    cursor: pointer;
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--accent-2);
+    list-style: none;
+  }
+
+  details.full-code summary::-webkit-details-marker { display: none; }
+
+  details.full-code summary::before {
+    content: "▸ ";
+  }
+
+  details.full-code[open] summary::before {
+    content: "▾ ";
+  }
+
+  .trouble {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .trouble-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .trouble-item .q {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    margin: 0 0 6px;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .trouble-item .q::before {
+    content: "?";
+    font-family: "IBM Plex Mono", monospace;
+    color: var(--accent-2);
+    font-weight: 500;
+  }
+
+  .trouble-item p {
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--muted);
+  }
+
+  .trouble-item p + p { margin-top: 8px; }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .step { transition: none; }
+  }
+</style>
+
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">Sesión 4 de 26 &middot; Bloque 1: JavaScript</span>
+    <h1>JS moderno y asíncrono</h1>
+    <p class="lede">Preparar el terreno justo para React: cómo se reparte el código entre archivos con módulos, y cómo se escribe código que &ldquo;espera&rdquo; una respuesta que tarda &mdash; como la de un servidor real.</p>
+    <div class="meta-row">
+      <span class="meta-chip">2 horas</span>
+      <span class="meta-chip">Sesión 4/26</span>
+      <span class="meta-chip">Consola del navegador</span>
+    </div>
+  </header>
+
+  <section class="block">
+    <h2 class="block-title">Antes de empezar</h2>
+    <p>Esta es la última sesión de JavaScript puro antes de entrar en React Native. Todo lo de hoy encaja directamente con lo próximo: los componentes de una app se reparten en archivos (módulos), y casi cualquier app real necesita pedir datos a un servidor, lo cual siempre tarda un poco &mdash; de ahí el código asíncrono.</p>
+    <p>Los ejemplos de <code class="inline">fetch</code> funcionan tal cual pegados en la consola del navegador (<code class="inline">F12</code> &rarr; Console), porque el navegador entiende <code class="inline">fetch</code> de forma nativa. Los ejemplos de módulos (<code class="inline">import</code>/<code class="inline">export</code>) son la excepción: no funcionan sueltos en la consola, solo dentro de un proyecto con varios archivos &mdash; como el que montaremos con Expo. Por ahora, léelos para entender la idea; los escribirás de verdad muy pronto.</p>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Módulos: import y export</h2>
+    <p>Hasta ahora todo el código ha vivido en un único sitio (la consola, o un archivo). En una aplicación real, el código se reparte en muchos archivos pequeños con una responsabilidad cada uno, y se conectan entre sí con <code class="inline">export</code> (para ofrecer algo) e <code class="inline">import</code> (para usarlo en otro archivo).</p>
+    <p>Imagina un archivo <code class="inline">matematicas.js</code> que ofrece varias utilidades:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="com">// matematicas.js</span>
+<span class="kw">export const</span> PI = <span class="hl">3.1416</span>;
+
+<span class="kw">export function</span> <span class="tag">sumar</span>(a, b) {
+  <span class="kw">return</span> a + b;
+}
+
+<span class="kw">export default function</span> <span class="tag">multiplicar</span>(a, b) {
+  <span class="kw">return</span> a * b;
+}</code></pre>
+    </div>
+    <p>Y otro archivo, <code class="inline">app.js</code>, que los usa:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="com">// app.js</span>
+<span class="kw">import</span> multiplicar, { PI, sumar } <span class="kw">from</span> <span class="str">'./matematicas.js'</span>;
+
+console.log(sumar(<span class="hl">2</span>, <span class="hl">3</span>));       <span class="com">// 5</span>
+console.log(multiplicar(<span class="hl">2</span>, <span class="hl">3</span>));  <span class="com">// 6</span>
+console.log(PI);                <span class="com">// 3.1416</span></code></pre>
+    </div>
+    <p>Hay dos tipos de exportación, y se importan distinto: un archivo puede tener <strong>como mucho un</strong> <code class="inline">export default</code> (la cosa &ldquo;principal&rdquo; de ese archivo, se importa sin llaves y con el nombre que quieras), y <strong>tantos</strong> <code class="inline">export</code> con nombre como haga falta (se importan entre llaves, con su nombre exacto).</p>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Esto ya lo has visto
+      </div>
+      <p>Si has echado un ojo a la guía del contador en Expo, la primera línea de <code class="inline">app/index.tsx</code> es exactamente esto: <code class="inline">import { useState } from 'react'</code>. Estás importando una utilidad con nombre desde el módulo <code class="inline">react</code>, igual que en el ejemplo de arriba.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Template literals</h2>
+    <p>Ya conocías la concatenación con <code class="inline">+</code>. Los <strong>template literals</strong> &mdash; strings entre comillas invertidas (<code class="inline">&#96;</code>) &mdash; hacen lo mismo de forma más legible, insertando variables directamente con <code class="inline">${...}</code>:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">const</span> nombre = <span class="str">"Ana"</span>;
+<span class="kw">const</span> edad = <span class="hl">27</span>;
+
+<span class="com">// antes, con +</span>
+console.log(<span class="str">"Hola, "</span> + nombre + <span class="str">". Tienes "</span> + edad + <span class="str">" años."</span>);
+
+<span class="com">// con template literal</span>
+console.log(<span class="str">`Hola, ${nombre}. Tienes ${edad} años.`</span>);
+<span class="com">// "Hola, Ana. Tienes 27 años."</span></code></pre>
+    </div>
+    <p>Dentro de <code class="inline">${...}</code> puedes poner cualquier expresión de JavaScript, no solo una variable suelta:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code>console.log(<span class="str">`El doble de ${edad} es ${edad * 2}`</span>);
+<span class="com">// "El doble de 27 es 54"</span></code></pre>
+    </div>
+    <p>También admiten varias líneas de verdad, sin trucos raros con <code class="inline">\n</code>:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">const</span> mensaje = <span class="str">`Primera línea
+Segunda línea`</span>;
+console.log(mensaje);</code></pre>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Promesas: una analogía simple</h2>
+    <p>Imagina que pides comida a domicilio por teléfono. Al colgar, no tienes la comida todavía &mdash; tienes una <strong>promesa</strong> de que va a llegar. Esa promesa puede acabar de dos formas: la comida llega (la promesa se <strong>cumple</strong>), o el restaurante cierra sin avisar y te llaman para decir que no pueden servirte (la promesa se <strong>rechaza</strong>). Mientras tanto, no te quedas parado esperando en la puerta: sigues con tu vida y reaccionas cuando pase una cosa u otra.</p>
+    <p>Una <code class="inline">Promise</code> en JavaScript es exactamente eso: un valor que todavía no existe, pero existirá &mdash; con éxito o con error &mdash; en algún momento.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">const</span> pedidoComida = <span class="kw">new</span> Promise((resolve, reject) =&gt; {
+  <span class="kw">const</span> restauranteAbierto = <span class="kw">true</span>;
+
+  <span class="kw">if</span> (restauranteAbierto) {
+    resolve(<span class="str">"Tu pizza está en camino"</span>);
+  } <span class="kw">else</span> {
+    reject(<span class="str">"El restaurante está cerrado"</span>);
+  }
+});
+
+pedidoComida
+  .then(mensaje =&gt; console.log(<span class="str">"✅ "</span> + mensaje))
+  .catch(error =&gt; console.log(<span class="str">"❌ "</span> + error));
+<span class="com">// "✅ Tu pizza está en camino"</span></code></pre>
+    </div>
+    <p><code class="inline">.then()</code> recibe el valor cuando la promesa se cumple; <code class="inline">.catch()</code> recibe el error cuando se rechaza. En la práctica, tú casi nunca vas a <em>crear</em> promesas con <code class="inline">new Promise(...)</code> como arriba &mdash; eso ya lo hacen por ti funciones como <code class="inline">fetch</code>. Lo que sí harás constantemente es <em>consumirlas</em>.</p>
+    <p>Escribir varias operaciones asíncronas seguidas con <code class="inline">.then()</code> encadenados se vuelve difícil de leer rápido. <strong><code class="inline">async</code>/<code class="inline">await</code></strong> es una forma más limpia de escribir exactamente lo mismo, como si el código &ldquo;esperara&rdquo; de forma síncrona:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">async function</span> <span class="tag">pedirComida</span>() {
+  <span class="kw">try</span> {
+    <span class="kw">const</span> mensaje = <span class="kw">await</span> pedidoComida;
+    console.log(<span class="str">"✅ "</span> + mensaje);
+  } <span class="kw">catch</span> (error) {
+    console.log(<span class="str">"❌ "</span> + error);
+  }
+}
+
+pedirComida();</code></pre>
+    </div>
+    <p>Las reglas son dos: <code class="inline">await</code> solo se puede usar dentro de una función marcada como <code class="inline">async</code>, y siempre &ldquo;pausa&rdquo; esa función hasta que la promesa se resuelva (con éxito o con error). El <code class="inline">try</code>/<code class="inline">catch</code> hace aquí el mismo papel que <code class="inline">.then()</code>/<code class="inline">.catch()</code> hacía arriba.</p>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Una llamada real: fetch</h2>
+    <p><code class="inline">fetch</code> es la función del navegador para pedir datos a una URL por internet. Devuelve una <code class="inline">Promise</code>, así que se combina perfectamente con <code class="inline">async</code>/<code class="inline">await</code>. Vamos a usar <a href="https://jsonplaceholder.typicode.com/" target="_blank" rel="noopener">JSONPlaceholder</a>, una API pública, gratuita y sin necesidad de registrarte, pensada exactamente para practicar esto.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">async function</span> <span class="tag">obtenerUnPost</span>() {
+  <span class="kw">const</span> respuesta = <span class="kw">await</span> fetch(<span class="str">"https://jsonplaceholder.typicode.com/posts/1"</span>);
+  <span class="kw">const</span> post = <span class="kw">await</span> respuesta.json();
+  console.log(post);
+}
+
+obtenerUnPost();
+<span class="com">// { userId: 1, id: 1, title: "sunt aut facere...", body: "quia et suscipit..." }</span></code></pre>
+    </div>
+    <p>Fíjate en los dos <code class="inline">await</code>: el primero espera a que el servidor responda (<code class="inline">fetch</code>), y el segundo espera a que esa respuesta se convierta de texto crudo a un objeto de JavaScript (<code class="inline">.json()</code>) &mdash; ese segundo paso también es asíncrono, aunque suele ser instantáneo.</p>
+    <div class="checkpoint">
+      <div class="checkpoint-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        Pégalo en la consola
+      </div>
+      <p>Este ejemplo funciona tal cual, pegado directamente en la consola del navegador. Pruébalo antes de seguir &mdash; es tu primera petición real a un servidor en internet.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Práctica</h2>
+    <p>Vamos a combinar lo de hoy con lo de la sesión pasada: pedir una lista completa a la API, y procesarla con los métodos de array que ya conoces (<code class="inline">slice</code>, <code class="inline">map</code>, <code class="inline">filter</code>).</p>
+
+    <div class="step">
+      <div class="step-chip">1</div>
+      <div class="step-body">
+        <h3>Trae la lista completa de posts</h3>
+        <p>El endpoint <code class="inline">/posts</code> (sin número al final) devuelve un array con 100 posts. Empieza por traerlos todos y comprobar cuántos hay.</p>
+        <div class="code-panel">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code><span class="kw">async function</span> <span class="tag">obtenerPosts</span>() {
+  <span class="kw">const</span> respuesta = <span class="kw">await</span> fetch(<span class="str">"https://jsonplaceholder.typicode.com/posts"</span>);
+  <span class="kw">const</span> posts = <span class="kw">await</span> respuesta.json();
+  console.log(posts.length); <span class="com">// 100</span>
+  <span class="kw">return</span> posts;
+}</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">2</div>
+      <div class="step-body">
+        <h3>Quédate con los 5 primeros</h3>
+        <p><code class="inline">slice(0, 5)</code> devuelve una copia del array recortada a las 5 primeras posiciones, sin tocar el array original &mdash; el mismo espíritu que <code class="inline">map</code>/<code class="inline">filter</code> de la sesión pasada.</p>
+        <div class="code-panel">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code><span class="kw">async function</span> <span class="tag">obtenerPrimerosCinco</span>() {
+  <span class="kw">const</span> posts = <span class="kw">await</span> obtenerPosts();
+  <span class="kw">const</span> primerosCinco = posts.slice(<span class="hl">0</span>, <span class="hl">5</span>);
+  console.log(primerosCinco);
+}</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">3</div>
+      <div class="step-body">
+        <h3>Muestra solo los títulos</h3>
+        <p>Cada post trae varios campos (<code class="inline">userId</code>, <code class="inline">id</code>, <code class="inline">title</code>, <code class="inline">body</code>). Usa <code class="inline">map</code> para quedarte solo con <code class="inline">title</code>, exactamente igual que hiciste con los nombres de los alumnos.</p>
+        <div class="code-panel">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code><span class="kw">async function</span> <span class="tag">mostrarTitulos</span>() {
+  <span class="kw">const</span> posts = <span class="kw">await</span> obtenerPosts();
+  <span class="kw">const</span> titulos = posts.slice(<span class="hl">0</span>, <span class="hl">5</span>).map(post =&gt; post.title);
+  console.log(titulos);
+}
+
+mostrarTitulos();
+<span class="com">// ["sunt aut facere...", "qui est esse", "ea molestias quasi...", ...]</span></code></pre>
+        </div>
+        <div class="checkpoint">
+          <div class="checkpoint-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Deberías ver esto
+          </div>
+          <p>Un array de 5 strings en la consola, cada uno el título de un post. Si ves <code class="inline">undefined</code> en vez de texto, revisa que estás escribiendo <code class="inline">post.title</code> y no <code class="inline">post.titulo</code> &mdash; la API responde en inglés.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">4</div>
+      <div class="step-body">
+        <h3>Filtra por autor</h3>
+        <p>Cada post tiene un <code class="inline">userId</code> (del 1 al 10). Combina <code class="inline">filter</code> con lo anterior para quedarte solo con los posts de un usuario concreto.</p>
+        <div class="code-panel">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code><span class="kw">async function</span> <span class="tag">postsDelUsuario</span>(userId) {
+  <span class="kw">const</span> posts = <span class="kw">await</span> obtenerPosts();
+  <span class="kw">const</span> deEseUsuario = posts.filter(post =&gt; post.userId === userId);
+  console.log(<span class="str">`El usuario ${userId} tiene ${deEseUsuario.length} posts`</span>);
+  <span class="kw">return</span> deEseUsuario;
+}
+
+postsDelUsuario(<span class="hl">3</span>);</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Reto extra
+      </div>
+      <p>Trae la lista de usuarios en <code class="inline">https://jsonplaceholder.typicode.com/users</code> (también un array de objetos, con <code class="inline">id</code> y <code class="inline">name</code>) y escribe una función que reciba un <code class="inline">userId</code> y devuelva un mensaje del tipo <code class="inline">"Ese usuario se llama Clementine Bauch y tiene 10 posts"</code>, combinando dos peticiones <code class="inline">fetch</code> distintas dentro de la misma función <code class="inline">async</code>. Como segundo reto: usa <code class="inline">reduce</code> sobre los 100 posts para contar cuántos posts tiene cada <code class="inline">userId</code>, sin hacer 10 peticiones separadas.</p>
+    </div>
+  </section>
+
+  <footer class="end">
+    Siguiente sesión: empieza el Bloque 2, dos sesiones de TypeScript &mdash; el mismo JavaScript de este bloque, pero con tipos, justo antes de que ese tipado se vuelva imprescindible en React y React Native.
+  </footer>
+
+</div>

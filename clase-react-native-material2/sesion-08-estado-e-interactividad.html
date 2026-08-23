@@ -1,0 +1,706 @@
+<title>Estado e interactividad</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #E4572E;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #FF8A5C;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #F2764C;
+      --accent-ink: #17110D;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #F2764C;
+    --accent-ink: #17110D;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top {
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.08rem;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  section.block {
+    margin-top: 44px;
+  }
+
+  h2.block-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+
+  .checklist {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow);
+  }
+
+  .checklist li {
+    list-style: none;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 15px;
+  }
+
+  .checklist ul { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+
+  .checklist svg {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    color: var(--accent-2);
+  }
+
+  .learn-list {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .learn-list li {
+    list-style: none;
+    padding-left: 20px;
+    position: relative;
+    color: var(--ink);
+  }
+
+  .learn-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  p { margin: 0 0 14px; }
+  p:last-child { margin-bottom: 0; }
+
+  .prose p { margin: 0 0 14px; }
+
+  .step {
+    display: flex;
+    gap: 18px;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .step:first-of-type { border-top: none; padding-top: 0; }
+
+  .step-chip {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-body { flex: 1; min-width: 0; }
+
+  .step h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 4px 0 8px;
+  }
+
+  .step p {
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+
+  .step p.small {
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+
+  .term {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+
+  .term-bar span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--code-line);
+  }
+
+  .term pre {
+    margin: 0;
+    padding: 14px 16px 16px;
+    overflow-x: auto;
+  }
+
+  .term code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13.6px;
+    line-height: 1.7;
+    color: var(--code-ink);
+  }
+
+  .term .prompt { color: var(--code-muted); }
+  .term .cmt { color: var(--code-muted); }
+  .term .hl { color: var(--code-accent); }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .code-panel .term-bar { }
+
+  .code-panel pre {
+    margin: 0;
+    padding: 16px 18px 18px;
+    overflow-x: auto;
+  }
+
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+
+  .code-panel .tag { color: var(--accent-2); }
+  .code-panel .str { color: #C9D96B; }
+  .code-panel .kw { color: var(--code-accent); }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .prop { color: #8FB8FF; }
+  .code-panel .hl { color: var(--code-accent); }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+
+  .checkpoint p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .substep {
+    display: flex;
+    gap: 14px;
+    margin: 18px 0 0 16px;
+    padding-left: 16px;
+    border-left: 2px solid var(--line-soft);
+  }
+
+  .substep-chip {
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: var(--line-soft);
+    color: var(--muted);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 11.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .substep h4 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.98rem;
+    font-weight: 600;
+    margin: 2px 0 6px;
+  }
+
+  .substep p {
+    margin: 0 0 8px;
+    font-size: 14.5px;
+    color: var(--ink);
+  }
+
+  .substep .code-panel, .substep .term {
+    margin: 10px 0;
+  }
+
+  details.full-code {
+    margin-top: 16px;
+  }
+
+  details.full-code summary {
+    cursor: pointer;
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--accent-2);
+    list-style: none;
+  }
+
+  details.full-code summary::-webkit-details-marker { display: none; }
+
+  details.full-code summary::before {
+    content: "▸ ";
+  }
+
+  details.full-code[open] summary::before {
+    content: "▾ ";
+  }
+
+  .trouble {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .trouble-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .trouble-item .q {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    margin: 0 0 6px;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .trouble-item .q::before {
+    content: "?";
+    font-family: "IBM Plex Mono", monospace;
+    color: var(--accent-2);
+    font-weight: 500;
+  }
+
+  .trouble-item p {
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--muted);
+  }
+
+  .trouble-item p + p { margin-top: 8px; }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .step { transition: none; }
+  }
+</style>
+
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">Sesión 8 de 26 &middot; Bloque 3: React</span>
+    <h1>Estado e interactividad</h1>
+    <p class="lede">Los componentes de la sesión pasada eran fotos fijas de unos datos. Hoy los conectamos a lo que hace la persona que usa la app: clics, texto escrito, cosas que aparecen y desaparecen.</p>
+    <div class="meta-row">
+      <span class="meta-chip">2 horas</span>
+      <span class="meta-chip">Sesión 8/26</span>
+      <span class="meta-chip">useState + eventos</span>
+    </div>
+  </header>
+
+  <section class="block prose">
+    <p>En la sesión 7 tus componentes recibían props y las pintaban, sin más. Pero una interfaz real cambia con el tiempo: un contador sube, una tarea se marca como hecha, un menú se abre y se cierra. React necesita una forma de decir &ldquo;este dato puede cambiar, y cuando cambie, vuelve a dibujar lo que dependa de él&rdquo;. Esa forma es <strong>el estado</strong>, y hoy es el protagonista. Seguimos en el navegador, con React normal.</p>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Qué vas a aprender</h2>
+    <ul class="learn-list">
+      <li>Qué es <code class="inline">useState</code> y por qué el estado nunca se modifica directamente, siempre a través de su función <code class="inline">set</code>.</li>
+      <li>Cómo reaccionar a eventos del usuario, sobre todo <code class="inline">onClick</code>.</li>
+      <li>Cómo mostrar u ocultar cosas según una condición, con <code class="inline">&amp;&amp;</code> y con el operador ternario.</li>
+    </ul>
+  </section>
+
+  <section class="block prose">
+    <h2 class="block-title">useState: memoria propia de un componente</h2>
+    <p><code class="inline">useState</code> le da a un componente un valor que persiste entre renders, y una función para actualizarlo. Al llamarla, React vuelve a ejecutar el componente con el nuevo valor y actualiza solo lo que cambió en el DOM real.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">import</span> { useState } <span class="kw">from</span> <span class="str">"react"</span>;
+
+<span class="kw">function</span> <span class="tag">Contador</span>() {
+  <span class="kw">const</span> [cuenta, setCuenta] = useState(<span class="hl">0</span>);
+
+  <span class="kw">return</span> (
+    &lt;<span class="tag">div</span>&gt;
+      &lt;<span class="tag">p</span>&gt;Valor: {cuenta}&lt;/<span class="tag">p</span>&gt;
+      &lt;<span class="tag">button</span> <span class="prop">onClick</span>={() =&gt; setCuenta(cuenta + <span class="hl">1</span>)}&gt;
+        Sumar 1
+      &lt;/<span class="tag">button</span>&gt;
+    &lt;/<span class="tag">div</span>&gt;
+  );
+}</code></pre>
+    </div>
+    <p><code class="inline">useState(0)</code> devuelve un array de dos posiciones: el valor actual (<code class="inline">cuenta</code>) y la única función autorizada para cambiarlo (<code class="inline">setCuenta</code>). <code class="inline">cuenta = cuenta + 1</code> directamente <strong>no funcionaría</strong>: reasignar una constante rompe, y aunque no rompiera, React no se enteraría de que algo cambió y no volvería a dibujar la pantalla. <code class="inline">setCuenta(...)</code> es la señal que React necesita para saber que toca actualizar.</p>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Con arrays y objetos, nunca mutar
+      </div>
+      <p>Si el estado es un array o un objeto, tampoco se puede tocar por dentro (<code class="inline">.push()</code>, asignar una propiedad). React compara la referencia anterior con la nueva para decidir si algo cambió, y si mutas el mismo objeto, la referencia sigue siendo idéntica &mdash; React cree que nada cambió y no repinta.</p>
+      <div class="code-panel" style="margin-top:10px;">
+        <div class="term-bar"><span></span><span></span><span></span></div>
+        <pre><code><span class="com">// ❌ mal: mutar el array que ya existía</span>
+tareas.push(nuevaTarea);
+setTareas(tareas);
+
+<span class="com">// ✅ bien: construir un array nuevo</span>
+setTareas([...tareas, nuevaTarea]);</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="block prose">
+    <h2 class="block-title">Renderizado condicional</h2>
+    <p>JSX no admite un <code class="inline">if</code> suelto dentro del <code class="inline">{'{ }'}</code>, porque un <code class="inline">if</code> no devuelve un valor. Para mostrar algo solo bajo cierta condición se usan expresiones que sí devuelven valor: el operador <code class="inline">&amp;&amp;</code> y el operador ternario <code class="inline">? :</code>.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">function</span> <span class="tag">Mensaje</span>({ cuenta }) {
+  <span class="kw">return</span> (
+    &lt;<span class="tag">div</span>&gt;
+      {cuenta === <span class="hl">0</span> &amp;&amp; &lt;<span class="tag">p</span>&gt;Todavía no has sumado nada&lt;/<span class="tag">p</span>&gt;}
+      {cuenta &gt; <span class="hl">0</span> ? (
+        &lt;<span class="tag">p</span>&gt;Llevas {cuenta} puntos&lt;/<span class="tag">p</span>&gt;
+      ) : (
+        &lt;<span class="tag">p</span>&gt;Empieza a sumar&lt;/<span class="tag">p</span>&gt;
+      )}
+    &lt;/<span class="tag">div</span>&gt;
+  );
+}</code></pre>
+    </div>
+    <p><code class="inline">condición &amp;&amp; algo</code> muestra <code class="inline">algo</code> solo si la condición es verdadera (y no muestra nada &mdash; técnicamente <code class="inline">false</code>, que React ignora &mdash; si es falsa). El ternario sirve para elegir entre dos alternativas, como un <code class="inline">if / else</code> compacto.</p>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Cuidado con &amp;&amp; y el número 0
+      </div>
+      <p><code class="inline">{'{cantidad && <p>Hay elementos</p>}'}</code> es una trampa clásica: si <code class="inline">cantidad</code> vale <code class="inline">0</code>, React no imprime &ldquo;nada&rdquo;, imprime literalmente el número <strong>0</strong> en la pantalla, porque <code class="inline">0</code> es el valor de la expresión. La solución es comparar explícitamente: <code class="inline">cantidad &gt; 0 &amp;&amp; ...</code></p>
+    </div>
+  </section>
+
+  <section class="block prose">
+    <h2 class="block-title">Juntándolo todo: una lista de tareas</h2>
+    <p>Un contador es útil para entender <code class="inline">useState</code>, pero una lista de tareas obliga a combinar todo lo de hoy: estado que es un array, un input controlado por ese estado, y tres acciones distintas sobre la lista.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">type</span> <span class="tag">Tarea</span> = { id: <span class="tag">number</span>; texto: <span class="tag">string</span>; hecha: <span class="tag">boolean</span> };
+
+<span class="kw">function</span> <span class="tag">ListaTareas</span>() {
+  <span class="kw">const</span> [tareas, setTareas] = useState&lt;<span class="tag">Tarea</span>[]&gt;([]);
+  <span class="kw">const</span> [texto, setTexto] = useState(<span class="str">""</span>);
+
+  <span class="kw">function</span> <span class="tag">anadirTarea</span>() {
+    <span class="kw">if</span> (texto.trim() === <span class="str">""</span>) <span class="kw">return</span>;
+    <span class="kw">const</span> nueva: <span class="tag">Tarea</span> = { id: Date.now(), texto, hecha: <span class="hl">false</span> };
+    setTareas([...tareas, nueva]);
+    setTexto(<span class="str">""</span>);
+  }
+
+  <span class="kw">function</span> <span class="tag">alternarTarea</span>(id: <span class="tag">number</span>) {
+    setTareas(
+      tareas.map((t) =&gt; (t.id === id ? { ...t, hecha: !t.hecha } : t))
+    );
+  }
+
+  <span class="kw">function</span> <span class="tag">eliminarTarea</span>(id: <span class="tag">number</span>) {
+    setTareas(tareas.filter((t) =&gt; t.id !== id));
+  }
+
+  <span class="kw">return</span> (
+    &lt;<span class="tag">div</span>&gt;
+      &lt;<span class="tag">input</span>
+        <span class="prop">value</span>={texto}
+        <span class="prop">onChange</span>={(e) =&gt; setTexto(e.target.value)}
+        <span class="prop">placeholder</span>=<span class="str">"Nueva tarea"</span>
+      /&gt;
+      &lt;<span class="tag">button</span> <span class="prop">onClick</span>={anadirTarea}&gt;Añadir&lt;/<span class="tag">button</span>&gt;
+
+      &lt;<span class="tag">ul</span>&gt;
+        {tareas.map((t) =&gt; (
+          &lt;<span class="tag">li</span> <span class="prop">key</span>={t.id}&gt;
+            &lt;<span class="tag">span</span>
+              <span class="prop">onClick</span>={() =&gt; alternarTarea(t.id)}
+              <span class="prop">style</span>={{
+                textDecoration: t.hecha ? <span class="str">"line-through"</span> : <span class="str">"none"</span>,
+              }}
+            &gt;
+              {t.texto}
+            &lt;/<span class="tag">span</span>&gt;
+            &lt;<span class="tag">button</span> <span class="prop">onClick</span>={() =&gt; eliminarTarea(t.id)}&gt;
+              Eliminar
+            &lt;/<span class="tag">button</span>&gt;
+          &lt;/<span class="tag">li</span>&gt;
+        ))}
+      &lt;/<span class="tag">ul</span>&gt;
+    &lt;/<span class="tag">div</span>&gt;
+  );
+}</code></pre>
+    </div>
+    <p>Fíjate en el patrón que se repite en las tres funciones: ninguna toca <code class="inline">tareas</code> directamente, todas construyen una versión nueva (con <code class="inline">[...tareas, nueva]</code>, <code class="inline">.map()</code> o <code class="inline">.filter()</code>) y se la pasan a <code class="inline">setTareas</code>. Es el mismo principio de &ldquo;nunca mutar&rdquo; de antes, aplicado tres veces.</p>
+    <div class="checkpoint">
+      <div class="checkpoint-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        La idea que se queda de hoy
+      </div>
+      <p>El estado se lee directamente pero se cambia siempre a través de su función <code class="inline">set</code>, con un valor nuevo, nunca mutando el anterior. Cada cambio de estado provoca un nuevo render.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Práctica: contador y lista de tareas</h2>
+
+    <div class="step">
+      <div class="step-chip">1</div>
+      <div class="step-body">
+        <h3>Repaso rápido: un contador</h3>
+        <p>Crea un componente <code class="inline">Contador</code> con <code class="inline">useState(0)</code> y dos botones, uno que sume y otro que reste. Sirve de calentamiento antes de la parte larga.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">2</div>
+      <div class="step-body">
+        <h3>Estado de la lista y el input</h3>
+        <p>Crea un componente <code class="inline">ListaTareas</code> con dos estados: el array de tareas (vacío al empezar) y el texto del input (una cadena vacía).</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">3</div>
+      <div class="step-body">
+        <h3>Añadir una tarea</h3>
+        <p>Un input controlado por el estado <code class="inline">texto</code>, y un botón que añade un objeto <code class="inline">{'{ id, texto, hecha: false }'}</code> nuevo al array y vacía el input.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">4</div>
+      <div class="step-body">
+        <h3>Marcar como hecha y eliminar</h3>
+        <p>Cada tarea de la lista necesita una forma de marcarse como completada (cambia visualmente, por ejemplo con <code class="inline">text-decoration</code>) y un botón para eliminarla.</p>
+        <div class="checkpoint">
+          <div class="checkpoint-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Deberías ver esto
+          </div>
+          <p>Puedes escribir una tarea, pulsar &ldquo;Añadir&rdquo; y verla aparecer en la lista; puedes tachar tareas y quitarlas, y el input siempre queda vacío después de añadir.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Reto extra
+      </div>
+      <p>Muestra un mensaje &ldquo;No hay tareas todavía&rdquo; con renderizado condicional cuando el array esté vacío.</p>
+      <p>Añade un contador de &ldquo;X tareas pendientes&rdquo; calculado con <code class="inline">tareas.filter(t =&gt; !t.hecha).length</code>, sin guardarlo en un estado aparte.</p>
+    </div>
+  </section>
+
+  <footer class="end">
+    Siguiente sesión: qué pasa cuando un componente necesita hablar con el mundo exterior &mdash; <code class="inline">useEffect</code> y formularios controlados.
+  </footer>
+
+</div>

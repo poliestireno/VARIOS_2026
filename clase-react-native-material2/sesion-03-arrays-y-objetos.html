@@ -1,0 +1,758 @@
+<title>Arrays y objetos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #E4572E;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #FF8A5C;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #F2764C;
+      --accent-ink: #17110D;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #F2764C;
+    --accent-ink: #17110D;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top {
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.08rem;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  section.block {
+    margin-top: 44px;
+  }
+
+  h2.block-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+
+  section.block p {
+    margin: 0 0 14px;
+  }
+
+  section.block ul {
+    margin: 0 0 14px;
+    padding-left: 22px;
+  }
+
+  section.block li {
+    margin-bottom: 6px;
+  }
+
+  h3.option-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: var(--ink);
+    margin: 40px 0 4px;
+  }
+
+  .checklist {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow);
+  }
+
+  .checklist li {
+    list-style: none;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 15px;
+    margin-bottom: 0;
+  }
+
+  .checklist ul { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+
+  .checklist svg {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    color: var(--accent-2);
+  }
+
+  .learn-list {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .learn-list li {
+    list-style: none;
+    padding-left: 20px;
+    position: relative;
+    color: var(--ink);
+    margin-bottom: 0;
+  }
+
+  .learn-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .step {
+    display: flex;
+    gap: 18px;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .step:first-of-type { border-top: none; padding-top: 0; }
+
+  .step-chip {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-body { flex: 1; min-width: 0; }
+
+  .step h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 4px 0 8px;
+  }
+
+  .step p {
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+
+  .step p.small {
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+
+  .term {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+
+  .term-bar span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--code-line);
+  }
+
+  .term pre {
+    margin: 0;
+    padding: 14px 16px 16px;
+    overflow-x: auto;
+  }
+
+  .term code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13.6px;
+    line-height: 1.7;
+    color: var(--code-ink);
+  }
+
+  .term .prompt { color: var(--code-muted); }
+  .term .cmt { color: var(--code-muted); }
+  .term .hl { color: var(--code-accent); }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .code-panel .term-bar { }
+
+  .code-panel pre {
+    margin: 0;
+    padding: 16px 18px 18px;
+    overflow-x: auto;
+  }
+
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+
+  .code-panel .tag { color: var(--accent-2); }
+  .code-panel .str { color: #C9D96B; }
+  .code-panel .kw { color: var(--code-accent); }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .prop { color: #8FB8FF; }
+  .code-panel .hl { color: var(--code-accent); }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+
+  .checkpoint p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .substep {
+    display: flex;
+    gap: 14px;
+    margin: 18px 0 0 16px;
+    padding-left: 16px;
+    border-left: 2px solid var(--line-soft);
+  }
+
+  .substep-chip {
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: var(--line-soft);
+    color: var(--muted);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 11.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .substep h4 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.98rem;
+    font-weight: 600;
+    margin: 2px 0 6px;
+  }
+
+  .substep p {
+    margin: 0 0 8px;
+    font-size: 14.5px;
+    color: var(--ink);
+  }
+
+  .substep .code-panel, .substep .term {
+    margin: 10px 0;
+  }
+
+  details.full-code {
+    margin-top: 16px;
+  }
+
+  details.full-code summary {
+    cursor: pointer;
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--accent-2);
+    list-style: none;
+  }
+
+  details.full-code summary::-webkit-details-marker { display: none; }
+
+  details.full-code summary::before {
+    content: "▸ ";
+  }
+
+  details.full-code[open] summary::before {
+    content: "▾ ";
+  }
+
+  .trouble {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .trouble-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .trouble-item .q {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    margin: 0 0 6px;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .trouble-item .q::before {
+    content: "?";
+    font-family: "IBM Plex Mono", monospace;
+    color: var(--accent-2);
+    font-weight: 500;
+  }
+
+  .trouble-item p {
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--muted);
+  }
+
+  .trouble-item p + p { margin-top: 8px; }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .step { transition: none; }
+  }
+</style>
+
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">Sesión 3 de 26 &middot; Bloque 1: JavaScript</span>
+    <h1>Arrays y objetos</h1>
+    <p class="lede">Modelar colecciones de datos &mdash; listas de cosas, y cosas con varias propiedades a la vez &mdash; que es prácticamente la base de toda app real: listas de productos, mensajes, usuarios, tareas.</p>
+    <div class="meta-row">
+      <span class="meta-chip">2 horas</span>
+      <span class="meta-chip">Sesión 3/26</span>
+      <span class="meta-chip">Sin instalar nada</span>
+    </div>
+  </header>
+
+  <section class="block">
+    <h2 class="block-title">Antes de empezar</h2>
+    <p>Seguimos con la consola del navegador o <code class="inline">node</code>. Hasta ahora hemos trabajado con datos sueltos: un número, un texto. Hoy aprendemos a agrupar muchos datos relacionados en una sola variable, que es como se organiza la información en cualquier aplicación de verdad.</p>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Arrays y sus métodos</h2>
+    <p>Un <strong>array</strong> es una lista ordenada de valores, entre corchetes y separados por comas. Puede contener cualquier tipo de dato, incluso mezclado.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">const</span> frutas = [<span class="str">"manzana"</span>, <span class="str">"pera"</span>, <span class="str">"uva"</span>];
+
+console.log(frutas[<span class="hl">0</span>]);      <span class="com">// "manzana" -> el primer elemento va en la posición 0</span>
+console.log(frutas.length); <span class="com">// 3 -> cuántos elementos tiene</span></code></pre>
+    </div>
+    <p>Los arrays tienen métodos incorporados muy potentes para transformarlos <strong>sin escribir un bucle a mano</strong>. Los cuatro que vas a usar constantemente:</p>
+    <p><code class="inline">map</code> transforma cada elemento y devuelve un array nuevo, del mismo tamaño:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">const</span> numeros = [<span class="hl">1</span>, <span class="hl">2</span>, <span class="hl">3</span>, <span class="hl">4</span>];
+<span class="kw">const</span> dobles = numeros.map(n =&gt; n * <span class="hl">2</span>);
+
+console.log(dobles); <span class="com">// [2, 4, 6, 8]</span>
+console.log(numeros); <span class="com">// [1, 2, 3, 4] -> el original no cambia</span></code></pre>
+    </div>
+    <p><code class="inline">filter</code> se queda solo con los elementos que cumplen una condición, y devuelve un array nuevo (posiblemente más corto):</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">const</span> pares = numeros.filter(n =&gt; n % <span class="hl">2</span> === <span class="hl">0</span>);
+
+console.log(pares); <span class="com">// [2, 4]</span></code></pre>
+    </div>
+    <p><code class="inline">find</code> devuelve el <strong>primer</strong> elemento que cumple una condición &mdash; solo uno, no un array &mdash; o <code class="inline">undefined</code> si ninguno la cumple:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">const</span> primerMayorQueDos = numeros.find(n =&gt; n &gt; <span class="hl">2</span>);
+
+console.log(primerMayorQueDos); <span class="com">// 3</span></code></pre>
+    </div>
+    <p><code class="inline">reduce</code> es el más difícil de los cuatro y el más potente: recorre el array acumulando un único valor final &mdash; una suma, un máximo, cualquier cosa. Recibe una función con dos parámetros (el acumulado hasta ahora, y el elemento actual) y un valor inicial:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">const</span> suma = numeros.reduce((acumulado, actual) =&gt; acumulado + actual, <span class="hl">0</span>);
+
+console.log(suma); <span class="com">// 10  -> (((0+1)+2)+3)+4</span></code></pre>
+    </div>
+    <p>El <code class="inline">0</code> al final es el punto de partida del acumulado. En cada vuelta, <code class="inline">reduce</code> llama a la función con el resultado de la vuelta anterior y el siguiente elemento, hasta que no quedan más.</p>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Ninguno de los cuatro modifica el array original
+      </div>
+      <p><code class="inline">map</code>, <code class="inline">filter</code>, <code class="inline">find</code> y <code class="inline">reduce</code> siempre devuelven algo <strong>nuevo</strong> y dejan el array de partida intacto. Esto es intencionado: en React y React Native nunca modificamos datos &ldquo;en su sitio&rdquo;, siempre creamos versiones nuevas &mdash; una costumbre que empieza a formarse aquí.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Objetos y acceso a propiedades</h2>
+    <p>Un <strong>objeto</strong> agrupa datos relacionados bajo un mismo nombre, cada uno con su propia etiqueta (su &ldquo;propiedad&rdquo;). Donde el array ordena por posición (<code class="inline">0</code>, <code class="inline">1</code>, <code class="inline">2</code>&hellip;), el objeto ordena por nombre.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">const</span> alumno = {
+  <span class="prop">nombre</span>: <span class="str">"Marta"</span>,
+  <span class="prop">nota</span>: <span class="hl">8.5</span>,
+  <span class="prop">edad</span>: <span class="hl">27</span>,
+};
+
+console.log(alumno.nombre);    <span class="com">// "Marta" -> notación con punto</span>
+console.log(alumno[<span class="str">"nota"</span>]);  <span class="com">// 8.5     -> notación con corchetes</span></code></pre>
+    </div>
+    <p>Las dos formas de acceder hacen lo mismo. La notación con punto es la más habitual; la de corchetes hace falta cuando el nombre de la propiedad viene en una variable, en vez de escrito directamente:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">const</span> campo = <span class="str">"edad"</span>;
+console.log(alumno[campo]); <span class="com">// 27 -> alumno.campo NO funcionaría</span></code></pre>
+    </div>
+    <p>Los arrays y los objetos se combinan constantemente: un <strong>array de objetos</strong> es como se representa casi cualquier lista de datos real &mdash; alumnos, productos, mensajes.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">const</span> alumnos = [
+  { <span class="prop">nombre</span>: <span class="str">"Marta"</span>, <span class="prop">nota</span>: <span class="hl">8.5</span>, <span class="prop">edad</span>: <span class="hl">27</span> },
+  { <span class="prop">nombre</span>: <span class="str">"Luis"</span>, <span class="prop">nota</span>: <span class="hl">4.2</span>, <span class="prop">edad</span>: <span class="hl">31</span> },
+  { <span class="prop">nombre</span>: <span class="str">"Sara"</span>, <span class="prop">nota</span>: <span class="hl">6.9</span>, <span class="prop">edad</span>: <span class="hl">22</span> },
+];
+
+console.log(alumnos[<span class="hl">0</span>].nombre); <span class="com">// "Marta" -> primero la posición, luego la propiedad</span></code></pre>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Destructuring y spread/rest</h2>
+    <p>El <strong>destructuring</strong> extrae propiedades de un objeto (o posiciones de un array) directamente en variables sueltas, sin repetir el nombre del objeto en cada línea:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">const</span> { nombre, nota } = alumnos[<span class="hl">0</span>];
+
+console.log(nombre); <span class="com">// "Marta"</span>
+console.log(nota);   <span class="com">// 8.5</span>
+
+<span class="com">// también funciona con arrays, por posición:</span>
+<span class="kw">const</span> [primero, segundo] = frutas;
+console.log(primero); <span class="com">// "manzana"</span></code></pre>
+    </div>
+    <p>Es especialmente útil en los parámetros de una función, para extraer solo lo que necesitas:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">function</span> <span class="tag">describir</span>({ nombre, edad }) {
+  <span class="kw">return</span> nombre + <span class="str">" tiene "</span> + edad + <span class="str">" años"</span>;
+}
+
+console.log(describir(alumnos[<span class="hl">0</span>])); <span class="com">// "Marta tiene 27 años"</span></code></pre>
+    </div>
+    <p>El <strong>spread</strong> (<code class="inline">...</code>) &ldquo;desparrama&rdquo; los elementos de un array o las propiedades de un objeto dentro de otro nuevo &mdash; la forma habitual de copiar y modificar sin tocar el original:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">const</span> masFrutas = [...frutas, <span class="str">"kiwi"</span>];
+console.log(masFrutas); <span class="com">// ["manzana", "pera", "uva", "kiwi"]</span>
+
+<span class="kw">const</span> alumnoAprobado = { ...alumnos[<span class="hl">1</span>], nota: <span class="hl">5.0</span> };
+console.log(alumnoAprobado); <span class="com">// { nombre: "Luis", nota: 5, edad: 31 }</span>
+console.log(alumnos[<span class="hl">1</span>].nota); <span class="com">// 4.2 -> el original no cambió</span></code></pre>
+    </div>
+    <p>El <strong>rest</strong> usa la misma sintaxis <code class="inline">...</code> pero en sentido contrario: agrupa el resto de argumentos sobrantes en un array, típicamente en parámetros de función:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">function</span> <span class="tag">sumarTodos</span>(...numeros) {
+  <span class="kw">return</span> numeros.reduce((acc, n) =&gt; acc + n, <span class="hl">0</span>);
+}
+
+console.log(sumarTodos(<span class="hl">1</span>, <span class="hl">2</span>, <span class="hl">3</span>, <span class="hl">4</span>)); <span class="com">// 10 -> acepta cualquier cantidad de argumentos</span></code></pre>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Práctica</h2>
+    <p>Partimos de este array de alumnos. Cópialo tal cual en tu consola antes de empezar:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">const</span> alumnos = [
+  { <span class="prop">nombre</span>: <span class="str">"Marta"</span>, <span class="prop">nota</span>: <span class="hl">8.5</span>, <span class="prop">edad</span>: <span class="hl">27</span> },
+  { <span class="prop">nombre</span>: <span class="str">"Luis"</span>,  <span class="prop">nota</span>: <span class="hl">4.2</span>, <span class="prop">edad</span>: <span class="hl">31</span> },
+  { <span class="prop">nombre</span>: <span class="str">"Sara"</span>,  <span class="prop">nota</span>: <span class="hl">6.9</span>, <span class="prop">edad</span>: <span class="hl">22</span> },
+  { <span class="prop">nombre</span>: <span class="str">"Iván"</span>,  <span class="prop">nota</span>: <span class="hl">9.8</span>, <span class="prop">edad</span>: <span class="hl">19</span> },
+  { <span class="prop">nombre</span>: <span class="str">"Noa"</span>,   <span class="prop">nota</span>: <span class="hl">3.4</span>, <span class="prop">edad</span>: <span class="hl">45</span> },
+];</code></pre>
+    </div>
+    <p>Vas a escribir tres funciones sobre este array, cada una con el método adecuado de los que hemos visto.</p>
+
+    <div class="step">
+      <div class="step-chip">1</div>
+      <div class="step-body">
+        <h3>Filtra los aprobados</h3>
+        <p>Escribe <code class="inline">obtenerAprobados</code>, que reciba el array de alumnos y devuelva solo los que tienen nota 5 o más. Es exactamente el trabajo de <code class="inline">filter</code>.</p>
+        <div class="code-panel">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code><span class="kw">function</span> <span class="tag">obtenerAprobados</span>(lista) {
+  <span class="kw">return</span> lista.filter(alumno =&gt; alumno.nota &gt;= <span class="hl">5</span>);
+}
+
+console.log(obtenerAprobados(alumnos));
+<span class="com">// [Marta (8.5), Sara (6.9), Iván (9.8)]</span></code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">2</div>
+      <div class="step-body">
+        <h3>Calcula la nota media</h3>
+        <p>Escribe <code class="inline">calcularMedia</code>, que devuelva la media de todas las notas. Necesitas sumar todas las notas (<code class="inline">reduce</code>) y dividir entre cuántas hay (<code class="inline">.length</code>).</p>
+        <div class="code-panel">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code><span class="kw">function</span> <span class="tag">calcularMedia</span>(lista) {
+  <span class="kw">const</span> sumaNotas = lista.reduce((acc, alumno) =&gt; acc + alumno.nota, <span class="hl">0</span>);
+  <span class="kw">return</span> sumaNotas / lista.length;
+}
+
+console.log(calcularMedia(alumnos)); <span class="com">// 6.56</span></code></pre>
+        </div>
+        <div class="checkpoint">
+          <div class="checkpoint-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Pista si te atascas
+          </div>
+          <p>Dentro de <code class="inline">reduce</code>, cada &ldquo;elemento actual&rdquo; es un objeto alumno completo, no un número &mdash; por eso hace falta acceder a <code class="inline">alumno.nota</code> dentro de la función.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">3</div>
+      <div class="step-body">
+        <h3>Devuelve solo los nombres</h3>
+        <p>Escribe <code class="inline">obtenerNombres</code>, que transforme el array de objetos en un simple array de strings con los nombres. Es el caso de uso más típico de <code class="inline">map</code>: cambiar la &ldquo;forma&rdquo; de cada elemento.</p>
+        <div class="code-panel">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code><span class="kw">function</span> <span class="tag">obtenerNombres</span>(lista) {
+  <span class="kw">return</span> lista.map(alumno =&gt; alumno.nombre);
+}
+
+console.log(obtenerNombres(alumnos));
+<span class="com">// ["Marta", "Luis", "Sara", "Iván", "Noa"]</span></code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">4</div>
+      <div class="step-body">
+        <h3>Encadénalas</h3>
+        <p>Como las tres devuelven algo nuevo sin tocar el original, se pueden combinar en una sola línea: los nombres de solo los alumnos aprobados.</p>
+        <div class="code-panel">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code>console.log(obtenerNombres(obtenerAprobados(alumnos)));
+<span class="com">// ["Marta", "Sara", "Iván"]</span>
+
+<span class="com">// o encadenando los métodos directamente:</span>
+console.log(
+  alumnos.filter(a =&gt; a.nota &gt;= <span class="hl">5</span>).map(a =&gt; a.nombre)
+);
+<span class="com">// ["Marta", "Sara", "Iván"]</span></code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Reto extra
+      </div>
+      <p>Escribe <code class="inline">alumnoConMejorNota</code> usando <code class="inline">reduce</code> (no <code class="inline">find</code>) para devolver el objeto del alumno con la nota más alta. Luego, usando destructuring y spread, escribe <code class="inline">subirNota(alumno, puntos)</code> que devuelva una <strong>copia</strong> del alumno con la nota incrementada, sin modificar el objeto original &mdash; comprueba con <code class="inline">console.log</code> que el alumno de partida sigue con su nota de siempre.</p>
+    </div>
+  </section>
+
+  <footer class="end">
+    Siguiente sesión: JS moderno y asíncrono &mdash; módulos, promesas y una primera llamada a una API real con fetch.
+  </footer>
+
+</div>

@@ -1,0 +1,701 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Demo day</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #E4572E;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #FF8A5C;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #F2764C;
+      --accent-ink: #17110D;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #F2764C;
+    --accent-ink: #17110D;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top {
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.08rem;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  section.block {
+    margin-top: 44px;
+  }
+
+  h2.block-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+
+  .checklist {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow);
+  }
+
+  .checklist li {
+    list-style: none;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 15px;
+  }
+
+  .checklist ul { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+
+  .checklist svg {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    color: var(--accent-2);
+  }
+
+  .learn-list {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .learn-list li {
+    list-style: none;
+    padding-left: 20px;
+    position: relative;
+    color: var(--ink);
+  }
+
+  .learn-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .step {
+    display: flex;
+    gap: 18px;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .step:first-of-type { border-top: none; padding-top: 0; }
+
+  .step-chip {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-body { flex: 1; min-width: 0; }
+
+  .step h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 4px 0 8px;
+  }
+
+  .step p {
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+
+  .step p.small {
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+
+  .term {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+
+  .term-bar span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--code-line);
+  }
+
+  .term pre {
+    margin: 0;
+    padding: 14px 16px 16px;
+    overflow-x: auto;
+  }
+
+  .term code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13.6px;
+    line-height: 1.7;
+    color: var(--code-ink);
+  }
+
+  .term .prompt { color: var(--code-muted); }
+  .term .cmt { color: var(--code-muted); }
+  .term .hl { color: var(--code-accent); }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .code-panel .term-bar { }
+
+  .code-panel pre {
+    margin: 0;
+    padding: 16px 18px 18px;
+    overflow-x: auto;
+  }
+
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+
+  .code-panel .tag { color: var(--accent-2); }
+  .code-panel .str { color: #C9D96B; }
+  .code-panel .kw { color: var(--code-accent); }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .prop { color: #8FB8FF; }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+
+  .checkpoint p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .substep {
+    display: flex;
+    gap: 14px;
+    margin: 18px 0 0 16px;
+    padding-left: 16px;
+    border-left: 2px solid var(--line-soft);
+  }
+
+  .substep-chip {
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: var(--line-soft);
+    color: var(--muted);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 11.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .substep h4 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.98rem;
+    font-weight: 600;
+    margin: 2px 0 6px;
+  }
+
+  .substep p {
+    margin: 0 0 8px;
+    font-size: 14.5px;
+    color: var(--ink);
+  }
+
+  .substep .code-panel, .substep .term {
+    margin: 10px 0;
+  }
+
+  details.full-code {
+    margin-top: 16px;
+  }
+
+  details.full-code summary {
+    cursor: pointer;
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--accent-2);
+    list-style: none;
+  }
+
+  details.full-code summary::-webkit-details-marker { display: none; }
+
+  details.full-code summary::before {
+    content: "▸ ";
+  }
+
+  details.full-code[open] summary::before {
+    content: "▾ ";
+  }
+
+  .trouble {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .trouble-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .trouble-item .q {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    margin: 0 0 6px;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .trouble-item .q::before {
+    content: "?";
+    font-family: "IBM Plex Mono", monospace;
+    color: var(--accent-2);
+    font-weight: 500;
+  }
+
+  .trouble-item p {
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--muted);
+  }
+
+  .trouble-item p + p { margin-top: 8px; }
+
+  table.timing-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    font-size: 14px;
+    margin: 14px 0;
+  }
+
+  table.timing-table th, table.timing-table td {
+    text-align: left;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--line-soft);
+    vertical-align: top;
+  }
+
+  table.timing-table th {
+    font-family: "Lexend", sans-serif;
+    font-size: 12.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+    background: var(--line-soft);
+  }
+
+  table.timing-table tr:last-child td { border-bottom: none; }
+
+  .eval-block {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    box-shadow: var(--shadow);
+  }
+
+  .eval-item {
+    display: flex;
+    gap: 14px;
+    padding: 14px 0;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .eval-item:first-child { border-top: none; padding-top: 0; }
+  .eval-item:last-child { padding-bottom: 0; }
+
+  .eval-num {
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: var(--line-soft);
+    color: var(--muted);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 12.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .eval-item p {
+    margin: 0;
+    font-size: 15px;
+    color: var(--ink);
+  }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  footer.closing {
+    margin-top: 52px;
+    padding: 22px 24px;
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 6%, var(--surface));
+    color: var(--ink);
+    font-size: 14.5px;
+  }
+
+  footer.closing p { margin: 0 0 10px; }
+  footer.closing p:last-child { margin-bottom: 0; }
+
+  a { color: var(--accent-2); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .step { transition: none; }
+  }
+</style>
+
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">Sesión 26 de 26 &middot; Bloque 5: Proyecto final</span>
+    <h1>Demo day</h1>
+    <p class="lede">Presentar y defender el trabajo de todo el curso. No hay contenido nuevo que enseñar: la sesión entera es de cada alumno, y tu trabajo es sostener el ritmo y el tiempo para que todos lleguen a presentar.</p>
+    <div class="meta-row">
+      <span class="meta-chip">2 horas</span>
+      <span class="meta-chip">Sesión 26/26</span>
+      <span class="meta-chip">Última sesión</span>
+    </div>
+  </header>
+
+  <section class="block">
+    <h2 class="block-title">Contexto de la sesión</h2>
+    <p>Ocho sesiones atrás, el bloque 5 empezó con una idea en un papel. Hoy esa idea es una app instalada de verdad en el móvil de cada alumno, gracias a la build generada en la sesión 25. El demo day es el cierre natural: cada persona enseña lo que construyó, explica cómo lo construyó, y recibe una reacción del resto de la clase. No es un examen &mdash; es la parte del curso que más se parece a lo que pasa después de él.</p>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Cómo estructurar las 2 horas</h2>
+    <p>La aritmética manda aquí más que la pedagogía: con un grupo de 12 alumnos y 5 minutos por persona, ya son 60 minutos solo de presentaciones puras. En la práctica hay que contar también transiciones (cada alumno conectando su móvil, encontrando la pantalla que quiere enseñar) y el feedback de 30 segundos que cierra cada turno, así que el bloque real de &ldquo;presentación completa&rdquo; ronda los 8 minutos por persona.</p>
+    <table class="timing-table">
+      <tr><th>Bloque</th><th>Duración</th></tr>
+      <tr><td>Apertura: recordar la estructura, orden de turnos</td><td>10 min</td></tr>
+      <tr><td>12 alumnos &times; 8 min (demo + feedback + transición)</td><td>96 min</td></tr>
+      <tr><td>Margen para imprevistos (móvil que no conecta, nervios, preguntas largas)</td><td>10 min</td></tr>
+      <tr><td>Cierre: unas palabras finales, agradecimientos</td><td>4 min</td></tr>
+    </table>
+    <p class="small">Total: unas 2 horas exactas. Si el grupo es más pequeño (8&ndash;10 alumnos), hay margen de sobra; si es más grande (15+), conviene recortar a 6 minutos por persona en vez de alargar la sesión, para no perder la atención del grupo hacia el final.</p>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Un truco de ritmo
+      </div>
+      <p>Ten un temporizador visible (móvil, portátil, lo que sea) y avisa en voz alta cuando queda 1 minuto. Sin esto, casi todas las demos se alargan porque a nadie le gusta cortar a un alumno a media frase &mdash; y ese medio minuto de más, multiplicado por doce, es lo que hace descarrilar el horario.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">La estructura de una demo de 5 minutos</h2>
+    <p>Vale la pena escribir esta estructura en la pizarra al empezar, para que nadie improvise sobre la marcha:</p>
+
+    <div class="substep">
+      <div class="substep-chip">0:30</div>
+      <div class="step-body">
+        <h4>Qué problema resuelve la app</h4>
+        <p>Una frase, sin tecnicismos: &ldquo;Mi app ayuda a llevar la cuenta de los libros que quiero leer&rdquo;, no &ldquo;usa Context API y AsyncStorage&rdquo;. El público entiende el problema antes de ver la solución.</p>
+      </div>
+    </div>
+
+    <div class="substep">
+      <div class="substep-chip">3:00</div>
+      <div class="step-body">
+        <h4>Demo en vivo, desde el móvil</h4>
+        <p>Directo sobre el APK instalado, no sobre capturas de pantalla ni sobre Expo Go. Recorriendo el flujo principal de la app tal y como lo usaría alguien de verdad.</p>
+      </div>
+    </div>
+
+    <div class="substep">
+      <div class="substep-chip">1:00</div>
+      <div class="step-body">
+        <h4>Qué fue lo más difícil de construir</h4>
+        <p>El momento más honesto de la demo. Puede ser algo técnico (&ldquo;me costó entender por qué la lista no se actualizaba&rdquo;) o de decisión (&ldquo;no sabía si usar Context o pasar props&rdquo;). Es la parte que más engancha al resto de la clase, porque seguro que a alguien más le pasó algo parecido.</p>
+      </div>
+    </div>
+
+    <div class="substep">
+      <div class="substep-chip">0:30</div>
+      <div class="step-body">
+        <h4>Feedback rápido del resto de la clase</h4>
+        <p>Una o dos reacciones cortas, no una ronda completa. &ldquo;Me ha gustado que&hellip;&rdquo; o una pregunta concreta. El objetivo es que cada demo termine con una reacción real, no en silencio.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Checklist antes de empezar</h2>
+    <p>Repásala con todo el grupo diez minutos antes de arrancar &mdash; es más fácil resolver un móvil sin batería antes de empezar que a mitad de la primera demo.</p>
+    <div class="checklist">
+      <ul>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span><strong>Móvil cargado</strong> (o cargador a mano) &mdash; nada corta el ritmo como una pantalla que se apaga a mitad de demo.</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span><strong>App instalada</strong> desde el APK de la sesión 25, o si no llegó a generarse, el proyecto accesible al instante por Expo Go (servidor ya arrancado, QR listo).</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span><strong>Orden claro de lo que va a enseñar</strong> &mdash; qué pantalla abre primero, qué acción hace en cada paso. No hace falta guion escrito, pero sí saberlo de memoria para no perder tiempo navegando a ciegas.</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Plantilla de autoevaluación</h2>
+    <p>Antes de que empiecen las presentaciones, cada alumno rellena esto sobre su propio proyecto &mdash; en papel, en una nota, o en voz alta preparándose mentalmente. No se entrega ni se corrige: es para que cada uno llegue a su turno con las ideas ordenadas, y de paso da pie natural a la parte de &ldquo;lo más difícil&rdquo; de la demo.</p>
+    <div class="eval-block">
+      <div class="eval-item">
+        <div class="eval-num">1</div>
+        <p>¿Qué es lo que más orgullo te da de tu proyecto?</p>
+      </div>
+      <div class="eval-item">
+        <div class="eval-num">2</div>
+        <p>¿Qué harías distinto si repitieras el proyecto desde cero?</p>
+      </div>
+      <div class="eval-item">
+        <div class="eval-num">3</div>
+        <p>¿Qué añadirías con una semana más de trabajo?</p>
+      </div>
+      <div class="eval-item">
+        <div class="eval-num">4</div>
+        <p>¿Qué fue lo que más te costó, y cómo lo resolviste?</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Práctica</h2>
+    <p>No hay ejercicio técnico. El entregable de hoy es la propia presentación: cada alumno enseña su app funcionando en su móvil, explica una decisión difícil que tomó, y recibe una reacción del resto de la clase. Todo lo demás construido en las 23 sesiones anteriores ya está hecho &mdash; hoy toca enseñarlo.</p>
+  </section>
+
+  <footer class="closing">
+    <p><strong>Una nota de cierre.</strong> Esta es la última de las 24 sesiones. No hay &ldquo;próxima sesión&rdquo; que anunciar al final de hoy &mdash; en su lugar, vale la pena cerrar con unas palabras breves: reconocer el camino recorrido desde un &ldquo;Hola, React Native!&rdquo; en la sesión 1 hasta una app propia instalada en un móvil real, y dejar claro que lo aprendido (JavaScript, React, y ahora React Native) sirve fuera de este curso tanto como dentro de él.</p>
+    <p>Si el centro o el grupo lo contempla, este es también el momento natural para certificados, una foto de grupo, o compartir dónde seguir aprendiendo después. Nada de esto es obligatorio para el contenido del curso, pero cierra mejor que simplemente dejar que suene el timbre tras la última demo.</p>
+  </footer>
+
+</div>
+
+</html>

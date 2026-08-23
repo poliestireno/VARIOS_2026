@@ -1,0 +1,510 @@
+<title>TypeScript en la práctica</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #E4572E;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #FF8A5C;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #F2764C;
+      --accent-ink: #17110D;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #F2764C;
+    --accent-ink: #17110D;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top {
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.08rem;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  section.block {
+    margin-top: 44px;
+  }
+
+  h2.block-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+
+  section.block p {
+    margin: 0 0 14px;
+  }
+
+  section.block ul {
+    margin: 0 0 14px;
+    padding-left: 22px;
+  }
+
+  section.block li {
+    margin-bottom: 6px;
+  }
+
+  .learn-list {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .learn-list li {
+    list-style: none;
+    padding-left: 20px;
+    position: relative;
+    color: var(--ink);
+    margin-bottom: 0;
+  }
+
+  .learn-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .step {
+    display: flex;
+    gap: 18px;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .step:first-of-type { border-top: none; padding-top: 0; }
+
+  .step-chip {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-body { flex: 1; min-width: 0; }
+
+  .step h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 4px 0 8px;
+  }
+
+  .step p {
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+
+  .step p.small {
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .code-panel .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+
+  .code-panel .term-bar span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--code-line);
+  }
+
+  .code-panel pre {
+    margin: 0;
+    padding: 16px 18px 18px;
+    overflow-x: auto;
+  }
+
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+
+  .code-panel .tag { color: var(--accent-2); }
+  .code-panel .str { color: #C9D96B; }
+  .code-panel .kw { color: var(--code-accent); }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .prop { color: #8FB8FF; }
+  .code-panel .hl { color: var(--code-accent); }
+  .code-panel .err { color: #FF6B6B; text-decoration: wavy underline; }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+
+  .checkpoint p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+</style>
+
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">Sesión 6 de 26 &middot; Bloque 2: TypeScript</span>
+    <h1>TypeScript en la práctica</h1>
+    <p class="lede">Cerramos TypeScript con lo que realmente vais a usar a diario: propiedades que pueden faltar, datos que llegan de fuera sin forma conocida, y un adelanto de cómo se tipan las props de un componente &mdash; el primer sitio donde lo aplicaréis de verdad, la semana que viene.</p>
+    <div class="meta-row">
+      <span class="meta-chip">2 horas</span>
+      <span class="meta-chip">Sesión 6/26</span>
+      <span class="meta-chip">TypeScript Playground</span>
+    </div>
+  </header>
+
+  <section class="block">
+    <h2 class="block-title">Qué vas a ver hoy</h2>
+    <ul class="learn-list">
+      <li>Propiedades opcionales (<code class="inline">?</code>) y de solo lectura (<code class="inline">readonly</code>).</li>
+      <li><code class="inline">any</code> frente a <code class="inline">unknown</code>: por qué el segundo es casi siempre mejor.</li>
+      <li>Tipar la respuesta de un <code class="inline">fetch</code> real.</li>
+      <li>Genéricos, lo justo para entender <code class="inline">useState&lt;T&gt;</code> cuando lo veáis la semana que viene.</li>
+      <li>Cómo se tipan las props de un componente de React &mdash; sin escribir JSX todavía.</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Propiedades opcionales</h2>
+    <p>No todos los objetos de una misma forma tienen siempre todos los datos rellenos. Un <code class="inline">?</code> después del nombre de la propiedad dice &ldquo;esto puede no estar&rdquo;:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">type</span> <span class="tag">Alumno</span> = {
+  nombre: <span class="tag">string</span>;
+  edad: <span class="tag">number</span>;
+  email?: <span class="tag">string</span>; <span class="com">// puede no venir</span>
+};
+
+<span class="kw">const</span> a: <span class="tag">Alumno</span> = { nombre: <span class="str">'Ana'</span>, edad: <span class="hl">27</span> }; <span class="com">// válido, sin email</span>
+
+<span class="kw">function</span> <span class="tag">contactar</span>(a: <span class="tag">Alumno</span>) {
+  console.log(a.email.<span class="err">toUpperCase</span>()); <span class="com">// error: 'email' puede ser undefined</span>
+}</code></pre>
+    </div>
+    <p>Ese error es justo el motivo por el que la propiedad opcional merece la pena: TypeScript os obliga a comprobar que el dato existe antes de usarlo, con un <code class="inline">if</code> o con el operador <code class="inline">?.</code> (optional chaining) que ya usasteis en JavaScript:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">function</span> <span class="tag">contactar</span>(a: <span class="tag">Alumno</span>) {
+  console.log(a.email?.toUpperCase() ?? <span class="str">'sin email'</span>);
+}</code></pre>
+    </div>
+    <p>El <code class="inline">readonly</code> es el otro modificador habitual: marca una propiedad que se puede leer pero no reasignar después de creado el objeto, útil para datos que no deberían cambiar por accidente (un <code class="inline">id</code>, por ejemplo).</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">type</span> <span class="tag">Alumno</span> = {
+  <span class="kw">readonly</span> id: <span class="tag">string</span>;
+  nombre: <span class="tag">string</span>;
+};
+
+<span class="kw">const</span> a: <span class="tag">Alumno</span> = { id: <span class="str">'a1'</span>, nombre: <span class="str">'Ana'</span> };
+a.nombre = <span class="str">'Ana María'</span>; <span class="com">// bien</span>
+a.id = <span class="err">'a2'</span>;            <span class="com">// error: id es readonly</span></code></pre>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title"><code class="inline">any</code> frente a <code class="inline">unknown</code></h2>
+    <p><code class="inline">any</code> apaga TypeScript por completo para ese valor: podéis hacer lo que sea con él sin que el editor proteste nunca, lo cual anula justo lo que veníais buscando. Aparece solo, sin que lo pidáis, en un sitio muy concreto: el resultado de <code class="inline">JSON.parse()</code> o de <code class="inline">.json()</code> tras un <code class="inline">fetch</code>, porque TypeScript no tiene forma de saber qué forma tiene un texto JSON hasta que lo leéis.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">const</span> datos: <span class="tag">any</span> = JSON.parse(<span class="str">'{"nombre": "Ana"}'</span>);
+console.log(datos.nombre.aFuncionQueNoExiste()); <span class="com">// compila sin avisar, revienta al ejecutar</span></code></pre>
+    </div>
+    <p><code class="inline">unknown</code> es la alternativa más segura para &ldquo;no sé qué es esto todavía&rdquo;: acepta cualquier valor igual que <code class="inline">any</code>, pero no os deja <em>usarlo</em> hasta que comprobéis (o afirméis) de qué tipo es en realidad.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">const</span> datos: <span class="tag">unknown</span> = JSON.parse(<span class="str">'{"nombre": "Ana"}'</span>);
+console.log(datos.<span class="err">nombre</span>); <span class="com">// error: no puedes leer propiedades de 'unknown' sin comprobar antes</span>
+
+<span class="kw">if</span> (<span class="kw">typeof</span> datos === <span class="str">'object'</span> && datos !== <span class="kw">null</span> && <span class="str">'nombre'</span> <span class="kw">in</span> datos) {
+  console.log((datos <span class="kw">as</span> { nombre: <span class="tag">string</span> }).nombre); <span class="com">// bien, ya comprobado</span>
+}</code></pre>
+    </div>
+    <p>En la práctica, para los datos de una API en la que confiáis (como en la sesión 4), la solución habitual es más directa: en vez de comprobar la forma a mano, definís el <code class="inline">type</code> que esperáis y le decís a TypeScript &ldquo;confía en mí, esto tiene esta forma&rdquo; con <code class="inline">as</code>:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">type</span> <span class="tag">Post</span> = { userId: <span class="tag">number</span>; id: <span class="tag">number</span>; title: <span class="tag">string</span>; body: <span class="tag">string</span> };
+
+<span class="kw">async function</span> <span class="tag">obtenerPost</span>(id: <span class="tag">number</span>): <span class="tag">Promise</span>&lt;<span class="tag">Post</span>&gt; {
+  <span class="kw">const</span> respuesta = <span class="kw">await</span> fetch(<span class="str">`https://jsonplaceholder.typicode.com/posts/${id}`</span>);
+  <span class="kw">const</span> datos = <span class="kw">await</span> respuesta.json() <span class="kw">as</span> <span class="tag">Post</span>;
+  <span class="kw">return</span> datos;
+}</code></pre>
+    </div>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        &ldquo;as Post&rdquo; es una promesa, no una comprobación
+      </div>
+      <p><code class="inline">as Post</code> no valida nada en tiempo de ejecución &mdash; solo le dice al editor &ldquo;trátalo como si fuera esto&rdquo;. Si la API cambia de forma sin avisar, <code class="inline">as</code> no os va a salvar; solo os da autocompletado y avisos correctos mientras la API responde lo que esperáis. Es una herramienta de productividad, no una red de seguridad contra datos corruptos.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Genéricos, lo justo para reconocer <code class="inline">useState&lt;T&gt;</code></h2>
+    <p>Un <strong>genérico</strong> es un tipo que recibe otro tipo como parámetro, escrito entre <code class="inline">&lt;&gt;</code>. No hace falta que sepáis <em>crear</em> vuestros propios genéricos para este curso &mdash; sí que sepáis leerlos, porque los vais a ver constantemente a partir de la semana que viene:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">function</span> <span class="tag">primero</span>&lt;<span class="tag">T</span>&gt;(lista: <span class="tag">T</span>[]): <span class="tag">T</span> {
+  <span class="kw">return</span> lista[<span class="hl">0</span>];
+}
+
+primero([<span class="hl">1</span>, <span class="hl">2</span>, <span class="hl">3</span>]);         <span class="com">// T = number, devuelve un number</span>
+primero([<span class="str">'a'</span>, <span class="str">'b'</span>]);      <span class="com">// T = string, devuelve un string</span></code></pre>
+    </div>
+    <p><code class="inline">T</code> es un marcador de posición: se rellena con el tipo real cada vez que llamáis a la función, y TypeScript lo infiere solo a partir de lo que le pasáis &mdash; no tenéis que escribirlo casi nunca. Esto es exactamente lo que pasa con <code class="inline">useState&lt;number&gt;(0)</code> que veréis en la guía del contador: <code class="inline">useState</code> es una función genérica, y <code class="inline">&lt;number&gt;</code> es vosotros rellenando <code class="inline">T</code> a mano en vez de dejar que lo infiera, porque a partir de un array vacío (<code class="inline">useState([])</code>) no hay nada de lo que inferir.</p>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Adelanto: tipar props de un componente</h2>
+    <p>Todavía no habéis escrito JSX &mdash; eso empieza en la sesión 7 &mdash; pero la pieza de TypeScript que más vais a usar en React es tan sencilla como lo de hoy: un <code class="inline">type</code> para describir qué recibe un componente, usado como tipo de su único parámetro (las props):</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">type</span> <span class="tag">TarjetaPerfilProps</span> = {
+  nombre: <span class="tag">string</span>;
+  edad: <span class="tag">number</span>;
+  verificado?: <span class="tag">boolean</span>; <span class="com">// opcional, como antes</span>
+};
+
+<span class="kw">function</span> <span class="tag">TarjetaPerfil</span>({ nombre, edad, verificado }: <span class="tag">TarjetaPerfilProps</span>) {
+  <span class="com">// aquí ya sabéis, sin adivinar, que "edad" es number y "nombre" un string</span>
+  <span class="kw">return</span> <span class="str">`${nombre} (${edad})${verificado ? ' ✓' : ''}`</span>;
+}</code></pre>
+    </div>
+    <p>Nada de esto es nuevo: es exactamente un <code class="inline">type</code> con propiedades, algunas opcionales, usado para tipar el parámetro de una función &mdash; solo que ese parámetro se llama &ldquo;props&rdquo; y esa función va a devolver JSX en vez de un string. La sesión que viene retomamos justo aquí.</p>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Práctica</h2>
+    <p>Seguimos en el <a href="https://www.typescriptlang.org/play" target="_blank" rel="noopener">TypeScript Playground</a>, cerrando el círculo con la sesión 4 (fetch y async/await).</p>
+
+    <div class="step">
+      <div class="step-chip">1</div>
+      <div class="step-body">
+        <h3>Tipa la respuesta de la API</h3>
+        <p>Define <code class="inline">type Post</code> con los cuatro campos que devuelve JSONPlaceholder (<code class="inline">userId</code>, <code class="inline">id</code>, <code class="inline">title</code>, <code class="inline">body</code>), y reescribe tu función <code class="inline">obtenerPosts</code> de la sesión 4 para que devuelva <code class="inline">Promise&lt;Post[]&gt;</code>, usando <code class="inline">as Post[]</code> sobre el resultado de <code class="inline">.json()</code>.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">2</div>
+      <div class="step-body">
+        <h3>Añade un campo opcional</h3>
+        <p>La API de usuarios (<code class="inline">/users</code>) tiene un campo anidado <code class="inline">company</code> que no todos los objetos tendrán bien formado en según qué proyectos reales. Practica marcándolo opcional en un <code class="inline">type Usuario</code> y usando <code class="inline">?.</code> al leerlo.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">3</div>
+      <div class="step-body">
+        <h3>Tipa unas props sin JSX</h3>
+        <p>Escribe un <code class="inline">type TareaProps</code> con <code class="inline">texto: string</code>, <code class="inline">hecha: boolean</code> y <code class="inline">prioridad?: 'alta' | 'media' | 'baja'</code>, y una función <code class="inline">function describirTarea(props: TareaProps): string</code> que devuelva un resumen en texto combinando los tres campos &mdash; sin ningún componente ni JSX todavía, solo para practicar la forma.</p>
+        <div class="checkpoint">
+          <div class="checkpoint-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Cómo saber que va bien
+          </div>
+          <p>Llama a <code class="inline">describirTarea</code> sin el campo <code class="inline">texto</code>, o con <code class="inline">prioridad: 'urgente'</code>. Ambas deberían subrayarse en rojo en el Playground antes de que le deis a ejecutar.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="end">
+    Con esto se cierra el Bloque 2. Siguiente sesión: empieza el Bloque 3, React &mdash; primeros componentes, JSX, y las mismas props que acabáis de tipar hoy, ya devolviendo interfaz de verdad.
+  </footer>
+
+</div>

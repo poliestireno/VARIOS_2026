@@ -1,0 +1,866 @@
+<title>Contador en Expo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #E4572E;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #FF8A5C;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #F2764C;
+      --accent-ink: #17110D;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #F2764C;
+    --accent-ink: #17110D;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top {
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.08rem;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  section.block {
+    margin-top: 44px;
+  }
+
+  h2.block-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+
+  .checklist {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow);
+  }
+
+  .checklist li {
+    list-style: none;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 15px;
+  }
+
+  .checklist ul { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+
+  .checklist svg {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    color: var(--accent-2);
+  }
+
+  .learn-list {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .learn-list li {
+    list-style: none;
+    padding-left: 20px;
+    position: relative;
+    color: var(--ink);
+  }
+
+  .learn-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .step {
+    display: flex;
+    gap: 18px;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .step:first-of-type { border-top: none; padding-top: 0; }
+
+  .step-chip {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-body { flex: 1; min-width: 0; }
+
+  .step h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 4px 0 8px;
+  }
+
+  .step p {
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+
+  .step p.small {
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+
+  .term {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+
+  .term-bar span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--code-line);
+  }
+
+  .term pre {
+    margin: 0;
+    padding: 14px 16px 16px;
+    overflow-x: auto;
+  }
+
+  .term code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13.6px;
+    line-height: 1.7;
+    color: var(--code-ink);
+  }
+
+  .term .prompt { color: var(--code-muted); }
+  .term .cmt { color: var(--code-muted); }
+  .term .hl { color: var(--code-accent); }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .code-panel .term-bar { }
+
+  .code-panel pre {
+    margin: 0;
+    padding: 16px 18px 18px;
+    overflow-x: auto;
+  }
+
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+
+  .code-panel .tag { color: var(--accent-2); }
+  .code-panel .str { color: #C9D96B; }
+  .code-panel .kw { color: var(--code-accent); }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .prop { color: #8FB8FF; }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+
+  .checkpoint p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .substep {
+    display: flex;
+    gap: 14px;
+    margin: 18px 0 0 16px;
+    padding-left: 16px;
+    border-left: 2px solid var(--line-soft);
+  }
+
+  .substep-chip {
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: var(--line-soft);
+    color: var(--muted);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 11.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .substep h4 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.98rem;
+    font-weight: 600;
+    margin: 2px 0 6px;
+  }
+
+  .substep p {
+    margin: 0 0 8px;
+    font-size: 14.5px;
+    color: var(--ink);
+  }
+
+  .substep .code-panel, .substep .term {
+    margin: 10px 0;
+  }
+
+  details.full-code {
+    margin-top: 16px;
+  }
+
+  details.full-code summary {
+    cursor: pointer;
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--accent-2);
+    list-style: none;
+  }
+
+  details.full-code summary::-webkit-details-marker { display: none; }
+
+  details.full-code summary::before {
+    content: "▸ ";
+  }
+
+  details.full-code[open] summary::before {
+    content: "▾ ";
+  }
+
+  .trouble {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .trouble-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .trouble-item .q {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    margin: 0 0 6px;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .trouble-item .q::before {
+    content: "?";
+    font-family: "IBM Plex Mono", monospace;
+    color: var(--accent-2);
+    font-weight: 500;
+  }
+
+  .trouble-item p {
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--muted);
+  }
+
+  .trouble-item p + p { margin-top: 8px; }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .step { transition: none; }
+  }
+</style>
+
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">Guía de clase &middot; primer contacto</span>
+    <h1>Tu primera app con Expo: un contador</h1>
+    <p class="lede">De un portátil vacío a un botón que suma, funcionando en tu propio móvil. Sin Mac, sin Android Studio, sin Xcode.</p>
+    <div class="meta-row">
+      <span class="meta-chip">React Native + Expo SDK 54</span>
+      <span class="meta-chip">TypeScript</span>
+      <span class="meta-chip">VS Code</span>
+      <span class="meta-chip">Android &amp; iOS</span>
+      <span class="meta-chip">~20 min</span>
+    </div>
+  </header>
+
+  <section class="block">
+    <h2 class="block-title">Antes de empezar</h2>
+    <div class="checklist">
+      <ul>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span><strong>Node.js</strong> instalado en tu portátil (cualquier versión reciente sirve). Lo compruebas con <code class="inline">node -v</code> en una terminal.</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span><strong>Visual Studio Code</strong> instalado &mdash; es el editor que vamos a usar de principio a fin, terminal incluida.</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span>Tu <strong>móvil</strong> (Android o iPhone), con la app <strong>Expo Go</strong> instalada desde Play Store o App Store.</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span>Portátil y móvil conectados a la <strong>misma red wifi</strong>.</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Extensiones de VS Code</h2>
+    <div class="checklist">
+      <ul>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span>Ninguna es obligatoria: el proyecto funciona con un VS Code recién instalado, sin extra alguno.</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span><strong>ES7+ React/Redux/React-Native Snippets</strong> (dsznajder) &mdash; atajos como <code class="inline">rnfes</code> para generar un componente entero en dos teclas. La más rentable para una clase.</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span><strong>Prettier &ndash; Code formatter</strong> &mdash; ordena el código solo al guardar. Útil para que el código de todos los alumnos tenga el mismo formato de un vistazo.</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span><strong>Expo Tools</strong> (Expo) &mdash; resalta la sintaxis de <code class="inline">app.json</code>/<code class="inline">app.config.js</code> y permite lanzar comandos de Expo desde VS Code.</span>
+        </li>
+      </ul>
+    </div>
+    <p style="color:var(--muted); font-size:14.5px; margin-top:12px;">Se instalan igual todas: icono de piezas de puzle en la barra lateral izquierda (<code class="inline">Ctrl+Shift+X</code>), buscas el nombre, &ldquo;Install&rdquo;. Si activas Prettier, actívale también &ldquo;Format on Save&rdquo; en Settings para que actúe solo.</p>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Qué vas a aprender</h2>
+    <ul class="learn-list">
+      <li>Cómo se arranca y se prueba una app de React Native en un móvil real, sin compilar nada nativo.</li>
+      <li>Los componentes básicos: <code class="inline">View</code>, <code class="inline">Text</code>, <code class="inline">Pressable</code>.</li>
+      <li>Cómo guardar y mostrar un valor que cambia con <code class="inline">useState</code>.</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Los pasos</h2>
+
+    <div class="step">
+      <div class="step-chip">1</div>
+      <div class="step-body">
+        <h3>Abre VS Code y su terminal integrada</h3>
+        <p>No hace falta salir de VS Code en ningún momento: tiene una terminal propia. Ábrela con <code class="inline">Ctrl</code> + <code class="inline">&#96;</code> (comilla invertida), o desde el menú <strong>Terminal &rarr; Nueva terminal</strong>.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">2</div>
+      <div class="step-body">
+        <h3>Crea el proyecto</h3>
+        <p>En esa terminal, sitúate en la carpeta donde quieras guardar tus proyectos y ejecuta:</p>
+        <div class="term">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code><span class="prompt">$</span> npx create-expo-app mi-primera-app
+<span class="prompt">$</span> cd mi-primera-app</code></pre>
+        </div>
+        <p class="small">Sin ningún <code class="inline">--template</code>, obtienes la plantilla oficial por defecto: un proyecto ya en <strong>TypeScript</strong>, con la navegación resuelta por <strong>Expo Router</strong> (cada archivo dentro de <code class="inline">app/</code> es una pantalla) y un par de pestañas de ejemplo ya montadas.</p>
+        <p class="small">Tarda entre 30 segundos y un par de minutos, según tu conexión.</p>
+
+        <div class="checkpoint">
+          <div class="checkpoint-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Deberías ver esto
+          </div>
+          <p>Una lista de paquetes instalándose y, al final, algo como <code class="inline">✅ Your project is ready!</code>. Si te pregunta por un gestor de paquetes, elige <code class="inline">npm</code> (la opción por defecto, tecla Enter).</p>
+        </div>
+
+        <div class="substep">
+          <div class="substep-chip">2.1</div>
+          <div class="step-body">
+            <h4>Limpia la plantilla de ejemplo</h4>
+            <p>La plantilla por defecto trae dos pestañas de muestra (&ldquo;Home&rdquo; y &ldquo;Explore&rdquo;) con componentes temáticos que no necesitamos para esta guía. Expo incluye un script que las aparta automáticamente:</p>
+            <div class="term">
+              <div class="term-bar"><span></span><span></span><span></span></div>
+              <pre><code><span class="prompt">$</span> npm run reset-project</code></pre>
+            </div>
+            <p class="small">Mueve todo el ejemplo a una carpeta <code class="inline">app-example/</code> (que puedes borrar cuando quieras) y deja <code class="inline">app/</code> con solo dos archivos: <code class="inline">_layout.tsx</code> y <code class="inline">index.tsx</code>. Contesta &ldquo;y&rdquo; si te pregunta si quieres continuar.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">3</div>
+      <div class="step-body">
+        <h3>Abre la carpeta del proyecto en VS Code</h3>
+        <div class="term">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code><span class="prompt">$</span> code .</code></pre>
+        </div>
+        <p class="small">Si <code class="inline">code .</code> no hace nada, usa el menú <strong>File &rarr; Open Folder&hellip;</strong> y selecciona la carpeta <code class="inline">mi-primera-app</code>. Verás sus archivos en el panel de la izquierda (el Explorer).</p>
+        <p class="small">La primera vez, VS Code puede preguntarte &ldquo;Do you trust the authors of this folder?&rdquo; &mdash; dale a <strong>Yes, I trust the authors</strong>, es tu propio proyecto.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">4</div>
+      <div class="step-body">
+        <h3>Arranca el servidor</h3>
+        <div class="term">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code><span class="prompt">$</span> npm start</code></pre>
+        </div>
+        <p>En la terminal integrada aparecerá un <strong>código QR</strong>. Déjalo abierto: es el servidor de desarrollo, tiene que seguir corriendo mientras trabajas.</p>
+
+        <div class="checkpoint">
+          <div class="checkpoint-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Deberías ver esto
+          </div>
+          <p>Un QR grande, y debajo un menú de texto con opciones como <code class="inline">Press a │ open Android</code>, <code class="inline">Press w │ open web</code>. No pulses ninguna letra todavía &mdash; vamos a usar el QR con el móvil.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">5</div>
+      <div class="step-body">
+        <h3>Ábrelo en el móvil</h3>
+        <p><strong>Android:</strong> abre la app Expo Go, pulsa el botón &ldquo;Scan QR code&rdquo; y apunta a la pantalla.</p>
+        <p><strong>iPhone:</strong> abre la app <strong>Cámara</strong> normal (no Expo Go) y apunta al QR; te saldrá un aviso arriba para abrirlo en Expo Go.</p>
+        <p class="small">La primera vez tarda un poco más: el móvil está descargando el bundle de JS de tu app.</p>
+
+        <div class="checkpoint">
+          <div class="checkpoint-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Deberías ver esto
+          </div>
+          <p>Una pantalla blanca con el texto &ldquo;Edit app/index.tsx to edit this screen.&rdquo; centrado. Si ves eso, todo está conectado correctamente.</p>
+        </div>
+
+        <div class="callout">
+          <div class="callout-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+            Si el móvil dice &ldquo;Project is incompatible with this version of Expo Go&rdquo;
+          </div>
+          <p>Expo Go de las tiendas suele ir un paso por detrás de la última versión de Expo. Baja el proyecto a la versión que sí soporta la app de la tienda:</p>
+          <div class="term">
+            <div class="term-bar"><span></span><span></span><span></span></div>
+            <pre><code><span class="prompt">$</span> npx expo install expo@^54.0.0
+<span class="prompt">$</span> npx expo install --fix</code></pre>
+          </div>
+          <p>Para y vuelve a lanzar <code class="inline">npm start</code>, y escanea otra vez.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">6</div>
+      <div class="step-body">
+        <h3>Abre <code class="inline">app/index.tsx</code></h3>
+        <p>En el Explorer de la izquierda, despliega la carpeta <code class="inline">app</code> y haz clic en <code class="inline">index.tsx</code>. Es el único archivo que necesitas tocar para esta guía: es la pantalla que Expo Router muestra en la ruta raíz (&ldquo;/&rdquo;) de la app. Ya trae un ejemplo mínimo: un fondo blanco con un texto centrado. Ese será tu punto de partida.</p>
+        <p class="small">¿No ves <code class="inline">index.tsx</code> directamente dentro de <code class="inline">app/</code>, sino una carpeta <code class="inline">(tabs)</code> y varios archivos más? Es señal de que falta el paso 2.1: cierra el servidor con <code class="inline">Ctrl+C</code> y ejecuta <code class="inline">npm run reset-project</code>.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">7</div>
+      <div class="step-body">
+        <h3>Escribe el contador</h3>
+        <p>Vamos a construirlo por partes dentro de <code class="inline">app/index.tsx</code>, para que veas qué hace cada trozo antes de juntarlo todo. Aprovecha el autocompletado de VS Code mientras escribes &mdash; al ser TypeScript, te avisará en rojo si te falta un tipo o te equivocas de nombre de propiedad.</p>
+
+        <div class="substep">
+          <div class="substep-chip">7.1</div>
+          <div class="step-body">
+            <h4>Importa lo que necesitas</h4>
+            <p>Borra el contenido de <code class="inline">app/index.tsx</code> y empieza por estas tres líneas:</p>
+            <div class="code-panel">
+              <div class="term-bar"><span></span><span></span><span></span></div>
+              <pre><code><span class="kw">import</span> { useState } <span class="kw">from</span> <span class="str">'react'</span>;
+<span class="kw">import</span> { StatusBar } <span class="kw">from</span> <span class="str">'expo-status-bar'</span>;
+<span class="kw">import</span> { StyleSheet, Text, View, Pressable } <span class="kw">from</span> <span class="str">'react-native'</span>;</code></pre>
+            </div>
+            <p><code class="inline">react</code> te da <code class="inline">useState</code>; <code class="inline">react-native</code> te da los componentes visuales: <code class="inline">View</code> (un contenedor, como un <code class="inline">div</code>), <code class="inline">Text</code> (todo texto tiene que ir dentro de uno) y <code class="inline">Pressable</code> (un botón táctil).</p>
+          </div>
+        </div>
+
+        <div class="substep">
+          <div class="substep-chip">7.2</div>
+          <div class="step-body">
+            <h4>Guarda el número que cambia</h4>
+            <p>Debajo, crea el componente con su estado:</p>
+            <div class="code-panel">
+              <div class="term-bar"><span></span><span></span><span></span></div>
+              <pre><code><span class="kw">export default function</span> <span class="tag">Index</span>() {
+  <span class="kw">const</span> [contador, setContador] = useState&lt;<span class="tag">number</span>&gt;(<span class="hl">0</span>);
+
+  <span class="kw">return</span> (
+    &lt;<span class="tag">View</span> <span class="prop">style</span>={styles.container}&gt;
+    &lt;/<span class="tag">View</span>&gt;
+  );
+}</code></pre>
+            </div>
+            <p><code class="inline">useState&lt;number&gt;(0)</code> arranca en cero y le dice a TypeScript que <code class="inline">contador</code> siempre va a ser un número &mdash; si más adelante intentas guardarle un texto por error, el editor te lo marcará antes de llegar al móvil. Te da dos cosas: <code class="inline">contador</code> (el valor actual, solo lectura) y <code class="inline">setContador</code> (la única forma permitida de cambiarlo).</p>
+          </div>
+        </div>
+
+        <div class="substep">
+          <div class="substep-chip">7.3</div>
+          <div class="step-body">
+            <h4>Dibuja la pantalla</h4>
+            <p>Rellena ese <code class="inline">View</code> vacío:</p>
+            <div class="code-panel">
+              <div class="term-bar"><span></span><span></span><span></span></div>
+              <pre><code>    &lt;<span class="tag">View</span> <span class="prop">style</span>={styles.container}&gt;
+      &lt;<span class="tag">Text</span> <span class="prop">style</span>={styles.titulo}&gt;¡Hola, React Native!&lt;/<span class="tag">Text</span>&gt;
+      &lt;<span class="tag">Text</span> <span class="prop">style</span>={styles.contador}&gt;{contador}&lt;/<span class="tag">Text</span>&gt;
+      &lt;<span class="tag">Pressable</span> <span class="prop">style</span>={styles.boton} <span class="prop">onPress</span>={() =&gt; setContador(contador + <span class="hl">1</span>)}&gt;
+        &lt;<span class="tag">Text</span> <span class="prop">style</span>={styles.textoBoton}&gt;Sumar 1&lt;/<span class="tag">Text</span>&gt;
+      &lt;/<span class="tag">Pressable</span>&gt;
+      &lt;<span class="tag">StatusBar</span> <span class="prop">style</span>=<span class="str">"auto"</span> /&gt;
+    &lt;/<span class="tag">View</span>&gt;</code></pre>
+            </div>
+            <p><code class="inline">onPress</code> se ejecuta cada vez que tocas el <code class="inline">Pressable</code>. Al llamar a <code class="inline">setContador</code>, React vuelve a dibujar la pantalla solo con el número nuevo &mdash; tú no tocas el texto a mano en ningún sitio.</p>
+          </div>
+        </div>
+
+        <div class="substep">
+          <div class="substep-chip">7.4</div>
+          <div class="step-body">
+            <h4>Dale estilo</h4>
+            <p>Y cierra el archivo con los estilos, fuera del componente:</p>
+            <div class="code-panel">
+              <div class="term-bar"><span></span><span></span><span></span></div>
+              <pre><code><span class="kw">const</span> styles = StyleSheet.create({
+  container: {
+    flex: <span class="hl">1</span>,
+    backgroundColor: <span class="str">'#fff'</span>,
+    alignItems: <span class="str">'center'</span>,
+    justifyContent: <span class="str">'center'</span>,
+    gap: <span class="hl">16</span>,
+  },
+  titulo: { fontSize: <span class="hl">22</span>, fontWeight: <span class="str">'bold'</span> },
+  contador: { fontSize: <span class="hl">48</span> },
+  boton: {
+    backgroundColor: <span class="str">'#2563eb'</span>,
+    paddingVertical: <span class="hl">12</span>,
+    paddingHorizontal: <span class="hl">24</span>,
+    borderRadius: <span class="hl">8</span>,
+  },
+  textoBoton: { color: <span class="str">'#fff'</span>, fontSize: <span class="hl">18</span> },
+});</code></pre>
+            </div>
+            <p><code class="inline">StyleSheet.create</code> es un objeto de JavaScript, no CSS: los nombres van en camelCase (<code class="inline">backgroundColor</code>, no <code class="inline">background-color</code>) y no hay herencia entre elementos.</p>
+          </div>
+        </div>
+
+        <details class="full-code">
+          <summary>Ver el archivo completo, por si quieres comparar</summary>
+          <div class="code-panel">
+            <div class="term-bar"><span></span><span></span><span></span></div>
+            <pre><code><span class="kw">import</span> { useState } <span class="kw">from</span> <span class="str">'react'</span>;
+<span class="kw">import</span> { StatusBar } <span class="kw">from</span> <span class="str">'expo-status-bar'</span>;
+<span class="kw">import</span> { StyleSheet, Text, View, Pressable } <span class="kw">from</span> <span class="str">'react-native'</span>;
+
+<span class="kw">export default function</span> <span class="tag">Index</span>() {
+  <span class="kw">const</span> [contador, setContador] = useState&lt;<span class="tag">number</span>&gt;(<span class="hl">0</span>);
+
+  <span class="kw">return</span> (
+    &lt;<span class="tag">View</span> <span class="prop">style</span>={styles.container}&gt;
+      &lt;<span class="tag">Text</span> <span class="prop">style</span>={styles.titulo}&gt;¡Hola, React Native!&lt;/<span class="tag">Text</span>&gt;
+      &lt;<span class="tag">Text</span> <span class="prop">style</span>={styles.contador}&gt;{contador}&lt;/<span class="tag">Text</span>&gt;
+      &lt;<span class="tag">Pressable</span> <span class="prop">style</span>={styles.boton} <span class="prop">onPress</span>={() =&gt; setContador(contador + <span class="hl">1</span>)}&gt;
+        &lt;<span class="tag">Text</span> <span class="prop">style</span>={styles.textoBoton}&gt;Sumar 1&lt;/<span class="tag">Text</span>&gt;
+      &lt;/<span class="tag">Pressable</span>&gt;
+      &lt;<span class="tag">StatusBar</span> <span class="prop">style</span>=<span class="str">"auto"</span> /&gt;
+    &lt;/<span class="tag">View</span>&gt;
+  );
+}
+
+<span class="kw">const</span> styles = StyleSheet.create({
+  container: {
+    flex: <span class="hl">1</span>,
+    backgroundColor: <span class="str">'#fff'</span>,
+    alignItems: <span class="str">'center'</span>,
+    justifyContent: <span class="str">'center'</span>,
+    gap: <span class="hl">16</span>,
+  },
+  titulo: { fontSize: <span class="hl">22</span>, fontWeight: <span class="str">'bold'</span> },
+  contador: { fontSize: <span class="hl">48</span> },
+  boton: {
+    backgroundColor: <span class="str">'#2563eb'</span>,
+    paddingVertical: <span class="hl">12</span>,
+    paddingHorizontal: <span class="hl">24</span>,
+    borderRadius: <span class="hl">8</span>,
+  },
+  textoBoton: { color: <span class="str">'#fff'</span>, fontSize: <span class="hl">18</span> },
+});</code></pre>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">8</div>
+      <div class="step-body">
+        <h3>Guarda y mira el móvil</h3>
+        <p>Guarda con <code class="inline">Ctrl+S</code>. No hace falta volver a escanear nada: en cuanto guardas, el móvil se actualiza solo (esto se llama <strong>Fast Refresh</strong>).</p>
+
+        <div class="checkpoint">
+          <div class="checkpoint-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Deberías ver esto
+          </div>
+          <p>El texto &ldquo;¡Hola, React Native!&rdquo;, un <code class="inline">0</code> grande debajo, y un botón azul &ldquo;Sumar 1&rdquo;. Tócalo: el número sube a 1, 2, 3&hellip; Si no cambia nada, revisa que guardaste el archivo y que el servidor sigue corriendo.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">9</div>
+      <div class="step-body">
+        <h3>Para cuando termines</h3>
+        <p>En el móvil no hay que hacer nada especial, puedes cerrar la app sin más. En la terminal integrada de VS Code, pulsa <code class="inline">Ctrl+C</code> para apagar el servidor &mdash; nunca <code class="inline">Ctrl+Z</code>, que solo lo deja colgado en segundo plano ocupando el puerto.</p>
+      </div>
+    </div>
+
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Si algo falla</h2>
+    <div class="trouble">
+      <div class="trouble-item">
+        <p class="q">Dentro de <code class="inline">app/</code> veo una carpeta <code class="inline">(tabs)</code>, <code class="inline">explore.tsx</code> y un montón de componentes que no hemos escrito</p>
+        <p>Es la plantilla de ejemplo de Expo Router, que trae dos pestañas montadas por defecto. Se te olvidó el paso 2.1: para el servidor con <code class="inline">Ctrl+C</code>, ejecuta <code class="inline">npm run reset-project</code> y contesta &ldquo;y&rdquo;. Al terminar, <code class="inline">app/</code> se queda solo con <code class="inline">_layout.tsx</code> e <code class="inline">index.tsx</code>.</p>
+      </div>
+      <div class="trouble-item">
+        <p class="q">El móvil dejó de recibir cambios a mitad de clase</p>
+        <p>Casi siempre es porque el móvil cambió de red (por ejemplo, pasó a datos móviles). Portátil y móvil tienen que estar en la misma wifi. Si la wifi del centro aísla los dispositivos entre sí, arranca con <code class="inline">npx expo start --tunnel</code> en su lugar.</p>
+      </div>
+      <div class="trouble-item">
+        <p class="q">¿Hay que reiniciar todo cada vez que cambio código?</p>
+        <p>No. Mientras el servidor siga encendido, cada guardado se refleja solo en el móvil. Solo hace falta reiniciar si instalas una librería nueva o tocas la configuración del proyecto.</p>
+      </div>
+      <div class="trouble-item">
+        <p class="q">Aparecen &ldquo;vulnerabilities&rdquo; al instalar</p>
+        <p>Son avisos sobre herramientas internas de desarrollo, no sobre tu app ni sobre lo que corre en el móvil. Para una clase, se pueden ignorar sin problema &mdash; y sobre todo, no ejecutéis <code class="inline">npm audit fix --force</code>, puede cambiaros la versión de Expo sin avisar.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="end">
+    Siguiente paso natural: cambiar el texto, los colores, o añadir una imagen con <code class="inline">Image</code> y <code class="inline">require()</code>.
+  </footer>
+
+</div>

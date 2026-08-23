@@ -1,0 +1,698 @@
+<title>Temario React Native</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #E4572E;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #F2764C;
+      --accent-ink: #17110D;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #F2764C;
+    --accent-ink: #17110D;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top { margin-bottom: 36px; }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.9rem, 4.5vw, 2.5rem);
+    line-height: 1.14;
+    letter-spacing: -0.01em;
+    margin: 16px 0 8px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.05rem;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .meta-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .overview-wrap { overflow-x: auto; margin-top: 8px; }
+
+  table.overview {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    font-size: 14.5px;
+  }
+
+  table.overview th {
+    text-align: left;
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 12.5px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  table.overview td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--line-soft);
+    vertical-align: top;
+  }
+
+  table.overview tr:last-child td { border-bottom: none; }
+
+  table.overview td.num { font-variant-numeric: tabular-nums; color: var(--muted); }
+
+  table.overview .block-name { font-weight: 600; }
+  table.overview .block-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 8px;
+  }
+
+  section.phase { margin-top: 56px; }
+
+  .phase-head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 6px;
+  }
+
+  .phase-num {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    color: var(--accent-2);
+    font-weight: 500;
+  }
+
+  h2.phase-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 1.4rem;
+    margin: 0;
+  }
+
+  .phase-meta {
+    color: var(--muted);
+    font-size: 13.5px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    margin-left: auto;
+    white-space: nowrap;
+  }
+
+  .phase-summary {
+    color: var(--muted);
+    font-size: 15px;
+    max-width: 62ch;
+    margin: 6px 0 24px;
+  }
+
+  .session {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-top: 12px;
+    box-shadow: var(--shadow);
+    display: flex;
+    gap: 14px;
+  }
+
+  .session-chip {
+    flex: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .session-body { flex: 1; min-width: 0; }
+
+  .session h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.02rem;
+    font-weight: 600;
+    margin: 0 0 5px;
+  }
+
+  .session h3 a {
+    color: inherit;
+    text-decoration: none;
+    background-image: linear-gradient(var(--accent-2), var(--accent-2));
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 0% 1.5px;
+    transition: background-size 0.15s ease;
+    padding-bottom: 1px;
+  }
+
+  .session h3 a:hover,
+  .session h3 a:focus-visible {
+    color: var(--accent-2);
+    background-size: 100% 1.5px;
+  }
+
+  .session h3 a::after {
+    content: " \2197";
+    font-size: 0.8em;
+    color: var(--muted);
+  }
+
+  .session p.objetivo {
+    margin: 0 0 8px;
+    color: var(--ink);
+    font-size: 14.5px;
+  }
+
+  .session .linea {
+    font-size: 13.5px;
+    color: var(--muted);
+    margin: 4px 0 0;
+  }
+
+  .session .linea strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .session .practica {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px dashed var(--line);
+    font-size: 13.5px;
+  }
+
+  .session .practica strong { color: var(--accent-2); }
+
+  footer.end {
+    margin-top: 56px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+  }
+
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+
+  .checkpoint p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink);
+  }
+</style>
+
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">Temario de clase</span>
+    <h1>React Native desde cero</h1>
+    <p class="lede">26 sesiones de 2 horas (2 por semana) para llevar a un grupo desde su primera línea de JavaScript hasta una app móvil propia, escrita en TypeScript, funcionando en su teléfono.</p>
+    <div class="meta-row">
+      <span class="meta-chip">26 sesiones</span>
+      <span class="meta-chip">52 h totales</span>
+      <span class="meta-chip">13 semanas</span>
+      <span class="meta-chip">2 × 2h / semana</span>
+    </div>
+  </header>
+
+  <div class="overview-wrap">
+    <table class="overview">
+      <thead>
+        <tr>
+          <th>Bloque</th>
+          <th>Sesiones</th>
+          <th>Horas</th>
+          <th>Semanas</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="block-name"><span class="block-dot" style="background:#E4572E"></span>JavaScript desde cero</td>
+          <td class="num">1&ndash;4</td>
+          <td class="num">8 h</td>
+          <td class="num">1&ndash;2</td>
+        </tr>
+        <tr>
+          <td class="block-name"><span class="block-dot" style="background:#3178C6"></span>TypeScript</td>
+          <td class="num">5&ndash;6</td>
+          <td class="num">4 h</td>
+          <td class="num">3</td>
+        </tr>
+        <tr>
+          <td class="block-name"><span class="block-dot" style="background:#0F8B8D"></span>React</td>
+          <td class="num">7&ndash;10</td>
+          <td class="num">8 h</td>
+          <td class="num">4&ndash;5</td>
+        </tr>
+        <tr>
+          <td class="block-name"><span class="block-dot" style="background:#d4af37"></span>React Native</td>
+          <td class="num">11&ndash;18</td>
+          <td class="num">16 h</td>
+          <td class="num">6&ndash;9</td>
+        </tr>
+        <tr>
+          <td class="block-name"><span class="block-dot" style="background:#7c6bd8"></span>Proyecto final</td>
+          <td class="num">19&ndash;26</td>
+          <td class="num">16 h</td>
+          <td class="num">10&ndash;13</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <section class="phase" style="margin-top: 36px;">
+    <h2 class="block-title" style="font-family:'Lexend',sans-serif;font-weight:600;font-size:1.05rem;letter-spacing:0.01em;color:var(--muted);text-transform:uppercase;margin:0 0 12px;">Guías de apoyo ya preparadas</h2>
+    <div class="checkpoint" style="margin:0;">
+      <div class="checkpoint-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        Contador en Expo
+      </div>
+      <p>Tutorial paso a paso, con subpasos y checkpoints, para construir y probar la primera app en el móvil desde VS Code, con la plantilla de Expo Router y TypeScript por defecto. Es la práctica de la <a href="#sesion-11">sesión 11</a>. <a href="contador-en-expo.html">Abrir guía &#8599;</a></p>
+    </div>
+  </section>
+
+  <!-- BLOQUE 1 -->
+  <section class="phase">
+    <div class="phase-head">
+      <span class="phase-num">Bloque 1</span>
+      <h2 class="phase-title">JavaScript desde cero</h2>
+      <span class="phase-meta">Sesiones 1&ndash;4 · Semanas 1&ndash;2</span>
+    </div>
+    <p class="phase-summary">Sin esto, React Native es sintaxis sin sentido. El objetivo no es dominar JS, es tener las manos suficientes para no tropezar constantemente cuando empiece React.</p>
+
+    <div class="session">
+      <div class="session-chip">1</div>
+      <div class="session-body">
+        <h3><a href="sesion-01-fundamentos-del-lenguaje.html">Fundamentos del lenguaje</a></h3>
+        <p class="objetivo">Ejecutar código, guardar datos y tomar decisiones.</p>
+        <p class="linea"><strong>Contenido:</strong> variables (let, const), tipos de datos, operadores, condicionales (if/else), comparación (===).</p>
+        <p class="practica"><strong>Práctica:</strong> programa de consola sencillo (clasificador de edad / calculadora de IMC).</p>
+      </div>
+    </div>
+
+    <div class="session">
+      <div class="session-chip">2</div>
+      <div class="session-body">
+        <h3><a href="sesion-02-funciones-y-bucles.html">Funciones y bucles</a></h3>
+        <p class="objetivo">Dejar de repetir código a mano.</p>
+        <p class="linea"><strong>Contenido:</strong> function y arrow functions, parámetros y retorno, for, while, scope básico.</p>
+        <p class="practica"><strong>Práctica:</strong> FizzBuzz o generador de tablas de multiplicar.</p>
+      </div>
+    </div>
+
+    <div class="session">
+      <div class="session-chip">3</div>
+      <div class="session-body">
+        <h3><a href="sesion-03-arrays-y-objetos.html">Arrays y objetos</a></h3>
+        <p class="objetivo">Modelar colecciones de datos, la base de casi toda app real.</p>
+        <p class="linea"><strong>Contenido:</strong> arrays y sus métodos (map, filter, find, reduce), objetos y propiedades, destructuring, spread/rest.</p>
+        <p class="practica"><strong>Práctica:</strong> gestionar una lista de "alumnos" (array de objetos) con filtros y transformaciones.</p>
+      </div>
+    </div>
+
+    <div class="session">
+      <div class="session-chip">4</div>
+      <div class="session-body">
+        <h3><a href="sesion-04-js-moderno-y-asincrono.html">JS moderno y asíncrono</a></h3>
+        <p class="objetivo">Preparar el terreno justo para React: módulos y código que "espera".</p>
+        <p class="linea"><strong>Contenido:</strong> import/export, template literals, introducción a promesas y async/await con una llamada real a <code>fetch</code>.</p>
+        <p class="practica"><strong>Práctica:</strong> ejercicio integrador del bloque + primera petición a una API pública.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOQUE 2 -->
+  <section class="phase">
+    <div class="phase-head">
+      <span class="phase-num">Bloque 2</span>
+      <h2 class="phase-title">TypeScript</h2>
+      <span class="phase-meta">Sesiones 5&ndash;6 · Semana 3</span>
+    </div>
+    <p class="phase-summary">El proyecto de Expo que vais a crear viene en TypeScript por defecto, así que esta capa se aprende ahora, con el mismo JavaScript ya conocido, antes de mezclarla con componentes y JSX.</p>
+
+    <div class="session">
+      <div class="session-chip">5</div>
+      <div class="session-body">
+        <h3><a href="sesion-05-typescript-fundamentos.html">TypeScript: fundamentos</a></h3>
+        <p class="objetivo">Añadir tipos al JavaScript que ya conocéis, y ver el error en el editor antes de ejecutar nada.</p>
+        <p class="linea"><strong>Contenido:</strong> tipos básicos (string, number, boolean, arrays), tipar funciones, <code>type</code> / <code>interface</code>, tipos unión y literales.</p>
+        <p class="practica"><strong>Práctica:</strong> volver a los ejercicios de las sesiones 1 y 3 (calculadora de IMC, lista de alumnos) y añadirles tipos.</p>
+      </div>
+    </div>
+
+    <div class="session">
+      <div class="session-chip">6</div>
+      <div class="session-body">
+        <h3><a href="sesion-06-typescript-en-la-practica.html">TypeScript en la práctica</a></h3>
+        <p class="objetivo">Lo que hace falta a diario: datos opcionales, datos que llegan de fuera, y un adelanto de cómo se tipan las props de un componente.</p>
+        <p class="linea"><strong>Contenido:</strong> propiedades opcionales y <code>readonly</code>, <code>any</code> frente a <code>unknown</code>, tipar la respuesta de un <code>fetch</code>, genéricos básicos.</p>
+        <p class="practica"><strong>Práctica:</strong> tipar la función <code>fetch</code> de la sesión 4 y escribir el primer <code>type</code> de props, sin JSX todavía.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOQUE 3 -->
+  <section class="phase">
+    <div class="phase-head">
+      <span class="phase-num">Bloque 3</span>
+      <h2 class="phase-title">React</h2>
+      <span class="phase-meta">Sesiones 7&ndash;10 · Semanas 4&ndash;5</span>
+    </div>
+    <p class="phase-summary">Todo en el navegador todavía &mdash; deliberadamente, y ya en TypeScript. Separar "cómo piensa React" de "cómo se ve en el móvil" evita mezclar dos curvas de aprendizaje a la vez.</p>
+
+    <div class="session">
+      <div class="session-chip">7</div>
+      <div class="session-body">
+        <h3><a href="sesion-07-primeros-componentes.html">Primeros componentes</a></h3>
+        <p class="objetivo">La idea central de React: la interfaz es una función de los datos.</p>
+        <p class="linea"><strong>Contenido:</strong> JSX, componentes funcionales, props tipadas con <code>type</code>, renderizar listas con <code>.map()</code>.</p>
+        <p class="practica"><strong>Práctica:</strong> tarjeta de perfil reutilizable que recibe props distintas.</p>
+      </div>
+    </div>
+
+    <div class="session">
+      <div class="session-chip">8</div>
+      <div class="session-body">
+        <h3><a href="sesion-08-estado-e-interactividad.html">Estado e interactividad</a></h3>
+        <p class="objetivo">Que la pantalla reaccione a lo que hace el usuario.</p>
+        <p class="linea"><strong>Contenido:</strong> useState, manejadores de eventos, renderizado condicional.</p>
+        <p class="practica"><strong>Práctica:</strong> contador y lista de tareas básica.</p>
+      </div>
+    </div>
+
+    <div class="session">
+      <div class="session-chip">9</div>
+      <div class="session-body">
+        <h3><a href="sesion-09-efectos-y-formularios.html">Efectos y formularios</a></h3>
+        <p class="objetivo">Sincronizar componentes con el exterior y capturar entradas.</p>
+        <p class="linea"><strong>Contenido:</strong> useEffect, formularios controlados, inputs, validación básica.</p>
+        <p class="practica"><strong>Práctica:</strong> formulario de registro con validación y feedback visual.</p>
+      </div>
+    </div>
+
+    <div class="session">
+      <div class="session-chip">10</div>
+      <div class="session-body">
+        <h3><a href="sesion-10-composicion-y-proyecto-de-repaso.html">Composición y proyecto de repaso</a></h3>
+        <p class="objetivo">Combinar componentes en una app pequeña y coherente.</p>
+        <p class="linea"><strong>Contenido:</strong> paso de props entre niveles, organización de componentes en archivos.</p>
+        <p class="practica"><strong>Práctica:</strong> mini proyecto integrador (lista de la compra: añadir, eliminar, marcar).</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOQUE 4 -->
+  <section class="phase">
+    <div class="phase-head">
+      <span class="phase-num">Bloque 4</span>
+      <h2 class="phase-title">React Native</h2>
+      <span class="phase-meta">Sesiones 11&ndash;18 · Semanas 6&ndash;9</span>
+    </div>
+    <p class="phase-summary">Aquí entra el móvil de verdad. Progresión pensada para encadenar directamente con los ejemplos ya construidos en clase (el contador, Arcanoid, Pang, Black Jack, Brisca).</p>
+
+    <div class="session" id="sesion-11">
+      <div class="session-chip">11</div>
+      <div class="session-body">
+        <h3><a href="sesion-11-del-navegador-al-movil.html">Del navegador al móvil</a></h3>
+        <p class="objetivo">Entender qué cambia entre React web y React Native.</p>
+        <p class="linea"><strong>Contenido:</strong> Expo, Expo Go, estructura de un proyecto con Expo Router, View/Text frente a div/span.</p>
+        <p class="practica"><strong>Práctica:</strong> guía &ldquo;Contador en Expo&rdquo; ya preparada, paso a paso hasta verlo en el móvil.</p>
+      </div>
+    </div>
+
+    <div class="session">
+      <div class="session-chip">12</div>
+      <div class="session-body">
+        <h3><a href="sesion-12-componentes-visuales-y-estilos.html">Componentes visuales y estilos</a></h3>
+        <p class="objetivo">Construir pantallas con los bloques básicos de RN.</p>
+        <p class="linea"><strong>Contenido:</strong> Image, Pressable, ScrollView, StyleSheet, Flexbox en RN (diferencias con CSS web).</p>
+        <p class="practica"><strong>Práctica:</strong> pantalla de perfil con imagen, textos y botones estilizados.</p>
+      </div>
+    </div>
+
+    <div class="session">
+      <div class="session-chip">13</div>
+      <div class="session-body">
+        <h3><a href="sesion-13-listas-y-gestos.html">Listas y gestos</a></h3>
+        <p class="objetivo">Mostrar colecciones de forma eficiente y capturar el dedo del usuario.</p>
+        <p class="linea"><strong>Contenido:</strong> FlatList, keyExtractor, PanResponder y gestos básicos.</p>
+        <p class="practica"><strong>Práctica:</strong> retomar el Arcanoid/Pang de clase y explicar el arrastre de la pala línea a línea.</p>
+      </div>
+    </div>
+
+    <div class="session">
+      <div class="session-chip">14</div>
+      <div class="session-body">
+        <h3><a href="sesion-14-navegacion.html">Navegación</a></h3>
+        <p class="objetivo">Pasar de una pantalla a apps de verdad, con varias.</p>
+        <p class="linea"><strong>Contenido:</strong> Expo Router, rutas por convención de archivos, rutas dinámicas, Stack y Tabs anidados.</p>
+        <p class="practica"><strong>Práctica:</strong> app de 3 pantallas navegables (lista &rarr; detalle &rarr; ajustes).</p>
+      </div>
+    </div>
+
+    <div class="session">
+      <div class="session-chip">15</div>
+      <div class="session-body">
+        <h3><a href="sesion-15-entrada-de-usuario-avanzada.html">Entrada de usuario avanzada</a></h3>
+        <p class="objetivo">Formularios e interacción compleja en móvil.</p>
+        <p class="linea"><strong>Contenido:</strong> TextInput, teclado, KeyboardAvoidingView, Modal.</p>
+        <p class="practica"><strong>Práctica:</strong> formulario de &ldquo;nueva nota&rdquo; o &ldquo;nuevo contacto&rdquo; dentro de un modal.</p>
+      </div>
+    </div>
+
+    <div class="session">
+      <div class="session-chip">16</div>
+      <div class="session-body">
+        <h3><a href="sesion-16-conectar-con-el-exterior.html">Conectar con el exterior</a></h3>
+        <p class="objetivo">Consumir datos de una API real.</p>
+        <p class="linea"><strong>Contenido:</strong> fetch, useEffect con estados de carga/error, listas de datos remotos.</p>
+        <p class="practica"><strong>Práctica:</strong> app que consulta una API pública (clima, películas&hellip;) y muestra resultados.</p>
+      </div>
+    </div>
+
+    <div class="session">
+      <div class="session-chip">17</div>
+      <div class="session-body">
+        <h3><a href="sesion-17-guardar-datos.html">Guardar datos</a></h3>
+        <p class="objetivo">Que la app recuerde algo al cerrarla y reabrirla.</p>
+        <p class="linea"><strong>Contenido:</strong> AsyncStorage, leer y escribir datos localmente.</p>
+        <p class="practica"><strong>Práctica:</strong> añadir favoritos o historial persistente a la app de la sesión anterior.</p>
+      </div>
+    </div>
+
+    <div class="session">
+      <div class="session-chip">18</div>
+      <div class="session-body">
+        <h3><a href="sesion-18-cierre-de-bloque-logica-de-juego.html">Cierre de bloque: lógica de juego</a></h3>
+        <p class="objetivo">Integrar estado complejo, condiciones y bucles de juego.</p>
+        <p class="linea"><strong>Contenido:</strong> repaso useState vs useRef para bucles de animación, máquinas de estado simples (como en Black Jack/Brisca).</p>
+        <p class="practica"><strong>Práctica:</strong> cada alumno amplía uno de los juegos de clase con una función nueva propia.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOQUE 5 -->
+  <section class="phase">
+    <div class="phase-head">
+      <span class="phase-num">Bloque 5</span>
+      <h2 class="phase-title">Proyecto final</h2>
+      <span class="phase-meta">Sesiones 19&ndash;26 · Semanas 10&ndash;13</span>
+    </div>
+    <p class="phase-summary">De aquí en adelante tú dejas de dar contenido nuevo y pasas a guiar: cada alumno o grupo construye su propia app de principio a fin.</p>
+
+    <div class="session">
+      <div class="session-chip">19</div>
+      <div class="session-body">
+        <h3><a href="sesion-19-definicion-del-proyecto.html">Definición del proyecto</a></h3>
+        <p class="objetivo">Pasar de idea a especificación realista.</p>
+        <p class="linea"><strong>Contenido:</strong> elección de idea, alcance para 7 sesiones, wireframes, lista de funcionalidades mínimas (MVP).</p>
+        <p class="practica"><strong>Práctica:</strong> entrega de propuesta de proyecto + wireframes de pantallas.</p>
+      </div>
+    </div>
+
+    <div class="session">
+      <div class="session-chip">20</div>
+      <div class="session-body">
+        <h3><a href="sesion-20-arquitectura.html">Arquitectura</a></h3>
+        <p class="objetivo">Sentar las bases técnicas antes de programar a lo loco.</p>
+        <p class="linea"><strong>Contenido:</strong> estructura de carpetas con Expo Router, planificación de pantallas y componentes.</p>
+        <p class="practica"><strong>Práctica:</strong> esqueleto navegable del proyecto (pantallas vacías ya conectadas).</p>
+      </div>
+    </div>
+
+    <div class="session">
+      <div class="session-chip">21</div>
+      <div class="session-body">
+        <h3><a href="sesion-21-desarrollo-1.html">Desarrollo I &mdash; pantallas principales</a></h3>
+        <p class="objetivo">Construir la funcionalidad core del proyecto.</p>
+        <p class="linea"><strong>Contenido:</strong> trabajo guiado individual, dudas, revisión de código en vivo.</p>
+        <p class="practica"><strong>Práctica:</strong> implementar 1&ndash;2 pantallas principales del proyecto propio.</p>
+      </div>
+    </div>
+
+    <div class="session">
+      <div class="session-chip">22</div>
+      <div class="session-body">
+        <h3><a href="sesion-22-desarrollo-2.html">Desarrollo II &mdash; interacción y estado</a></h3>
+        <p class="objetivo">Completar la lógica de negocio de la app.</p>
+        <p class="linea"><strong>Contenido:</strong> gestión de estado entre pantallas, formularios, validaciones.</p>
+        <p class="practica"><strong>Práctica:</strong> continuar el desarrollo con seguimiento individual por mesas.</p>
+      </div>
+    </div>
+
+    <div class="session">
+      <div class="session-chip">23</div>
+      <div class="session-body">
+        <h3><a href="sesion-23-datos-persistencia.html">Datos y persistencia</a></h3>
+        <p class="objetivo">Conectar el proyecto con datos reales o persistentes.</p>
+        <p class="linea"><strong>Contenido:</strong> API externa o AsyncStorage según el proyecto, manejo de errores y carga.</p>
+        <p class="practica"><strong>Práctica:</strong> integrar la fuente de datos elegida en el proyecto propio.</p>
+      </div>
+    </div>
+
+    <div class="session">
+      <div class="session-chip">24</div>
+      <div class="session-body">
+        <h3><a href="sesion-24-estado-global.html">Estado global y pulido funcional</a></h3>
+        <p class="objetivo">Resolver los dolores de cabeza de estado compartido entre pantallas.</p>
+        <p class="linea"><strong>Contenido:</strong> Context API (introducción), revisión de bugs, checklist funcional.</p>
+        <p class="practica"><strong>Práctica:</strong> refactor de estado compartido + corrección de errores pendientes.</p>
+      </div>
+    </div>
+
+    <div class="session">
+      <div class="session-chip">25</div>
+      <div class="session-body">
+        <h3><a href="sesion-25-pulido-build.html">Pulido visual y build</a></h3>
+        <p class="objetivo">Dejar la app lista para enseñarla fuera del aula.</p>
+        <p class="linea"><strong>Contenido:</strong> estilos finales, icono/splash, introducción a EAS Build para generar una build de prueba.</p>
+        <p class="practica"><strong>Práctica:</strong> generar una build instalable del proyecto propio.</p>
+      </div>
+    </div>
+
+    <div class="session">
+      <div class="session-chip">26</div>
+      <div class="session-body">
+        <h3><a href="sesion-26-demo-day.html">Demo day</a></h3>
+        <p class="objetivo">Presentar y defender el trabajo de todo el curso.</p>
+        <p class="linea"><strong>Contenido:</strong> presentaciones en vivo desde el móvil de cada alumno o grupo.</p>
+        <p class="practica"><strong>Práctica:</strong> demo + feedback final del curso.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="end">
+    Los bloques 1, 2 y 3 son intencionadamente independientes del móvil &mdash; todo en el navegador, para no mezclar la curva de aprendizaje de JavaScript/TypeScript/React con la de React Native a la vez. El bloque 4 reutiliza directamente los ejemplos ya construidos en clase (contador, Arcanoid, Pang, Black Jack, Brisca) como progresión natural de dificultad, ya con Expo Router y TypeScript de serie.
+  </footer>
+
+</div>
