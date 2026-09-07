@@ -1,0 +1,1677 @@
+<title>Arkanoid en 4 fases</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #E4572E;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #FF8A5C;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #F2764C;
+      --accent-ink: #17110D;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #F2764C;
+    --accent-ink: #17110D;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top { margin-bottom: 40px; }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.08rem;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  a.back {
+    display: inline-block;
+    margin-top: 14px;
+    color: var(--accent-2);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    text-decoration: none;
+  }
+  a.back:hover { text-decoration: underline; }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  section.block { margin-top: 44px; }
+
+  h2.block-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+
+  section.block p { margin: 0 0 14px; }
+
+  .checklist {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow);
+  }
+
+  .checklist li {
+    list-style: none;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 15px;
+  }
+
+  .checklist ul { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+
+  .checklist svg {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    color: var(--accent-2);
+  }
+
+  .learn-list {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .learn-list li {
+    list-style: none;
+    padding-left: 20px;
+    position: relative;
+    color: var(--ink);
+  }
+
+  .learn-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .fase-head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 4px;
+  }
+
+  .fase-num {
+    flex: none;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--accent-ink);
+    background: var(--accent);
+    border-radius: 999px;
+    padding: 3px 12px;
+  }
+
+  h2.fase-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    margin: 0;
+  }
+
+  .fase-objetivo {
+    color: var(--muted);
+    font-size: 15px;
+    margin: 6px 0 20px;
+  }
+
+  .step {
+    display: flex;
+    gap: 18px;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .step:first-of-type { border-top: none; padding-top: 0; }
+
+  .step-chip {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-body { flex: 1; min-width: 0; }
+
+  .step h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 4px 0 8px;
+  }
+
+  .step p { margin: 0 0 12px; color: var(--ink); }
+  .step p.small { color: var(--muted); font-size: 14.5px; }
+
+  .term {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+
+  .term-bar span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--code-line);
+  }
+
+  .term pre { margin: 0; padding: 14px 16px 16px; overflow-x: auto; }
+
+  .term code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13.6px;
+    line-height: 1.7;
+    color: var(--code-ink);
+  }
+
+  .term .prompt { color: var(--code-muted); }
+  .term .cmt { color: var(--code-muted); }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+
+  .code-panel pre { margin: 0; padding: 16px 18px 18px; overflow-x: auto; }
+
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+
+  .code-panel .tag { color: var(--accent-2); }
+  .code-panel .str { color: #C9D96B; }
+  .code-panel .kw { color: var(--code-accent); }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .prop { color: #8FB8FF; }
+  .code-panel .hl { color: var(--code-accent); }
+
+  .code-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--code-line);
+  }
+
+  .code-bar-name {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    color: var(--code-muted);
+  }
+
+  button.copy-btn {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    color: var(--code-ink);
+    background: var(--code-line);
+    border: 1px solid color-mix(in srgb, var(--code-ink) 20%, var(--code-line));
+    border-radius: 6px;
+    padding: 5px 11px;
+    cursor: pointer;
+  }
+
+  button.copy-btn:hover { background: color-mix(in srgb, var(--code-accent) 25%, var(--code-line)); }
+
+  button.copy-btn.copiado { background: var(--accent-2); color: #fff; border-color: var(--accent-2); }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+  .checkpoint p { margin: 0; font-size: 14px; color: var(--ink); }
+
+  details.full-code { margin-top: 16px; }
+
+  details.full-code summary {
+    cursor: pointer;
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--accent-2);
+    list-style: none;
+  }
+
+  details.full-code summary::-webkit-details-marker { display: none; }
+  details.full-code summary::before { content: "▸ "; }
+  details.full-code[open] summary::before { content: "▾ "; }
+
+  .trouble { display: flex; flex-direction: column; gap: 14px; }
+
+  .trouble-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .trouble-item .q {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    margin: 0 0 6px;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .trouble-item .q::before {
+    content: "?";
+    font-family: "IBM Plex Mono", monospace;
+    color: var(--accent-2);
+    font-weight: 500;
+  }
+
+  .trouble-item p { margin: 0; font-size: 14.5px; color: var(--muted); }
+  .trouble-item p + p { margin-top: 8px; }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+</style>
+
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">Guía de clase &middot; práctica de la Sesión 18</span>
+    <h1>Arkanoid en 4 fases</h1>
+    <p class="lede">El &ldquo;rompebloques&rdquo; de toda la vida, construido paso a paso: primero el escenario quieto, luego la paleta, luego la física de la pelota, y por último los bloques de verdad. Cada fase es un archivo independiente y funcionando &mdash; nunca te quedas con código a medias.</p>
+    <div class="meta-row">
+      <span class="meta-chip">React Native + Expo</span>
+      <span class="meta-chip">TypeScript</span>
+      <span class="meta-chip">PanResponder</span>
+      <span class="meta-chip">useRef + bucle de juego</span>
+      <span class="meta-chip">~45 min</span>
+    </div>
+    <a class="back" href="sesion-18-cierre-de-bloque-logica-de-juego.html">&larr; Volver a la Sesión 18</a>
+  </header>
+
+  <section class="block">
+    <h2 class="block-title">Antes de empezar</h2>
+    <div class="checklist">
+      <ul>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span>Node.js y VS Code instalados, y un proyecto de Expo funcionando en tu móvil. Si todavía no tienes ninguno, sigue primero <a href="contador-en-expo.html">la guía &ldquo;Contador en Expo&rdquo;</a> &mdash; los pasos de creación son idénticos, solo cambia el nombre del proyecto.</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span>Haber visto <code class="inline">useState</code> (Sesión 8), <code class="inline">useEffect</code> (Sesión 9) y, sobre todo, tener fresca la Sesión 18: aquí vamos a construir en vivo el &ldquo;Patrón A&rdquo; (bucle en tiempo real con <code class="inline">useRef</code>) que esa sesión solo explica en teoría.</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Qué vas a construir</h2>
+    <p>Cuatro pantallas, cada una un poco más completa que la anterior. Ninguna se queda a medias: en cualquier fase tienes algo que se ve y se toca.</p>
+    <ul class="learn-list">
+      <li><strong>Fase 1 &middot; Escenario estático</strong> &mdash; la paleta, la pelota y los bloques colocados en su sitio, sin moverse. Solo layout con <code class="inline">View</code> y posición absoluta.</li>
+      <li><strong>Fase 2 &middot; Mover la paleta</strong> &mdash; arrastras el dedo (o el ratón, en la versión web) y la paleta te sigue, con <code class="inline">PanResponder</code> y un <code class="inline">useState</code> normal.</li>
+      <li><strong>Fase 3 &middot; La pelota rebota sola</strong> &mdash; la pelota se mueve 60 veces por segundo y rebota en paredes y en la paleta. Aquí pasamos del <code class="inline">useState</code> al <code class="inline">useRef</code> + bucle de la Sesión 18, porque ya no nos lo podemos permitir.</li>
+      <li><strong>Fase 4 &middot; Romper bloques y ganar</strong> &mdash; los bloques pasan a formar parte del estado del juego: la pelota choca con ellos, los rompe, y ganas si los destruyes todos.</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Preparación: crea el proyecto</h2>
+
+    <div class="step">
+      <div class="step-chip">1</div>
+      <div class="step-body">
+        <h3>Crea un proyecto de Expo nuevo</h3>
+        <p>En la terminal integrada de VS Code:</p>
+        <div class="term">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code><span class="prompt">$</span> npx create-expo-app arkanoid
+<span class="prompt">$</span> cd arkanoid
+<span class="prompt">$</span> npm run reset-project</code></pre>
+        </div>
+        <p class="small">Contesta &ldquo;n&rdquo; si <code class="inline">reset-project</code> te pregunta si quieres mover los archivos de ejemplo a <code class="inline">/example</code> en vez de borrarlos &mdash; para este proyecto no los necesitamos. Al terminar, te quedan solo <code class="inline">src/app/_layout.tsx</code> y <code class="inline">src/app/index.tsx</code>.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">2</div>
+      <div class="step-body">
+        <h3>Crea los 4 archivos de las fases</h3>
+        <p>Dentro de <code class="inline">src/app/</code>, crea cuatro archivos vacíos: <code class="inline">fase1.tsx</code>, <code class="inline">fase2.tsx</code>, <code class="inline">fase3.tsx</code> y <code class="inline">fase4.tsx</code>. Con Expo Router, el simple hecho de crear el archivo ya le da una ruta &mdash; <code class="inline">fase1.tsx</code> será accesible en <code class="inline">/fase1</code>, sin tocar ninguna configuración.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">3</div>
+      <div class="step-body">
+        <h3>Convierte <code class="inline">index.tsx</code> en un menú</h3>
+        <p>Para no tener que escribir la ruta a mano cada vez, deja un menú con un enlace a cada fase:</p>
+        <div class="code-panel">
+          <div class="code-bar"><span class="code-bar-name">src/app/index.tsx</span></div>
+          <pre><code><span class="kw">import</span> { Link } <span class="kw">from</span> <span class="str">'expo-router'</span>;
+<span class="kw">import</span> { StyleSheet, Text, View } <span class="kw">from</span> <span class="str">'react-native'</span>;
+
+<span class="kw">export default function</span> <span class="tag">Index</span>() {
+  <span class="kw">return</span> (
+    &lt;<span class="tag">View</span> <span class="prop">style</span>={styles.container}&gt;
+      &lt;<span class="tag">Text</span> <span class="prop">style</span>={styles.titulo}&gt;🧱 Arkanoid en 4 fases&lt;/<span class="tag">Text</span>&gt;
+      &lt;<span class="tag">Link</span> <span class="prop">href</span>=<span class="str">"/fase1"</span> <span class="prop">style</span>={styles.enlace}&gt;Fase 1&lt;/<span class="tag">Link</span>&gt;
+      &lt;<span class="tag">Link</span> <span class="prop">href</span>=<span class="str">"/fase2"</span> <span class="prop">style</span>={styles.enlace}&gt;Fase 2&lt;/<span class="tag">Link</span>&gt;
+      &lt;<span class="tag">Link</span> <span class="prop">href</span>=<span class="str">"/fase3"</span> <span class="prop">style</span>={styles.enlace}&gt;Fase 3&lt;/<span class="tag">Link</span>&gt;
+      &lt;<span class="tag">Link</span> <span class="prop">href</span>=<span class="str">"/fase4"</span> <span class="prop">style</span>={styles.enlace}&gt;Fase 4&lt;/<span class="tag">Link</span>&gt;
+    &lt;/<span class="tag">View</span>&gt;
+  );
+}
+<span class="com">// … + StyleSheet.create con "container", "titulo" y "enlace" a tu gusto.</span></code></pre>
+        </div>
+        <p><code class="inline">Link</code> de <code class="inline">expo-router</code> funciona como una etiqueta <code class="inline">&lt;a&gt;</code>: le das un <code class="inline">href</code> con la ruta y se encarga de la navegación al tocarlo.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">4</div>
+      <div class="step-body">
+        <h3>Arranca el servidor y prueba el menú</h3>
+        <div class="term">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code><span class="prompt">$</span> npm start</code></pre>
+        </div>
+        <div class="checkpoint">
+          <div class="checkpoint-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Deberías ver esto
+          </div>
+          <p>Un título y 4 botones de texto. Al tocar cualquiera te dará un error o pantalla en blanco &mdash; normal, esos archivos siguen vacíos. Vamos a rellenarlos, uno por fase.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="fase-head">
+      <span class="fase-num">Fase 1</span>
+      <h2 class="fase-title">Escenario estático</h2>
+    </div>
+    <p class="fase-objetivo">Objetivo: colocar la paleta, la pelota y los bloques en su sitio. Nada se mueve todavía &mdash; el reto es puramente de layout.</p>
+
+    <div class="step">
+      <div class="step-chip">1</div>
+      <div class="step-body">
+        <h3>El área de juego: una caja con posición relativa</h3>
+        <p>Todo el juego vive dentro de una <code class="inline">View</code> de tamaño fijo (<code class="inline">anchoJuego</code> &times; <code class="inline">altoJuego</code>) con <code class="inline">position: 'relative'</code>. Es la clave de todo lo que sigue: cualquier hijo con <code class="inline">position: 'absolute'</code> se coloca dentro de <em>esa</em> caja, con <code class="inline">left</code>/<code class="inline">top</code> midiendo desde su esquina superior izquierda &mdash; no desde la pantalla entera.</p>
+        <div class="code-panel">
+          <div class="code-bar"><span class="code-bar-name">extracto</span></div>
+          <pre><code>areaJuego: {
+  backgroundColor: <span class="str">'#0a0a23'</span>,
+  position: <span class="str">'relative'</span>,
+  overflow: <span class="str">'hidden'</span>,  <span class="com">// lo que se salga de la caja no se ve</span>
+  borderRadius: <span class="hl">8</span>,
+},</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">2</div>
+      <div class="step-body">
+        <h3>Los bloques: una cuadrícula calculada, no escrita a mano</h3>
+        <p>En vez de escribir 20 <code class="inline">View</code> con coordenadas a mano, generamos su posición con dos bucles <code class="inline">for</code> anidados (fila &times; columna) y las guardamos en un array normal. <code class="inline">MARGEN_BLOQUES</code> se calcula a partir del resto de constantes para que la cuadrícula quede centrada, sin tener que reajustarlo a mano si cambias el número de columnas.</p>
+        <div class="code-panel">
+          <div class="code-bar"><span class="code-bar-name">extracto</span></div>
+          <pre><code><span class="kw">const</span> MARGEN_BLOQUES =
+  (anchoJuego - (BLOQUES_POR_FILA * ANCHO_BLOQUE + (BLOQUES_POR_FILA - <span class="hl">1</span>) * ESPACIO_BLOQUES)) / <span class="hl">2</span>;
+
+<span class="kw">const</span> bloques: { x: <span class="tag">number</span>; y: <span class="tag">number</span> }[] = [];
+<span class="kw">for</span> (<span class="kw">let</span> fila = <span class="hl">0</span>; fila &lt; FILAS_BLOQUES; fila++) {
+  <span class="kw">for</span> (<span class="kw">let</span> columna = <span class="hl">0</span>; columna &lt; BLOQUES_POR_FILA; columna++) {
+    bloques.push({
+      x: MARGEN_BLOQUES + columna * (ANCHO_BLOQUE + ESPACIO_BLOQUES),
+      y: Y_INICIAL_BLOQUES + fila * (ALTO_BLOQUE + ESPACIO_BLOQUES),
+    });
+  }
+}</code></pre>
+        </div>
+        <p>Luego, en el JSX, un <code class="inline">bloques.map(...)</code> convierte ese array en una <code class="inline">View</code> por bloque &mdash; el mismo patrón que ya usaste con <code class="inline">FlatList</code> y con <code class="inline">.map()</code> en React web, aplicado aquí a rectángulos en vez de a filas de una lista.</p>
+      </div>
+    </div>
+
+    <details class="full-code">
+      <summary>Ver <code class="inline">fase1.tsx</code> completo</summary>
+      <div class="code-panel">
+        <div class="code-bar">
+          <span class="code-bar-name">src/app/fase1.tsx</span>
+          <button class="copy-btn" data-target="codigo-fase1" type="button">Copiar código</button>
+        </div>
+        <pre><code id="codigo-fase1">import { StyleSheet, Text, View } from 'react-native';
+
+// ---------------------------------------------------------------------
+// FASE 1: solo el escenario, quieto. Nada se mueve todavía.
+// El objetivo de esta fase es únicamente dominar el layout: colocar la
+// paleta, la pelota y los bloques en su sitio con posición absoluta.
+// ---------------------------------------------------------------------
+
+// Tamaño fijo del área de juego.
+const anchoJuego = 300;
+const altoJuego = 480;
+
+// La paleta ("jugador"): el rectángulo que el usuario moverá en la Fase 2.
+const ANCHO_JUGADOR = 70;
+const ALTO_JUGADOR = 14;
+const Y_JUGADOR = altoJuego - 40; // pegada abajo, con un pequeño margen.
+
+// La pelota.
+const TAMANO_PELOTA = 14;
+
+// Los bloques: una cuadrícula de FILAS_BLOQUES x BLOQUES_POR_FILA.
+const FILAS_BLOQUES = 4;
+const BLOQUES_POR_FILA = 5;
+const ANCHO_BLOQUE = 50;
+const ALTO_BLOQUE = 18;
+const ESPACIO_BLOQUES = 8;
+const Y_INICIAL_BLOQUES = 40;
+// Centramos la cuadrícula de bloques horizontalmente en el área de juego.
+const MARGEN_BLOQUES =
+  (anchoJuego - (BLOQUES_POR_FILA * ANCHO_BLOQUE + (BLOQUES_POR_FILA - 1) * ESPACIO_BLOQUES)) / 2;
+
+// Calculamos la posición de cada bloque una sola vez, fuera del componente
+// (no cambia nunca en esta fase, así que no hace falta recalcularlo).
+const bloques: { x: number; y: number }[] = [];
+for (let fila = 0; fila &lt; FILAS_BLOQUES; fila++) {
+  for (let columna = 0; columna &lt; BLOQUES_POR_FILA; columna++) {
+    bloques.push({
+      x: MARGEN_BLOQUES + columna * (ANCHO_BLOQUE + ESPACIO_BLOQUES),
+      y: Y_INICIAL_BLOQUES + fila * (ALTO_BLOQUE + ESPACIO_BLOQUES),
+    });
+  }
+}
+
+export default function Fase1() {
+  return (
+    &lt;View style={styles.pantalla}&gt;
+      &lt;Text style={styles.titulo}&gt;Fase 1 · Escenario estático&lt;/Text&gt;
+      &lt;Text style={styles.ayuda}&gt;Todavía no hay nada interactivo: solo el layout.&lt;/Text&gt;
+
+      &lt;View style={[styles.areaJuego, { width: anchoJuego, height: altoJuego }]}&gt;
+        {/* Los bloques: una View por cada elemento del array "bloques" */}
+        {bloques.map((bloque, indice) =&gt; (
+          &lt;View
+            key={indice}
+            style={[
+              styles.bloque,
+              { left: bloque.x, top: bloque.y, width: ANCHO_BLOQUE, height: ALTO_BLOQUE },
+            ]}
+          /&gt;
+        ))}
+
+        {/* La pelota, centrada, justo encima de la paleta */}
+        &lt;View
+          style={[
+            styles.pelota,
+            {
+              left: (anchoJuego - TAMANO_PELOTA) / 2,
+              top: Y_JUGADOR - TAMANO_PELOTA - 4,
+              width: TAMANO_PELOTA,
+              height: TAMANO_PELOTA,
+            },
+          ]}
+        /&gt;
+
+        {/* La paleta, centrada abajo */}
+        &lt;View
+          style={[
+            styles.paleta,
+            {
+              left: (anchoJuego - ANCHO_JUGADOR) / 2,
+              top: Y_JUGADOR,
+              width: ANCHO_JUGADOR,
+              height: ALTO_JUGADOR,
+            },
+          ]}
+        /&gt;
+      &lt;/View&gt;
+    &lt;/View&gt;
+  );
+}
+
+const styles = StyleSheet.create({
+  pantalla: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 12,
+    padding: 16,
+  },
+  titulo: { fontSize: 18, fontWeight: 'bold' },
+  ayuda: { fontSize: 13, color: '#888' },
+  areaJuego: {
+    backgroundColor: '#0a0a23', // fondo "espacial" oscuro, como una recreativa.
+    position: 'relative', // imprescindible: los hijos "absolute" se ubican dentro de esta caja.
+    overflow: 'hidden',
+    borderRadius: 8,
+  },
+  bloque: { position: 'absolute', backgroundColor: '#f97316', borderRadius: 3 },
+  pelota: { position: 'absolute', backgroundColor: '#facc15', borderRadius: 999 },
+  paleta: { position: 'absolute', backgroundColor: '#22c55e', borderRadius: 4 },
+});
+</code></pre>
+      </div>
+    </details>
+
+    <div class="checkpoint">
+      <div class="checkpoint-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        Deberías ver esto
+      </div>
+      <p>Una caja oscura con 4 filas de 5 bloques naranjas arriba, una pelota amarilla y una paleta verde abajo. Nada se mueve al tocar la pantalla &mdash; es exactamente lo esperado en esta fase.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="fase-head">
+      <span class="fase-num">Fase 2</span>
+      <h2 class="fase-title">Mover la paleta</h2>
+    </div>
+    <p class="fase-objetivo">Objetivo: arrastrar el dedo dentro del área de juego mueve la paleta. La pelota y los bloques siguen decorativos.</p>
+
+    <div class="step">
+      <div class="step-chip">1</div>
+      <div class="step-body">
+        <h3><code class="inline">PanResponder</code>: seguir un dedo por la pantalla</h3>
+        <p>Ya lo viste en la Sesión 13: <code class="inline">PanResponder.create({'{ ... }'})</code> crea el manejador de gestos, envuelto en <code class="inline">useRef(...).current</code> para que sea siempre el mismo objeto. Aquí no hace falta condición de estado de juego todavía (eso llega en la Fase 3): ambas preguntas devuelven <code class="inline">true</code> directamente.</p>
+        <div class="code-panel">
+          <div class="code-bar"><span class="code-bar-name">extracto</span></div>
+          <pre><code><span class="kw">const</span> [jugadorX, setJugadorX] = useState((anchoJuego - ANCHO_JUGADOR) / <span class="hl">2</span>);
+
+<span class="kw">const</span> panResponder = useRef(
+  PanResponder.create({
+    onStartShouldSetPanResponder: () =&gt; <span class="kw">true</span>,
+    onMoveShouldSetPanResponder: () =&gt; <span class="kw">true</span>,
+    onPanResponderMove: (evento) =&gt; {
+      <span class="kw">const</span> x = evento.nativeEvent.locationX;
+      setJugadorX(Math.max(<span class="hl">0</span>, Math.min(anchoJuego - ANCHO_JUGADOR, x - ANCHO_JUGADOR / <span class="hl">2</span>)));
+    },
+  })
+).current;</code></pre>
+        </div>
+        <p><code class="inline">evento.nativeEvent.locationX</code> es la posición horizontal del dedo <em>relativa al área de juego</em> (gracias a que se lo pasamos con <code class="inline">{'{...panResponder.panHandlers}'}</code> a esa misma <code class="inline">View</code>). El &ldquo;clamp&rdquo; <code class="inline">Math.max(0, Math.min(límite, valor))</code> evita que la paleta se salga por los lados, y restar la mitad de su ancho la centra respecto al dedo en vez de pegar su borde izquierdo a él.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">2</div>
+      <div class="step-body">
+        <h3>Conecta el gesto al área de juego</h3>
+        <div class="code-panel">
+          <div class="code-bar"><span class="code-bar-name">extracto</span></div>
+          <pre><code>&lt;<span class="tag">View</span>
+  <span class="prop">style</span>={[styles.areaJuego, { width: anchoJuego, height: altoJuego }]}
+  {...panResponder.panHandlers}
+&gt;
+  {<span class="com">/* bloques, pelota y paleta (con left: jugadorX) */</span>}
+&lt;/<span class="tag">View</span>&gt;</code></pre>
+        </div>
+        <p><code class="inline">panResponder.panHandlers</code> es un objeto con varias props (<code class="inline">onStartShouldSetResponder</code>, <code class="inline">onResponderMove</code>&hellip;) que React Native usa por debajo para conectar el sistema de gestos a este elemento en concreto. Al esparcirlo con <code class="inline">{'{...}'}</code>, esta <code class="inline">View</code> pasa a &ldquo;escuchar&rdquo; el dedo.</p>
+      </div>
+    </div>
+
+    <details class="full-code">
+      <summary>Ver <code class="inline">fase2.tsx</code> completo</summary>
+      <div class="code-panel">
+        <div class="code-bar">
+          <span class="code-bar-name">src/app/fase2.tsx</span>
+          <button class="copy-btn" data-target="codigo-fase2" type="button">Copiar código</button>
+        </div>
+        <pre><code id="codigo-fase2">import { useRef, useState } from 'react';
+import { PanResponder, StyleSheet, Text, View } from 'react-native';
+
+// ---------------------------------------------------------------------
+// FASE 2: la paleta ya se mueve, arrastrándola con el dedo.
+// La pelota y los bloques siguen quietos (decorativos) todavía.
+// ---------------------------------------------------------------------
+
+const anchoJuego = 300;
+const altoJuego = 480;
+
+const ANCHO_JUGADOR = 70;
+const ALTO_JUGADOR = 14;
+const Y_JUGADOR = altoJuego - 40;
+
+const TAMANO_PELOTA = 14;
+
+const FILAS_BLOQUES = 4;
+const BLOQUES_POR_FILA = 5;
+const ANCHO_BLOQUE = 50;
+const ALTO_BLOQUE = 18;
+const ESPACIO_BLOQUES = 8;
+const Y_INICIAL_BLOQUES = 40;
+const MARGEN_BLOQUES =
+  (anchoJuego - (BLOQUES_POR_FILA * ANCHO_BLOQUE + (BLOQUES_POR_FILA - 1) * ESPACIO_BLOQUES)) / 2;
+
+const bloques: { x: number; y: number }[] = [];
+for (let fila = 0; fila &lt; FILAS_BLOQUES; fila++) {
+  for (let columna = 0; columna &lt; BLOQUES_POR_FILA; columna++) {
+    bloques.push({
+      x: MARGEN_BLOQUES + columna * (ANCHO_BLOQUE + ESPACIO_BLOQUES),
+      y: Y_INICIAL_BLOQUES + fila * (ALTO_BLOQUE + ESPACIO_BLOQUES),
+    });
+  }
+}
+
+export default function Fase2() {
+  // Posición X de la paleta. Empieza centrada. Todavía es un useState
+  // normal: nada se mueve solo 60 veces por segundo, así que no hace
+  // falta el patrón de useRef + bucle que veremos en la Fase 3.
+  const [jugadorX, setJugadorX] = useState((anchoJuego - ANCHO_JUGADOR) / 2);
+
+  // PanResponder sigue el dedo del usuario mientras arrastra por el área
+  // de juego. Se crea una sola vez (useRef) porque no tiene sentido
+  // recrearlo en cada render.
+  const panResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () =&gt; true,
+      onMoveShouldSetPanResponder: () =&gt; true,
+      onPanResponderMove: (evento) =&gt; {
+        // locationX: posición horizontal del dedo relativa al área de juego.
+        const x = evento.nativeEvent.locationX;
+        // "Clamp": obliga al valor a quedarse entre 0 y el límite derecho,
+        // para que la paleta nunca se salga del área de juego. Restar la
+        // mitad del ancho centra la paleta respecto al dedo.
+        setJugadorX(Math.max(0, Math.min(anchoJuego - ANCHO_JUGADOR, x - ANCHO_JUGADOR / 2)));
+      },
+    })
+  ).current;
+
+  return (
+    &lt;View style={styles.pantalla}&gt;
+      &lt;Text style={styles.titulo}&gt;Fase 2 · Mover la paleta&lt;/Text&gt;
+      &lt;Text style={styles.ayuda}&gt;Arrastra el dedo dentro del área oscura&lt;/Text&gt;
+
+      {/* panResponder.panHandlers son las props que "conectan" el gesto
+          a esta View concreta: onStartShouldSetPanResponder, onMoveShouldSetPanResponder, etc. */}
+      &lt;View
+        style={[styles.areaJuego, { width: anchoJuego, height: altoJuego }]}
+        {...panResponder.panHandlers}
+      &gt;
+        {bloques.map((bloque, indice) =&gt; (
+          &lt;View
+            key={indice}
+            style={[
+              styles.bloque,
+              { left: bloque.x, top: bloque.y, width: ANCHO_BLOQUE, height: ALTO_BLOQUE },
+            ]}
+          /&gt;
+        ))}
+
+        &lt;View
+          style={[
+            styles.pelota,
+            {
+              left: (anchoJuego - TAMANO_PELOTA) / 2,
+              top: Y_JUGADOR - TAMANO_PELOTA - 4,
+              width: TAMANO_PELOTA,
+              height: TAMANO_PELOTA,
+            },
+          ]}
+        /&gt;
+
+        {/* La paleta ahora usa "jugadorX" en vez de un valor fijo */}
+        &lt;View
+          style={[
+            styles.paleta,
+            { left: jugadorX, top: Y_JUGADOR, width: ANCHO_JUGADOR, height: ALTO_JUGADOR },
+          ]}
+        /&gt;
+      &lt;/View&gt;
+    &lt;/View&gt;
+  );
+}
+
+const styles = StyleSheet.create({
+  pantalla: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 12,
+    padding: 16,
+  },
+  titulo: { fontSize: 18, fontWeight: 'bold' },
+  ayuda: { fontSize: 13, color: '#888' },
+  areaJuego: {
+    backgroundColor: '#0a0a23',
+    position: 'relative',
+    overflow: 'hidden',
+    borderRadius: 8,
+  },
+  bloque: { position: 'absolute', backgroundColor: '#f97316', borderRadius: 3 },
+  pelota: { position: 'absolute', backgroundColor: '#facc15', borderRadius: 999 },
+  paleta: { position: 'absolute', backgroundColor: '#22c55e', borderRadius: 4 },
+});
+</code></pre>
+      </div>
+    </details>
+
+    <div class="checkpoint">
+      <div class="checkpoint-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        Deberías ver esto
+      </div>
+      <p>Arrastra el dedo (o el ratón, si lo pruebas con <code class="inline">w</code> para abrir la versión web) dentro del recuadro oscuro: la paleta verde te sigue horizontalmente, sin salirse nunca de los bordes.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="fase-head">
+      <span class="fase-num">Fase 3</span>
+      <h2 class="fase-title">La pelota rebota sola</h2>
+    </div>
+    <p class="fase-objetivo">Objetivo: la pelota se mueve constantemente y rebota en paredes y en la paleta. Pierdes si se cae. Los bloques siguen siendo decorativos.</p>
+
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Aquí es donde entra el Patrón A de la Sesión 18
+      </div>
+      <p>Hasta ahora, cada cambio ha sido un <code class="inline">useState</code> disparado por el usuario: tocar, arrastrar. Pero una pelota que se mueve <strong>sola</strong>, 60 veces por segundo, no se puede modelar así &mdash; cada <code class="inline">setState</code> agenda un render completo, y a esa frecuencia satura la app en segundos. La solución es la de la Sesión 18: el estado real vive en un <code class="inline">useRef</code> (que no provoca render al mutarlo), y un <code class="inline">useState</code> aparte se usa solo como &ldquo;disparador&rdquo; para pedir un repintado una vez por frame.</p>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">1</div>
+      <div class="step-body">
+        <h3>Todo el estado, en un solo objeto <code class="inline">juego</code></h3>
+        <p>Antes de tocar el componente, definimos qué forma tiene el estado y cómo se crea desde cero:</p>
+        <div class="code-panel">
+          <div class="code-bar"><span class="code-bar-name">extracto</span></div>
+          <pre><code><span class="kw">type</span> <span class="tag">EstadoJuego</span> = <span class="str">'jugando'</span> | <span class="str">'perdido'</span>;
+
+<span class="kw">type</span> <span class="tag">Juego</span> = {
+  estado: <span class="tag">EstadoJuego</span>;
+  jugadorX: <span class="tag">number</span>;
+  pelota: { x: <span class="tag">number</span>; y: <span class="tag">number</span>; vx: <span class="tag">number</span>; vy: <span class="tag">number</span> };
+};
+
+<span class="kw">function</span> <span class="tag">crearEstadoInicial</span>(): <span class="tag">Juego</span> {
+  <span class="kw">return</span> {
+    estado: <span class="str">'jugando'</span>,
+    jugadorX: (anchoJuego - ANCHO_JUGADOR) / <span class="hl">2</span>,
+    pelota: { x: anchoJuego / <span class="hl">2</span>, y: altoJuego / <span class="hl">2</span>, vx: VELOCIDAD_INICIAL_PELOTA, vy: VELOCIDAD_INICIAL_PELOTA },
+  };
+}</code></pre>
+        </div>
+        <p><code class="inline">vx</code>/<code class="inline">vy</code> son la velocidad de la pelota en cada eje: cuántos píxeles avanza por &ldquo;tick&rdquo; del bucle. Invertir su signo (<code class="inline">vy = -vy</code>) es toda la física que necesita un rebote &ldquo;muy sencillo&rdquo;.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">2</div>
+      <div class="step-body">
+        <h3>La física, en una función aparte que muta el objeto</h3>
+        <p><code class="inline">actualizarFisica</code> no devuelve nada: recibe <code class="inline">juego</code> y lo modifica directamente (<code class="inline">pelota.x += pelota.vx</code>). Es exactamente el estilo que describe la Sesión 18 para este patrón.</p>
+        <div class="code-panel">
+          <div class="code-bar"><span class="code-bar-name">extracto</span></div>
+          <pre><code><span class="kw">function</span> <span class="tag">actualizarFisica</span>(juego: <span class="tag">Juego</span>) {
+  <span class="kw">if</span> (juego.estado !== <span class="str">'jugando'</span>) <span class="kw">return</span>;
+
+  <span class="kw">const</span> pelota = juego.pelota;
+  pelota.x += pelota.vx;
+  pelota.y += pelota.vy;
+
+  <span class="com">// Paredes izquierda/derecha</span>
+  <span class="kw">if</span> (pelota.x &lt;= <span class="hl">0</span> || pelota.x &gt;= anchoJuego - TAMANO_PELOTA) pelota.vx = -pelota.vx;
+
+  <span class="com">// Techo</span>
+  <span class="kw">if</span> (pelota.y &lt;= <span class="hl">0</span>) pelota.vy = -pelota.vy;
+
+  <span class="com">// Paleta: solo si la pelota va bajando y coincide en X e Y</span>
+  <span class="kw">const</span> tocaAlturaPaleta = pelota.y + TAMANO_PELOTA &gt;= Y_JUGADOR &amp;&amp; pelota.y &lt;= Y_JUGADOR + ALTO_JUGADOR;
+  <span class="kw">const</span> tocaAnchoPaleta = pelota.x + TAMANO_PELOTA &gt;= juego.jugadorX &amp;&amp; pelota.x &lt;= juego.jugadorX + ANCHO_JUGADOR;
+  <span class="kw">if</span> (pelota.vy &gt; <span class="hl">0</span> &amp;&amp; tocaAlturaPaleta &amp;&amp; tocaAnchoPaleta) pelota.vy = -pelota.vy;
+
+  <span class="com">// Se acabó: la pelota pasó de largo</span>
+  <span class="kw">if</span> (pelota.y &gt; altoJuego) juego.estado = <span class="str">'perdido'</span>;
+}</code></pre>
+        </div>
+        <p>La comprobación <code class="inline">pelota.vy &gt; 0</code> antes del rebote en la paleta evita un bug clásico: sin ella, si la pelota queda pegada a la paleta un par de frames, podría rebotar varias veces seguidas en el mismo golpe.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">3</div>
+      <div class="step-body">
+        <h3>El componente: <code class="inline">useRef</code> + <code class="inline">setInterval</code> + <code class="inline">redibujar</code></h3>
+        <div class="code-panel">
+          <div class="code-bar"><span class="code-bar-name">extracto</span></div>
+          <pre><code><span class="kw">const</span> juego = useRef(crearEstadoInicial()).current;
+
+<span class="kw">const</span> [, setTick] = useState(<span class="hl">0</span>);
+<span class="kw">const</span> redibujar = () =&gt; setTick((n) =&gt; n + <span class="hl">1</span>);
+
+useEffect(() =&gt; {
+  <span class="kw">const</span> id = setInterval(() =&gt; {
+    actualizarFisica(juego);
+    redibujar();
+  }, <span class="hl">16</span>);
+  <span class="kw">return</span> () =&gt; clearInterval(id);
+}, []);</code></pre>
+        </div>
+        <p><code class="inline">16</code> milisegundos por frame es, aproximadamente, 60 frames por segundo (<code class="inline">1000/60 ≈ 16.67</code>). El <code class="inline">useEffect</code> con array de dependencias vacío (<code class="inline">[]</code>) arranca el intervalo una sola vez, cuando el componente se monta, y lo limpia con <code class="inline">clearInterval</code> si el componente desaparece &mdash; exactamente igual que ya viste con <code class="inline">setInterval</code> en el mini Space Invaders y en el Adivina el número.</p>
+        <p>El <code class="inline">PanResponder</code> cambia respecto a la Fase 2: ya no existe <code class="inline">setJugadorX</code>, así que muta <code class="inline">juego.jugadorX</code> directamente y llama a <code class="inline">redibujar()</code> a mano. Las dos condiciones <code class="inline">onStartShouldSetPanResponder</code>/<code class="inline">onMoveShouldSetPanResponder</code> ahora comprueban <code class="inline">juego.estado === 'jugando'</code>, para no capturar el gesto cuando ya ha aparecido el botón de &ldquo;Reintentar&rdquo; encima.</p>
+      </div>
+    </div>
+
+    <details class="full-code">
+      <summary>Ver <code class="inline">fase3.tsx</code> completo</summary>
+      <div class="code-panel">
+        <div class="code-bar">
+          <span class="code-bar-name">src/app/fase3.tsx</span>
+          <button class="copy-btn" data-target="codigo-fase3" type="button">Copiar código</button>
+        </div>
+        <pre><code id="codigo-fase3">import { useEffect, useRef, useState } from 'react';
+import { PanResponder, Pressable, StyleSheet, Text, View } from 'react-native';
+
+// ---------------------------------------------------------------------
+// FASE 3: la pelota se mueve sola y rebota en las paredes y en la paleta.
+// Aquí es donde entra el "Patrón A" (bucle en tiempo real con useRef):
+// una pelota que se actualiza 60 veces por segundo no puede vivir en un
+// useState normal, porque cada cambio dispararía un render completo.
+// Los bloques siguen siendo decorativos: todavía no chocan (Fase 4).
+// ---------------------------------------------------------------------
+
+const anchoJuego = 300;
+const altoJuego = 480;
+
+const ANCHO_JUGADOR = 70;
+const ALTO_JUGADOR = 14;
+const Y_JUGADOR = altoJuego - 40;
+
+const TAMANO_PELOTA = 14;
+const VELOCIDAD_INICIAL_PELOTA = 4;
+
+const FILAS_BLOQUES = 4;
+const BLOQUES_POR_FILA = 5;
+const ANCHO_BLOQUE = 50;
+const ALTO_BLOQUE = 18;
+const ESPACIO_BLOQUES = 8;
+const Y_INICIAL_BLOQUES = 40;
+const MARGEN_BLOQUES =
+  (anchoJuego - (BLOQUES_POR_FILA * ANCHO_BLOQUE + (BLOQUES_POR_FILA - 1) * ESPACIO_BLOQUES)) / 2;
+
+const bloquesDecorativos: { x: number; y: number }[] = [];
+for (let fila = 0; fila &lt; FILAS_BLOQUES; fila++) {
+  for (let columna = 0; columna &lt; BLOQUES_POR_FILA; columna++) {
+    bloquesDecorativos.push({
+      x: MARGEN_BLOQUES + columna * (ANCHO_BLOQUE + ESPACIO_BLOQUES),
+      y: Y_INICIAL_BLOQUES + fila * (ALTO_BLOQUE + ESPACIO_BLOQUES),
+    });
+  }
+}
+
+// --- El estado del juego, todo junto en un solo objeto ---
+
+type EstadoJuego = 'jugando' | 'perdido';
+
+type Juego = {
+  estado: EstadoJuego;
+  jugadorX: number; // posición X de la paleta
+  pelota: { x: number; y: number; vx: number; vy: number };
+};
+
+function crearEstadoInicial(): Juego {
+  return {
+    estado: 'jugando',
+    jugadorX: (anchoJuego - ANCHO_JUGADOR) / 2,
+    pelota: {
+      x: anchoJuego / 2,
+      y: altoJuego / 2,
+      vx: VELOCIDAD_INICIAL_PELOTA,
+      vy: VELOCIDAD_INICIAL_PELOTA,
+    },
+  };
+}
+
+// Mueve la pelota un paso y resuelve los rebotes. MUTA "juego" directamente
+// (no devuelve nada): es el propio objeto que vive en el useRef del componente.
+function actualizarFisica(juego: Juego) {
+  if (juego.estado !== 'jugando') return;
+
+  const pelota = juego.pelota;
+  pelota.x += pelota.vx;
+  pelota.y += pelota.vy;
+
+  // Rebote en la pared izquierda o derecha: invertimos la velocidad horizontal.
+  if (pelota.x &lt;= 0 || pelota.x &gt;= anchoJuego - TAMANO_PELOTA) {
+    pelota.vx = -pelota.vx;
+  }
+
+  // Rebote en el techo: invertimos la velocidad vertical.
+  if (pelota.y &lt;= 0) {
+    pelota.vy = -pelota.vy;
+  }
+
+  // Rebote en la paleta: solo cuenta si la pelota está bajando (vy &gt; 0,
+  // para no "atraparla" rebotando varias veces seguidas) y coincide con
+  // la paleta tanto en su altura como en su rango horizontal.
+  const tocaAlturaPaleta = pelota.y + TAMANO_PELOTA &gt;= Y_JUGADOR &amp;&amp; pelota.y &lt;= Y_JUGADOR + ALTO_JUGADOR;
+  const tocaAnchoPaleta = pelota.x + TAMANO_PELOTA &gt;= juego.jugadorX &amp;&amp; pelota.x &lt;= juego.jugadorX + ANCHO_JUGADOR;
+  if (pelota.vy &gt; 0 &amp;&amp; tocaAlturaPaleta &amp;&amp; tocaAnchoPaleta) {
+    pelota.vy = -pelota.vy;
+  }
+
+  // Si la pelota pasó de largo la paleta, se acabó la partida.
+  if (pelota.y &gt; altoJuego) {
+    juego.estado = 'perdido';
+  }
+}
+
+export default function Fase3() {
+  // El objeto "juego" vive en un useRef: mutarlo (juego.pelota.x += ...)
+  // NO provoca ningún render por sí solo. useRef(...).current hace que
+  // sea siempre el mismo objeto durante toda la vida del componente.
+  const juego = useRef(crearEstadoInicial()).current;
+
+  // Este useState no se lee nunca (por eso el guion antes de la coma):
+  // solo sirve para forzar un repintado cuando llamamos a setTick.
+  const [, setTick] = useState(0);
+  const redibujar = () =&gt; setTick((n) =&gt; n + 1);
+
+  // El bucle del juego: se repite cada 16ms, aproximadamente 60 veces por
+  // segundo (1000/60 ≈ 16.67). Cada vuelta mueve la pelota y pide un repintado.
+  useEffect(() =&gt; {
+    const id = setInterval(() =&gt; {
+      actualizarFisica(juego);
+      redibujar();
+    }, 16);
+    return () =&gt; clearInterval(id);
+  }, []);
+
+  // Arrastrar el dedo mueve la paleta. A diferencia de la Fase 2, aquí NO
+  // usamos useState para jugadorX: mutamos juego.jugadorX directamente y
+  // forzamos el repintado a mano con redibujar(), igual que hace el bucle.
+  const panResponder = useRef(
+    PanResponder.create({
+      // Solo capturamos el gesto mientras se juega, para no bloquear
+      // el botón de "Reintentar" cuando la partida ya terminó.
+      onStartShouldSetPanResponder: () =&gt; juego.estado === 'jugando',
+      onMoveShouldSetPanResponder: () =&gt; juego.estado === 'jugando',
+      onPanResponderMove: (evento) =&gt; {
+        const x = evento.nativeEvent.locationX;
+        juego.jugadorX = Math.max(0, Math.min(anchoJuego - ANCHO_JUGADOR, x - ANCHO_JUGADOR / 2));
+        redibujar();
+      },
+    })
+  ).current;
+
+  // Reinicia la partida: Object.assign copia los campos del estado nuevo
+  // DENTRO del objeto que ya existía, en vez de crear un objeto distinto
+  // (así seguimos usando el mismo useRef de siempre).
+  function reiniciar() {
+    Object.assign(juego, crearEstadoInicial());
+    redibujar();
+  }
+
+  return (
+    &lt;View style={styles.pantalla}&gt;
+      &lt;Text style={styles.titulo}&gt;Fase 3 · La pelota rebota sola&lt;/Text&gt;
+
+      &lt;View
+        style={[styles.areaJuego, { width: anchoJuego, height: altoJuego }]}
+        {...panResponder.panHandlers}
+      &gt;
+        {bloquesDecorativos.map((bloque, indice) =&gt; (
+          &lt;View
+            key={indice}
+            style={[
+              styles.bloque,
+              { left: bloque.x, top: bloque.y, width: ANCHO_BLOQUE, height: ALTO_BLOQUE },
+            ]}
+          /&gt;
+        ))}
+
+        &lt;View
+          style={[
+            styles.pelota,
+            { left: juego.pelota.x, top: juego.pelota.y, width: TAMANO_PELOTA, height: TAMANO_PELOTA },
+          ]}
+        /&gt;
+
+        &lt;View
+          style={[
+            styles.paleta,
+            { left: juego.jugadorX, top: Y_JUGADOR, width: ANCHO_JUGADOR, height: ALTO_JUGADOR },
+          ]}
+        /&gt;
+
+        {juego.estado === 'perdido' &amp;&amp; (
+          &lt;View style={styles.overlay}&gt;
+            &lt;Text style={styles.mensajeFinal}&gt;Perdiste 💥&lt;/Text&gt;
+            &lt;Pressable style={styles.boton} onPress={reiniciar}&gt;
+              &lt;Text style={styles.textoBoton}&gt;Reintentar&lt;/Text&gt;
+            &lt;/Pressable&gt;
+          &lt;/View&gt;
+        )}
+      &lt;/View&gt;
+    &lt;/View&gt;
+  );
+}
+
+const styles = StyleSheet.create({
+  pantalla: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 12,
+    padding: 16,
+  },
+  titulo: { fontSize: 18, fontWeight: 'bold' },
+  areaJuego: {
+    backgroundColor: '#0a0a23',
+    position: 'relative',
+    overflow: 'hidden',
+    borderRadius: 8,
+  },
+  bloque: { position: 'absolute', backgroundColor: '#f97316', borderRadius: 3 },
+  pelota: { position: 'absolute', backgroundColor: '#facc15', borderRadius: 999 },
+  paleta: { position: 'absolute', backgroundColor: '#22c55e', borderRadius: 4 },
+  overlay: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0,0,0,0.75)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 12,
+  },
+  mensajeFinal: { color: '#fff', fontSize: 22, fontWeight: 'bold' },
+  boton: { backgroundColor: '#2563eb', paddingVertical: 10, paddingHorizontal: 22, borderRadius: 8 },
+  textoBoton: { color: '#fff', fontSize: 16, fontWeight: '600' },
+});
+</code></pre>
+      </div>
+    </details>
+
+    <div class="checkpoint">
+      <div class="checkpoint-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        Deberías ver esto
+      </div>
+      <p>La pelota se mueve sola desde que entras, rebotando en paredes y techo. Si la paleta la intercepta, rebota hacia arriba; si se te escapa por abajo, aparece &ldquo;Perdiste&rdquo; con un botón &ldquo;Reintentar&rdquo; que reinicia la partida.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="fase-head">
+      <span class="fase-num">Fase 4</span>
+      <h2 class="fase-title">Romper bloques y ganar</h2>
+    </div>
+    <p class="fase-objetivo">Objetivo: los bloques dejan de ser decoración. La pelota comprueba si choca con alguno, lo rompe, y ganas al destruirlos todos.</p>
+
+    <div class="step">
+      <div class="step-chip">1</div>
+      <div class="step-body">
+        <h3>Los bloques entran en el estado del juego</h3>
+        <p>Cada bloque pasa de ser <code class="inline">{'{ x, y }'}</code> a tener también un <code class="inline">vivo: boolean</code>, y el array completo vive dentro de <code class="inline">Juego</code>, no fuera:</p>
+        <div class="code-panel">
+          <div class="code-bar"><span class="code-bar-name">extracto</span></div>
+          <pre><code><span class="kw">type</span> <span class="tag">EstadoJuego</span> = <span class="str">'jugando'</span> | <span class="str">'perdido'</span> | <span class="str">'ganado'</span>;
+<span class="kw">type</span> <span class="tag">Bloque</span> = { x: <span class="tag">number</span>; y: <span class="tag">number</span>; vivo: <span class="tag">boolean</span> };
+
+<span class="kw">type</span> <span class="tag">Juego</span> = {
+  estado: <span class="tag">EstadoJuego</span>;
+  jugadorX: <span class="tag">number</span>;
+  pelota: { x: <span class="tag">number</span>; y: <span class="tag">number</span>; vx: <span class="tag">number</span>; vy: <span class="tag">number</span> };
+  bloques: <span class="tag">Bloque</span>[];
+};</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">2</div>
+      <div class="step-body">
+        <h3>Colisión pelota&ndash;bloque: el mismo patrón de siempre</h3>
+        <p>Es la misma comprobación de rectángulos que ya usaste para las balas contra los enemigos del mini Space Invaders: si los dos rangos (en X y en Y) se solapan, hay choque. Se añade dentro de <code class="inline">actualizarFisica</code>, después de resolver paredes y paleta:</p>
+        <div class="code-panel">
+          <div class="code-bar"><span class="code-bar-name">extracto</span></div>
+          <pre><code><span class="kw">for</span> (<span class="kw">const</span> bloque <span class="kw">of</span> juego.bloques) {
+  <span class="kw">if</span> (!bloque.vivo) <span class="kw">continue</span>;
+
+  <span class="kw">const</span> chocaEnX = pelota.x + TAMANO_PELOTA &gt;= bloque.x &amp;&amp; pelota.x &lt;= bloque.x + ANCHO_BLOQUE;
+  <span class="kw">const</span> chocaEnY = pelota.y + TAMANO_PELOTA &gt;= bloque.y &amp;&amp; pelota.y &lt;= bloque.y + ALTO_BLOQUE;
+
+  <span class="kw">if</span> (chocaEnX &amp;&amp; chocaEnY) {
+    bloque.vivo = <span class="kw">false</span>;      <span class="com">// el bloque se rompe</span>
+    pelota.vy = -pelota.vy;  <span class="com">// y la pelota rebota</span>
+    <span class="kw">break</span>;
+  }
+}
+
+<span class="kw">if</span> (juego.bloques.every((bloque) =&gt; !bloque.vivo)) {
+  juego.estado = <span class="str">'ganado'</span>;
+}</code></pre>
+        </div>
+        <p>El <code class="inline">break</code> es intencionado: para un Arkanoid &ldquo;muy sencillo&rdquo; basta con resolver un bloque por frame, aunque en teoría la pelota pudiera tocar dos a la vez. <code class="inline">.every(...)</code> devuelve <code class="inline">true</code> solo si <strong>ningún</strong> bloque sigue vivo &mdash; ahí se dispara la victoria.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">3</div>
+      <div class="step-body">
+        <h3>Pintar solo los bloques vivos</h3>
+        <div class="code-panel">
+          <div class="code-bar"><span class="code-bar-name">extracto</span></div>
+          <pre><code>{juego.bloques
+  .filter((bloque) =&gt; bloque.vivo)
+  .map((bloque, indice) =&gt; (
+    &lt;<span class="tag">View</span> <span class="prop">key</span>={indice} <span class="prop">style</span>={[styles.bloque, { left: bloque.x, top: bloque.y, ... }]} /&gt;
+  ))}</code></pre>
+        </div>
+        <p>Igual que en la Fase 1, pero con un <code class="inline">.filter(...)</code> antes del <code class="inline">.map(...)</code>: los bloques rotos (<code class="inline">vivo: false</code>) simplemente dejan de dibujarse, sin que haga falta borrarlos del array.</p>
+      </div>
+    </div>
+
+    <details class="full-code">
+      <summary>Ver <code class="inline">fase4.tsx</code> completo</summary>
+      <div class="code-panel">
+        <div class="code-bar">
+          <span class="code-bar-name">src/app/fase4.tsx</span>
+          <button class="copy-btn" data-target="codigo-fase4" type="button">Copiar código</button>
+        </div>
+        <pre><code id="codigo-fase4">import { useEffect, useRef, useState } from 'react';
+import { PanResponder, Pressable, StyleSheet, Text, View } from 'react-native';
+
+// ---------------------------------------------------------------------
+// FASE 4: los bloques dejan de ser decoración. Ahora forman parte del
+// estado del juego (cada uno con su "vivo"), la pelota comprueba si
+// choca contra alguno, y se gana la partida al destruirlos todos.
+// ---------------------------------------------------------------------
+
+const anchoJuego = 300;
+const altoJuego = 480;
+
+const ANCHO_JUGADOR = 70;
+const ALTO_JUGADOR = 14;
+const Y_JUGADOR = altoJuego - 40;
+
+const TAMANO_PELOTA = 14;
+const VELOCIDAD_INICIAL_PELOTA = 4;
+
+const FILAS_BLOQUES = 4;
+const BLOQUES_POR_FILA = 5;
+const ANCHO_BLOQUE = 50;
+const ALTO_BLOQUE = 18;
+const ESPACIO_BLOQUES = 8;
+const Y_INICIAL_BLOQUES = 40;
+const MARGEN_BLOQUES =
+  (anchoJuego - (BLOQUES_POR_FILA * ANCHO_BLOQUE + (BLOQUES_POR_FILA - 1) * ESPACIO_BLOQUES)) / 2;
+
+// --- El estado del juego ---
+
+type EstadoJuego = 'jugando' | 'perdido' | 'ganado';
+
+type Bloque = { x: number; y: number; vivo: boolean };
+
+type Juego = {
+  estado: EstadoJuego;
+  jugadorX: number;
+  pelota: { x: number; y: number; vx: number; vy: number };
+  bloques: Bloque[];
+};
+
+// Genera la cuadrícula completa de bloques, todos vivos.
+function crearBloques(): Bloque[] {
+  const bloques: Bloque[] = [];
+  for (let fila = 0; fila &lt; FILAS_BLOQUES; fila++) {
+    for (let columna = 0; columna &lt; BLOQUES_POR_FILA; columna++) {
+      bloques.push({
+        x: MARGEN_BLOQUES + columna * (ANCHO_BLOQUE + ESPACIO_BLOQUES),
+        y: Y_INICIAL_BLOQUES + fila * (ALTO_BLOQUE + ESPACIO_BLOQUES),
+        vivo: true,
+      });
+    }
+  }
+  return bloques;
+}
+
+function crearEstadoInicial(): Juego {
+  return {
+    estado: 'jugando',
+    jugadorX: (anchoJuego - ANCHO_JUGADOR) / 2,
+    pelota: {
+      x: anchoJuego / 2,
+      y: altoJuego / 2,
+      vx: VELOCIDAD_INICIAL_PELOTA,
+      vy: VELOCIDAD_INICIAL_PELOTA,
+    },
+    bloques: crearBloques(),
+  };
+}
+
+// Mueve la pelota, resuelve rebotes con paredes/paleta/bloques, y decide
+// si la partida se gana o se pierde. Todo mutando "juego" directamente.
+function actualizarFisica(juego: Juego) {
+  if (juego.estado !== 'jugando') return;
+
+  const pelota = juego.pelota;
+  pelota.x += pelota.vx;
+  pelota.y += pelota.vy;
+
+  if (pelota.x &lt;= 0 || pelota.x &gt;= anchoJuego - TAMANO_PELOTA) {
+    pelota.vx = -pelota.vx;
+  }
+  if (pelota.y &lt;= 0) {
+    pelota.vy = -pelota.vy;
+  }
+
+  const tocaAlturaPaleta = pelota.y + TAMANO_PELOTA &gt;= Y_JUGADOR &amp;&amp; pelota.y &lt;= Y_JUGADOR + ALTO_JUGADOR;
+  const tocaAnchoPaleta = pelota.x + TAMANO_PELOTA &gt;= juego.jugadorX &amp;&amp; pelota.x &lt;= juego.jugadorX + ANCHO_JUGADOR;
+  if (pelota.vy &gt; 0 &amp;&amp; tocaAlturaPaleta &amp;&amp; tocaAnchoPaleta) {
+    pelota.vy = -pelota.vy;
+  }
+
+  // NUEVO: colisión con los bloques. Recorremos solo los que siguen vivos;
+  // con el primero que coincida basta (para un Arkanoid "muy sencillo" no
+  // hace falta resolver más de un golpe por frame).
+  for (const bloque of juego.bloques) {
+    if (!bloque.vivo) continue;
+
+    const chocaEnX = pelota.x + TAMANO_PELOTA &gt;= bloque.x &amp;&amp; pelota.x &lt;= bloque.x + ANCHO_BLOQUE;
+    const chocaEnY = pelota.y + TAMANO_PELOTA &gt;= bloque.y &amp;&amp; pelota.y &lt;= bloque.y + ALTO_BLOQUE;
+
+    if (chocaEnX &amp;&amp; chocaEnY) {
+      bloque.vivo = false; // el bloque se rompe
+      pelota.vy = -pelota.vy; // y la pelota rebota
+      break;
+    }
+  }
+
+  // Victoria: no queda ningún bloque vivo.
+  if (juego.bloques.every((bloque) =&gt; !bloque.vivo)) {
+    juego.estado = 'ganado';
+  }
+
+  // Derrota: la pelota pasó de largo la paleta.
+  if (pelota.y &gt; altoJuego) {
+    juego.estado = 'perdido';
+  }
+}
+
+export default function Fase4() {
+  const juego = useRef(crearEstadoInicial()).current;
+
+  const [, setTick] = useState(0);
+  const redibujar = () =&gt; setTick((n) =&gt; n + 1);
+
+  useEffect(() =&gt; {
+    const id = setInterval(() =&gt; {
+      actualizarFisica(juego);
+      redibujar();
+    }, 16);
+    return () =&gt; clearInterval(id);
+  }, []);
+
+  const panResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () =&gt; juego.estado === 'jugando',
+      onMoveShouldSetPanResponder: () =&gt; juego.estado === 'jugando',
+      onPanResponderMove: (evento) =&gt; {
+        const x = evento.nativeEvent.locationX;
+        juego.jugadorX = Math.max(0, Math.min(anchoJuego - ANCHO_JUGADOR, x - ANCHO_JUGADOR / 2));
+        redibujar();
+      },
+    })
+  ).current;
+
+  function reiniciar() {
+    Object.assign(juego, crearEstadoInicial());
+    redibujar();
+  }
+
+  return (
+    &lt;View style={styles.pantalla}&gt;
+      &lt;Text style={styles.titulo}&gt;Fase 4 · Romper bloques y ganar&lt;/Text&gt;
+
+      &lt;View
+        style={[styles.areaJuego, { width: anchoJuego, height: altoJuego }]}
+        {...panResponder.panHandlers}
+      &gt;
+        {/* Solo dibujamos los bloques que siguen vivos */}
+        {juego.bloques
+          .filter((bloque) =&gt; bloque.vivo)
+          .map((bloque, indice) =&gt; (
+            &lt;View
+              key={indice}
+              style={[
+                styles.bloque,
+                { left: bloque.x, top: bloque.y, width: ANCHO_BLOQUE, height: ALTO_BLOQUE },
+              ]}
+            /&gt;
+          ))}
+
+        &lt;View
+          style={[
+            styles.pelota,
+            { left: juego.pelota.x, top: juego.pelota.y, width: TAMANO_PELOTA, height: TAMANO_PELOTA },
+          ]}
+        /&gt;
+
+        &lt;View
+          style={[
+            styles.paleta,
+            { left: juego.jugadorX, top: Y_JUGADOR, width: ANCHO_JUGADOR, height: ALTO_JUGADOR },
+          ]}
+        /&gt;
+
+        {juego.estado !== 'jugando' &amp;&amp; (
+          &lt;View style={styles.overlay}&gt;
+            &lt;Text style={styles.mensajeFinal}&gt;
+              {juego.estado === 'ganado' ? '¡Ganaste! 🎉' : 'Perdiste 💥'}
+            &lt;/Text&gt;
+            &lt;Pressable style={styles.boton} onPress={reiniciar}&gt;
+              &lt;Text style={styles.textoBoton}&gt;Jugar de nuevo&lt;/Text&gt;
+            &lt;/Pressable&gt;
+          &lt;/View&gt;
+        )}
+      &lt;/View&gt;
+    &lt;/View&gt;
+  );
+}
+
+const styles = StyleSheet.create({
+  pantalla: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 12,
+    padding: 16,
+  },
+  titulo: { fontSize: 18, fontWeight: 'bold' },
+  areaJuego: {
+    backgroundColor: '#0a0a23',
+    position: 'relative',
+    overflow: 'hidden',
+    borderRadius: 8,
+  },
+  bloque: { position: 'absolute', backgroundColor: '#f97316', borderRadius: 3 },
+  pelota: { position: 'absolute', backgroundColor: '#facc15', borderRadius: 999 },
+  paleta: { position: 'absolute', backgroundColor: '#22c55e', borderRadius: 4 },
+  overlay: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0,0,0,0.75)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 12,
+  },
+  mensajeFinal: { color: '#fff', fontSize: 22, fontWeight: 'bold' },
+  boton: { backgroundColor: '#2563eb', paddingVertical: 10, paddingHorizontal: 22, borderRadius: 8 },
+  textoBoton: { color: '#fff', fontSize: 16, fontWeight: '600' },
+});
+</code></pre>
+      </div>
+    </details>
+
+    <div class="checkpoint">
+      <div class="checkpoint-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        Deberías ver esto
+      </div>
+      <p>Arrastra la paleta para devolver la pelota: cada bloque que toca desaparece. Si destruyes los 20, aparece &ldquo;¡Ganaste!&rdquo;; si se te escapa la pelota antes, &ldquo;Perdiste&rdquo;. En ambos casos, &ldquo;Jugar de nuevo&rdquo; reinicia todo &mdash;bloques incluidos.</p>
+    </div>
+
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Retos extra
+      </div>
+      <p>Añade una <strong>puntuación</strong>: un campo <code class="inline">puntos</code> en <code class="inline">Juego</code> que suba al romper cada bloque, mostrado en un <code class="inline">Text</code> encima del área de juego.</p>
+      <p>Añade <strong>vidas</strong>: en vez de perder al primer fallo, resta una vida y llama a algo parecido a <code class="inline">reiniciar()</code> pero conservando los bloques que ya quedaban rotos.</p>
+      <p>Haz que la pelota <strong>acelere</strong> un poco cada vez que rompe un bloque (multiplica <code class="inline">vx</code> y <code class="inline">vy</code> por, por ejemplo, <code class="inline">1.03</code>), para que la partida se ponga más difícil según avanza.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Si algo falla</h2>
+    <div class="trouble">
+      <div class="trouble-item">
+        <p class="q">La paleta no se mueve al arrastrar</p>
+        <p>Comprueba que <code class="inline">{'{...panResponder.panHandlers}'}</code> está puesto en la <code class="inline">View</code> del área de juego (la que tiene <code class="inline">position: 'relative'</code>), no en una <code class="inline">View</code> exterior. El <code class="inline">PanResponder</code> solo sigue el dedo dentro del elemento al que está conectado.</p>
+      </div>
+      <div class="trouble-item">
+        <p class="q">La pelota atraviesa la paleta o los bloques sin rebotar</p>
+        <p>Revisa el orden de las comprobaciones dentro de <code class="inline">actualizarFisica</code>: si <code class="inline">TAMANO_PELOTA</code>, <code class="inline">ANCHO_JUGADOR</code> o <code class="inline">ANCHO_BLOQUE</code> no coinciden con los que usas al dibujar (en los estilos), los rectángulos de colisión no encajan con lo que ves en pantalla.</p>
+      </div>
+      <div class="trouble-item">
+        <p class="q">La pelota se queda &ldquo;pegada&rdquo;, rebotando muy rápido en el mismo sitio</p>
+        <p>Suele pasar si el rebote de la paleta no comprueba <code class="inline">pelota.vy &gt; 0</code>: sin esa condición, mientras la pelota siga solapada con la paleta unos frames, puede invertir su velocidad varias veces seguidas.</p>
+      </div>
+      <div class="trouble-item">
+        <p class="q">Al probar en el navegador (<code class="inline">w</code> en la terminal) no pasa nada al arrastrar con el ratón</p>
+        <p><code class="inline">PanResponder</code> también funciona con el ratón gracias a <code class="inline">react-native-web</code>, pero asegúrate de mantener pulsado el botón mientras mueves el cursor (arrastrar de verdad, no solo pasar por encima).</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="end">
+    Volviendo a la Sesión 18: identifica en tu propio Arkanoid dónde está el &ldquo;Patrón A&rdquo; (la Fase 3 y 4 enteras) y dónde asomaría el &ldquo;Patrón B&rdquo; si añadieras, por ejemplo, un menú de pausa por turnos.
+  </footer>
+
+</div>
+
+<script>
+  document.querySelectorAll('.copy-btn').forEach(function (boton) {
+    boton.addEventListener('click', function () {
+      var codigo = document.getElementById(boton.dataset.target).textContent;
+      navigator.clipboard.writeText(codigo).then(function () {
+        var original = boton.textContent;
+        boton.textContent = '¡Copiado!';
+        boton.classList.add('copiado');
+        setTimeout(function () {
+          boton.textContent = original;
+          boton.classList.remove('copiado');
+        }, 1800);
+      });
+    });
+  });
+</script>
