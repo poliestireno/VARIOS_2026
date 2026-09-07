@@ -519,20 +519,63 @@
 
   <section class="block">
     <h2 class="block-title">Antes de empezar</h2>
-    <p>Hoy no vamos a instalar ningún proyecto ni tocar React Native todavía. Vamos a escribir JavaScript &ldquo;a pelo&rdquo;, en el sitio más simple posible, para centrarnos solo en el lenguaje. Sirven dos herramientas, cualquiera de las dos:</p>
-    <div class="checklist">
-      <ul>
-        <li>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-          <span><strong>La consola del navegador:</strong> abre Chrome o Firefox, pulsa <code class="inline">F12</code> (o clic derecho &rarr; &ldquo;Inspeccionar&rdquo;), y ve a la pestaña <strong>Console</strong>. Escribes una línea, pulsas Enter, ves el resultado al instante.</span>
-        </li>
-        <li>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-          <span><strong>Node.js en una terminal:</strong> si ya lo instalaste para Expo, escribe <code class="inline">node</code> en una terminal y entrarás en un modo interactivo idéntico en espíritu a la consola del navegador.</span>
-        </li>
-      </ul>
+    <p>Hoy no vamos a instalar ningún proyecto de React Native todavía, pero sí vamos a usar ya el editor que usaremos el resto del curso: <strong>Visual Studio Code</strong>. Vamos a escribir JavaScript &ldquo;a pelo&rdquo;, en un archivo normal y corriente, y a verlo funcionar con Node.js desde la propia terminal de VSCode &mdash; el mismo ciclo de &ldquo;escribir y ejecutar&rdquo; que vas a repetir en cada sesión del curso.</p>
+
+    <div class="step">
+      <div class="step-chip">1</div>
+      <div class="step-body">
+        <h3>Abre una carpeta en VSCode</h3>
+        <p>Crea (o reutiliza) una carpeta vacía para los ejercicios del curso, por ejemplo <code class="inline">curso-js</code>. En VSCode: <strong>Archivo &rarr; Abrir carpeta&hellip;</strong> y selecciónala. A partir de ahora, todo lo que crees en esta sesión va dentro de esa carpeta.</p>
+      </div>
     </div>
-    <p style="margin-top:14px;">Todo el código de esta sesión funciona igual en los dos sitios. Usa el que te resulte más cómodo.</p>
+
+    <div class="step">
+      <div class="step-chip">2</div>
+      <div class="step-body">
+        <h3>Crea tu primer archivo</h3>
+        <p>En el explorador de archivos de la izquierda, pulsa el icono de &ldquo;Nuevo archivo&rdquo; y llámalo <code class="inline">sesion-01.js</code>. La extensión <code class="inline">.js</code> es lo único que necesita Node para saber que es JavaScript &mdash; no hace falta ninguna configuración extra.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">3</div>
+      <div class="step-body">
+        <h3>Abre la terminal integrada</h3>
+        <p>Menú <strong>Terminal &rarr; Nueva terminal</strong> (o el atajo <code class="inline">Ctrl</code> + <code class="inline">&#96;</code> en Windows/Linux, <code class="inline">Cmd</code> + <code class="inline">&#96;</code> en Mac). Se abre una terminal dentro de la propia ventana de VSCode, ya situada en tu carpeta &mdash; es la misma terminal que usarás más adelante para arrancar Expo.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">4</div>
+      <div class="step-body">
+        <h3>Escribe código y ejecútalo</h3>
+        <p>En <code class="inline">sesion-01.js</code>, escribe una línea de prueba como <code class="inline">console.log("Hola")</code>, guarda el archivo (<code class="inline">Ctrl</code>/<code class="inline">Cmd</code> + <code class="inline">S</code>) y en la terminal ejecuta:</p>
+        <div class="term">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code><span class="prompt">$</span> node sesion-01.js</code></pre>
+        </div>
+        <p class="small">El resultado de cada <code class="inline">console.log(...)</code> aparece impreso justo debajo, en la propia terminal.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        El ciclo de hoy
+      </div>
+      <p>Vas a repetir esto muchas veces durante la sesión: escribes o cambias unas líneas en <code class="inline">sesion-01.js</code>, guardas, y vuelves a ejecutar <code class="inline">node sesion-01.js</code> en la terminal. Ese ciclo &ldquo;editar &rarr; guardar &rarr; ejecutar&rdquo; es el mismo que usarás luego con Expo &mdash; hoy lo practicas sin la complejidad de un proyecto de por medio.</p>
+      <p>Truco: no borres las líneas anteriores al añadir código nuevo, simplemente ve añadiendo más abajo en el archivo &mdash; así, al ejecutar de nuevo, vuelves a ver también los resultados de los pasos anteriores.</p>
+    </div>
+
+    <div class="checkpoint">
+      <div class="checkpoint-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        ¿Prefieres no escribir el comando cada vez?
+      </div>
+      <p>La extensión <strong>Code Runner</strong> (búscala en la pestaña de Extensiones de VSCode, el icono de piezas de puzle) añade un botón &#9654; en la esquina superior derecha del editor que hace exactamente lo mismo (<code class="inline">node archivo.js</code>) con un solo clic. Es opcional: la terminal a mano funciona igual de bien, y te acostumbra a un comando que vas a usar constantemente.</p>
+    </div>
+
+    <p style="margin-top:14px; color:var(--muted); font-size:14.5px;">Nota: si alguna vez quieres probar una línea suelta muy rápido, sin archivo de por medio, la consola del navegador (<code class="inline">F12</code> &rarr; pestaña <strong>Console</strong>) sigue funcionando igual &mdash; pero para esta sesión y las siguientes, el flujo de referencia es VSCode + <code class="inline">node</code>.</p>
   </section>
 
   <section class="block">
@@ -657,7 +700,7 @@ console.log(<span class="hl">5</span> !== <span class="str">"5"</span>); <span c
 
   <section class="block">
     <h2 class="block-title">Práctica</h2>
-    <p>Elige <strong>uno</strong> de los dos ejercicios &mdash; los dos usan exactamente lo visto hoy: variables, tipos y <code class="inline">if</code>/<code class="inline">else</code>. Escribe el código en la consola del navegador o en <code class="inline">node</code>, paso a paso.</p>
+    <p>Elige <strong>uno</strong> de los dos ejercicios &mdash; los dos usan exactamente lo visto hoy: variables, tipos y <code class="inline">if</code>/<code class="inline">else</code>. Ve escribiendo el código paso a paso en tu <code class="inline">sesion-01.js</code> (o un archivo nuevo, como <code class="inline">practica.js</code>) y ejecuta <code class="inline">node practica.js</code> en la terminal cada vez que quieras ver el resultado.</p>
 
     <h3 class="option-title">Opción A &mdash; Clasificador de edad</h3>
 
