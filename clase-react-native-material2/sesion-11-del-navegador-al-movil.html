@@ -497,6 +497,82 @@
   }
 
   .compare-item .code-panel { margin: 0; }
+
+  .flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 20px 0;
+  }
+
+  .flow-node {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 14px 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .flow-node.is-wait {
+    background: color-mix(in srgb, var(--accent-2) 7%, var(--surface));
+    border-color: color-mix(in srgb, var(--accent-2) 32%, var(--line));
+  }
+
+  .flow-node-title {
+    display: flex;
+    align-items: center;
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--ink);
+    margin-bottom: 5px;
+  }
+
+  .flow-num {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px;
+    margin-right: 9px;
+  }
+
+  .flow-node p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  .flow-arrow {
+    text-align: center;
+    color: var(--muted);
+    opacity: 0.6;
+    font-size: 18px;
+    line-height: 1;
+    padding: 3px 0;
+  }
+
+  .flow-loop {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 4px;
+    padding: 11px 18px;
+    border: 1px dashed color-mix(in srgb, var(--accent-2) 45%, var(--line));
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--accent-2) 7%, transparent);
+    color: var(--accent-2);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+  }
+
+  .flow-loop svg { flex: none; width: 16px; height: 16px; }
 </style>
 
 <div class="page">
@@ -635,6 +711,65 @@
       </div>
     </div>
     <p class="small" style="color:var(--muted); font-size:14.5px;"><code class="inline">StyleSheet.create</code> valida y optimiza ese objeto internamente, pero conceptualmente sigue siendo un objeto JS normal &mdash; nada de cascada: si quieres que un texto dentro de una <code class="inline">View</code> sea blanco, se lo tienes que decir a ese <code class="inline">Text</code> en concreto, ningún estilo &ldquo;baja&rdquo; solo.</p>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">El mismo ciclo de render, un destino distinto</h2>
+    <p>En la Sesión 7 vimos el ciclo de render de React: primer render, commit, esperar, cambiar estado, re-render, reconciliación, commit otra vez. Ese ciclo <strong>no cambia nada</strong> en React Native &mdash; sigue siendo el mismo motor de React ejecutando el mismo JavaScript. Lo único que cambia son los pasos 3 y 8: dónde termina yendo a parar el resultado.</p>
+
+    <div class="flow">
+      <div class="flow-node">
+        <span class="flow-node-title"><span class="flow-num">1</span>Primer render</span>
+        <p>Igual que en la web: React ejecuta tu función componente de arriba a abajo.</p>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-node">
+        <span class="flow-node-title"><span class="flow-num">2</span>Construye el árbol de elementos</span>
+        <p>El árbol describe <code class="inline">&lt;View&gt;</code>, <code class="inline">&lt;Text&gt;</code>, <code class="inline">&lt;Pressable&gt;</code>&hellip; en vez de <code class="inline">&lt;div&gt;</code>, <code class="inline">&lt;span&gt;</code>, <code class="inline">&lt;button&gt;</code>. No hay HTML detrás.</p>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-node">
+        <span class="flow-node-title"><span class="flow-num">3</span>Commit inicial &mdash; aquí está la diferencia</span>
+        <p>No hay DOM que pintar. React Native envía esa descripción al lado nativo, que crea vistas nativas reales: <code class="inline">UIView</code> en iOS, <code class="inline">android.view.View</code> en Android.</p>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-node is-wait">
+        <span class="flow-node-title"><span class="flow-num">4</span>Esperando&hellip;</span>
+        <p>Igual que en la web, pero los eventos son táctiles: un toque, un swipe, un teclado nativo &mdash; no un clic de ratón.</p>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-node">
+        <span class="flow-node-title"><span class="flow-num">5</span>Algo cambia el estado</span>
+        <p><code class="inline">setAlgo(...)</code> funciona exactamente igual que en React web &mdash; es el mismo hook <code class="inline">useState</code>.</p>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-node">
+        <span class="flow-node-title"><span class="flow-num">6</span>Re-render</span>
+        <p>React vuelve a ejecutar tu componente con el nuevo valor de estado. Mismo motor, mismo JavaScript.</p>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-node">
+        <span class="flow-node-title"><span class="flow-num">7</span>Reconciliación (diffing)</span>
+        <p>Se compara el árbol nuevo con el anterior para calcular exactamente qué cambió.</p>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-node">
+        <span class="flow-node-title"><span class="flow-num">8</span>Commit &mdash; otra vez la diferencia</span>
+        <p>Solo ese cambio se envía al lado nativo, que actualiza las vistas reales en pantalla &mdash; sin volver a crearlas todas.</p>
+      </div>
+      <div class="flow-loop">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+        Vuelve al paso 4 y espera el siguiente toque de pantalla.
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        &ldquo;El puente&rdquo; en una frase
+      </div>
+      <p>Tu código JavaScript corre en su propio hilo, calculando qué debería cambiar. Ese resultado cruza hacia el lado nativo, que es quien de verdad dibuja píxeles en pantalla. React DOM cruza ese puente hacia el navegador; React Native lo cruza hacia iOS o Android &mdash; es la misma idea de &ldquo;calcular aquí, pintar allá&rdquo; en los dos casos.</p>
+    </div>
   </section>
 
   <section class="block">

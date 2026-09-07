@@ -484,6 +484,82 @@
   @media (prefers-reduced-motion: no-preference) {
     .step { transition: none; }
   }
+
+  .flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 20px 0;
+  }
+
+  .flow-node {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 14px 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .flow-node.is-wait {
+    background: color-mix(in srgb, var(--accent-2) 7%, var(--surface));
+    border-color: color-mix(in srgb, var(--accent-2) 32%, var(--line));
+  }
+
+  .flow-node-title {
+    display: flex;
+    align-items: center;
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--ink);
+    margin-bottom: 5px;
+  }
+
+  .flow-num {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px;
+    margin-right: 9px;
+  }
+
+  .flow-node p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  .flow-arrow {
+    text-align: center;
+    color: var(--muted);
+    opacity: 0.6;
+    font-size: 18px;
+    line-height: 1;
+    padding: 3px 0;
+  }
+
+  .flow-loop {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 4px;
+    padding: 11px 18px;
+    border: 1px dashed color-mix(in srgb, var(--accent-2) 45%, var(--line));
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--accent-2) 7%, transparent);
+    color: var(--accent-2);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+  }
+
+  .flow-loop svg { flex: none; width: 16px; height: 16px; }
 </style>
 
 <div class="page">
@@ -598,6 +674,65 @@
         La idea que se queda de hoy
       </div>
       <p>Un componente es una función que devuelve JSX. Los datos entran por props y fluyen de fuera hacia dentro. Una lista de datos se convierte en una lista de componentes con <code class="inline">.map()</code>, y cada uno necesita una <code class="inline">key</code> propia.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Cómo piensa React por dentro: el ciclo de render</h2>
+    <p>Todavía no hemos tocado estado &mdash; llega en la Sesión 8 &mdash; pero ya puedes entender la pieza que lo hace posible: por qué un componente es una función que React puede volver a ejecutar tantas veces como haga falta, y no un trozo de código que corre una única vez. Este es el ciclo completo. Vuelve a esta imagen cuando lleguemos a <code class="inline">useState</code>.</p>
+
+    <div class="flow">
+      <div class="flow-node">
+        <span class="flow-node-title"><span class="flow-num">1</span>Primer render</span>
+        <p>React llama a tu función componente por primera vez, de arriba a abajo.</p>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-node">
+        <span class="flow-node-title"><span class="flow-num">2</span>Construye el árbol de elementos</span>
+        <p>El JSX que devuelves no es HTML: es una descripción &mdash; un árbol de objetos JavaScript &mdash; de cómo debería verse la pantalla para esos datos.</p>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-node">
+        <span class="flow-node-title"><span class="flow-num">3</span>Commit inicial</span>
+        <p>React toma esa descripción y la pinta en el DOM real del navegador. Es la primera vez que algo aparece en pantalla.</p>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-node is-wait">
+        <span class="flow-node-title"><span class="flow-num">4</span>Esperando&hellip;</span>
+        <p>La app no hace nada hasta que ocurre algo: un clic, escribir en un input, una respuesta de red, un temporizador.</p>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-node">
+        <span class="flow-node-title"><span class="flow-num">5</span>Algo cambia el estado</span>
+        <p>Se llama a la función <code class="inline">setAlgo(...)</code> que <code class="inline">useState</code> te dio. Esto no toca la pantalla directamente: solo avisa a React de que hay un dato nuevo.</p>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-node">
+        <span class="flow-node-title"><span class="flow-num">6</span>Re-render</span>
+        <p>React vuelve a llamar a tu función componente &mdash; la misma del paso 1 &mdash; pero esta vez con el nuevo valor de estado.</p>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-node">
+        <span class="flow-node-title"><span class="flow-num">7</span>Reconciliación (diffing)</span>
+        <p>React compara el árbol de elementos nuevo con el árbol anterior y calcula la diferencia mínima entre los dos.</p>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-node">
+        <span class="flow-node-title"><span class="flow-num">8</span>Commit</span>
+        <p>React actualiza el DOM real, pero solo en los sitios donde algo cambió de verdad &mdash; no vuelve a pintar la pantalla entera.</p>
+      </div>
+      <div class="flow-loop">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+        Vuelve al paso 4 y espera el siguiente cambio &mdash; este ciclo se repite mientras la app esté abierta.
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Por qué importa
+      </div>
+      <p>Tú nunca llamas a tu propio componente a mano después del primer render. Es React quien decide, en el paso 6, volver a ejecutarlo &mdash; siempre como reacción a un cambio de estado. De ahí viene el nombre &ldquo;React&rdquo;: reacciona a los cambios, no los ejecuta el programador paso a paso.</p>
     </div>
   </section>
 
