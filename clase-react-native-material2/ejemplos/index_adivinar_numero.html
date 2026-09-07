@@ -1,0 +1,386 @@
+<title>Adivina el número — código</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #E4572E;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #FF8A5C;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #F2764C;
+      --accent-ink: #17110D;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #F2764C;
+    --accent-ink: #17110D;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top { margin-bottom: 32px; }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.7rem, 4.5vw, 2.2rem);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    margin: 16px 0 8px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.02rem;
+    max-width: 62ch;
+    margin: 0 0 14px;
+  }
+
+  a.back {
+    color: var(--accent-2);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    text-decoration: none;
+  }
+  a.back:hover { text-decoration: underline; }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 10px;
+    margin: 18px 0;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+
+  .code-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--code-line);
+  }
+
+  .code-bar-name {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    color: var(--code-muted);
+  }
+
+  button.copy-btn {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    color: var(--code-ink);
+    background: var(--code-line);
+    border: 1px solid color-mix(in srgb, var(--code-ink) 20%, var(--code-line));
+    border-radius: 6px;
+    padding: 6px 12px;
+    cursor: pointer;
+  }
+
+  button.copy-btn:hover {
+    background: color-mix(in srgb, var(--code-accent) 25%, var(--code-line));
+  }
+
+  button.copy-btn.copiado {
+    background: var(--accent-2);
+    color: #fff;
+    border-color: var(--accent-2);
+  }
+
+  .code-panel pre {
+    margin: 0;
+    padding: 18px 20px 20px;
+    overflow-x: auto;
+    max-height: 78vh;
+    overflow-y: auto;
+  }
+
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+
+  .hint {
+    color: var(--muted);
+    font-size: 13.5px;
+    margin: 10px 2px 0;
+  }
+</style>
+
+<div class="page">
+  <header class="top">
+    <span class="eyebrow">Ejemplo · Sesión 11</span>
+    <h1>Adivina el número — código</h1>
+    <p class="lede">Pantalla completa de Expo (app/index.tsx): un juego para adivinar un número del 0 al 100, con pistas de mayor/menor y conteo de intentos. Comentado línea a línea.</p>
+    <a class="back" href="../sesion-11-del-navegador-al-movil.html">&larr; Volver a la Sesión 11</a>
+  </header>
+
+  <div class="code-panel">
+    <div class="code-bar">
+      <span class="code-bar-name">app/index.tsx &mdash; index_adivinar_numero.tsx</span>
+      <button class="copy-btn" id="btnCopiar" type="button">Copiar código</button>
+    </div>
+    <pre><code id="codigoFuente">// useState: hook de React que permite guardar un valor y "recordarlo"
+// entre renderizados de la pantalla.
+import { useState } from 'react';
+// StatusBar: componente para controlar la barra de estado del celular (hora, batería, etc).
+import { StatusBar } from 'expo-status-bar';
+// Componentes básicos de React Native:
+// StyleSheet -&gt; para crear estilos, Text -&gt; para mostrar texto,
+// View -&gt; contenedor/caja, Pressable -&gt; detecta toques (botones),
+// TextInput -&gt; caja de texto donde el usuario escribe.
+import { StyleSheet, Text, View, Pressable, TextInput } from 'react-native';
+
+// Función auxiliar que genera un número entero al azar entre 0 y 100.
+function numeroAleatorio(): number {
+  // Math.random() da un decimal entre 0 y 1 (sin llegar a 1).
+  // Lo multiplicamos por 101 y redondeamos hacia abajo (Math.floor)
+  // para obtener un entero entre 0 y 100 (ambos incluidos).
+  return Math.floor(Math.random() * 101);
+}
+
+// Componente principal de la pantalla. Es una función que devuelve
+// lo que se ve en pantalla (JSX).
+export default function Index() {
+  // Número secreto que el jugador debe adivinar.
+  // Se calcula una sola vez, al crear el componente por primera vez.
+  const [secreto, setSecreto] = useState&lt;number&gt;(numeroAleatorio());
+
+  // Texto que el usuario va escribiendo en el input (siempre es string,
+  // aunque represente un número, porque así funciona un TextInput).
+  const [valorInput, setValorInput] = useState&lt;string&gt;('');
+
+  // Cuántas veces ha intentado adivinar.
+  const [intentos, setIntentos] = useState&lt;number&gt;(0);
+
+  // Mensaje que se muestra en pantalla (pista, error o mensaje de victoria).
+  const [mensaje, setMensaje] = useState&lt;string&gt;('Adivina un número entre 0 y 100');
+
+  // Indica si el juego ya terminó (true = ya adivinó el número).
+  const [terminado, setTerminado] = useState&lt;boolean&gt;(false);
+
+  // Esta función se ejecuta cuando el usuario presiona el botón "Adivinar".
+  function adivinar() {
+    // Convertimos el texto escrito a número. Si el texto no es un número
+    // válido (ej: "hola"), Number(...) devuelve NaN (Not a Number).
+    const numero = Number(valorInput);
+
+    // Validamos que el usuario haya escrito algo y que sea un número
+    // dentro del rango permitido (0 a 100).
+    if (valorInput.trim() === '' || Number.isNaN(numero) || numero &lt; 0 || numero &gt; 100) {
+      setMensaje('Ingresa un número válido entre 0 y 100');
+      return; // Salimos de la función, no contamos este intento.
+    }
+
+    // Si el número es válido, sumamos un intento.
+    const nuevosIntentos = intentos + 1;
+    setIntentos(nuevosIntentos);
+
+    // Comparamos el número ingresado contra el número secreto.
+    if (numero === secreto) {
+      // Acertó: mostramos mensaje de victoria con el total de intentos.
+      setMensaje(`¡Correcto! Lo lograste en ${nuevosIntentos} intento(s)`);
+      setTerminado(true); // Marcamos el juego como terminado.
+    } else if (numero &lt; secreto) {
+      // El número ingresado es menor que el secreto, entonces el secreto es mayor.
+      setMensaje('Mayor ⬆️');
+    } else {
+      // El número ingresado es mayor que el secreto, entonces el secreto es menor.
+      setMensaje('Menor ⬇️');
+    }
+
+    // Limpiamos el input para que el usuario escriba el siguiente intento.
+    setValorInput('');
+  }
+
+  // Esta función reinicia el juego desde cero (nuevo número secreto).
+  function jugarDeNuevo() {
+    setSecreto(numeroAleatorio()); // Nuevo número a adivinar.
+    setValorInput('');             // Limpiamos el input.
+    setIntentos(0);                // Reiniciamos el contador de intentos.
+    setMensaje('Adivina un número entre 0 y 100'); // Mensaje inicial.
+    setTerminado(false);           // El juego vuelve a estar "en curso".
+  }
+
+  // A partir de aquí se define lo que se dibuja en pantalla.
+  return (
+    // Contenedor principal de toda la pantalla.
+    &lt;View style={styles.container}&gt;
+      {/* Título fijo del juego */}
+      &lt;Text style={styles.titulo}&gt;🎯 Adivina el número&lt;/Text&gt;
+
+      {/* Mensaje dinámico: cambia según lo que pase (pista, error, victoria) */}
+      &lt;Text style={styles.mensaje}&gt;{mensaje}&lt;/Text&gt;
+
+      {/*
+        Si el juego NO ha terminado (!terminado), mostramos el input
+        y el botón para seguir adivinando. El "&amp;&amp;" es un truco típico
+        de React: si la condición de la izquierda es falsa, no se
+        muestra nada; si es verdadera, se muestra lo de la derecha.
+      */}
+      {!terminado &amp;&amp; (
+        // &lt;&gt;...&lt;/&gt; es un "Fragment": permite agrupar dos elementos
+        // (TextInput y Pressable) sin necesidad de un View extra.
+        &lt;&gt;
+          &lt;TextInput
+            style={styles.input}
+            keyboardType="numeric" // Muestra el teclado numérico del celular.
+            placeholder="Escribe tu número" // Texto de ayuda cuando está vacío.
+            value={valorInput} // El valor mostrado siempre viene del estado.
+            onChangeText={setValorInput} // Cada letra escrita actualiza el estado.
+          /&gt;
+          {/* Botón que, al presionarlo, ejecuta la función adivinar() */}
+          &lt;Pressable style={styles.boton} onPress={adivinar}&gt;
+            &lt;Text style={styles.textoBoton}&gt;Adivinar&lt;/Text&gt;
+          &lt;/Pressable&gt;
+        &lt;/&gt;
+      )}
+
+      {/* Siempre mostramos cuántos intentos lleva el jugador */}
+      &lt;Text style={styles.intentos}&gt;Intentos: {intentos}&lt;/Text&gt;
+
+      {/* Si el juego terminó, mostramos el botón para volver a jugar */}
+      {terminado &amp;&amp; (
+        &lt;Pressable style={styles.boton} onPress={jugarDeNuevo}&gt;
+          &lt;Text style={styles.textoBoton}&gt;Jugar de nuevo&lt;/Text&gt;
+        &lt;/Pressable&gt;
+      )}
+
+      {/* Barra de estado del sistema, con estilo automático (claro u oscuro) */}
+      &lt;StatusBar style="auto" /&gt;
+    &lt;/View&gt;
+  );
+}
+
+// Definimos todos los estilos (como CSS, pero en objeto de JavaScript).
+const styles = StyleSheet.create({
+  container: {
+    flex: 1, // Ocupa toda la pantalla disponible.
+    backgroundColor: '#fff', // Fondo blanco.
+    alignItems: 'center', // Centra los elementos horizontalmente.
+    justifyContent: 'center', // Centra los elementos verticalmente.
+    gap: 16, // Espacio entre cada elemento hijo.
+    padding: 24, // Espacio interno respecto a los bordes de la pantalla.
+  },
+  titulo: { fontSize: 22, fontWeight: 'bold' }, // Texto grande y en negrita.
+  mensaje: { fontSize: 18, textAlign: 'center' }, // Texto centrado para la pista.
+  intentos: { fontSize: 16, color: '#555' }, // Texto gris para el contador.
+  input: {
+    borderWidth: 1, // Grosor del borde de la caja de texto.
+    borderColor: '#ccc', // Color gris claro del borde.
+    borderRadius: 8, // Esquinas redondeadas.
+    paddingVertical: 10, // Espacio interno arriba/abajo.
+    paddingHorizontal: 16, // Espacio interno izquierda/derecha.
+    fontSize: 18, // Tamaño del texto escrito.
+    width: 160, // Ancho fijo de la caja.
+    textAlign: 'center', // Texto centrado dentro de la caja.
+  },
+  boton: {
+    backgroundColor: '#2563eb', // Fondo azul.
+    paddingVertical: 12, // Espacio interno arriba/abajo del botón.
+    paddingHorizontal: 24, // Espacio interno izquierda/derecha del botón.
+    borderRadius: 8, // Esquinas redondeadas.
+  },
+  textoBoton: { color: '#fff', fontSize: 18 }, // Texto blanco dentro del botón.
+});
+</code></pre>
+  </div>
+  <p class="hint">También puedes seleccionar el texto directamente dentro del recuadro y copiarlo a mano.</p>
+</div>
+
+<script>
+  document.getElementById('btnCopiar').addEventListener('click', function () {
+    var texto = document.getElementById('codigoFuente').textContent;
+    var boton = this;
+    navigator.clipboard.writeText(texto).then(function () {
+      var original = boton.textContent;
+      boton.textContent = '¡Copiado!';
+      boton.classList.add('copiado');
+      setTimeout(function () {
+        boton.textContent = original;
+        boton.classList.remove('copiado');
+      }, 1800);
+    });
+  });
+</script>
