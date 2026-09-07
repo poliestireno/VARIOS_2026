@@ -1,0 +1,456 @@
+<title>Login + tabla aleatoria — código</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #E4572E;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #FF8A5C;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #F2764C;
+      --accent-ink: #17110D;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #F2764C;
+    --accent-ink: #17110D;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top { margin-bottom: 32px; }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.7rem, 4.5vw, 2.2rem);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    margin: 16px 0 8px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.02rem;
+    max-width: 62ch;
+    margin: 0 0 14px;
+  }
+
+  a.back {
+    color: var(--accent-2);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    text-decoration: none;
+  }
+  a.back:hover { text-decoration: underline; }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .file-desc {
+    color: var(--muted);
+    font-size: 14.5px;
+    margin: 28px 2px 0;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 10px;
+    margin: 10px 0 18px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+
+  .code-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--code-line);
+  }
+
+  .code-bar-name {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    color: var(--code-muted);
+  }
+
+  button.copy-btn {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    color: var(--code-ink);
+    background: var(--code-line);
+    border: 1px solid color-mix(in srgb, var(--code-ink) 20%, var(--code-line));
+    border-radius: 6px;
+    padding: 6px 12px;
+    cursor: pointer;
+  }
+
+  button.copy-btn:hover {
+    background: color-mix(in srgb, var(--code-accent) 25%, var(--code-line));
+  }
+
+  button.copy-btn.copiado {
+    background: var(--accent-2);
+    color: #fff;
+    border-color: var(--accent-2);
+  }
+
+  .code-panel pre {
+    margin: 0;
+    padding: 18px 20px 20px;
+    overflow-x: auto;
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+
+  .hint {
+    color: var(--muted);
+    font-size: 13.5px;
+    margin: 10px 2px 0;
+  }
+</style>
+
+<div class="page">
+  <header class="top">
+    <span class="eyebrow">Ejemplo · Sesión 11</span>
+    <h1>Login + tabla aleatoria &mdash; código</h1>
+    <p class="lede">Dos pantallas con Expo Router: una pantalla de login (imagen + formulario) y una segunda pantalla que confirma si el usuario y la contraseña son correctos (<code class="inline">a1</code> / <code class="inline">a1</code>) y, si lo son, muestra una tabla 3x3 de números aleatorios del 1 al 9.</p>
+    <a class="back" href="../sesion-11-del-navegador-al-movil.html">&larr; Volver a la Sesión 11</a>
+  </header>
+
+  <p class="file-desc"><code class="inline">app/index.tsx</code> &mdash; Pantalla 1: una imagen y, debajo, el formulario de login (usuario/contraseña).</p>
+  <div class="code-panel">
+    <div class="code-bar">
+      <span class="code-bar-name">app/index.tsx</span>
+      <button class="copy-btn" data-target="codigo0" type="button">Copiar código</button>
+    </div>
+    <pre><code id="codigo0">// useState: para guardar en memoria lo que el usuario escribe en el formulario.
+import { useState } from 'react';
+// useRouter: hook de Expo Router para navegar de una pantalla a otra.
+import { useRouter } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, Text, View, TextInput, Pressable, Image } from 'react-native';
+
+// Usuario y contraseña "correctos" para esta demo. En una app real
+// nunca se comparan así, escritos directamente en el código: esto es
+// solo para practicar el formulario y la navegación entre pantallas.
+const USUARIO_VALIDO = 'a1';
+const PASSWORD_VALIDA = 'a1';
+
+// Esta es la PRIMERA pantalla: una imagen y, debajo, el formulario de login.
+export default function Index() {
+  // router nos deja movernos a otra pantalla (a "resultado.tsx").
+  const router = useRouter();
+
+  // Lo que el usuario va escribiendo en cada campo del formulario.
+  const [usuario, setUsuario] = useState('');
+  const [password, setPassword] = useState('');
+
+  // Se ejecuta al pulsar el botón "Entrar".
+  function iniciarSesion() {
+    // Comparamos lo escrito contra los valores válidos de arriba.
+    const esCorrecto = usuario === USUARIO_VALIDO &amp;&amp; password === PASSWORD_VALIDA;
+
+    // router.push cambia a la pantalla "resultado" y le manda datos
+    // como "parámetros" (aquí, si el login fue correcto o no).
+    // Los parámetros siempre viajan como texto, por eso usamos '1'/'0'.
+    router.push({
+      pathname: '/resultado',
+      params: { ok: esCorrecto ? '1' : '0' },
+    });
+  }
+
+  return (
+    &lt;View style={styles.container}&gt;
+      {/* Una imagen cualquiera: aquí usamos un logo que ya trae el proyecto */}
+      &lt;Image source={require('../../assets/images/react-logo.png')} style={styles.imagen} /&gt;
+
+      &lt;Text style={styles.titulo}&gt;Iniciar sesión&lt;/Text&gt;
+
+      {/* Debajo de la imagen, el formulario de login */}
+      &lt;View style={styles.formulario}&gt;
+        &lt;TextInput
+          style={styles.input}
+          placeholder="Usuario"
+          autoCapitalize="none" // Evita que ponga la primera letra en mayúscula sola.
+          value={usuario}
+          onChangeText={setUsuario}
+        /&gt;
+        &lt;TextInput
+          style={styles.input}
+          placeholder="Contraseña"
+          autoCapitalize="none"
+          secureTextEntry // Oculta lo escrito con puntos, como en cualquier login.
+          value={password}
+          onChangeText={setPassword}
+        /&gt;
+        &lt;Pressable style={styles.boton} onPress={iniciarSesion}&gt;
+          &lt;Text style={styles.textoBoton}&gt;Entrar&lt;/Text&gt;
+        &lt;/Pressable&gt;
+      &lt;/View&gt;
+
+      &lt;StatusBar style="auto" /&gt;
+    &lt;/View&gt;
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 20,
+    padding: 24,
+  },
+  imagen: {
+    width: 120,
+    height: 120,
+    resizeMode: 'contain', // Encoge/agranda la imagen sin deformarla.
+  },
+  titulo: { fontSize: 24, fontWeight: 'bold' },
+  formulario: {
+    width: '100%',
+    maxWidth: 320,
+    gap: 12,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    paddingVertical: 10,
+    paddingHorizontal: 14,
+    fontSize: 16,
+  },
+  boton: {
+    backgroundColor: '#2563eb',
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 4,
+  },
+  textoBoton: { color: '#fff', fontSize: 16, fontWeight: '600' },
+});
+</code></pre>
+  </div>
+
+  <p class="file-desc"><code class="inline">app/resultado.tsx</code> &mdash; Pantalla 2: dice si el login fue correcto o no, y si lo fue, muestra la tabla 3x3 de números aleatorios.</p>
+  <div class="code-panel">
+    <div class="code-bar">
+      <span class="code-bar-name">app/resultado.tsx</span>
+      <button class="copy-btn" data-target="codigo1" type="button">Copiar código</button>
+    </div>
+    <pre><code id="codigo1">import { useState } from 'react';
+// useLocalSearchParams: lee los parámetros que la pantalla anterior mandó
+// al navegar aquí. useRouter: para poder volver al login.
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, Text, View, Pressable } from 'react-native';
+
+// Genera una tabla de 3x3 (un array de 3 filas, cada fila con 3 números)
+// con números aleatorios del 1 al 9. Se usa una función aparte para no
+// repetir el mismo cálculo dos veces dentro del componente.
+function generarTabla(): number[][] {
+  const tabla: number[][] = [];
+
+  for (let fila = 0; fila &lt; 3; fila++) {
+    const numerosDeLaFila: number[] = [];
+    for (let columna = 0; columna &lt; 3; columna++) {
+      // Math.random() da un decimal entre 0 y 1 (sin llegar a 1).
+      // Al multiplicar por 9 y redondear hacia abajo (Math.floor)
+      // obtenemos un entero de 0 a 8; sumando 1 queda entre 1 y 9.
+      numerosDeLaFila.push(Math.floor(Math.random() * 9) + 1);
+    }
+    tabla.push(numerosDeLaFila);
+  }
+
+  return tabla;
+}
+
+// Esta es la SEGUNDA pantalla: dice si el login fue correcto o no,
+// y si fue correcto, además muestra la tabla 3x3 de números aleatorios.
+export default function Resultado() {
+  const router = useRouter();
+
+  // Los parámetros que llegan por la URL siempre son texto (string),
+  // aunque representen otra cosa (aquí, "1" o "0").
+  const { ok } = useLocalSearchParams&lt;{ ok: string }&gt;();
+  const loginCorrecto = ok === '1';
+
+  // Le pasamos una función a useState (en vez de un valor directo) para
+  // que la tabla se genere una única vez, al entrar a esta pantalla,
+  // y no se recalcule cada vez que el componente se vuelve a renderizar.
+  const [tabla] = useState&lt;number[][]&gt;(() =&gt; generarTabla());
+
+  return (
+    &lt;View style={styles.container}&gt;
+      {loginCorrecto ? (
+        &lt;&gt;
+          &lt;Text style={styles.mensajeOk}&gt;✅ Login correcto&lt;/Text&gt;
+
+          {/* Dibujamos la tabla: una fila por cada array dentro de "tabla",
+              y dentro de cada fila, una celda por cada número. */}
+          &lt;View style={styles.tabla}&gt;
+            {tabla.map((numerosDeLaFila, indiceFila) =&gt; (
+              &lt;View key={indiceFila} style={styles.fila}&gt;
+                {numerosDeLaFila.map((numero, indiceColumna) =&gt; (
+                  &lt;View key={indiceColumna} style={styles.celda}&gt;
+                    &lt;Text style={styles.numeroCelda}&gt;{numero}&lt;/Text&gt;
+                  &lt;/View&gt;
+                ))}
+              &lt;/View&gt;
+            ))}
+          &lt;/View&gt;
+        &lt;/&gt;
+      ) : (
+        &lt;Text style={styles.mensajeError}&gt;❌ Usuario o contraseña incorrectos&lt;/Text&gt;
+      )}
+
+      {/* router.replace en vez de router.back(): evita que, al volver
+          a entrar mal, se vayan acumulando pantallas en el historial. */}
+      &lt;Pressable style={styles.boton} onPress={() =&gt; router.replace('/')}&gt;
+        &lt;Text style={styles.textoBoton}&gt;Volver al login&lt;/Text&gt;
+      &lt;/Pressable&gt;
+
+      &lt;StatusBar style="auto" /&gt;
+    &lt;/View&gt;
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 24,
+    padding: 24,
+  },
+  mensajeOk: { fontSize: 22, fontWeight: 'bold', color: '#16a34a' },
+  mensajeError: { fontSize: 20, fontWeight: 'bold', color: '#dc2626', textAlign: 'center' },
+  tabla: { gap: 8 },
+  fila: { flexDirection: 'row', gap: 8 },
+  celda: {
+    width: 56,
+    height: 56,
+    borderRadius: 8,
+    backgroundColor: '#eef2ff',
+    borderWidth: 1,
+    borderColor: '#c7d2fe',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  numeroCelda: { fontSize: 22, fontWeight: '600', color: '#1e293b' },
+  boton: {
+    backgroundColor: '#2563eb',
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 8,
+  },
+  textoBoton: { color: '#fff', fontSize: 16, fontWeight: '600' },
+});
+</code></pre>
+  </div>
+  <p class="hint">También puedes seleccionar el texto directamente dentro de cada recuadro y copiarlo a mano.</p>
+</div>
+
+<script>
+  document.querySelectorAll('.copy-btn').forEach(function (boton) {
+    boton.addEventListener('click', function () {
+      var codigo = document.getElementById(boton.dataset.target).textContent;
+      navigator.clipboard.writeText(codigo).then(function () {
+        var original = boton.textContent;
+        boton.textContent = '¡Copiado!';
+        boton.classList.add('copiado');
+        setTimeout(function () {
+          boton.textContent = original;
+          boton.classList.remove('copiado');
+        }, 1800);
+      });
+    });
+  });
+</script>
