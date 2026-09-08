@@ -1,0 +1,816 @@
+<title>Piedra, papel o tijera en 4 fases</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #E4572E;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #FF8A5C;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #F2764C;
+      --accent-ink: #17110D;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #F2764C;
+    --accent-ink: #17110D;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top { margin-bottom: 36px; }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.8rem, 4.5vw, 2.35rem);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    margin: 16px 0 8px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.03rem;
+    max-width: 64ch;
+    margin: 0 0 14px;
+  }
+
+  .meta-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  a.back {
+    color: var(--accent-2);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    text-decoration: none;
+  }
+  a.back:hover { text-decoration: underline; }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  section.fase {
+    margin-top: 44px;
+    padding-top: 28px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  section.fase h2 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 1.3rem;
+    margin: 0 0 8px;
+  }
+
+  .lede-fase {
+    color: var(--muted);
+    font-size: 15px;
+    max-width: 66ch;
+    margin: 0 0 10px;
+  }
+
+  ul.puntos {
+    margin: 0 0 4px;
+    padding-left: 20px;
+    color: var(--ink);
+    font-size: 14px;
+  }
+  ul.puntos li { margin-bottom: 4px; }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 10px;
+    margin: 18px 0;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+
+  .code-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--code-line);
+  }
+
+  .code-bar-name {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    color: var(--code-muted);
+  }
+
+  button.copy-btn {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    color: var(--code-ink);
+    background: var(--code-line);
+    border: 1px solid color-mix(in srgb, var(--code-ink) 20%, var(--code-line));
+    border-radius: 6px;
+    padding: 6px 12px;
+    cursor: pointer;
+  }
+
+  button.copy-btn:hover {
+    background: color-mix(in srgb, var(--code-accent) 25%, var(--code-line));
+  }
+
+  button.copy-btn.copiado {
+    background: var(--accent-2);
+    color: #fff;
+    border-color: var(--accent-2);
+  }
+
+  .code-panel pre {
+    margin: 0;
+    padding: 18px 20px 20px;
+    overflow-x: auto;
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+
+  footer.end {
+    margin-top: 48px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+</style>
+
+<div class="page">
+  <header class="top">
+    <span class="eyebrow">Ejemplo · Piedra, papel o tijera</span>
+    <h1>Piedra, papel o tijera en 4 fases</h1>
+    <p class="lede">El clásico juego contra la máquina, construido paso a paso: primero elegir y mostrar, luego decidir quién gana, después un marcador que no se pierde entre rondas, y por último una partida completa al mejor de 3. Cada fase es un archivo independiente y funcionando, igual que el Ahorcado y el Arkanoid.</p>
+    <div class="meta-row">
+      <span class="meta-chip">React Native + Expo</span>
+      <span class="meta-chip">TypeScript</span>
+      <span class="meta-chip">4 fases</span>
+    </div>
+    <p style="margin-top:16px;"><a class="back" href="index.html">&larr; Volver al índice del curso</a></p>
+  </header>
+
+  <p class="lede">Necesitas Node.js, VS Code y un proyecto de Expo funcionando. Si te falta alguno, empieza por <a href="contador-en-expo.html">la guía &ldquo;Contador en Expo&rdquo;</a> &mdash; los pasos de creación son idénticos, solo cambia el nombre del proyecto (aquí, <code class="inline">piedrapapeltijera</code>). Cada fase de abajo es un archivo distinto dentro de <code class="inline">app/</code> (<code class="inline">fase1.tsx</code>, <code class="inline">fase2.tsx</code>&hellip;), enlazados desde un menú en <code class="inline">index.tsx</code>.</p>
+
+
+  <section class="fase">
+    <h2>Fase 1 · Elegir y mostrar</h2>
+    <p class="lede-fase">Elegir piedra, papel o tijera y ver qué responde la máquina. Todavía no hay ganador: el objetivo es solo guardar las dos elecciones en estado y mostrarlas en pantalla.</p>
+    <ul class="puntos">
+      <li>useState para guardar la elección del jugador y la de la máquina.</li>
+      <li>Una función auxiliar que elige al azar entre las tres opciones.</li>
+      <li>Un emoji por opción en vez de solo texto, para que se vea como un juego de verdad.</li>
+    </ul>
+
+  <div class="code-panel">
+    <div class="code-bar">
+      <span class="code-bar-name">app/fase1.tsx</span>
+      <button class="copy-btn" id="btnCopiar1" type="button" data-target="codigoFuente1">Copiar código</button>
+    </div>
+    <pre><code id="codigoFuente1">import { useState } from &#x27;react&#x27;;
+import { Pressable, StyleSheet, Text, View } from &#x27;react-native&#x27;;
+
+// ---------------------------------------------------------------------
+// FASE 1: elegir piedra, papel o tijera y ver qué elige la máquina.
+// Todavía no hay ganador: el objetivo es solo guardar dos elecciones
+// en estado (la del jugador y la de la máquina, al azar) y mostrarlas.
+// ---------------------------------------------------------------------
+
+type Opcion = &#x27;piedra&#x27; | &#x27;papel&#x27; | &#x27;tijera&#x27;;
+
+const OPCIONES: Opcion[] = [&#x27;piedra&#x27;, &#x27;papel&#x27;, &#x27;tijera&#x27;];
+
+// Un emoji por opción, para no mostrar solo texto.
+const EMOJI: Record&lt;Opcion, string&gt; = {
+  piedra: &#x27;🪨&#x27;,
+  papel: &#x27;📄&#x27;,
+  tijera: &#x27;✂️&#x27;,
+};
+
+// Elige una opción al azar entre las tres posibles.
+function elegirAlAzar(): Opcion {
+  const indice = Math.floor(Math.random() * OPCIONES.length);
+  return OPCIONES[indice];
+}
+
+export default function Fase1() {
+  const [eleccionJugador, setEleccionJugador] = useState&lt;Opcion | null&gt;(null);
+  const [eleccionMaquina, setEleccionMaquina] = useState&lt;Opcion | null&gt;(null);
+
+  function jugar(opcion: Opcion) {
+    setEleccionJugador(opcion);
+    setEleccionMaquina(elegirAlAzar());
+  }
+
+  return (
+    &lt;View style={styles.pantalla}&gt;
+      &lt;Text style={styles.titulo}&gt;Fase 1 · Elegir y mostrar&lt;/Text&gt;
+
+      &lt;View style={styles.marcador}&gt;
+        &lt;View style={styles.lado}&gt;
+          &lt;Text style={styles.etiqueta}&gt;Tú&lt;/Text&gt;
+          &lt;Text style={styles.emojiGrande}&gt;{eleccionJugador ? EMOJI[eleccionJugador] : &#x27;❔&#x27;}&lt;/Text&gt;
+        &lt;/View&gt;
+        &lt;Text style={styles.vs}&gt;VS&lt;/Text&gt;
+        &lt;View style={styles.lado}&gt;
+          &lt;Text style={styles.etiqueta}&gt;Máquina&lt;/Text&gt;
+          &lt;Text style={styles.emojiGrande}&gt;{eleccionMaquina ? EMOJI[eleccionMaquina] : &#x27;❔&#x27;}&lt;/Text&gt;
+        &lt;/View&gt;
+      &lt;/View&gt;
+
+      &lt;View style={styles.botones}&gt;
+        {OPCIONES.map((opcion) =&gt; (
+          &lt;Pressable key={opcion} style={styles.boton} onPress={() =&gt; jugar(opcion)}&gt;
+            &lt;Text style={styles.emojiBoton}&gt;{EMOJI[opcion]}&lt;/Text&gt;
+          &lt;/Pressable&gt;
+        ))}
+      &lt;/View&gt;
+    &lt;/View&gt;
+  );
+}
+
+const styles = StyleSheet.create({
+  pantalla: { flex: 1, backgroundColor: &#x27;#fff&#x27;, alignItems: &#x27;center&#x27;, justifyContent: &#x27;center&#x27;, gap: 28, padding: 24 },
+  titulo: { fontSize: 18, fontWeight: &#x27;bold&#x27; },
+  marcador: { flexDirection: &#x27;row&#x27;, alignItems: &#x27;center&#x27;, gap: 20 },
+  lado: { alignItems: &#x27;center&#x27;, gap: 6 },
+  etiqueta: { fontSize: 13, color: &#x27;#888&#x27; },
+  emojiGrande: { fontSize: 56 },
+  vs: { fontSize: 16, fontWeight: &#x27;bold&#x27;, color: &#x27;#888&#x27; },
+  botones: { flexDirection: &#x27;row&#x27;, gap: 14 },
+  boton: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: &#x27;#2563eb&#x27;,
+    alignItems: &#x27;center&#x27;,
+    justifyContent: &#x27;center&#x27;,
+  },
+  emojiBoton: { fontSize: 28 },
+});
+</code></pre>
+  </div>
+  </section>
+  <section class="fase">
+    <h2>Fase 2 · Quién gana</h2>
+    <p class="lede-fase">Se añade la lógica que decide el resultado de la ronda: piedra vence a tijera, tijera vence a papel, papel vence a piedra; si ambos eligen lo mismo, es empate.</p>
+    <ul class="puntos">
+      <li>Un objeto GANA_A que guarda las reglas del juego, en vez de encadenar if/else.</li>
+      <li>Una función determinarGanador() que se puede probar aparte del componente.</li>
+      <li>Un texto de resultado distinto según quién ganó la ronda.</li>
+    </ul>
+
+  <div class="code-panel">
+    <div class="code-bar">
+      <span class="code-bar-name">app/fase2.tsx</span>
+      <button class="copy-btn" id="btnCopiar2" type="button" data-target="codigoFuente2">Copiar código</button>
+    </div>
+    <pre><code id="codigoFuente2">import { useState } from &#x27;react&#x27;;
+import { Pressable, StyleSheet, Text, View } from &#x27;react-native&#x27;;
+
+// ---------------------------------------------------------------------
+// FASE 2: ya se decide quién gana la ronda. Piedra vence a tijera,
+// tijera vence a papel, papel vence a piedra; si ambos eligen lo
+// mismo, es empate. Todavía no se guarda un marcador entre rondas.
+// ---------------------------------------------------------------------
+
+type Opcion = &#x27;piedra&#x27; | &#x27;papel&#x27; | &#x27;tijera&#x27;;
+type Resultado = &#x27;jugador&#x27; | &#x27;maquina&#x27; | &#x27;empate&#x27;;
+
+const OPCIONES: Opcion[] = [&#x27;piedra&#x27;, &#x27;papel&#x27;, &#x27;tijera&#x27;];
+
+const EMOJI: Record&lt;Opcion, string&gt; = {
+  piedra: &#x27;🪨&#x27;,
+  papel: &#x27;📄&#x27;,
+  tijera: &#x27;✂️&#x27;,
+};
+
+// Qué opción vence a cuál: la clave gana a su valor.
+const GANA_A: Record&lt;Opcion, Opcion&gt; = {
+  piedra: &#x27;tijera&#x27;,
+  tijera: &#x27;papel&#x27;,
+  papel: &#x27;piedra&#x27;,
+};
+
+function elegirAlAzar(): Opcion {
+  const indice = Math.floor(Math.random() * OPCIONES.length);
+  return OPCIONES[indice];
+}
+
+// Compara las dos elecciones y decide quién gana la ronda.
+function determinarGanador(jugador: Opcion, maquina: Opcion): Resultado {
+  if (jugador === maquina) return &#x27;empate&#x27;;
+  return GANA_A[jugador] === maquina ? &#x27;jugador&#x27; : &#x27;maquina&#x27;;
+}
+
+const TEXTO_RESULTADO: Record&lt;Resultado, string&gt; = {
+  jugador: &#x27;Ganaste 🎉&#x27;,
+  maquina: &#x27;Perdiste 💀&#x27;,
+  empate: &#x27;Empate 🤝&#x27;,
+};
+
+export default function Fase2() {
+  const [eleccionJugador, setEleccionJugador] = useState&lt;Opcion | null&gt;(null);
+  const [eleccionMaquina, setEleccionMaquina] = useState&lt;Opcion | null&gt;(null);
+  const [resultado, setResultado] = useState&lt;Resultado | null&gt;(null);
+
+  function jugar(opcion: Opcion) {
+    const maquina = elegirAlAzar();
+    setEleccionJugador(opcion);
+    setEleccionMaquina(maquina);
+    setResultado(determinarGanador(opcion, maquina));
+  }
+
+  return (
+    &lt;View style={styles.pantalla}&gt;
+      &lt;Text style={styles.titulo}&gt;Fase 2 · Quién gana&lt;/Text&gt;
+
+      &lt;View style={styles.marcador}&gt;
+        &lt;View style={styles.lado}&gt;
+          &lt;Text style={styles.etiqueta}&gt;Tú&lt;/Text&gt;
+          &lt;Text style={styles.emojiGrande}&gt;{eleccionJugador ? EMOJI[eleccionJugador] : &#x27;❔&#x27;}&lt;/Text&gt;
+        &lt;/View&gt;
+        &lt;Text style={styles.vs}&gt;VS&lt;/Text&gt;
+        &lt;View style={styles.lado}&gt;
+          &lt;Text style={styles.etiqueta}&gt;Máquina&lt;/Text&gt;
+          &lt;Text style={styles.emojiGrande}&gt;{eleccionMaquina ? EMOJI[eleccionMaquina] : &#x27;❔&#x27;}&lt;/Text&gt;
+        &lt;/View&gt;
+      &lt;/View&gt;
+
+      &lt;Text style={styles.resultado}&gt;{resultado ? TEXTO_RESULTADO[resultado] : &#x27; &#x27;}&lt;/Text&gt;
+
+      &lt;View style={styles.botones}&gt;
+        {OPCIONES.map((opcion) =&gt; (
+          &lt;Pressable key={opcion} style={styles.boton} onPress={() =&gt; jugar(opcion)}&gt;
+            &lt;Text style={styles.emojiBoton}&gt;{EMOJI[opcion]}&lt;/Text&gt;
+          &lt;/Pressable&gt;
+        ))}
+      &lt;/View&gt;
+    &lt;/View&gt;
+  );
+}
+
+const styles = StyleSheet.create({
+  pantalla: { flex: 1, backgroundColor: &#x27;#fff&#x27;, alignItems: &#x27;center&#x27;, justifyContent: &#x27;center&#x27;, gap: 20, padding: 24 },
+  titulo: { fontSize: 18, fontWeight: &#x27;bold&#x27; },
+  marcador: { flexDirection: &#x27;row&#x27;, alignItems: &#x27;center&#x27;, gap: 20 },
+  lado: { alignItems: &#x27;center&#x27;, gap: 6 },
+  etiqueta: { fontSize: 13, color: &#x27;#888&#x27; },
+  emojiGrande: { fontSize: 56 },
+  vs: { fontSize: 16, fontWeight: &#x27;bold&#x27;, color: &#x27;#888&#x27; },
+  resultado: { fontSize: 20, fontWeight: &#x27;bold&#x27;, minHeight: 26 },
+  botones: { flexDirection: &#x27;row&#x27;, gap: 14 },
+  boton: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: &#x27;#2563eb&#x27;,
+    alignItems: &#x27;center&#x27;,
+    justifyContent: &#x27;center&#x27;,
+  },
+  emojiBoton: { fontSize: 28 },
+});
+</code></pre>
+  </div>
+  </section>
+  <section class="fase">
+    <h2>Fase 3 · Marcador</h2>
+    <p class="lede-fase">El resultado de cada ronda ya no se pierde: se suma a un marcador de victorias, derrotas y empates que se mantiene mientras se siguen jugando rondas, con un botón para reiniciarlo.</p>
+    <ul class="puntos">
+      <li>Tres estados nuevos (victorias, derrotas, empates) que no se resetean al jugar.</li>
+      <li>Sumar al contador correcto según el resultado de la ronda.</li>
+      <li>Un botón de texto para volver a poner el marcador a cero.</li>
+    </ul>
+
+  <div class="code-panel">
+    <div class="code-bar">
+      <span class="code-bar-name">app/fase3.tsx</span>
+      <button class="copy-btn" id="btnCopiar3" type="button" data-target="codigoFuente3">Copiar código</button>
+    </div>
+    <pre><code id="codigoFuente3">import { useState } from &#x27;react&#x27;;
+import { Pressable, StyleSheet, Text, View } from &#x27;react-native&#x27;;
+
+// ---------------------------------------------------------------------
+// FASE 3: se añade un marcador que se mantiene entre rondas. Cada vez
+// que se juega, se suma un punto a &quot;victorias&quot;, &quot;derrotas&quot; o
+// &quot;empates&quot; según corresponda, y un botón permite reiniciarlo.
+// ---------------------------------------------------------------------
+
+type Opcion = &#x27;piedra&#x27; | &#x27;papel&#x27; | &#x27;tijera&#x27;;
+type Resultado = &#x27;jugador&#x27; | &#x27;maquina&#x27; | &#x27;empate&#x27;;
+
+const OPCIONES: Opcion[] = [&#x27;piedra&#x27;, &#x27;papel&#x27;, &#x27;tijera&#x27;];
+
+const EMOJI: Record&lt;Opcion, string&gt; = {
+  piedra: &#x27;🪨&#x27;,
+  papel: &#x27;📄&#x27;,
+  tijera: &#x27;✂️&#x27;,
+};
+
+const GANA_A: Record&lt;Opcion, Opcion&gt; = {
+  piedra: &#x27;tijera&#x27;,
+  tijera: &#x27;papel&#x27;,
+  papel: &#x27;piedra&#x27;,
+};
+
+function elegirAlAzar(): Opcion {
+  const indice = Math.floor(Math.random() * OPCIONES.length);
+  return OPCIONES[indice];
+}
+
+function determinarGanador(jugador: Opcion, maquina: Opcion): Resultado {
+  if (jugador === maquina) return &#x27;empate&#x27;;
+  return GANA_A[jugador] === maquina ? &#x27;jugador&#x27; : &#x27;maquina&#x27;;
+}
+
+const TEXTO_RESULTADO: Record&lt;Resultado, string&gt; = {
+  jugador: &#x27;Ganaste 🎉&#x27;,
+  maquina: &#x27;Perdiste 💀&#x27;,
+  empate: &#x27;Empate 🤝&#x27;,
+};
+
+export default function Fase3() {
+  const [eleccionJugador, setEleccionJugador] = useState&lt;Opcion | null&gt;(null);
+  const [eleccionMaquina, setEleccionMaquina] = useState&lt;Opcion | null&gt;(null);
+  const [resultado, setResultado] = useState&lt;Resultado | null&gt;(null);
+
+  // Marcador acumulado: no se reinicia al jugar una nueva ronda.
+  const [victorias, setVictorias] = useState(0);
+  const [derrotas, setDerrotas] = useState(0);
+  const [empates, setEmpates] = useState(0);
+
+  function jugar(opcion: Opcion) {
+    const maquina = elegirAlAzar();
+    const nuevoResultado = determinarGanador(opcion, maquina);
+
+    setEleccionJugador(opcion);
+    setEleccionMaquina(maquina);
+    setResultado(nuevoResultado);
+
+    if (nuevoResultado === &#x27;jugador&#x27;) setVictorias(victorias + 1);
+    else if (nuevoResultado === &#x27;maquina&#x27;) setDerrotas(derrotas + 1);
+    else setEmpates(empates + 1);
+  }
+
+  function reiniciarMarcador() {
+    setVictorias(0);
+    setDerrotas(0);
+    setEmpates(0);
+    setEleccionJugador(null);
+    setEleccionMaquina(null);
+    setResultado(null);
+  }
+
+  return (
+    &lt;View style={styles.pantalla}&gt;
+      &lt;Text style={styles.titulo}&gt;Fase 3 · Marcador&lt;/Text&gt;
+
+      &lt;View style={styles.filaMarcador}&gt;
+        &lt;Text style={styles.puntoVictoria}&gt;Tú {victorias}&lt;/Text&gt;
+        &lt;Text style={styles.puntoEmpate}&gt;Empates {empates}&lt;/Text&gt;
+        &lt;Text style={styles.puntoDerrota}&gt;Máquina {derrotas}&lt;/Text&gt;
+      &lt;/View&gt;
+
+      &lt;View style={styles.marcador}&gt;
+        &lt;View style={styles.lado}&gt;
+          &lt;Text style={styles.etiqueta}&gt;Tú&lt;/Text&gt;
+          &lt;Text style={styles.emojiGrande}&gt;{eleccionJugador ? EMOJI[eleccionJugador] : &#x27;❔&#x27;}&lt;/Text&gt;
+        &lt;/View&gt;
+        &lt;Text style={styles.vs}&gt;VS&lt;/Text&gt;
+        &lt;View style={styles.lado}&gt;
+          &lt;Text style={styles.etiqueta}&gt;Máquina&lt;/Text&gt;
+          &lt;Text style={styles.emojiGrande}&gt;{eleccionMaquina ? EMOJI[eleccionMaquina] : &#x27;❔&#x27;}&lt;/Text&gt;
+        &lt;/View&gt;
+      &lt;/View&gt;
+
+      &lt;Text style={styles.resultado}&gt;{resultado ? TEXTO_RESULTADO[resultado] : &#x27; &#x27;}&lt;/Text&gt;
+
+      &lt;View style={styles.botones}&gt;
+        {OPCIONES.map((opcion) =&gt; (
+          &lt;Pressable key={opcion} style={styles.boton} onPress={() =&gt; jugar(opcion)}&gt;
+            &lt;Text style={styles.emojiBoton}&gt;{EMOJI[opcion]}&lt;/Text&gt;
+          &lt;/Pressable&gt;
+        ))}
+      &lt;/View&gt;
+
+      &lt;Pressable onPress={reiniciarMarcador}&gt;
+        &lt;Text style={styles.reiniciar}&gt;Reiniciar marcador&lt;/Text&gt;
+      &lt;/Pressable&gt;
+    &lt;/View&gt;
+  );
+}
+
+const styles = StyleSheet.create({
+  pantalla: { flex: 1, backgroundColor: &#x27;#fff&#x27;, alignItems: &#x27;center&#x27;, justifyContent: &#x27;center&#x27;, gap: 18, padding: 24 },
+  titulo: { fontSize: 18, fontWeight: &#x27;bold&#x27; },
+  filaMarcador: { flexDirection: &#x27;row&#x27;, gap: 16 },
+  puntoVictoria: { fontSize: 13, fontWeight: &#x27;600&#x27;, color: &#x27;#16a34a&#x27; },
+  puntoEmpate: { fontSize: 13, fontWeight: &#x27;600&#x27;, color: &#x27;#888&#x27; },
+  puntoDerrota: { fontSize: 13, fontWeight: &#x27;600&#x27;, color: &#x27;#dc2626&#x27; },
+  marcador: { flexDirection: &#x27;row&#x27;, alignItems: &#x27;center&#x27;, gap: 20 },
+  lado: { alignItems: &#x27;center&#x27;, gap: 6 },
+  etiqueta: { fontSize: 13, color: &#x27;#888&#x27; },
+  emojiGrande: { fontSize: 56 },
+  vs: { fontSize: 16, fontWeight: &#x27;bold&#x27;, color: &#x27;#888&#x27; },
+  resultado: { fontSize: 20, fontWeight: &#x27;bold&#x27;, minHeight: 26 },
+  botones: { flexDirection: &#x27;row&#x27;, gap: 14 },
+  boton: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: &#x27;#2563eb&#x27;,
+    alignItems: &#x27;center&#x27;,
+    justifyContent: &#x27;center&#x27;,
+  },
+  emojiBoton: { fontSize: 28 },
+  reiniciar: { fontSize: 13, color: &#x27;#888&#x27;, textDecorationLine: &#x27;underline&#x27; },
+});
+</code></pre>
+  </div>
+  </section>
+  <section class="fase">
+    <h2>Fase 4 · Mejor de 3</h2>
+    <p class="lede-fase">La partida ya tiene un final: gana quien llegue antes a 2 rondas ganadas. Al terminar, los botones de jugar se sustituyen por un botón “Jugar de nuevo” que resetea la partida completa.</p>
+    <ul class="puntos">
+      <li>Una constante RONDAS_PARA_GANAR para no tener el número “2” suelto por el código.</li>
+      <li>Un estado estadoPartida ('jugando' | 'ganada' | 'perdida') que decide qué se muestra.</li>
+      <li>jugarDeNuevo() reinicia marcador y estado, igual que en el Ahorcado.</li>
+    </ul>
+
+  <div class="code-panel">
+    <div class="code-bar">
+      <span class="code-bar-name">app/fase4.tsx</span>
+      <button class="copy-btn" id="btnCopiar4" type="button" data-target="codigoFuente4">Copiar código</button>
+    </div>
+    <pre><code id="codigoFuente4">import { useState } from &#x27;react&#x27;;
+import { Pressable, StyleSheet, Text, View } from &#x27;react-native&#x27;;
+
+// ---------------------------------------------------------------------
+// FASE 4: la partida se juega &quot;al mejor de 3&quot;: el primero que llega a
+// 2 rondas ganadas se lleva la partida. Al terminar, los botones de
+// jugar se cambian por un botón &quot;Jugar de nuevo&quot; que resetea todo.
+// ---------------------------------------------------------------------
+
+type Opcion = &#x27;piedra&#x27; | &#x27;papel&#x27; | &#x27;tijera&#x27;;
+type Resultado = &#x27;jugador&#x27; | &#x27;maquina&#x27; | &#x27;empate&#x27;;
+type EstadoPartida = &#x27;jugando&#x27; | &#x27;ganada&#x27; | &#x27;perdida&#x27;;
+
+const OPCIONES: Opcion[] = [&#x27;piedra&#x27;, &#x27;papel&#x27;, &#x27;tijera&#x27;];
+const RONDAS_PARA_GANAR = 2;
+
+const EMOJI: Record&lt;Opcion, string&gt; = {
+  piedra: &#x27;🪨&#x27;,
+  papel: &#x27;📄&#x27;,
+  tijera: &#x27;✂️&#x27;,
+};
+
+const GANA_A: Record&lt;Opcion, Opcion&gt; = {
+  piedra: &#x27;tijera&#x27;,
+  tijera: &#x27;papel&#x27;,
+  papel: &#x27;piedra&#x27;,
+};
+
+function elegirAlAzar(): Opcion {
+  const indice = Math.floor(Math.random() * OPCIONES.length);
+  return OPCIONES[indice];
+}
+
+function determinarGanador(jugador: Opcion, maquina: Opcion): Resultado {
+  if (jugador === maquina) return &#x27;empate&#x27;;
+  return GANA_A[jugador] === maquina ? &#x27;jugador&#x27; : &#x27;maquina&#x27;;
+}
+
+const TEXTO_RESULTADO: Record&lt;Resultado, string&gt; = {
+  jugador: &#x27;Ganaste la ronda 🎉&#x27;,
+  maquina: &#x27;Perdiste la ronda 💀&#x27;,
+  empate: &#x27;Empate 🤝&#x27;,
+};
+
+export default function Fase4() {
+  const [eleccionJugador, setEleccionJugador] = useState&lt;Opcion | null&gt;(null);
+  const [eleccionMaquina, setEleccionMaquina] = useState&lt;Opcion | null&gt;(null);
+  const [resultado, setResultado] = useState&lt;Resultado | null&gt;(null);
+
+  const [victorias, setVictorias] = useState(0);
+  const [derrotas, setDerrotas] = useState(0);
+  const [estadoPartida, setEstadoPartida] = useState&lt;EstadoPartida&gt;(&#x27;jugando&#x27;);
+
+  function jugar(opcion: Opcion) {
+    if (estadoPartida !== &#x27;jugando&#x27;) return;
+
+    const maquina = elegirAlAzar();
+    const nuevoResultado = determinarGanador(opcion, maquina);
+
+    setEleccionJugador(opcion);
+    setEleccionMaquina(maquina);
+    setResultado(nuevoResultado);
+
+    if (nuevoResultado === &#x27;jugador&#x27;) {
+      const nuevasVictorias = victorias + 1;
+      setVictorias(nuevasVictorias);
+      if (nuevasVictorias &gt;= RONDAS_PARA_GANAR) setEstadoPartida(&#x27;ganada&#x27;);
+    } else if (nuevoResultado === &#x27;maquina&#x27;) {
+      const nuevasDerrotas = derrotas + 1;
+      setDerrotas(nuevasDerrotas);
+      if (nuevasDerrotas &gt;= RONDAS_PARA_GANAR) setEstadoPartida(&#x27;perdida&#x27;);
+    }
+  }
+
+  function jugarDeNuevo() {
+    setVictorias(0);
+    setDerrotas(0);
+    setEstadoPartida(&#x27;jugando&#x27;);
+    setEleccionJugador(null);
+    setEleccionMaquina(null);
+    setResultado(null);
+  }
+
+  return (
+    &lt;View style={styles.pantalla}&gt;
+      &lt;Text style={styles.titulo}&gt;Fase 4 · Mejor de 3&lt;/Text&gt;
+
+      &lt;View style={styles.filaMarcador}&gt;
+        &lt;Text style={styles.puntoVictoria}&gt;Tú {victorias}&lt;/Text&gt;
+        &lt;Text style={styles.puntoDerrota}&gt;Máquina {derrotas}&lt;/Text&gt;
+      &lt;/View&gt;
+
+      &lt;View style={styles.marcador}&gt;
+        &lt;View style={styles.lado}&gt;
+          &lt;Text style={styles.etiqueta}&gt;Tú&lt;/Text&gt;
+          &lt;Text style={styles.emojiGrande}&gt;{eleccionJugador ? EMOJI[eleccionJugador] : &#x27;❔&#x27;}&lt;/Text&gt;
+        &lt;/View&gt;
+        &lt;Text style={styles.vs}&gt;VS&lt;/Text&gt;
+        &lt;View style={styles.lado}&gt;
+          &lt;Text style={styles.etiqueta}&gt;Máquina&lt;/Text&gt;
+          &lt;Text style={styles.emojiGrande}&gt;{eleccionMaquina ? EMOJI[eleccionMaquina] : &#x27;❔&#x27;}&lt;/Text&gt;
+        &lt;/View&gt;
+      &lt;/View&gt;
+
+      {estadoPartida === &#x27;jugando&#x27; &amp;&amp; (
+        &lt;Text style={styles.resultado}&gt;{resultado ? TEXTO_RESULTADO[resultado] : &#x27; &#x27;}&lt;/Text&gt;
+      )}
+      {estadoPartida === &#x27;ganada&#x27; &amp;&amp; &lt;Text style={styles.mensajeGanado}&gt;¡Ganaste la partida! 🏆&lt;/Text&gt;}
+      {estadoPartida === &#x27;perdida&#x27; &amp;&amp; &lt;Text style={styles.mensajePerdido}&gt;Perdiste la partida 💀&lt;/Text&gt;}
+
+      {estadoPartida === &#x27;jugando&#x27; ? (
+        &lt;View style={styles.botones}&gt;
+          {OPCIONES.map((opcion) =&gt; (
+            &lt;Pressable key={opcion} style={styles.boton} onPress={() =&gt; jugar(opcion)}&gt;
+              &lt;Text style={styles.emojiBoton}&gt;{EMOJI[opcion]}&lt;/Text&gt;
+            &lt;/Pressable&gt;
+          ))}
+        &lt;/View&gt;
+      ) : (
+        &lt;Pressable style={styles.botonJugarDeNuevo} onPress={jugarDeNuevo}&gt;
+          &lt;Text style={styles.textoBoton}&gt;Jugar de nuevo&lt;/Text&gt;
+        &lt;/Pressable&gt;
+      )}
+    &lt;/View&gt;
+  );
+}
+
+const styles = StyleSheet.create({
+  pantalla: { flex: 1, backgroundColor: &#x27;#fff&#x27;, alignItems: &#x27;center&#x27;, justifyContent: &#x27;center&#x27;, gap: 18, padding: 24 },
+  titulo: { fontSize: 18, fontWeight: &#x27;bold&#x27; },
+  filaMarcador: { flexDirection: &#x27;row&#x27;, gap: 16 },
+  puntoVictoria: { fontSize: 14, fontWeight: &#x27;600&#x27;, color: &#x27;#16a34a&#x27; },
+  puntoDerrota: { fontSize: 14, fontWeight: &#x27;600&#x27;, color: &#x27;#dc2626&#x27; },
+  marcador: { flexDirection: &#x27;row&#x27;, alignItems: &#x27;center&#x27;, gap: 20 },
+  lado: { alignItems: &#x27;center&#x27;, gap: 6 },
+  etiqueta: { fontSize: 13, color: &#x27;#888&#x27; },
+  emojiGrande: { fontSize: 56 },
+  vs: { fontSize: 16, fontWeight: &#x27;bold&#x27;, color: &#x27;#888&#x27; },
+  resultado: { fontSize: 20, fontWeight: &#x27;bold&#x27;, minHeight: 26 },
+  mensajeGanado: { fontSize: 20, fontWeight: &#x27;bold&#x27;, color: &#x27;#16a34a&#x27; },
+  mensajePerdido: { fontSize: 20, fontWeight: &#x27;bold&#x27;, color: &#x27;#dc2626&#x27; },
+  botones: { flexDirection: &#x27;row&#x27;, gap: 14 },
+  boton: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: &#x27;#2563eb&#x27;,
+    alignItems: &#x27;center&#x27;,
+    justifyContent: &#x27;center&#x27;,
+  },
+  emojiBoton: { fontSize: 28 },
+  botonJugarDeNuevo: { backgroundColor: &#x27;#2563eb&#x27;, paddingVertical: 12, paddingHorizontal: 24, borderRadius: 8 },
+  textoBoton: { color: &#x27;#fff&#x27;, fontSize: 16, fontWeight: &#x27;600&#x27; },
+});
+</code></pre>
+  </div>
+  </section>
+
+  <footer class="end">
+    Las cuatro fases reutilizan el mismo patrón: un objeto <code class="inline">GANA_A</code> con las reglas del juego y una función <code class="inline">determinarGanador()</code> que no cambia de una fase a otra &mdash; lo único que crece es el estado que la envuelve (marcador, condición de fin de partida). Es la misma idea de progresión que el Ahorcado y el Arkanoid, pero sin necesitar una API externa ni gestos.
+  </footer>
+</div>
+
+<script>
+  document.querySelectorAll('.copy-btn').forEach(function (boton) {
+    boton.addEventListener('click', function () {
+      var destino = document.getElementById(boton.dataset.target);
+      var texto = destino.textContent;
+      navigator.clipboard.writeText(texto).then(function () {
+        var original = boton.textContent;
+        boton.textContent = '¡Copiado!';
+        boton.classList.add('copiado');
+        setTimeout(function () {
+          boton.textContent = original;
+          boton.classList.remove('copiado');
+        }, 1800);
+      });
+    });
+  });
+</script>
