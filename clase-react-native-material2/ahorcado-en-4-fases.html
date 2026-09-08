@@ -1,0 +1,1486 @@
+<title>Ahorcado en 4 fases</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #E4572E;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #FF8A5C;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #F2764C;
+      --accent-ink: #17110D;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #F2764C;
+    --accent-ink: #17110D;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top { margin-bottom: 40px; }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.08rem;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  a.back {
+    display: inline-block;
+    margin-top: 14px;
+    color: var(--accent-2);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    text-decoration: none;
+  }
+  a.back:hover { text-decoration: underline; }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  section.block { margin-top: 44px; }
+
+  h2.block-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+
+  section.block p { margin: 0 0 14px; }
+
+  .checklist {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow);
+  }
+
+  .checklist li {
+    list-style: none;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 15px;
+  }
+
+  .checklist ul { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+
+  .checklist svg {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    color: var(--accent-2);
+  }
+
+  .learn-list {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .learn-list li {
+    list-style: none;
+    padding-left: 20px;
+    position: relative;
+    color: var(--ink);
+  }
+
+  .learn-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .fase-head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 4px;
+  }
+
+  .fase-num {
+    flex: none;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--accent-ink);
+    background: var(--accent);
+    border-radius: 999px;
+    padding: 3px 12px;
+  }
+
+  h2.fase-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    margin: 0;
+  }
+
+  .fase-objetivo {
+    color: var(--muted);
+    font-size: 15px;
+    margin: 6px 0 20px;
+  }
+
+  .step {
+    display: flex;
+    gap: 18px;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .step:first-of-type { border-top: none; padding-top: 0; }
+
+  .step-chip {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-body { flex: 1; min-width: 0; }
+
+  .step h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 4px 0 8px;
+  }
+
+  .step p { margin: 0 0 12px; color: var(--ink); }
+  .step p.small { color: var(--muted); font-size: 14.5px; }
+
+  .term {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+
+  .term-bar span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--code-line);
+  }
+
+  .term pre { margin: 0; padding: 14px 16px 16px; overflow-x: auto; }
+
+  .term code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13.6px;
+    line-height: 1.7;
+    color: var(--code-ink);
+  }
+
+  .term .prompt { color: var(--code-muted); }
+  .term .cmt { color: var(--code-muted); }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+
+  .code-panel pre { margin: 0; padding: 16px 18px 18px; overflow-x: auto; }
+
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+
+  .code-panel .tag { color: var(--accent-2); }
+  .code-panel .str { color: #C9D96B; }
+  .code-panel .kw { color: var(--code-accent); }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .prop { color: #8FB8FF; }
+  .code-panel .hl { color: var(--code-accent); }
+
+  .code-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--code-line);
+  }
+
+  .code-bar-name {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    color: var(--code-muted);
+  }
+
+  button.copy-btn {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    color: var(--code-ink);
+    background: var(--code-line);
+    border: 1px solid color-mix(in srgb, var(--code-ink) 20%, var(--code-line));
+    border-radius: 6px;
+    padding: 5px 11px;
+    cursor: pointer;
+  }
+
+  button.copy-btn:hover { background: color-mix(in srgb, var(--code-accent) 25%, var(--code-line)); }
+
+  button.copy-btn.copiado { background: var(--accent-2); color: #fff; border-color: var(--accent-2); }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+  .checkpoint p { margin: 0; font-size: 14px; color: var(--ink); }
+
+  details.full-code { margin-top: 16px; }
+
+  details.full-code summary {
+    cursor: pointer;
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--accent-2);
+    list-style: none;
+  }
+
+  details.full-code summary::-webkit-details-marker { display: none; }
+  details.full-code summary::before { content: "▸ "; }
+  details.full-code[open] summary::before { content: "▾ "; }
+
+  .trouble { display: flex; flex-direction: column; gap: 14px; }
+
+  .trouble-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .trouble-item .q {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    margin: 0 0 6px;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .trouble-item .q::before {
+    content: "?";
+    font-family: "IBM Plex Mono", monospace;
+    color: var(--accent-2);
+    font-weight: 500;
+  }
+
+  .trouble-item p { margin: 0; font-size: 14.5px; color: var(--muted); }
+  .trouble-item p + p { margin-top: 8px; }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+</style>
+
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">Guía de clase &middot; práctica de la Sesión 18</span>
+    <h1>Ahorcado en 4 fases</h1>
+    <p class="lede">El clásico juego de adivinar una palabra, letra a letra &mdash; con una vuelta de tuerca: la palabra no la inventas tú, la pide la app a una API real de internet. Es el compañero perfecto del Arkanoid: mismo curso, mismo estilo de 4 fases, pero un patrón de estado completamente distinto.</p>
+    <div class="meta-row">
+      <span class="meta-chip">React Native + Expo</span>
+      <span class="meta-chip">TypeScript</span>
+      <span class="meta-chip">fetch + async/await</span>
+      <span class="meta-chip">useState por turno</span>
+      <span class="meta-chip">~35 min</span>
+    </div>
+    <a class="back" href="sesion-18-cierre-de-bloque-logica-de-juego.html">&larr; Volver a la Sesión 18</a>
+  </header>
+
+  <section class="block">
+    <h2 class="block-title">Antes de empezar</h2>
+    <div class="checklist">
+      <ul>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span>Node.js, VS Code y un proyecto de Expo funcionando. Si te falta cualquiera de los dos, empieza por <a href="contador-en-expo.html">la guía &ldquo;Contador en Expo&rdquo;</a>.</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span><strong>Conexión a internet</strong> mientras pruebas la app: cada partida pide una palabra nueva a una API pública. No hace falta ninguna clave (&ldquo;API key&rdquo;) ni registro.</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span>Haber visto <code class="inline">useState</code> (Sesión 8) y <code class="inline">fetch</code>/<code class="inline">async</code>&#8209;<code class="inline">await</code> (Sesión 16, &ldquo;Conectar con el exterior&rdquo;). Si la Sesión 16 todavía te queda lejos, este es un buen sitio para repasarlo con un caso real y pequeño.</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">La API que vamos a usar</h2>
+    <p><a href="https://random-word-api.herokuapp.com/word?lang=es">random-word-api.herokuapp.com</a> es una API pública y gratuita de palabras aleatorias. Con el parámetro <code class="inline">lang=es</code> devuelve palabras en español, como un array de un solo elemento:</p>
+    <div class="term">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="prompt">$</span> curl <span class="hl">"https://random-word-api.herokuapp.com/word?lang=es"</span>
+["cuenca"]</code></pre>
+    </div>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Los datos de internet llegan sucios &mdash; y esto no es una excepción
+      </div>
+      <p>Esta API no está pensada para juegos de mesa: de vez en cuando devuelve palabras con tildes, en mayúscula, en otro idioma, o incluso algún símbolo suelto. En vez de asumir que el dato viene limpio, la Fase 1 incluye una función que <strong>valida</strong> cada palabra y pide otra si no sirve &mdash; una comprobación que en el mundo real harías con cualquier API que no controlas tú.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Qué vas a construir</h2>
+    <ul class="learn-list">
+      <li><strong>Fase 1 &middot; Pedir una palabra a la API</strong> &mdash; <code class="inline">fetch</code>, estado de carga, y una función que limpia y valida lo que llega.</li>
+      <li><strong>Fase 2 &middot; Revelar letras</strong> &mdash; la palabra se oculta con guiones; un teclado en pantalla (A-Z) va revelando las letras correctas.</li>
+      <li><strong>Fase 3 &middot; Fallos y derrota</strong> &mdash; cada letra que falla cuenta; al llegar a 6 fallos, se acaba la partida y se revela la palabra.</li>
+      <li><strong>Fase 4 &middot; Ganar y jugar de nuevo</strong> &mdash; victoria al completar la palabra, y un botón que pide otra palabra distinta a la API para volver a jugar.</li>
+    </ul>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        El otro patrón de la Sesión 18
+      </div>
+      <p>Fíjate en que en ningún momento aparece un <code class="inline">setInterval</code> ni un <code class="inline">useRef</code> para el estado del juego: cada cambio &mdash;revelar una letra, sumar un fallo, ganar&mdash; ocurre porque el jugador tocó algo, nunca solo. Es el &ldquo;Patrón B&rdquo; de la Sesión 18, el mismo que Black Jack o Brisca: <code class="inline">useState</code> normal, disparado por <code class="inline">onPress</code>, sin bucle de ningún tipo. Compáralo con el Arkanoid (Patrón A) cuando lo veas.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Preparación: crea el proyecto</h2>
+
+    <div class="step">
+      <div class="step-chip">1</div>
+      <div class="step-body">
+        <h3>Crea un proyecto de Expo nuevo</h3>
+        <div class="term">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code><span class="prompt">$</span> npx create-expo-app ahorcado
+<span class="prompt">$</span> cd ahorcado
+<span class="prompt">$</span> npm run reset-project</code></pre>
+        </div>
+        <p class="small">Contesta &ldquo;n&rdquo; si te pregunta por mover los archivos de ejemplo a <code class="inline">/example</code> &mdash; no los necesitas. Te quedan <code class="inline">src/app/_layout.tsx</code> y <code class="inline">src/app/index.tsx</code>.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">2</div>
+      <div class="step-body">
+        <h3>Crea los 4 archivos de las fases y el menú</h3>
+        <p>Dentro de <code class="inline">src/app/</code>, crea <code class="inline">fase1.tsx</code>, <code class="inline">fase2.tsx</code>, <code class="inline">fase3.tsx</code> y <code class="inline">fase4.tsx</code>. Y convierte <code class="inline">index.tsx</code> en un menú, igual que en la guía del Arkanoid:</p>
+        <div class="code-panel">
+          <div class="code-bar"><span class="code-bar-name">src/app/index.tsx</span></div>
+          <pre><code><span class="kw">import</span> { Link } <span class="kw">from</span> <span class="str">'expo-router'</span>;
+<span class="kw">import</span> { StyleSheet, Text, View } <span class="kw">from</span> <span class="str">'react-native'</span>;
+
+<span class="kw">export default function</span> <span class="tag">Index</span>() {
+  <span class="kw">return</span> (
+    &lt;<span class="tag">View</span> <span class="prop">style</span>={styles.container}&gt;
+      &lt;<span class="tag">Text</span> <span class="prop">style</span>={styles.titulo}&gt;🔤 Ahorcado en 4 fases&lt;/<span class="tag">Text</span>&gt;
+      &lt;<span class="tag">Link</span> <span class="prop">href</span>=<span class="str">"/fase1"</span> <span class="prop">style</span>={styles.enlace}&gt;Fase 1&lt;/<span class="tag">Link</span>&gt;
+      &lt;<span class="tag">Link</span> <span class="prop">href</span>=<span class="str">"/fase2"</span> <span class="prop">style</span>={styles.enlace}&gt;Fase 2&lt;/<span class="tag">Link</span>&gt;
+      &lt;<span class="tag">Link</span> <span class="prop">href</span>=<span class="str">"/fase3"</span> <span class="prop">style</span>={styles.enlace}&gt;Fase 3&lt;/<span class="tag">Link</span>&gt;
+      &lt;<span class="tag">Link</span> <span class="prop">href</span>=<span class="str">"/fase4"</span> <span class="prop">style</span>={styles.enlace}&gt;Fase 4&lt;/<span class="tag">Link</span>&gt;
+    &lt;/<span class="tag">View</span>&gt;
+  );
+}
+<span class="com">// … + StyleSheet.create con "container", "titulo" y "enlace" a tu gusto.</span></code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">3</div>
+      <div class="step-body">
+        <h3>Arranca el servidor</h3>
+        <div class="term">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code><span class="prompt">$</span> npm start</code></pre>
+        </div>
+        <p class="small">Escanea el QR con Expo Go, o pulsa <code class="inline">w</code> para probarlo en el navegador mientras programas.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="fase-head">
+      <span class="fase-num">Fase 1</span>
+      <h2 class="fase-title">Pedir una palabra a la API</h2>
+    </div>
+    <p class="fase-objetivo">Objetivo: al entrar a la pantalla, pedir una palabra válida a la API y mostrarla. Sin juego todavía &mdash; solo <code class="inline">fetch</code>, carga y validación.</p>
+
+    <div class="step">
+      <div class="step-chip">1</div>
+      <div class="step-body">
+        <h3>Limpiar lo que llega de la API</h3>
+        <p>La API a veces devuelve palabras con tildes o símbolos. <code class="inline">quitarAcentos</code> usa un truco de Unicode: <code class="inline">normalize('NFD')</code> separa cada letra acentuada en dos piezas &mdash;la letra base y una &ldquo;marca de acento&rdquo; aparte&mdash;, y luego filtramos esas marcas por su código.</p>
+        <div class="code-panel">
+          <div class="code-bar"><span class="code-bar-name">extracto</span></div>
+          <pre><code><span class="kw">function</span> <span class="tag">quitarAcentos</span>(texto: <span class="tag">string</span>): <span class="tag">string</span> {
+  <span class="kw">return</span> texto
+    .normalize(<span class="str">'NFD'</span>)
+    .split(<span class="str">''</span>)
+    .filter((caracter) =&gt; {
+      <span class="kw">const</span> codigo = caracter.codePointAt(<span class="hl">0</span>) ?? <span class="hl">0</span>;
+      <span class="kw">const</span> esMarcaDeAcento = codigo &gt;= <span class="hl">0x0300</span> &amp;&amp; codigo &lt;= <span class="hl">0x036f</span>;
+      <span class="kw">return</span> !esMarcaDeAcento;
+    })
+    .join(<span class="str">''</span>);
+}</code></pre>
+        </div>
+        <p>Con la palabra ya sin tildes, <code class="inline">limpiarPalabra</code> la pasa a mayúsculas y comprueba con una expresión regular que sean <strong>solo letras A-Z</strong>, de <strong>4 a 10</strong> de longitud. Si no cumple, devuelve <code class="inline">null</code> y la descartamos.</p>
+        <div class="code-panel">
+          <div class="code-bar"><span class="code-bar-name">extracto</span></div>
+          <pre><code><span class="kw">function</span> <span class="tag">limpiarPalabra</span>(bruta: <span class="tag">string</span>): <span class="tag">string</span> | <span class="kw">null</span> {
+  <span class="kw">const</span> mayusculas = quitarAcentos(bruta).toUpperCase();
+  <span class="kw">if</span> (!/^[A-Z]{<span class="hl">4</span>,<span class="hl">10</span>}$/.test(mayusculas)) <span class="kw">return</span> <span class="kw">null</span>;
+  <span class="kw">return</span> mayusculas;
+}</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">2</div>
+      <div class="step-body">
+        <h3>Pedir palabras hasta que llegue una válida</h3>
+        <div class="code-panel">
+          <div class="code-bar"><span class="code-bar-name">extracto</span></div>
+          <pre><code><span class="kw">async function</span> <span class="tag">pedirPalabra</span>(): <span class="tag">Promise</span>&lt;<span class="tag">string</span>&gt; {
+  <span class="kw">while</span> (<span class="kw">true</span>) {
+    <span class="kw">const</span> respuesta = <span class="kw">await</span> fetch(URL_API);
+    <span class="kw">const</span> datos: <span class="tag">string</span>[] = <span class="kw">await</span> respuesta.json(); <span class="com">// ej: ["cuenca"]</span>
+    <span class="kw">const</span> limpia = limpiarPalabra(datos[<span class="hl">0</span>]);
+    <span class="kw">if</span> (limpia) <span class="kw">return</span> limpia;
+    <span class="com">// si no era válida, el bucle vuelve a pedir otra</span>
+  }
+}</code></pre>
+        </div>
+        <p><code class="inline">await fetch(...)</code> espera a que llegue la respuesta antes de seguir; <code class="inline">await respuesta.json()</code> espera a que ese cuerpo de la respuesta se convierta en un array de JavaScript. El <code class="inline">while (true)</code> es intencionado: la función no termina hasta que consigue una palabra que pasa la validación &mdash;normalmente la primera ya sirve, pero el código no lo da por hecho.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">3</div>
+      <div class="step-body">
+        <h3>Pedirla al entrar a la pantalla</h3>
+        <div class="code-panel">
+          <div class="code-bar"><span class="code-bar-name">extracto</span></div>
+          <pre><code><span class="kw">const</span> [palabra, setPalabra] = useState&lt;<span class="tag">string</span> | <span class="kw">null</span>&gt;(<span class="kw">null</span>);
+<span class="kw">const</span> [cargando, setCargando] = useState(<span class="kw">true</span>);
+
+useEffect(() =&gt; {
+  pedirPalabra().then((p) =&gt; {
+    setPalabra(p);
+    setCargando(<span class="kw">false</span>);
+  });
+}, []);</code></pre>
+        </div>
+        <p>El array de dependencias vacío (<code class="inline">[]</code>) hace que este <code class="inline">useEffect</code> se ejecute <strong>una sola vez</strong>, al montar el componente &mdash;justo lo que hace falta para pedir la palabra inicial. Mientras <code class="inline">cargando</code> es <code class="inline">true</code>, mostramos un <code class="inline">ActivityIndicator</code> en vez de la palabra.</p>
+      </div>
+    </div>
+
+    <details class="full-code">
+      <summary>Ver <code class="inline">fase1.tsx</code> completo</summary>
+      <div class="code-panel">
+        <div class="code-bar">
+          <span class="code-bar-name">src/app/fase1.tsx</span>
+          <button class="copy-btn" data-target="codigo-fase1" type="button">Copiar código</button>
+        </div>
+        <pre><code id="codigo-fase1">import { useEffect, useState } from 'react';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+
+// ---------------------------------------------------------------------
+// FASE 1: solo pedir una palabra a una API real de internet y mostrarla
+// en pantalla. Todavía no hay juego: el objetivo es dominar el fetch,
+// el estado de "cargando", y limpiar un dato que llega sucio.
+// ---------------------------------------------------------------------
+
+// API pública y gratuita de palabras aleatorias, con soporte de español
+// mediante el parámetro lang=es. Devuelve un array con una palabra: ["casa"]
+const URL_API = 'https://random-word-api.herokuapp.com/word?lang=es';
+
+// Quita las tildes de una palabra: "á" -&gt; "a", "ó" -&gt; "o"...
+// normalize('NFD') separa cada letra acentuada en dos piezas: la letra
+// base ("a") y un carácter de marca de acento aparte (código Unicode
+// entre 0x0300 y 0x036F). Filtrando esos códigos, solo queda la letra base.
+function quitarAcentos(texto: string): string {
+  return texto
+    .normalize('NFD')
+    .split('')
+    .filter((caracter) =&gt; {
+      const codigo = caracter.codePointAt(0) ?? 0;
+      const esMarcaDeAcento = codigo &gt;= 0x0300 &amp;&amp; codigo &lt;= 0x036f;
+      return !esMarcaDeAcento;
+    })
+    .join('');
+}
+
+// Esta API no está pensada para juegos: a veces devuelve palabras con
+// tildes, en mayúscula, en otro idioma o incluso símbolos sueltos. Esta
+// función se queda solo con las que nos sirven: solo letras A-Z (sin
+// tildes ni Ñ, para mantener el juego "muy sencillo"), de 4 a 10 letras.
+function limpiarPalabra(bruta: string): string | null {
+  const mayusculas = quitarAcentos(bruta).toUpperCase();
+
+  if (!/^[A-Z]{4,10}$/.test(mayusculas)) {
+    return null; // no nos sirve: la descartamos
+  }
+  return mayusculas;
+}
+
+// Pide palabras a la API, una tras otra, hasta que llega una válida.
+async function pedirPalabra(): Promise&lt;string&gt; {
+  while (true) {
+    const respuesta = await fetch(URL_API);
+    const datos: string[] = await respuesta.json(); // ej: ["cuenca"]
+    const limpia = limpiarPalabra(datos[0]);
+    if (limpia) {
+      return limpia;
+    }
+    // Si no era válida, el bucle vuelve a empezar y pide otra.
+  }
+}
+
+export default function Fase1() {
+  const [palabra, setPalabra] = useState&lt;string | null&gt;(null);
+  const [cargando, setCargando] = useState(true);
+
+  // useEffect con array vacío [] : se ejecuta una sola vez, al entrar
+  // a la pantalla. Justo lo que necesitamos para pedir la palabra inicial.
+  useEffect(() =&gt; {
+    pedirPalabra().then((p) =&gt; {
+      setPalabra(p);
+      setCargando(false);
+    });
+  }, []);
+
+  return (
+    &lt;View style={styles.pantalla}&gt;
+      &lt;Text style={styles.titulo}&gt;Fase 1 · Pedir una palabra a la API&lt;/Text&gt;
+
+      {cargando ? (
+        &lt;ActivityIndicator size="large" color="#2563eb" /&gt;
+      ) : (
+        &lt;Text style={styles.palabra}&gt;{palabra}&lt;/Text&gt;
+      )}
+
+      &lt;Text style={styles.ayuda}&gt;
+        {cargando ? 'Pidiendo palabra...' : 'Palabra recibida y validada (solo A-Z, 4 a 10 letras)'}
+      &lt;/Text&gt;
+    &lt;/View&gt;
+  );
+}
+
+const styles = StyleSheet.create({
+  pantalla: { flex: 1, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center', gap: 16, padding: 24 },
+  titulo: { fontSize: 18, fontWeight: 'bold', textAlign: 'center' },
+  palabra: { fontSize: 32, fontWeight: 'bold', letterSpacing: 4, color: '#2563eb' },
+  ayuda: { fontSize: 13, color: '#888' },
+});
+</code></pre>
+      </div>
+    </details>
+
+    <div class="checkpoint">
+      <div class="checkpoint-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        Deberías ver esto
+      </div>
+      <p>Un indicador de carga durante un instante y, después, una palabra en mayúsculas (por ejemplo <code class="inline">CUENCA</code>). Recarga la pantalla un par de veces: la palabra cambia porque cada vez es una petición nueva a la API.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="fase-head">
+      <span class="fase-num">Fase 2</span>
+      <h2 class="fase-title">Revelar letras</h2>
+    </div>
+    <p class="fase-objetivo">Objetivo: ocultar la palabra con guiones y revelar las letras correctas al tocarlas en un teclado en pantalla.</p>
+
+    <div class="step">
+      <div class="step-chip">1</div>
+      <div class="step-body">
+        <h3>De la palabra real a lo que se ve en pantalla</h3>
+        <div class="code-panel">
+          <div class="code-bar"><span class="code-bar-name">extracto</span></div>
+          <pre><code><span class="kw">function</span> <span class="tag">mostrarPalabra</span>(palabra: <span class="tag">string</span>, letrasUsadas: <span class="tag">string</span>[]): <span class="tag">string</span> {
+  <span class="kw">return</span> palabra
+    .split(<span class="str">''</span>)
+    .map((letra) =&gt; (letrasUsadas.includes(letra) ? letra : <span class="str">'_'</span>))
+    .join(<span class="str">' '</span>);
+}</code></pre>
+        </div>
+        <p><code class="inline">letrasUsadas</code> es un <code class="inline">useState&lt;string[]&gt;([])</code>: el array de letras que el jugador ya ha pulsado. Por cada letra de la palabra, si ya está en ese array se muestra tal cual; si no, se sustituye por <code class="inline">'_'</code>. El resultado para <code class="inline">CASA</code> con <code class="inline">letrasUsadas = ['A']</code> sería <code class="inline">"_ A _ A"</code>.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">2</div>
+      <div class="step-body">
+        <h3>Un teclado que se dibuja solo</h3>
+        <div class="code-panel">
+          <div class="code-bar"><span class="code-bar-name">extracto</span></div>
+          <pre><code><span class="kw">const</span> ALFABETO = <span class="str">'ABCDEFGHIJKLMNOPQRSTUVWXYZ'</span>.split(<span class="str">''</span>);
+
+<span class="com">// dentro del JSX:</span>
+&lt;<span class="tag">View</span> <span class="prop">style</span>={styles.teclado}&gt;
+  {ALFABETO.map((letra) =&gt; {
+    <span class="kw">const</span> yaUsada = letrasUsadas.includes(letra);
+    <span class="kw">return</span> (
+      &lt;<span class="tag">Pressable</span>
+        <span class="prop">key</span>={letra}
+        <span class="prop">style</span>={[styles.tecla, yaUsada &amp;&amp; styles.teclaUsada]}
+        <span class="prop">onPress</span>={() =&gt; marcarLetra(letra)}
+        <span class="prop">disabled</span>={yaUsada}
+      &gt;
+        &lt;<span class="tag">Text</span> <span class="prop">style</span>={styles.textoTecla}&gt;{letra}&lt;/<span class="tag">Text</span>&gt;
+      &lt;/<span class="tag">Pressable</span>&gt;
+    );
+  })}
+&lt;/<span class="tag">View</span>&gt;</code></pre>
+        </div>
+        <p>26 botones generados con <code class="inline">.map()</code>, no escritos a mano. El estilo <code class="inline">teclado</code> usa <code class="inline">flexWrap: 'wrap'</code> (visto en el mini Space Invaders y en Adivina el número) para que, cuando no quepan en una fila, salten solas a la siguiente. <code class="inline">disabled={'{yaUsada}'}</code> evita marcar la misma letra dos veces.</p>
+      </div>
+    </div>
+
+    <details class="full-code">
+      <summary>Ver <code class="inline">fase2.tsx</code> completo</summary>
+      <div class="code-panel">
+        <div class="code-bar">
+          <span class="code-bar-name">src/app/fase2.tsx</span>
+          <button class="copy-btn" data-target="codigo-fase2" type="button">Copiar código</button>
+        </div>
+        <pre><code id="codigo-fase2">import { useEffect, useState } from 'react';
+import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
+
+// ---------------------------------------------------------------------
+// FASE 2: la palabra se oculta con guiones. Un teclado de la A a la Z
+// permite ir revelando las letras que sí están en la palabra. Todavía
+// no hay fallos ni derrota: pulsar una letra que no está no penaliza.
+// ---------------------------------------------------------------------
+
+const URL_API = 'https://random-word-api.herokuapp.com/word?lang=es';
+const ALFABETO = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+
+function quitarAcentos(texto: string): string {
+  return texto
+    .normalize('NFD')
+    .split('')
+    .filter((caracter) =&gt; {
+      const codigo = caracter.codePointAt(0) ?? 0;
+      return !(codigo &gt;= 0x0300 &amp;&amp; codigo &lt;= 0x036f);
+    })
+    .join('');
+}
+
+function limpiarPalabra(bruta: string): string | null {
+  const mayusculas = quitarAcentos(bruta).toUpperCase();
+  if (!/^[A-Z]{4,10}$/.test(mayusculas)) return null;
+  return mayusculas;
+}
+
+async function pedirPalabra(): Promise&lt;string&gt; {
+  while (true) {
+    const respuesta = await fetch(URL_API);
+    const datos: string[] = await respuesta.json();
+    const limpia = limpiarPalabra(datos[0]);
+    if (limpia) return limpia;
+  }
+}
+
+// Construye lo que se ve en pantalla: la letra si ya se adivinó, o "_" si no.
+function mostrarPalabra(palabra: string, letrasUsadas: string[]): string {
+  return palabra
+    .split('')
+    .map((letra) =&gt; (letrasUsadas.includes(letra) ? letra : '_'))
+    .join(' ');
+}
+
+export default function Fase2() {
+  const [palabra, setPalabra] = useState&lt;string | null&gt;(null);
+  const [cargando, setCargando] = useState(true);
+  const [letrasUsadas, setLetrasUsadas] = useState&lt;string[]&gt;([]);
+
+  useEffect(() =&gt; {
+    pedirPalabra().then((p) =&gt; {
+      setPalabra(p);
+      setCargando(false);
+    });
+  }, []);
+
+  function marcarLetra(letra: string) {
+    if (letrasUsadas.includes(letra)) return; // ya se pulsó antes, no hacemos nada
+    setLetrasUsadas([...letrasUsadas, letra]);
+  }
+
+  if (cargando || !palabra) {
+    return (
+      &lt;View style={styles.pantalla}&gt;
+        &lt;ActivityIndicator size="large" color="#2563eb" /&gt;
+      &lt;/View&gt;
+    );
+  }
+
+  return (
+    &lt;View style={styles.pantalla}&gt;
+      &lt;Text style={styles.titulo}&gt;Fase 2 · Revelar letras&lt;/Text&gt;
+
+      &lt;Text style={styles.palabraOculta}&gt;{mostrarPalabra(palabra, letrasUsadas)}&lt;/Text&gt;
+
+      {/* Teclado: una fila que se ajusta sola gracias a flexWrap */}
+      &lt;View style={styles.teclado}&gt;
+        {ALFABETO.map((letra) =&gt; {
+          const yaUsada = letrasUsadas.includes(letra);
+          return (
+            &lt;Pressable
+              key={letra}
+              style={[styles.tecla, yaUsada &amp;&amp; styles.teclaUsada]}
+              onPress={() =&gt; marcarLetra(letra)}
+              disabled={yaUsada}
+            &gt;
+              &lt;Text style={styles.textoTecla}&gt;{letra}&lt;/Text&gt;
+            &lt;/Pressable&gt;
+          );
+        })}
+      &lt;/View&gt;
+    &lt;/View&gt;
+  );
+}
+
+const styles = StyleSheet.create({
+  pantalla: { flex: 1, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center', gap: 20, padding: 24 },
+  titulo: { fontSize: 18, fontWeight: 'bold' },
+  palabraOculta: { fontSize: 30, fontWeight: 'bold', letterSpacing: 4 },
+  teclado: {
+    flexDirection: 'row',
+    flexWrap: 'wrap', // cuando no caben en una fila, salta a la siguiente
+    justifyContent: 'center',
+    gap: 6,
+    maxWidth: 320,
+  },
+  tecla: {
+    width: 34,
+    height: 34,
+    borderRadius: 6,
+    backgroundColor: '#2563eb',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  teclaUsada: { backgroundColor: '#cbd5e1' },
+  textoTecla: { color: '#fff', fontWeight: 'bold' },
+});
+</code></pre>
+      </div>
+    </details>
+
+    <div class="checkpoint">
+      <div class="checkpoint-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        Deberías ver esto
+      </div>
+      <p>La palabra oculta con guiones bajos, y un teclado completo A-Z debajo. Al tocar una letra que sí está en la palabra, aparece en su sitio; la tecla se queda gris tanto si acertaste como si no, para no poder repetirla.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="fase-head">
+      <span class="fase-num">Fase 3</span>
+      <h2 class="fase-title">Fallos y derrota</h2>
+    </div>
+    <p class="fase-objetivo">Objetivo: las letras que no están en la palabra cuentan como fallo. A los 6 fallos, se pierde y se revela la palabra completa.</p>
+
+    <div class="step">
+      <div class="step-chip">1</div>
+      <div class="step-body">
+        <h3>Contar solo los fallos de verdad</h3>
+        <div class="code-panel">
+          <div class="code-bar"><span class="code-bar-name">extracto</span></div>
+          <pre><code><span class="kw">function</span> <span class="tag">marcarLetra</span>(letra: <span class="tag">string</span>) {
+  <span class="kw">if</span> (estado !== <span class="str">'jugando'</span> || letrasUsadas.includes(letra) || !palabra) <span class="kw">return</span>;
+
+  setLetrasUsadas([...letrasUsadas, letra]);
+
+  <span class="kw">if</span> (!palabra.includes(letra)) {
+    <span class="kw">const</span> nuevosFallos = fallos + <span class="hl">1</span>;
+    setFallos(nuevosFallos);
+    <span class="kw">if</span> (nuevosFallos &gt;= MAX_FALLOS) {
+      setEstado(<span class="str">'perdido'</span>);
+    }
+  }
+}</code></pre>
+        </div>
+        <p>La primera línea es una guarda con tres condiciones: si la partida ya terminó, si esa letra ya se pulsó antes, o si todavía no hay palabra cargada, no hacemos nada. <code class="inline">nuevosFallos</code> se calcula en una variable aparte (en vez de leer <code class="inline">fallos</code> otra vez después de <code class="inline">setFallos</code>) porque, como ya viste con <code class="inline">useState</code>, el valor de <code class="inline">fallos</code> dentro de esta misma función no cambia hasta el siguiente render.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">2</div>
+      <div class="step-body">
+        <h3>Visualizar los fallos sin dibujar un muñeco</h3>
+        <p>Para mantenerlo &ldquo;muy sencillo&rdquo;, en vez del dibujo tradicional del ahorcado usamos 6 círculos que se van rellenando de rojo:</p>
+        <div class="code-panel">
+          <div class="code-bar"><span class="code-bar-name">extracto</span></div>
+          <pre><code>&lt;<span class="tag">View</span> <span class="prop">style</span>={styles.filaFallos}&gt;
+  {Array.from({ length: MAX_FALLOS }).map((_, indice) =&gt; (
+    &lt;<span class="tag">View</span> <span class="prop">key</span>={indice} <span class="prop">style</span>={[styles.bolaFallo, indice &lt; fallos &amp;&amp; styles.bolaFalloActiva]} /&gt;
+  ))}
+&lt;/<span class="tag">View</span>&gt;</code></pre>
+        </div>
+        <p><code class="inline">Array.from({'{ length: 6 }'})</code> crea un array de 6 huecos vacíos, solo para poder recorrerlo con <code class="inline">.map()</code> &mdash;un truco habitual cuando quieres repetir algo un número fijo de veces sin tener datos reales que recorrer. Cada círculo se pinta de rojo si su posición es menor que <code class="inline">fallos</code>.</p>
+      </div>
+    </div>
+
+    <details class="full-code">
+      <summary>Ver <code class="inline">fase3.tsx</code> completo</summary>
+      <div class="code-panel">
+        <div class="code-bar">
+          <span class="code-bar-name">src/app/fase3.tsx</span>
+          <button class="copy-btn" data-target="codigo-fase3" type="button">Copiar código</button>
+        </div>
+        <pre><code id="codigo-fase3">import { useEffect, useState } from 'react';
+import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
+
+// ---------------------------------------------------------------------
+// FASE 3: ahora sí hay fallos. Pulsar una letra que no está en la
+// palabra cuenta como error; al llegar a MAX_FALLOS, se pierde la
+// partida y se revela la palabra completa.
+// ---------------------------------------------------------------------
+
+const URL_API = 'https://random-word-api.herokuapp.com/word?lang=es';
+const ALFABETO = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+const MAX_FALLOS = 6;
+
+type EstadoJuego = 'jugando' | 'perdido';
+
+function quitarAcentos(texto: string): string {
+  return texto
+    .normalize('NFD')
+    .split('')
+    .filter((caracter) =&gt; {
+      const codigo = caracter.codePointAt(0) ?? 0;
+      return !(codigo &gt;= 0x0300 &amp;&amp; codigo &lt;= 0x036f);
+    })
+    .join('');
+}
+
+function limpiarPalabra(bruta: string): string | null {
+  const mayusculas = quitarAcentos(bruta).toUpperCase();
+  if (!/^[A-Z]{4,10}$/.test(mayusculas)) return null;
+  return mayusculas;
+}
+
+async function pedirPalabra(): Promise&lt;string&gt; {
+  while (true) {
+    const respuesta = await fetch(URL_API);
+    const datos: string[] = await respuesta.json();
+    const limpia = limpiarPalabra(datos[0]);
+    if (limpia) return limpia;
+  }
+}
+
+function mostrarPalabra(palabra: string, letrasUsadas: string[]): string {
+  return palabra
+    .split('')
+    .map((letra) =&gt; (letrasUsadas.includes(letra) ? letra : '_'))
+    .join(' ');
+}
+
+export default function Fase3() {
+  const [palabra, setPalabra] = useState&lt;string | null&gt;(null);
+  const [cargando, setCargando] = useState(true);
+  const [letrasUsadas, setLetrasUsadas] = useState&lt;string[]&gt;([]);
+  const [fallos, setFallos] = useState(0);
+  const [estado, setEstado] = useState&lt;EstadoJuego&gt;('jugando');
+
+  useEffect(() =&gt; {
+    pedirPalabra().then((p) =&gt; {
+      setPalabra(p);
+      setCargando(false);
+    });
+  }, []);
+
+  function marcarLetra(letra: string) {
+    if (estado !== 'jugando' || letrasUsadas.includes(letra) || !palabra) return;
+
+    setLetrasUsadas([...letrasUsadas, letra]);
+
+    if (!palabra.includes(letra)) {
+      const nuevosFallos = fallos + 1;
+      setFallos(nuevosFallos);
+      if (nuevosFallos &gt;= MAX_FALLOS) {
+        setEstado('perdido');
+      }
+    }
+  }
+
+  if (cargando || !palabra) {
+    return (
+      &lt;View style={styles.pantalla}&gt;
+        &lt;ActivityIndicator size="large" color="#2563eb" /&gt;
+      &lt;/View&gt;
+    );
+  }
+
+  return (
+    &lt;View style={styles.pantalla}&gt;
+      &lt;Text style={styles.titulo}&gt;Fase 3 · Fallos y derrota&lt;/Text&gt;
+
+      {/* Una bolita por cada fallo posible; se colorean según "fallos" */}
+      &lt;View style={styles.filaFallos}&gt;
+        {Array.from({ length: MAX_FALLOS }).map((_, indice) =&gt; (
+          &lt;View key={indice} style={[styles.bolaFallo, indice &lt; fallos &amp;&amp; styles.bolaFalloActiva]} /&gt;
+        ))}
+      &lt;/View&gt;
+      &lt;Text style={styles.contadorFallos}&gt;
+        Fallos: {fallos}/{MAX_FALLOS}
+      &lt;/Text&gt;
+
+      &lt;Text style={styles.palabraOculta}&gt;
+        {estado === 'perdido' ? palabra : mostrarPalabra(palabra, letrasUsadas)}
+      &lt;/Text&gt;
+
+      {estado === 'perdido' &amp;&amp; &lt;Text style={styles.mensajePerdido}&gt;Perdiste 💀&lt;/Text&gt;}
+
+      &lt;View style={styles.teclado}&gt;
+        {ALFABETO.map((letra) =&gt; {
+          const yaUsada = letrasUsadas.includes(letra);
+          return (
+            &lt;Pressable
+              key={letra}
+              style={[styles.tecla, (yaUsada || estado !== 'jugando') &amp;&amp; styles.teclaUsada]}
+              onPress={() =&gt; marcarLetra(letra)}
+              disabled={yaUsada || estado !== 'jugando'}
+            &gt;
+              &lt;Text style={styles.textoTecla}&gt;{letra}&lt;/Text&gt;
+            &lt;/Pressable&gt;
+          );
+        })}
+      &lt;/View&gt;
+    &lt;/View&gt;
+  );
+}
+
+const styles = StyleSheet.create({
+  pantalla: { flex: 1, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center', gap: 14, padding: 24 },
+  titulo: { fontSize: 18, fontWeight: 'bold' },
+  filaFallos: { flexDirection: 'row', gap: 8 },
+  bolaFallo: { width: 18, height: 18, borderRadius: 9, borderWidth: 2, borderColor: '#dc2626' },
+  bolaFalloActiva: { backgroundColor: '#dc2626' },
+  contadorFallos: { fontSize: 13, color: '#888' },
+  palabraOculta: { fontSize: 30, fontWeight: 'bold', letterSpacing: 4 },
+  mensajePerdido: { fontSize: 20, fontWeight: 'bold', color: '#dc2626' },
+  teclado: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    gap: 6,
+    maxWidth: 320,
+  },
+  tecla: {
+    width: 34,
+    height: 34,
+    borderRadius: 6,
+    backgroundColor: '#2563eb',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  teclaUsada: { backgroundColor: '#cbd5e1' },
+  textoTecla: { color: '#fff', fontWeight: 'bold' },
+});
+</code></pre>
+      </div>
+    </details>
+
+    <div class="checkpoint">
+      <div class="checkpoint-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        Deberías ver esto
+      </div>
+      <p>Cada letra que falla enciende un círculo rojo más. Al sexto fallo, aparece &ldquo;Perdiste&rdquo;, la palabra completa se revela, y el teclado deja de responder.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="fase-head">
+      <span class="fase-num">Fase 4</span>
+      <h2 class="fase-title">Ganar y jugar de nuevo</h2>
+    </div>
+    <p class="fase-objetivo">Objetivo: detectar la victoria, y un botón que vuelve a pedir una palabra a la API para empezar otra partida.</p>
+
+    <div class="step">
+      <div class="step-chip">1</div>
+      <div class="step-body">
+        <h3>¿Están ya todas las letras?</h3>
+        <div class="code-panel">
+          <div class="code-bar"><span class="code-bar-name">extracto</span></div>
+          <pre><code><span class="kw">function</span> <span class="tag">estaCompleta</span>(palabra: <span class="tag">string</span>, letrasUsadas: <span class="tag">string</span>[]): <span class="tag">boolean</span> {
+  <span class="kw">const</span> letrasUnicas = Array.from(<span class="kw">new</span> Set(palabra.split(<span class="str">''</span>)));
+  <span class="kw">return</span> letrasUnicas.every((letra) =&gt; letrasUsadas.includes(letra));
+}</code></pre>
+        </div>
+        <p><code class="inline">new Set(...)</code> quita las letras repetidas &mdash;en <code class="inline">"ARBOL"</code> ya no importaría, pero en una palabra como <code class="inline">"ELEFANTE"</code> evita exigir que <code class="inline">'E'</code> se marque tres veces. <code class="inline">.every(...)</code> devuelve <code class="inline">true</code> solo si <strong>todas</strong> esas letras únicas están ya en <code class="inline">letrasUsadas</code>.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">2</div>
+      <div class="step-body">
+        <h3>Jugar de nuevo: repetir la Fase 1, pero como función</h3>
+        <div class="code-panel">
+          <div class="code-bar"><span class="code-bar-name">extracto</span></div>
+          <pre><code><span class="kw">function</span> <span class="tag">jugarDeNuevo</span>() {
+  setCargando(<span class="kw">true</span>);
+  setEstado(<span class="str">'jugando'</span>);
+  setLetrasUsadas([]);
+  setFallos(<span class="hl">0</span>);
+  pedirPalabra().then((p) =&gt; {
+    setPalabra(p);
+    setCargando(<span class="kw">false</span>);
+  });
+}</code></pre>
+        </div>
+        <p>Es literalmente el mismo <code class="inline">pedirPalabra()</code> de la Fase 1, solo que ahora se llama desde un botón (<code class="inline">onPress</code>) en vez de desde un <code class="inline">useEffect</code> al montar la pantalla. Antes de pedir la nueva palabra, se resetean <code class="inline">letrasUsadas</code>, <code class="inline">fallos</code> y <code class="inline">estado</code> &mdash;si no, la siguiente partida empezaría ya con fallos del intento anterior.</p>
+      </div>
+    </div>
+
+    <details class="full-code">
+      <summary>Ver <code class="inline">fase4.tsx</code> completo</summary>
+      <div class="code-panel">
+        <div class="code-bar">
+          <span class="code-bar-name">src/app/fase4.tsx</span>
+          <button class="copy-btn" data-target="codigo-fase4" type="button">Copiar código</button>
+        </div>
+        <pre><code id="codigo-fase4">import { useEffect, useState } from 'react';
+import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
+
+// ---------------------------------------------------------------------
+// FASE 4: se añade la victoria (revelar todas las letras) y el botón
+// "Jugar de nuevo", que vuelve a pedir una palabra distinta a la API
+// y reinicia fallos y letras usadas.
+// ---------------------------------------------------------------------
+
+const URL_API = 'https://random-word-api.herokuapp.com/word?lang=es';
+const ALFABETO = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+const MAX_FALLOS = 6;
+
+type EstadoJuego = 'jugando' | 'perdido' | 'ganado';
+
+function quitarAcentos(texto: string): string {
+  return texto
+    .normalize('NFD')
+    .split('')
+    .filter((caracter) =&gt; {
+      const codigo = caracter.codePointAt(0) ?? 0;
+      return !(codigo &gt;= 0x0300 &amp;&amp; codigo &lt;= 0x036f);
+    })
+    .join('');
+}
+
+function limpiarPalabra(bruta: string): string | null {
+  const mayusculas = quitarAcentos(bruta).toUpperCase();
+  if (!/^[A-Z]{4,10}$/.test(mayusculas)) return null;
+  return mayusculas;
+}
+
+async function pedirPalabra(): Promise&lt;string&gt; {
+  while (true) {
+    const respuesta = await fetch(URL_API);
+    const datos: string[] = await respuesta.json();
+    const limpia = limpiarPalabra(datos[0]);
+    if (limpia) return limpia;
+  }
+}
+
+function mostrarPalabra(palabra: string, letrasUsadas: string[]): string {
+  return palabra
+    .split('')
+    .map((letra) =&gt; (letrasUsadas.includes(letra) ? letra : '_'))
+    .join(' ');
+}
+
+// Todas las letras distintas de la palabra ya están en letrasUsadas.
+function estaCompleta(palabra: string, letrasUsadas: string[]): boolean {
+  const letrasUnicas = Array.from(new Set(palabra.split('')));
+  return letrasUnicas.every((letra) =&gt; letrasUsadas.includes(letra));
+}
+
+export default function Fase4() {
+  const [palabra, setPalabra] = useState&lt;string | null&gt;(null);
+  const [cargando, setCargando] = useState(true);
+  const [letrasUsadas, setLetrasUsadas] = useState&lt;string[]&gt;([]);
+  const [fallos, setFallos] = useState(0);
+  const [estado, setEstado] = useState&lt;EstadoJuego&gt;('jugando');
+
+  useEffect(() =&gt; {
+    pedirPalabra().then((p) =&gt; {
+      setPalabra(p);
+      setCargando(false);
+    });
+  }, []);
+
+  function marcarLetra(letra: string) {
+    if (estado !== 'jugando' || letrasUsadas.includes(letra) || !palabra) return;
+
+    const nuevasLetras = [...letrasUsadas, letra];
+    setLetrasUsadas(nuevasLetras);
+
+    if (!palabra.includes(letra)) {
+      const nuevosFallos = fallos + 1;
+      setFallos(nuevosFallos);
+      if (nuevosFallos &gt;= MAX_FALLOS) {
+        setEstado('perdido');
+      }
+    } else if (estaCompleta(palabra, nuevasLetras)) {
+      setEstado('ganado');
+    }
+  }
+
+  // Pide una palabra nueva y reinicia todo lo demás.
+  function jugarDeNuevo() {
+    setCargando(true);
+    setEstado('jugando');
+    setLetrasUsadas([]);
+    setFallos(0);
+    pedirPalabra().then((p) =&gt; {
+      setPalabra(p);
+      setCargando(false);
+    });
+  }
+
+  if (cargando || !palabra) {
+    return (
+      &lt;View style={styles.pantalla}&gt;
+        &lt;ActivityIndicator size="large" color="#2563eb" /&gt;
+      &lt;/View&gt;
+    );
+  }
+
+  return (
+    &lt;View style={styles.pantalla}&gt;
+      &lt;Text style={styles.titulo}&gt;Fase 4 · Ganar y jugar de nuevo&lt;/Text&gt;
+
+      &lt;View style={styles.filaFallos}&gt;
+        {Array.from({ length: MAX_FALLOS }).map((_, indice) =&gt; (
+          &lt;View key={indice} style={[styles.bolaFallo, indice &lt; fallos &amp;&amp; styles.bolaFalloActiva]} /&gt;
+        ))}
+      &lt;/View&gt;
+      &lt;Text style={styles.contadorFallos}&gt;
+        Fallos: {fallos}/{MAX_FALLOS}
+      &lt;/Text&gt;
+
+      &lt;Text style={styles.palabraOculta}&gt;
+        {estado === 'perdido' ? palabra : mostrarPalabra(palabra, letrasUsadas)}
+      &lt;/Text&gt;
+
+      {estado === 'perdido' &amp;&amp; &lt;Text style={styles.mensajePerdido}&gt;Perdiste 💀&lt;/Text&gt;}
+      {estado === 'ganado' &amp;&amp; &lt;Text style={styles.mensajeGanado}&gt;¡Ganaste! 🎉&lt;/Text&gt;}
+
+      {estado === 'jugando' ? (
+        &lt;View style={styles.teclado}&gt;
+          {ALFABETO.map((letra) =&gt; {
+            const yaUsada = letrasUsadas.includes(letra);
+            return (
+              &lt;Pressable
+                key={letra}
+                style={[styles.tecla, yaUsada &amp;&amp; styles.teclaUsada]}
+                onPress={() =&gt; marcarLetra(letra)}
+                disabled={yaUsada}
+              &gt;
+                &lt;Text style={styles.textoTecla}&gt;{letra}&lt;/Text&gt;
+              &lt;/Pressable&gt;
+            );
+          })}
+        &lt;/View&gt;
+      ) : (
+        &lt;Pressable style={styles.boton} onPress={jugarDeNuevo}&gt;
+          &lt;Text style={styles.textoBoton}&gt;Jugar de nuevo&lt;/Text&gt;
+        &lt;/Pressable&gt;
+      )}
+    &lt;/View&gt;
+  );
+}
+
+const styles = StyleSheet.create({
+  pantalla: { flex: 1, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center', gap: 14, padding: 24 },
+  titulo: { fontSize: 18, fontWeight: 'bold' },
+  filaFallos: { flexDirection: 'row', gap: 8 },
+  bolaFallo: { width: 18, height: 18, borderRadius: 9, borderWidth: 2, borderColor: '#dc2626' },
+  bolaFalloActiva: { backgroundColor: '#dc2626' },
+  contadorFallos: { fontSize: 13, color: '#888' },
+  palabraOculta: { fontSize: 30, fontWeight: 'bold', letterSpacing: 4 },
+  mensajePerdido: { fontSize: 20, fontWeight: 'bold', color: '#dc2626' },
+  mensajeGanado: { fontSize: 20, fontWeight: 'bold', color: '#16a34a' },
+  teclado: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    gap: 6,
+    maxWidth: 320,
+  },
+  tecla: {
+    width: 34,
+    height: 34,
+    borderRadius: 6,
+    backgroundColor: '#2563eb',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  teclaUsada: { backgroundColor: '#cbd5e1' },
+  textoTecla: { color: '#fff', fontWeight: 'bold' },
+  boton: { backgroundColor: '#2563eb', paddingVertical: 12, paddingHorizontal: 24, borderRadius: 8 },
+  textoBoton: { color: '#fff', fontSize: 16, fontWeight: '600' },
+});
+</code></pre>
+      </div>
+    </details>
+
+    <div class="checkpoint">
+      <div class="checkpoint-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        Deberías ver esto
+      </div>
+      <p>Completa la palabra sin llegar a 6 fallos y verás &ldquo;¡Ganaste!&rdquo; en vez de &ldquo;Perdiste&rdquo;. En cualquiera de los dos casos, el teclado desaparece y aparece &ldquo;Jugar de nuevo&rdquo; &mdash;tócalo y, tras un instante pidiendo la nueva palabra, empieza otra partida distinta.</p>
+    </div>
+
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Retos extra
+      </div>
+      <p>Añade una <strong>pista</strong>: un botón que revela una letra al azar de las que faltan, a cambio de sumar un fallo directamente.</p>
+      <p>Muestra una <strong>categoría</strong> junto a la palabra pidiendo, además, una definición a <a href="https://dictionaryapi.dev/">otra API de diccionario</a> (en inglés; en español tendrías que traducir la palabra primero).</p>
+      <p>Guarda un <strong>contador de victorias</strong> con <code class="inline">AsyncStorage</code> (Sesión 17) para que sobreviva a cerrar y volver a abrir la app.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Si algo falla</h2>
+    <div class="trouble">
+      <div class="trouble-item">
+        <p class="q">La app se queda cargando para siempre</p>
+        <p>Comprueba tu conexión a internet, o que la URL no tenga ningún espacio o carácter de más. Si la API tarda mucho, el <code class="inline">ActivityIndicator</code> puede quedarse girando varios segundos &mdash;es normal, es una API pública compartida, no un servidor propio.</p>
+      </div>
+      <div class="trouble-item">
+        <p class="q">Salen palabras rarísimas o con mayúsculas raras</p>
+        <p>Es justo lo que <code class="inline">limpiarPalabra</code> intenta evitar: si aun así ves algo extraño, revisa que la expresión regular sea exactamente <code class="inline">/^[A-Z]{4,10}$/</code> y que se aplique <strong>después</strong> de <code class="inline">quitarAcentos(...).toUpperCase()</code>, no antes.</p>
+      </div>
+      <div class="trouble-item">
+        <p class="q">Nunca se pierde ni se gana</p>
+        <p>Revisa que <code class="inline">marcarLetra</code> compare exactamente con el mismo formato en el que guardaste <code class="inline">palabra</code> (mayúsculas) y en el que generas <code class="inline">ALFABETO</code> (también mayúsculas). Si uno está en minúsculas y el otro no, <code class="inline">.includes(...)</code> nunca encontrará coincidencias.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="end">
+    Vuelve a la Sesión 18 y compara: en el Ahorcado, cada <code class="inline">setState</code> es la reacción directa a un toque; en el Arkanoid, la mayoría de cambios los dispara un <code class="inline">setInterval</code> que nadie tocó. Esa diferencia es todo el contenido de la sesión, ahora visto en código de verdad.
+  </footer>
+
+</div>
+
+<script>
+  document.querySelectorAll('.copy-btn').forEach(function (boton) {
+    boton.addEventListener('click', function () {
+      var codigo = document.getElementById(boton.dataset.target).textContent;
+      navigator.clipboard.writeText(codigo).then(function () {
+        var original = boton.textContent;
+        boton.textContent = '¡Copiado!';
+        boton.classList.add('copiado');
+        setTimeout(function () {
+          boton.textContent = original;
+          boton.classList.remove('copiado');
+        }, 1800);
+      });
+    });
+  });
+</script>
