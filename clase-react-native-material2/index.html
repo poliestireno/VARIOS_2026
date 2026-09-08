@@ -370,14 +370,78 @@
     </table>
   </div>
 
-  <section class="phase" style="margin-top: 36px;">
-    <h2 class="block-title" style="font-family:'Lexend',sans-serif;font-weight:600;font-size:1.05rem;letter-spacing:0.01em;color:var(--muted);text-transform:uppercase;margin:0 0 12px;">Guías de apoyo ya preparadas</h2>
-    <div class="checkpoint" style="margin:0;">
-      <div class="checkpoint-title">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-        Contador en Expo
+  <section class="phase" style="margin-top: 36px;" id="ejemplos">
+    <h2 class="block-title" style="font-family:'Lexend',sans-serif;font-weight:600;font-size:1.05rem;letter-spacing:0.01em;color:var(--muted);text-transform:uppercase;margin:0 0 4px;">Ejemplos y guías ya preparados</h2>
+    <p class="phase-summary" style="margin:0 0 20px;">Código y tutoriales ya escritos, listos para usar en clase o mandar de referencia. Ordenados de menor a mayor dificultad.</p>
+
+    <div class="session">
+      <div class="session-chip">1</div>
+      <div class="session-body">
+        <h3><a href="contador-en-expo.html">Contador en Expo</a></h3>
+        <p class="objetivo">La primera app real funcionando en el móvil, con la plantilla oficial de Expo Router. Tutorial paso a paso con subpasos y checkpoints.</p>
+        <p class="linea"><strong>Contenido:</strong> useState, estructura de carpetas de Expo Router, ejecutar la app con Expo Go.</p>
+        <p class="practica"><strong>Nivel:</strong> iniciación &middot; Sesión 11 &middot; <a href="contador-en-expo.html">Abrir guía &#8599;</a></p>
       </div>
-      <p>Tutorial paso a paso, con subpasos y checkpoints, para construir y probar la primera app en el móvil desde VS Code, con la plantilla de Expo Router y TypeScript por defecto. Es la práctica de la <a href="#sesion-11">sesión 11</a>. <a href="contador-en-expo.html">Abrir guía &#8599;</a></p>
+    </div>
+
+    <div class="session">
+      <div class="session-chip">2</div>
+      <div class="session-body">
+        <h3><a href="ejemplos/index_cursor_direcciones.html">Cursor de 4 direcciones</a></h3>
+        <p class="objetivo">Cuatro botones en cruz que muestran en grande la última dirección pulsada. Código comentado línea a línea.</p>
+        <p class="linea"><strong>Contenido:</strong> useState, Pressable, renderizado condicional según el valor guardado.</p>
+        <p class="practica"><strong>Nivel:</strong> iniciación &middot; Sesión 11 &middot; <a href="ejemplos/index_cursor_direcciones.html">Abrir código &#8599;</a></p>
+      </div>
+    </div>
+
+    <div class="session">
+      <div class="session-chip">3</div>
+      <div class="session-body">
+        <h3><a href="ejemplos/index_adivinar_numero.html">Adivina el número</a></h3>
+        <p class="objetivo">Juego para adivinar un número del 0 al 100, con pistas de mayor/menor y conteo de intentos. Código comentado línea a línea.</p>
+        <p class="linea"><strong>Contenido:</strong> useState, TextInput, comparaciones y condicionales, conteo de intentos.</p>
+        <p class="practica"><strong>Nivel:</strong> básico &middot; Sesión 11 &middot; <a href="ejemplos/index_adivinar_numero.html">Abrir código &#8599;</a></p>
+      </div>
+    </div>
+
+    <div class="session">
+      <div class="session-chip">4</div>
+      <div class="session-body">
+        <h3><a href="ejemplos/login-tabla-aleatoria.html">Login + tabla aleatoria</a></h3>
+        <p class="objetivo">Dos pantallas con Expo Router: un login con formulario y, si es correcto, una segunda pantalla con una tabla 3&times;3 de números aleatorios.</p>
+        <p class="linea"><strong>Contenido:</strong> TextInput, navegación entre pantallas (<code>router.push</code>), paso de parámetros, matriz generada con bucles anidados.</p>
+        <p class="practica"><strong>Nivel:</strong> intermedio &middot; Sesión 11 &middot; <a href="ejemplos/login-tabla-aleatoria.html">Abrir código &#8599;</a></p>
+      </div>
+    </div>
+
+    <div class="session">
+      <div class="session-chip">5</div>
+      <div class="session-body">
+        <h3><a href="../../piedrapapeltijera/src/app/index.tsx">Piedra, papel o tijera en 4 fases</a></h3>
+        <p class="objetivo">El clásico juego contra la máquina: elegir, decidir quién gana, llevar un marcador y jugar una partida al mejor de 3.</p>
+        <p class="linea"><strong>Contenido:</strong> useState, lógica de comparación con un objeto de reglas, marcador acumulado entre rondas, condición de fin de partida.</p>
+        <p class="practica"><strong>Nivel:</strong> intermedio &middot; proyecto Expo aparte (<code>piedrapapeltijera/</code>), todavía sin guía en HTML &middot; <a href="../../piedrapapeltijera/src/app/index.tsx">Ver código &#8599;</a></p>
+      </div>
+    </div>
+
+    <div class="session">
+      <div class="session-chip">6</div>
+      <div class="session-body">
+        <h3><a href="ahorcado-en-4-fases.html">Ahorcado en 4 fases</a></h3>
+        <p class="objetivo">El clásico juego de adivinar una palabra, letra a letra, pedida a una API real de internet. Cada fase es un archivo independiente y funcionando.</p>
+        <p class="linea"><strong>Contenido:</strong> <code>fetch</code> y <code>async/await</code>, useState para letras acertadas y falladas, condicionales de victoria/derrota.</p>
+        <p class="practica"><strong>Nivel:</strong> intermedio-alto &middot; Sesión 18 &middot; <a href="ahorcado-en-4-fases.html">Abrir guía &#8599;</a></p>
+      </div>
+    </div>
+
+    <div class="session">
+      <div class="session-chip">7</div>
+      <div class="session-body">
+        <h3><a href="arkanoid-en-4-fases.html">Arkanoid en 4 fases</a></h3>
+        <p class="objetivo">El &ldquo;rompebloques&rdquo; de toda la vida: primero el escenario quieto, luego la paleta, luego la física de la pelota, y por último los bloques de verdad.</p>
+        <p class="linea"><strong>Contenido:</strong> PanResponder y gestos, bucle de animación con useRef frente a useState, detección de colisiones.</p>
+        <p class="practica"><strong>Nivel:</strong> avanzado &middot; Sesión 18 &middot; <a href="arkanoid-en-4-fases.html">Abrir guía &#8599;</a></p>
+      </div>
     </div>
   </section>
 
