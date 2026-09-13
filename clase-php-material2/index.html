@@ -1,0 +1,518 @@
+<title>Temario PHP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #777BB4;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #9195D6;
+      --accent-ink: #17110D;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #9195D6;
+    --accent-ink: #17110D;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top { margin-bottom: 36px; }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.9rem, 4.5vw, 2.5rem);
+    line-height: 1.14;
+    letter-spacing: -0.01em;
+    margin: 16px 0 8px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.05rem;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .meta-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .overview-wrap { overflow-x: auto; margin-top: 8px; }
+
+  table.overview {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    font-size: 14.5px;
+  }
+
+  table.overview th {
+    text-align: left;
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 12.5px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  table.overview td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--line-soft);
+    vertical-align: top;
+  }
+
+  table.overview tr:last-child td { border-bottom: none; }
+
+  table.overview td.num { font-variant-numeric: tabular-nums; color: var(--muted); }
+
+  table.overview .block-name { font-weight: 600; }
+  table.overview .block-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 8px;
+  }
+
+  section.phase { margin-top: 56px; }
+
+  .phase-head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 6px;
+  }
+
+  .phase-num {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    color: var(--accent-2);
+    font-weight: 500;
+  }
+
+  h2.phase-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 1.4rem;
+    margin: 0;
+  }
+
+  .phase-meta {
+    color: var(--muted);
+    font-size: 13.5px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    margin-left: auto;
+    white-space: nowrap;
+  }
+
+  .phase-summary {
+    color: var(--muted);
+    font-size: 15px;
+    max-width: 62ch;
+    margin: 6px 0 24px;
+  }
+
+  .session {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-top: 12px;
+    box-shadow: var(--shadow);
+    display: flex;
+    gap: 14px;
+  }
+
+  .session-chip {
+    flex: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .session-body { flex: 1; min-width: 0; }
+
+  .session h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.02rem;
+    font-weight: 600;
+    margin: 0 0 5px;
+  }
+
+  .session p.objetivo {
+    margin: 0 0 8px;
+    color: var(--ink);
+    font-size: 14.5px;
+  }
+
+  .session .linea {
+    font-size: 13.5px;
+    color: var(--muted);
+    margin: 4px 0 0;
+  }
+
+  .session .linea strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .session .practica {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px dashed var(--line);
+    font-size: 13.5px;
+  }
+
+  .session .practica strong { color: var(--accent-2); }
+
+  footer.end {
+    margin-top: 56px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+</style>
+
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">Temario de clase</span>
+    <h1>PHP desde cero</h1>
+    <p class="lede">13 sesiones de 2 horas para llevar a un grupo desde la instalación del entorno hasta una aplicación web propia en PHP, con base de datos, formularios y sesión de usuario.</p>
+    <div class="meta-row">
+      <span class="meta-chip">13 sesiones</span>
+      <span class="meta-chip">26 h totales</span>
+      <span class="meta-chip">13 semanas</span>
+      <span class="meta-chip">1 × 2h / semana</span>
+    </div>
+  </header>
+
+  <div class="overview-wrap">
+    <table class="overview">
+      <thead>
+        <tr>
+          <th>Bloque</th>
+          <th>Sesiones</th>
+          <th>Horas</th>
+          <th>Semanas</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="block-name"><span class="block-dot" style="background:#777BB4"></span>Fundamentos de PHP</td>
+          <td class="num">1&ndash;4</td>
+          <td class="num">8 h</td>
+          <td class="num">1&ndash;4</td>
+        </tr>
+        <tr>
+          <td class="block-name"><span class="block-dot" style="background:#0F8B8D"></span>Arrays y cadenas</td>
+          <td class="num">5&ndash;6</td>
+          <td class="num">4 h</td>
+          <td class="num">5&ndash;6</td>
+        </tr>
+        <tr>
+          <td class="block-name"><span class="block-dot" style="background:#E4572E"></span>Bases de datos</td>
+          <td class="num">7&ndash;9</td>
+          <td class="num">6 h</td>
+          <td class="num">7&ndash;9</td>
+        </tr>
+        <tr>
+          <td class="block-name"><span class="block-dot" style="background:#d4af37"></span>Sesiones y autenticación</td>
+          <td class="num">10&ndash;11</td>
+          <td class="num">4 h</td>
+          <td class="num">10&ndash;11</td>
+        </tr>
+        <tr>
+          <td class="block-name"><span class="block-dot" style="background:#7c6bd8"></span>Proyecto final</td>
+          <td class="num">12&ndash;13</td>
+          <td class="num">4 h</td>
+          <td class="num">12&ndash;13</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- BLOQUE 1 -->
+  <section class="phase">
+    <div class="phase-head">
+      <span class="phase-num">Bloque 1</span>
+      <h2 class="phase-title">Fundamentos de PHP</h2>
+      <span class="phase-meta">Sesiones 1&ndash;4 · Semanas 1&ndash;4</span>
+    </div>
+    <p class="phase-summary">Entorno de trabajo y la base del lenguaje: sin esto, ni el código se puede ejecutar en local ni tiene sentido lo que viene después.</p>
+
+    <div class="session">
+      <div class="session-chip">1</div>
+      <div class="session-body">
+        <h3>Entorno de desarrollo y primer script</h3>
+        <p class="objetivo">Tener PHP funcionando en local y escribir la primera página que combine HTML y PHP.</p>
+        <p class="linea"><strong>Contenido:</strong> instalar XAMPP (Apache + PHP + MySQL) y activar la visualización de errores; instalar VS Code y sus extensiones básicas para PHP &mdash; <code class="inline">PHP Intelephense</code> (autocompletado e ir a definición), <code class="inline">PHP Debug</code> (depurar con Xdebug), <code class="inline">PHP Server</code> (previsualizar sin salir del editor), <code class="inline">PHP DocBlocker</code> (documentar funciones) y <code class="inline">SQLTools</code> + su driver de MySQL (consultar la base de datos desde el propio VS Code); &ldquo;islas&rdquo; de PHP dentro de un HTML.</p>
+        <p class="practica"><strong>Práctica:</strong> primer &ldquo;hola mundo&rdquo; en PHP y una página que recibe datos de un formulario por <code class="inline">POST</code>.</p>
+      </div>
+    </div>
+
+    <div class="session">
+      <div class="session-chip">2</div>
+      <div class="session-body">
+        <h3>Sintaxis PHP I</h3>
+        <p class="objetivo">Escribir código PHP con soltura: variables, tipos, operadores y funciones propias.</p>
+        <p class="linea"><strong>Contenido:</strong> etiquetas de apertura/cierre, tipos de datos, operadores, constantes, funciones, paso de parámetros por valor y por referencia.</p>
+        <p class="practica"><strong>Práctica:</strong> función que reciba tres operandos y un operador, y devuelva el resultado por referencia.</p>
+      </div>
+    </div>
+
+    <div class="session">
+      <div class="session-chip">3</div>
+      <div class="session-body">
+        <h3>Control de flujo</h3>
+        <p class="objetivo">Tomar decisiones y repetir instrucciones.</p>
+        <p class="linea"><strong>Contenido:</strong> condicionales (<code class="inline">if</code>, <code class="inline">switch</code>, operador ternario), bucles (<code class="inline">while</code>, <code class="inline">do-while</code>, <code class="inline">for</code>, <code class="inline">foreach</code>).</p>
+        <p class="practica"><strong>Práctica:</strong> dado un número N, imprimir un triángulo de asteriscos centrado de altura N.</p>
+      </div>
+    </div>
+
+    <div class="session">
+      <div class="session-chip">4</div>
+      <div class="session-body">
+        <h3>Arrays I</h3>
+        <p class="objetivo">Guardar y recorrer colecciones de datos.</p>
+        <p class="linea"><strong>Contenido:</strong> arrays indexados y asociativos, recorrido con <code class="inline">foreach</code>, funciones básicas de array.</p>
+        <p class="practica"><strong>Práctica:</strong> a partir de un array asociativo de 12 elementos, imprimir en HTML sus claves y valores como dos matrices (3&times;4 y 6&times;2).</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOQUE 2 -->
+  <section class="phase">
+    <div class="phase-head">
+      <span class="phase-num">Bloque 2</span>
+      <h2 class="phase-title">Arrays y cadenas</h2>
+      <span class="phase-meta">Sesiones 5&ndash;6 · Semanas 5&ndash;6</span>
+    </div>
+    <p class="phase-summary">Se cierra la caja de herramientas del lenguaje antes de tocar datos reales: más funciones de array y todo lo necesario para procesar texto.</p>
+
+    <div class="session">
+      <div class="session-chip">5</div>
+      <div class="session-body">
+        <h3>Arrays II</h3>
+        <p class="objetivo">Profundizar en las funciones de array de uso diario.</p>
+        <p class="linea"><strong>Contenido:</strong> ordenar, filtrar y transformar arrays, arrays multidimensionales.</p>
+        <p class="practica"><strong>Práctica:</strong> ampliar el ejercicio de arrays de la sesión anterior con una función de ordenación propia.</p>
+      </div>
+    </div>
+
+    <div class="session">
+      <div class="session-chip">6</div>
+      <div class="session-body">
+        <h3>Cadenas y expresiones regulares</h3>
+        <p class="objetivo">Manipular texto y extraer patrones de una cadena.</p>
+        <p class="linea"><strong>Contenido:</strong> funciones de string, expresiones regulares con <code class="inline">preg_match()</code>, <code class="inline">preg_replace()</code>, <code class="inline">preg_split()</code> y <code class="inline">preg_match_all()</code>.</p>
+        <p class="practica"><strong>Práctica:</strong> dado un párrafo, extraer un mensaje oculto combinando una letra de cada palabra según su posición.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOQUE 3 -->
+  <section class="phase">
+    <div class="phase-head">
+      <span class="phase-num">Bloque 3</span>
+      <h2 class="phase-title">Bases de datos</h2>
+      <span class="phase-meta">Sesiones 7&ndash;9 · Semanas 7&ndash;9</span>
+    </div>
+    <p class="phase-summary">PHP deja de trabajar solo con datos inventados en el propio código y empieza a hablar con una base de datos MySQL real.</p>
+
+    <div class="session">
+      <div class="session-chip">7</div>
+      <div class="session-body">
+        <h3>Bases de datos en PHP I</h3>
+        <p class="objetivo">Conectar PHP con MySQL y traer los primeros datos.</p>
+        <p class="linea"><strong>Contenido:</strong> conexión con PDO, sentencias <code class="inline">SELECT</code>, sentencias preparadas.</p>
+        <p class="practica"><strong>Práctica:</strong> consultar una tabla y mostrar el resultado por pantalla.</p>
+      </div>
+    </div>
+
+    <div class="session">
+      <div class="session-chip">8</div>
+      <div class="session-body">
+        <h3>Bases de datos en PHP II</h3>
+        <p class="objetivo">Mostrar y filtrar datos reales de forma vistosa.</p>
+        <p class="linea"><strong>Contenido:</strong> volcar el resultado de una consulta en una tabla HTML, filtros por varios campos.</p>
+        <p class="practica"><strong>Práctica:</strong> página de listado con filtros por al menos dos campos distintos.</p>
+      </div>
+    </div>
+
+    <div class="session">
+      <div class="session-chip">9</div>
+      <div class="session-body">
+        <h3>Bases de datos en PHP III</h3>
+        <p class="objetivo">Cerrar el ciclo completo de operaciones sobre una tabla.</p>
+        <p class="linea"><strong>Contenido:</strong> <code class="inline">INSERT</code>, <code class="inline">UPDATE</code> y <code class="inline">DELETE</code> con sentencias preparadas.</p>
+        <p class="practica"><strong>Práctica:</strong> formulario de alta, edición y borrado sobre la tabla de la sesión anterior.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOQUE 4 -->
+  <section class="phase">
+    <div class="phase-head">
+      <span class="phase-num">Bloque 4</span>
+      <h2 class="phase-title">Sesiones y autenticación</h2>
+      <span class="phase-meta">Sesiones 10&ndash;11 · Semanas 10&ndash;11</span>
+    </div>
+    <p class="phase-summary">Una aplicación de verdad necesita saber quién está al otro lado. Se añade login, control de acceso y estado entre páginas.</p>
+
+    <div class="session">
+      <div class="session-chip">10</div>
+      <div class="session-body">
+        <h3>Sesión en PHP I</h3>
+        <p class="objetivo">Identificar a un usuario a lo largo de varias páginas.</p>
+        <p class="linea"><strong>Contenido:</strong> tabla de usuarios, formulario de login, <code class="inline">$_SESSION</code>, validar credenciales correctas e incorrectas.</p>
+        <p class="practica"><strong>Práctica:</strong> login funcional contra una tabla de usuarios en base de datos.</p>
+      </div>
+    </div>
+
+    <div class="session">
+      <div class="session-chip">11</div>
+      <div class="session-body">
+        <h3>Sesión en PHP II</h3>
+        <p class="objetivo">Completar el ciclo de vida de la sesión de un usuario.</p>
+        <p class="linea"><strong>Contenido:</strong> cerrar sesión programáticamente, proteger páginas frente a accesos sin login, expiración de la sesión por tiempo.</p>
+        <p class="practica"><strong>Práctica:</strong> ampliar el login anterior con cierre de sesión, páginas protegidas y una segunda página dentro del área privada.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOQUE 5 -->
+  <section class="phase">
+    <div class="phase-head">
+      <span class="phase-num">Bloque 5</span>
+      <h2 class="phase-title">Proyecto final</h2>
+      <span class="phase-meta">Sesiones 12&ndash;13 · Semanas 12&ndash;13</span>
+    </div>
+    <p class="phase-summary">Todo lo visto hasta ahora &mdash; PHP, base de datos y sesión &mdash; se junta en una aplicación propia, de principio a fin.</p>
+
+    <div class="session">
+      <div class="session-chip">12</div>
+      <div class="session-body">
+        <h3>Definición y diseño del proyecto</h3>
+        <p class="objetivo">Pasar de una idea a un diseño técnico realista.</p>
+        <p class="linea"><strong>Contenido:</strong> diagrama entidad-relación de la base de datos, reparto entre vista de administración y vista de cliente, lista de páginas necesarias.</p>
+        <p class="practica"><strong>Práctica:</strong> entrega del diseño de la base de datos (script SQL o diagrama).</p>
+      </div>
+    </div>
+
+    <div class="session">
+      <div class="session-chip">13</div>
+      <div class="session-body">
+        <h3>Desarrollo y presentación del proyecto</h3>
+        <p class="objetivo">Construir y enseñar la aplicación completa.</p>
+        <p class="linea"><strong>Contenido:</strong> páginas de gestión (listar, insertar, modificar, borrar) y área de cliente (registro, login y perfil).</p>
+        <p class="practica"><strong>Práctica:</strong> demo final del proyecto con su repositorio de código y capturas de la ejecución.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="end">
+    <p>Los bloques 1 y 2 son intencionadamente independientes de la base de datos &mdash; primero el lenguaje, después los datos reales &mdash; para no mezclar la curva de aprendizaje de PHP con la de SQL a la vez. El bloque 5 reutiliza directamente las bases de datos y la sesión de usuario de los bloques 3 y 4 como cierre natural del curso.</p>
+    <p style="margin-top:10px;"><a href="https://github.com/poliestireno/VARIOS_2026_P/tree/main/clase-php-material2/privado" style="color:var(--muted);">Notas privadas del profesor &#8599;</a></p>
+  </footer>
+
+</div>
