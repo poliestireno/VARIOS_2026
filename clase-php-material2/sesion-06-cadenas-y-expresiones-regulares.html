@@ -1,0 +1,654 @@
+<title>Cadenas y expresiones regulares</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #E4572E;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #FF8A5C;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #F2764C;
+      --accent-ink: #17110D;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #F2764C;
+    --accent-ink: #17110D;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top {
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.08rem;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  section.block {
+    margin-top: 44px;
+  }
+
+  h2.block-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+
+  section.block p {
+    margin: 0 0 14px;
+  }
+
+  section.block ul {
+    margin: 0 0 14px;
+    padding-left: 22px;
+  }
+
+  section.block li {
+    margin-bottom: 6px;
+  }
+
+  h3.option-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: var(--ink);
+    margin: 40px 0 4px;
+  }
+
+  .checklist {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow);
+  }
+
+  .checklist li {
+    list-style: none;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 15px;
+    margin-bottom: 0;
+  }
+
+  .checklist ul { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+
+  .checklist svg {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    color: var(--accent-2);
+  }
+
+  .learn-list {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .learn-list li {
+    list-style: none;
+    padding-left: 20px;
+    position: relative;
+    color: var(--ink);
+    margin-bottom: 0;
+  }
+
+  .learn-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .step {
+    display: flex;
+    gap: 18px;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .step:first-of-type { border-top: none; padding-top: 0; }
+
+  .step-chip {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-body { flex: 1; min-width: 0; }
+
+  .step h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 4px 0 8px;
+  }
+
+  .step p {
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+
+  .step p.small {
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+
+  .term {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+
+  .term-bar span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--code-line);
+  }
+
+  .term pre {
+    margin: 0;
+    padding: 14px 16px 16px;
+    overflow-x: auto;
+  }
+
+  .term code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13.6px;
+    line-height: 1.7;
+    color: var(--code-ink);
+  }
+
+  .term .prompt { color: var(--code-muted); }
+  .term .cmt { color: var(--code-muted); }
+  .term .hl { color: var(--code-accent); }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .code-panel .term-bar { }
+
+  .code-panel pre {
+    margin: 0;
+    padding: 16px 18px 18px;
+    overflow-x: auto;
+  }
+
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+
+  .code-panel .tag { color: var(--accent-2); }
+  .code-panel .str { color: #C9D96B; }
+  .code-panel .kw { color: var(--code-accent); }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .prop { color: #8FB8FF; }
+  .code-panel .hl { color: var(--code-accent); }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+
+  .checkpoint p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .substep {
+    display: flex;
+    gap: 14px;
+    margin: 18px 0 0 16px;
+    padding-left: 16px;
+    border-left: 2px solid var(--line-soft);
+  }
+
+  .substep-chip {
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: var(--line-soft);
+    color: var(--muted);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 11.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .substep h4 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.98rem;
+    font-weight: 600;
+    margin: 2px 0 6px;
+  }
+
+  .substep p {
+    margin: 0 0 8px;
+    font-size: 14.5px;
+    color: var(--ink);
+  }
+
+  .substep .code-panel, .substep .term {
+    margin: 10px 0;
+  }
+
+  details.full-code {
+    margin-top: 16px;
+  }
+
+  details.full-code summary {
+    cursor: pointer;
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--accent-2);
+    list-style: none;
+  }
+
+  details.full-code summary::-webkit-details-marker { display: none; }
+
+  details.full-code summary::before {
+    content: "▸ ";
+  }
+
+  details.full-code[open] summary::before {
+    content: "▾ ";
+  }
+
+  .trouble {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .trouble-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .trouble-item .q {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    margin: 0 0 6px;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .trouble-item .q::before {
+    content: "?";
+    font-family: "IBM Plex Mono", monospace;
+    color: var(--accent-2);
+    font-weight: 500;
+  }
+
+  .trouble-item p {
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--muted);
+  }
+
+  .trouble-item p + p { margin-top: 8px; }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .step { transition: none; }
+  }
+</style>
+
+
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">Sesión 6 de 13 &middot; Bloque 2: Arrays y cadenas</span>
+    <h1>Cadenas y expresiones regulares</h1>
+    <p class="lede">Funciones de string de uso diario y, para cuando eso no basta, expresiones regulares &mdash; buscar y extraer patrones dentro de un texto.</p>
+    <div class="meta-row">
+      <span class="meta-chip">2 horas</span>
+      <span class="meta-chip">Sesión 6/13</span>
+      <span class="meta-chip">Sin instalar nada nuevo</span>
+    </div>
+  </header>
+
+  <section class="block">
+    <h2 class="block-title">Funciones de string básicas</h2>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="prop">$texto</span> = <span class="str">"Curso de PHP"</span>;
+
+<span class="kw">echo</span> strlen(<span class="prop">$texto</span>);           <span class="com">// 12 -> longitud, en caracteres</span>
+<span class="kw">echo</span> strtoupper(<span class="prop">$texto</span>);        <span class="com">// "CURSO DE PHP"</span>
+<span class="kw">echo</span> strtolower(<span class="prop">$texto</span>);        <span class="com">// "curso de php"</span>
+<span class="kw">echo</span> substr(<span class="prop">$texto</span>, <span class="hl">0</span>, <span class="hl">5</span>);      <span class="com">// "Curso" -> desde la posición 0, 5 caracteres</span>
+<span class="kw">echo</span> str_replace(<span class="str">"PHP"</span>, <span class="str">"MySQL"</span>, <span class="prop">$texto</span>); <span class="com">// "Curso de MySQL"</span>
+var_dump(str_contains(<span class="prop">$texto</span>, <span class="str">"PHP"</span>)); <span class="com">// true</span></code></pre>
+    </div>
+    <p>Para pasar de texto a array y viceversa, las dos funciones que más vas a usar son <code class="inline">explode()</code> (trocea un string por un separador) y <code class="inline">implode()</code> (la operación contraria: une un array en un string):</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="prop">$frase</span> = <span class="str">"el veloz murciélago hindú"</span>;
+
+<span class="prop">$palabras</span> = explode(<span class="str">" "</span>, <span class="prop">$frase</span>);
+<span class="com">// ["el", "veloz", "murciélago", "hindú"]</span>
+
+<span class="kw">echo</span> implode(<span class="str">"-"</span>, <span class="prop">$palabras</span>);
+<span class="com">// "el-veloz-murciélago-hindú"</span></code></pre>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Expresiones regulares</h2>
+    <p>Una expresión regular describe un <strong>patrón</strong> de texto, en vez de un texto exacto. En PHP, el patrón siempre va entre delimitadores (normalmente <code class="inline">/</code>) al principio y al final.</p>
+
+    <h3 class="option-title">preg_match() &mdash; ¿encaja el patrón?</h3>
+    <p>Comprueba si el patrón aparece en el texto, y (si le pasas un tercer argumento) te devuelve lo encontrado.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="prop">$email</span> = <span class="str">"ana@ejemplo.com"</span>;
+
+<span class="kw">if</span> (preg_match(<span class="str">"/^[\w.]+@[\w.]+\.\w+$/"</span>, <span class="prop">$email</span>)) {
+  <span class="kw">echo</span> <span class="str">"Formato válido"</span>;
+}
+
+preg_match(<span class="str">"/(\d+)/"</span>, <span class="str">"Tengo 32 años"</span>, <span class="prop">$coincidencias</span>);
+<span class="kw">echo</span> <span class="prop">$coincidencias</span>[<span class="hl">0</span>]; <span class="com">// "32" -> lo que ha encontrado el grupo entre paréntesis</span></code></pre>
+    </div>
+
+    <h3 class="option-title">preg_replace() &mdash; buscar y reemplazar por patrón</h3>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="prop">$texto</span> = <span class="str">"Teléfono: 611-222-333"</span>;
+<span class="prop">$sinGuiones</span> = preg_replace(<span class="str">"/-/"</span>, <span class="str">""</span>, <span class="prop">$texto</span>);
+<span class="com">// "Teléfono: 611222333"</span></code></pre>
+    </div>
+
+    <h3 class="option-title">preg_split() &mdash; trocear por un patrón</h3>
+    <p>Como <code class="inline">explode()</code>, pero el separador puede ser un patrón en vez de un texto fijo &mdash; útil cuando el texto puede venir separado por comas, espacios o punto y coma indistintamente.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="prop">$datos</span> = <span class="str">"ana, luis;eva  carlos"</span>;
+<span class="prop">$nombres</span> = preg_split(<span class="str">"/[\s,;]+/"</span>, <span class="prop">$datos</span>);
+<span class="com">// ["ana", "luis", "eva", "carlos"] -> uno o más espacios, comas o punto y coma seguidos, cuentan como un solo separador</span></code></pre>
+    </div>
+
+    <h3 class="option-title">preg_match_all() &mdash; todas las coincidencias, no solo la primera</h3>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code>preg_match_all(<span class="str">"/\d+/"</span>, <span class="str">"3 manzanas, 12 peras y 7 uvas"</span>, <span class="prop">$todos</span>);
+<span class="kw">echo</span> implode(<span class="str">", "</span>, <span class="prop">$todos</span>[<span class="hl">0</span>]); <span class="com">// "3, 12, 7"</span></code></pre>
+    </div>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        No hace falta memorizar la sintaxis de golpe
+      </div>
+      <p><code class="inline">\d</code> (un dígito), <code class="inline">\w</code> (una letra, dígito o guion bajo), <code class="inline">\s</code> (un espacio) y <code class="inline">+</code> (uno o más) cubren el 80% de los casos que verás en el curso. El resto se busca en la documentación en el momento, como hace cualquier programador con expresiones regulares.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Práctica</h2>
+    <p>Dado un párrafo, extrae el mensaje oculto: la <strong>primera</strong> letra de la primera palabra, la <strong>segunda</strong> letra de la segunda palabra, la <strong>tercera</strong> letra de la tercera palabra, y así hasta el final &mdash; en cada palabra, la posición de la letra se calcula con el <strong>módulo</strong> de su longitud (para no salirte si la palabra es más corta que la posición que toca).</p>
+
+    <div class="step">
+      <div class="step-chip">1</div>
+      <div class="step-body">
+        <h3>Trocea el párrafo en palabras</h3>
+        <div class="code-panel">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code><span class="prop">$parrafo</span> = <span class="str">"el sol brilla sobre el mar en calma"</span>;
+<span class="prop">$palabras</span> = preg_split(<span class="str">"/\s+/"</span>, trim(<span class="prop">$parrafo</span>));</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">2</div>
+      <div class="step-body">
+        <h3>Recorre las palabras con su posición</h3>
+        <p>Necesitas el índice de cada palabra (0, 1, 2&hellip;) a la vez que la palabra en sí, así que aquí <code class="inline">foreach</code> con clave viene bien, aunque el array sea indexado:</p>
+        <div class="code-panel">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code><span class="prop">$mensaje</span> = <span class="str">""</span>;
+
+<span class="kw">foreach</span> (<span class="prop">$palabras</span> <span class="kw">as</span> <span class="prop">$indice</span> =&gt; <span class="prop">$palabra</span>) {
+  <span class="prop">$posicion</span> = <span class="prop">$indice</span> % strlen(<span class="prop">$palabra</span>);
+  <span class="prop">$mensaje</span> .= <span class="prop">$palabra</span>[<span class="prop">$posicion</span>];
+}
+
+<span class="kw">echo</span> <span class="prop">$mensaje</span>;</code></pre>
+        </div>
+        <p class="small"><code class="inline">$palabra[$posicion]</code> accede directamente a un carácter del string por su posición, igual que si fuera un array &mdash; funciona porque en PHP los strings se pueden indexar así. <code class="inline">.=</code> es &ldquo;concatena y asigna&rdquo;: añade al final de <code class="inline">$mensaje</code> sin reescribirlo entero.</p>
+      </div>
+    </div>
+
+    <div class="checkpoint">
+      <div class="checkpoint-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        Compruébalo tú
+      </div>
+      <p>Con el párrafo de ejemplo de arriba, la palabra número 2 (índice 2) es &ldquo;brilla&rdquo; (6 letras): <code class="inline">2 % 6 = 2</code>, así que la letra que toca es la de posición 2, la &ldquo;i&rdquo;. Sigue el mismo cálculo a mano con dos o tres palabras más para asegurarte de que lo tienes claro antes de ejecutar el script.</p>
+    </div>
+
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Reto extra
+      </div>
+      <p>Haz un segundo script que use las 4 funciones <code class="inline">preg_match()</code>, <code class="inline">preg_replace()</code>, <code class="inline">preg_split()</code> y <code class="inline">preg_match_all()</code>, cada una al menos una vez, sobre un texto de tu elección (por ejemplo, validar un email, anonimizar números de teléfono, contar cuántas veces aparece una palabra).</p>
+    </div>
+  </section>
+
+  <footer class="end">
+    Siguiente sesión: bases de datos en PHP I &mdash; conectar con MySQL y traer los primeros datos reales.
+  </footer>
+
+</div>

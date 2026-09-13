@@ -1,0 +1,687 @@
+<title>Sintaxis PHP I</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #E4572E;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #FF8A5C;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #F2764C;
+      --accent-ink: #17110D;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #F2764C;
+    --accent-ink: #17110D;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top {
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.08rem;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  section.block {
+    margin-top: 44px;
+  }
+
+  h2.block-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+
+  section.block p {
+    margin: 0 0 14px;
+  }
+
+  section.block ul {
+    margin: 0 0 14px;
+    padding-left: 22px;
+  }
+
+  section.block li {
+    margin-bottom: 6px;
+  }
+
+  h3.option-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: var(--ink);
+    margin: 40px 0 4px;
+  }
+
+  .checklist {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow);
+  }
+
+  .checklist li {
+    list-style: none;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 15px;
+    margin-bottom: 0;
+  }
+
+  .checklist ul { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+
+  .checklist svg {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    color: var(--accent-2);
+  }
+
+  .learn-list {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .learn-list li {
+    list-style: none;
+    padding-left: 20px;
+    position: relative;
+    color: var(--ink);
+    margin-bottom: 0;
+  }
+
+  .learn-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .step {
+    display: flex;
+    gap: 18px;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .step:first-of-type { border-top: none; padding-top: 0; }
+
+  .step-chip {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-body { flex: 1; min-width: 0; }
+
+  .step h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 4px 0 8px;
+  }
+
+  .step p {
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+
+  .step p.small {
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+
+  .term {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+
+  .term-bar span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--code-line);
+  }
+
+  .term pre {
+    margin: 0;
+    padding: 14px 16px 16px;
+    overflow-x: auto;
+  }
+
+  .term code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13.6px;
+    line-height: 1.7;
+    color: var(--code-ink);
+  }
+
+  .term .prompt { color: var(--code-muted); }
+  .term .cmt { color: var(--code-muted); }
+  .term .hl { color: var(--code-accent); }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .code-panel .term-bar { }
+
+  .code-panel pre {
+    margin: 0;
+    padding: 16px 18px 18px;
+    overflow-x: auto;
+  }
+
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+
+  .code-panel .tag { color: var(--accent-2); }
+  .code-panel .str { color: #C9D96B; }
+  .code-panel .kw { color: var(--code-accent); }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .prop { color: #8FB8FF; }
+  .code-panel .hl { color: var(--code-accent); }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+
+  .checkpoint p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .substep {
+    display: flex;
+    gap: 14px;
+    margin: 18px 0 0 16px;
+    padding-left: 16px;
+    border-left: 2px solid var(--line-soft);
+  }
+
+  .substep-chip {
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: var(--line-soft);
+    color: var(--muted);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 11.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .substep h4 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.98rem;
+    font-weight: 600;
+    margin: 2px 0 6px;
+  }
+
+  .substep p {
+    margin: 0 0 8px;
+    font-size: 14.5px;
+    color: var(--ink);
+  }
+
+  .substep .code-panel, .substep .term {
+    margin: 10px 0;
+  }
+
+  details.full-code {
+    margin-top: 16px;
+  }
+
+  details.full-code summary {
+    cursor: pointer;
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--accent-2);
+    list-style: none;
+  }
+
+  details.full-code summary::-webkit-details-marker { display: none; }
+
+  details.full-code summary::before {
+    content: "▸ ";
+  }
+
+  details.full-code[open] summary::before {
+    content: "▾ ";
+  }
+
+  .trouble {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .trouble-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .trouble-item .q {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    margin: 0 0 6px;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .trouble-item .q::before {
+    content: "?";
+    font-family: "IBM Plex Mono", monospace;
+    color: var(--accent-2);
+    font-weight: 500;
+  }
+
+  .trouble-item p {
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--muted);
+  }
+
+  .trouble-item p + p { margin-top: 8px; }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .step { transition: none; }
+  }
+</style>
+
+
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">Sesión 2 de 13 &middot; Bloque 1: Fundamentos de PHP</span>
+    <h1>Sintaxis PHP I</h1>
+    <p class="lede">Variables, tipos de datos, operadores, constantes y funciones propias &mdash; la caja de herramientas básica con la que está escrito cualquier script PHP.</p>
+    <div class="meta-row">
+      <span class="meta-chip">2 horas</span>
+      <span class="meta-chip">Sesión 2/13</span>
+      <span class="meta-chip">Sin instalar nada nuevo</span>
+    </div>
+  </header>
+
+  <section class="block">
+    <h2 class="block-title">Variables y tipos de datos</h2>
+    <p>En PHP, toda variable empieza con el símbolo <code class="inline">$</code> &mdash; no hace falta ninguna palabra como <code class="inline">let</code> o <code class="inline">const</code>, el propio <code class="inline">$</code> ya indica &ldquo;esto es una variable&rdquo;. PHP no obliga a declarar el tipo: lo decide solo, según el valor que le asignes.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="prop">$edad</span> = <span class="hl">32</span>;             <span class="com">// int</span>
+<span class="prop">$precio</span> = <span class="hl">19.90</span>;        <span class="com">// float</span>
+<span class="prop">$nombre</span> = <span class="str">"Ana"</span>;        <span class="com">// string</span>
+<span class="prop">$activo</span> = <span class="kw">true</span>;        <span class="com">// bool</span>
+<span class="prop">$sinValor</span> = <span class="kw">null</span>;      <span class="com">// null</span>
+
+<span class="kw">echo</span> gettype(<span class="prop">$edad</span>);      <span class="com">// "integer"</span>
+var_dump(<span class="prop">$precio</span>);       <span class="com">// float(19.9)</span></code></pre>
+    </div>
+    <p><code class="inline">gettype()</code> devuelve el tipo como texto; <code class="inline">var_dump()</code> es más completo &mdash; muestra el tipo <strong>y</strong> el valor, y es la herramienta que más vas a usar para depurar mientras aprendes, mucho más útil que <code class="inline">echo</code> cuando no estás seguro de qué contiene realmente una variable.</p>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        PHP es de tipado dinámico
+      </div>
+      <p>Una misma variable puede cambiar de tipo en cualquier momento: <code class="inline">$x = 5; $x = "cinco";</code> es perfectamente válido, el segundo <code class="inline">$x</code> ya es un <code class="inline">string</code>. Es cómodo para ir rápido, pero también la fuente de errores más habitual de quien empieza &mdash; comparar un número con el texto que lo representa (por ejemplo, un valor que llega de <code class="inline">$_POST</code>) es más delicado de lo que parece, como viste en la sesión 1.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Operadores</h2>
+    <p>Los <strong>aritméticos</strong> son los mismos que en cualquier calculadora, incluido el módulo (resto de una división) que usarás mucho en ejercicios de control de flujo:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">echo</span> <span class="hl">10</span> + <span class="hl">3</span>;  <span class="com">// 13</span>
+<span class="kw">echo</span> <span class="hl">10</span> % <span class="hl">3</span>;  <span class="com">// 1  -> resto de la división</span>
+<span class="kw">echo</span> <span class="hl">2</span> ** <span class="hl">3</span>;  <span class="com">// 8  -> potencia</span></code></pre>
+    </div>
+    <p>Para unir texto, PHP usa el <strong>punto</strong> (<code class="inline">.</code>), no el <code class="inline">+</code>:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="prop">$nombre</span> = <span class="str">"Ana"</span>;
+<span class="kw">echo</span> <span class="str">"Hola, "</span> . <span class="prop">$nombre</span> . <span class="str">"!"</span>; <span class="com">// "Hola, Ana!"</span>
+
+<span class="com">// atajo: incrustar la variable directamente dentro de un string con comillas dobles</span>
+<span class="kw">echo</span> <span class="str">"Hola, $nombre!"</span>; <span class="com">// mismo resultado, más corto</span></code></pre>
+    </div>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Comillas simples vs dobles
+      </div>
+      <p>Con comillas dobles (<code class="inline">"$nombre"</code>), PHP sustituye la variable por su valor. Con comillas simples (<code class="inline">'$nombre'</code>), no &mdash; se imprime literalmente el texto <code class="inline">$nombre</code>. Es la trampa más común de quien viene de JavaScript, donde las comillas simples y dobles se comportan siempre igual.</p>
+    </div>
+    <p>Los <strong>de comparación</strong> tienen la misma trampa que en JavaScript, y la misma solución:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code>var_dump(<span class="str">"5"</span> == <span class="hl">5</span>);   <span class="com">// true  -> compara solo el valor, convierte tipos</span>
+var_dump(<span class="str">"5"</span> === <span class="hl">5</span>);  <span class="com">// false -> compara valor Y tipo</span>
+var_dump(<span class="hl">0</span> == <span class="str">"texto"</span>); <span class="com">// false en PHP 8 (en PHP 7 daba true)</span></code></pre>
+    </div>
+    <p>Norma de la clase, igual que en JavaScript: usa siempre <code class="inline">===</code> y <code class="inline">!==</code>, nunca <code class="inline">==</code> ni <code class="inline">!=</code>, salvo que tengas una razón muy concreta para querer la conversión automática de tipos.</p>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Constantes</h2>
+    <p>Una constante es como una variable que no puede cambiar de valor una vez definida &mdash; y, a diferencia de las variables, no lleva <code class="inline">$</code>.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code>define(<span class="str">'IVA'</span>, <span class="hl">0.21</span>);
+<span class="kw">const</span> NOMBRE_APP = <span class="str">'Gestor de tareas'</span>;
+
+<span class="kw">echo</span> IVA;          <span class="com">// 0.21</span>
+<span class="kw">echo</span> NOMBRE_APP;   <span class="com">// "Gestor de tareas"</span></code></pre>
+    </div>
+    <p><code class="inline">define()</code> y <code class="inline">const</code> hacen prácticamente lo mismo; la diferencia práctica es que <code class="inline">const</code> se evalúa al cargar el script (no puedes usarla dentro de un <code class="inline">if</code>) mientras que <code class="inline">define()</code> es una función normal, y por tanto más flexible. Para constantes sencillas de configuración, cualquiera de las dos vale.</p>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Funciones</h2>
+    <p>Se declaran con <code class="inline">function</code>, reciben parámetros entre paréntesis y devuelven un valor con <code class="inline">return</code>:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">function</span> saludar(<span class="prop">$nombre</span>, <span class="prop">$saludo</span> = <span class="str">"Hola"</span>) {
+  <span class="kw">return</span> <span class="str">"$saludo, $nombre!"</span>;
+}
+
+<span class="kw">echo</span> saludar(<span class="str">"Ana"</span>);           <span class="com">// "Hola, Ana!"</span>
+<span class="kw">echo</span> saludar(<span class="str">"Luis"</span>, <span class="str">"Buenas"</span>); <span class="com">// "Buenas, Luis!"</span></code></pre>
+    </div>
+    <p><code class="inline">$saludo = "Hola"</code> es un <strong>valor por defecto</strong>: si no se pasa ese segundo argumento, la función usa <code class="inline">"Hola"</code> automáticamente. Los parámetros con valor por defecto siempre van al final de la lista.</p>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Paso por valor y por referencia</h2>
+    <p>Por defecto, PHP pasa los parámetros <strong>por valor</strong>: la función recibe una copia, y modificarla dentro no afecta a la variable original.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">function</span> duplicar(<span class="prop">$numero</span>) {
+  <span class="prop">$numero</span> = <span class="prop">$numero</span> * <span class="hl">2</span>;
+}
+
+<span class="prop">$x</span> = <span class="hl">5</span>;
+duplicar(<span class="prop">$x</span>);
+<span class="kw">echo</span> <span class="prop">$x</span>; <span class="com">// 5 -> no ha cambiado, "duplicar" trabajó sobre una copia</span></code></pre>
+    </div>
+    <p>Para que la función sí pueda modificar la variable original, se pasa <strong>por referencia</strong>, añadiendo <code class="inline">&amp;</code> delante del parámetro:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">function</span> duplicarDeVerdad(<span class="prop">&amp;$numero</span>) {
+  <span class="prop">$numero</span> = <span class="prop">$numero</span> * <span class="hl">2</span>;
+}
+
+<span class="prop">$x</span> = <span class="hl">5</span>;
+duplicarDeVerdad(<span class="prop">$x</span>);
+<span class="kw">echo</span> <span class="prop">$x</span>; <span class="com">// 10 -> esta vez sí ha cambiado</span></code></pre>
+    </div>
+    <div class="checkpoint">
+      <div class="checkpoint-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        Cuándo usar cada uno
+      </div>
+      <p>Casi siempre quieres <strong>por valor</strong> (el comportamiento por defecto): es más predecible, porque la función no tiene efectos secundarios fuera de lo que devuelve con <code class="inline">return</code>. Usa <strong>por referencia</strong> solo cuando de verdad necesites que una función modifique varias variables externas a la vez &mdash; es justo el caso del ejercicio de hoy.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Práctica</h2>
+    <p>Escribe una función <code class="inline">calcular($a, $b, $operador, &amp;$resultado)</code> que:</p>
+    <div class="step">
+      <div class="step-chip">1</div>
+      <div class="step-body">
+        <h3>Reciba tres operandos&hellip;</h3>
+        <p>Bueno, en realidad dos números (<code class="inline">$a</code>, <code class="inline">$b</code>) y un operador en texto (<code class="inline">$operador</code>, por ejemplo <code class="inline">"+"</code>, <code class="inline">"-"</code>, <code class="inline">"*"</code> o <code class="inline">"/"</code>).</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-chip">2</div>
+      <div class="step-body">
+        <h3>&hellip;y devuelva el resultado por referencia</h3>
+        <p>En vez de un <code class="inline">return</code>, la función escribe el resultado directamente en el cuarto parámetro, <code class="inline">&amp;$resultado</code>, que se pasa por referencia.</p>
+        <div class="code-panel">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code><span class="kw">function</span> calcular(<span class="prop">$a</span>, <span class="prop">$b</span>, <span class="prop">$operador</span>, <span class="prop">&amp;$resultado</span>) {
+  <span class="kw">if</span> (<span class="prop">$operador</span> === <span class="str">"+"</span>) {
+    <span class="prop">$resultado</span> = <span class="prop">$a</span> + <span class="prop">$b</span>;
+  } <span class="kw">elseif</span> (<span class="prop">$operador</span> === <span class="str">"-"</span>) {
+    <span class="prop">$resultado</span> = <span class="prop">$a</span> - <span class="prop">$b</span>;
+  }
+  <span class="com">// completa "*" y "/" tú mismo</span>
+}
+
+<span class="prop">$total</span> = <span class="hl">0</span>;
+calcular(<span class="hl">4</span>, <span class="hl">5</span>, <span class="str">"+"</span>, <span class="prop">$total</span>);
+<span class="kw">echo</span> <span class="prop">$total</span>; <span class="com">// 9</span></code></pre>
+        </div>
+      </div>
+    </div>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Reto extra
+      </div>
+      <p>Controla la división por cero: si <code class="inline">$operador</code> es <code class="inline">"/"</code> y <code class="inline">$b</code> es <code class="inline">0</code>, guarda en <code class="inline">$resultado</code> el texto <code class="inline">"Error: división por cero"</code> en vez de intentar dividir.</p>
+    </div>
+  </section>
+
+  <footer class="end">
+    Siguiente sesión: control de flujo &mdash; condicionales y, sobre todo, bucles.
+  </footer>
+
+</div>
