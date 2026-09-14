@@ -1,0 +1,982 @@
+<title>Programación orientada a objetos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #3776AB;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #4C9AE0;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #5B9BD5;
+      --accent-ink: #0D1B2A;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #5B9BD5;
+    --accent-ink: #0D1B2A;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top {
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.08rem;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  section.block {
+    margin-top: 44px;
+  }
+
+  h2.block-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+
+  section.block p {
+    margin: 0 0 14px;
+  }
+
+  section.block ul {
+    margin: 0 0 14px;
+    padding-left: 22px;
+  }
+
+  section.block li {
+    margin-bottom: 6px;
+  }
+
+  h3.option-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: var(--ink);
+    margin: 40px 0 4px;
+  }
+
+  .checklist {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow);
+  }
+
+  .checklist li {
+    list-style: none;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 15px;
+    margin-bottom: 0;
+  }
+
+  .checklist ul { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+
+  .checklist svg {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    color: var(--accent-2);
+  }
+
+  .learn-list {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .learn-list li {
+    list-style: none;
+    padding-left: 20px;
+    position: relative;
+    color: var(--ink);
+    margin-bottom: 0;
+  }
+
+  .learn-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .step {
+    display: flex;
+    gap: 18px;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .step:first-of-type { border-top: none; padding-top: 0; }
+
+  .step-chip {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-body { flex: 1; min-width: 0; }
+
+  .step h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 4px 0 8px;
+  }
+
+  .step p {
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+
+  .step p.small {
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+
+  .term {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+
+  .term-bar span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--code-line);
+  }
+
+  .term pre {
+    margin: 0;
+    padding: 14px 16px 16px;
+    overflow-x: auto;
+  }
+
+  .term code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13.6px;
+    line-height: 1.7;
+    color: var(--code-ink);
+  }
+
+  .term .prompt { color: var(--code-muted); }
+  .term .cmt { color: var(--code-muted); }
+  .term .hl { color: var(--code-accent); }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .code-panel .term-bar { }
+
+  .code-panel pre {
+    margin: 0;
+    padding: 16px 18px 18px;
+    overflow-x: auto;
+  }
+
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+
+  .code-panel .tag { color: var(--accent-2); }
+  .code-panel .str { color: #C9D96B; }
+  .code-panel .kw { color: var(--code-accent); }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .prop { color: #8FB8FF; }
+  .code-panel .hl { color: var(--code-accent); }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+
+  .checkpoint p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .substep {
+    display: flex;
+    gap: 14px;
+    margin: 18px 0 0 16px;
+    padding-left: 16px;
+    border-left: 2px solid var(--line-soft);
+  }
+
+  .substep-chip {
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: var(--line-soft);
+    color: var(--muted);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 11.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .substep h4 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.98rem;
+    font-weight: 600;
+    margin: 2px 0 6px;
+  }
+
+  .substep p {
+    margin: 0 0 8px;
+    font-size: 14.5px;
+    color: var(--ink);
+  }
+
+  .substep .code-panel, .substep .term {
+    margin: 10px 0;
+  }
+
+  details.full-code {
+    margin-top: 16px;
+  }
+
+  details.full-code summary {
+    cursor: pointer;
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--accent-2);
+    list-style: none;
+  }
+
+  details.full-code summary::-webkit-details-marker { display: none; }
+
+  details.full-code summary::before {
+    content: "▸ ";
+  }
+
+  details.full-code[open] summary::before {
+    content: "▾ ";
+  }
+
+  .trouble {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .trouble-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .trouble-item .q {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    margin: 0 0 6px;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .trouble-item .q::before {
+    content: "?";
+    font-family: "IBM Plex Mono", monospace;
+    color: var(--accent-2);
+    font-weight: 500;
+  }
+
+  .trouble-item p {
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--muted);
+  }
+
+  .trouble-item p + p { margin-top: 8px; }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .step { transition: none; }
+  }
+
+  nav.toc {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 20px 0 0;
+    box-shadow: var(--shadow);
+  }
+  nav.toc .toc-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 12.5px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 10px;
+  }
+  nav.toc ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 24px; }
+  nav.toc li { font-size: 14px; margin-bottom: 6px; break-inside: avoid; }
+  nav.toc a { color: var(--ink); text-decoration: none; }
+  nav.toc a:hover { color: var(--accent-2); text-decoration: underline; }
+
+  .diagram {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    margin: 16px 0;
+    padding: 18px;
+    display: flex;
+    justify-content: center;
+    overflow-x: auto;
+  }
+  .diagram svg { max-width: 100%; height: auto; }
+  .diagram-caption {
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    margin: -8px 0 16px;
+  }
+
+  .notacion {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+  .notacion .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+  .notacion .term-bar span { width: 9px; height: 9px; border-radius: 50%; background: var(--code-line); }
+  .notacion pre { margin: 0; padding: 14px 18px 16px; overflow-x: auto; }
+  .notacion code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+  .notacion .kw { color: var(--code-accent); font-weight: 500; }
+  .notacion .ent { color: #8FB8FF; }
+  .notacion .attr { color: #C9D96B; }
+  .notacion .com { color: var(--code-muted); font-style: italic; }
+
+  h2.section-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 1.35rem;
+    margin: 0 0 4px;
+    scroll-margin-top: 24px;
+  }
+  .section-num {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    color: var(--accent-2);
+    display: block;
+    margin-bottom: 4px;
+  }
+  section.tema {
+    margin-top: 52px;
+    padding-top: 28px;
+    border-top: 1px solid var(--line-soft);
+  }
+  section.tema:first-of-type { border-top: none; }
+  h3.subtema {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    margin: 28px 0 8px;
+  }
+</style>
+
+
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">RA6 &middot; Teoría</span>
+    <h1>Programación orientada a objetos</h1>
+    <p class="lede">Organizar el código simulando cómo funcionan los objetos del mundo real: clases, atributos y métodos, y los cuatro principios de la POO &mdash; abstracción, encapsulamiento, herencia y polimorfismo.</p>
+    <div class="meta-row">
+      <span class="meta-chip">RA6</span>
+      <span class="meta-chip">Clases y objetos</span>
+    </div>
+    <p style="margin-top:16px;"><a href="index.html" style="color:var(--accent-2);font-family:'IBM Plex Mono',monospace;font-size:13px;text-decoration:none;">&larr; Volver al índice del módulo</a></p>
+  </header>
+
+  <nav class="toc">
+    <p class="toc-title">Contenido</p>
+    <ol>
+      <li><a href="#conceptos-fundamentales">Conceptos fundamentales</a></li>
+      <li><a href="#clases">Clases</a></li>
+      <li><a href="#atributos">Atributos</a></li>
+      <li><a href="#metodos">Métodos</a></li>
+      <li><a href="#principios">Principios de la POO</a></li>
+      <li><a href="#abstraccion">Abstracción</a></li>
+      <li><a href="#encapsulamiento">Encapsulamiento</a></li>
+      <li><a href="#herencia">Herencia</a></li>
+      <li><a href="#polimorfismo">Polimorfismo</a></li>
+      <li><a href="#ejercicio-poo">Ejercicio</a></li>
+    </ol>
+  </nav>
+
+  <section class="tema">
+    <span class="section-num">00</span>
+    <h2 class="section-title">Presentación</h2>
+    <p>En este tema introducimos uno de los paradigmas más utilizados en el desarrollo de software moderno: la <strong>programación orientada a objetos</strong> (POO). A diferencia de la programación estructurada, la POO permite organizar el código de forma más lógica y modular, simulando cómo funcionan los objetos del mundo real. Trabajaremos paso a paso sus elementos clave &mdash; clases, atributos, métodos, encapsulamiento, herencia, polimorfismo y abstracción &mdash; y cómo aplicarlos en Python con ejemplos prácticos. El objetivo es que, al terminar este bloque, se pueda diseñar y construir programas propios aplicando correctamente estos principios: no solo para escribir mejor código, sino para poder abordar proyectos más complejos y trabajar de forma profesional en cualquier entorno de desarrollo.</p>
+  </section>
+
+  <section class="tema">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Programación orientada a objetos</h2>
+    <p>La POO es un paradigma de programación que organiza el código de forma más estructurada, reutilizable y cercana a cómo entendemos el mundo real. En vez de pensar en funciones sueltas y bloques de código, la POO se basa en <strong>objetos</strong>: entidades que agrupan datos (atributos) y comportamientos (métodos) en una misma unidad llamada <strong>clase</strong>.</p>
+    <p>Este enfoque permite modelar elementos del mundo real dentro del programa. Por ejemplo, para representar un coche, en vez de usar varias variables sueltas se puede crear una clase <code class="inline">Coche</code> con atributos como color, marca o velocidad, y métodos como <code class="inline">acelerar()</code> o <code class="inline">frenar()</code>, de forma que todo pertenezca al mismo elemento &mdash; el código resulta más fácil de entender, mantener y escalar.</p>
+    <p>No es obligatorio usar POO en un programa, pero aporta características muy valiosas para afrontar proyectos grandes:</p>
+    <ul>
+      <li><strong>Organización del código</strong>: agrupa datos y funciones relacionadas en un mismo objeto.</li>
+      <li><strong>Reutilización</strong>: las clases se reutilizan en distintos programas o partes de un mismo proyecto, reduciendo mucho la cantidad de código a escribir.</li>
+      <li><strong>Facilidad para ampliar</strong>: mejorar o extender una funcionalidad se hace sobre una clase concreta, sin afectar al resto del sistema.</li>
+      <li><strong>Simulación del mundo real</strong>: modela objetos como usuarios, productos o vehículos, facilitando representar la lógica de negocio.</li>
+    </ul>
+  </section>
+
+  <section class="tema" id="conceptos-fundamentales">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Conceptos fundamentales</h2>
+    <p>Antes de programar, conviene tener claros los conceptos en los que se basa este paradigma.</p>
+  </section>
+
+  <section class="tema" id="clases">
+    <span class="section-num">02.1</span>
+    <h2 class="section-title">Clases</h2>
+    <p>Las clases son las plantillas &mdash; con atributos y métodos &mdash; que después se van moldeando según las necesidades del programa. Para definir una clase se usa la palabra reservada <code class="inline">class</code>, normalmente en un archivo independiente:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">class</span> Usuario:
+    <span class="kw">def</span> __init__(self, nombre, edad, nota):
+        self.nombre = nombre
+        self.edad = edad
+        self.nota = nota</code></pre>
+    </div>
+    <p>El código crea una clase <code class="inline">Usuario</code> con nombre, edad y nota. Dentro de la clase se define una función especial, el <strong>constructor</strong>, que permite instanciar (hacer realidad) un objeto de esa clase. Se llama siempre <code class="inline">__init__</code>, y su primer parámetro es siempre <code class="inline">self</code> &mdash; hace referencia al propio objeto &mdash;, seguido de los atributos que forman parte de él. Dentro del constructor se hace la asignación, por ejemplo <code class="inline">self.nombre = nombre</code>, igualando la variable del objeto con el parámetro recibido.</p>
+    <p>Para instanciar el objeto desde otro archivo, se llama al constructor:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">import</span> objetos
+
+alumno = objetos.Usuario(<span class="str">"Gilbert"</span>, <span class="str">"Martin"</span>, <span class="hl">9</span>)
+print(alumno.nombre)</code></pre>
+    </div>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Un único constructor, pero flexible
+      </div>
+      <p>A diferencia de otros lenguajes como Java o C#, Python no permite varios constructores para la misma clase &mdash; solo hay un <code class="inline">__init__</code>. Lo que sí se puede hacer es combinarlo con parámetros por defecto y con <code class="inline">*args</code> para que admita llamadas distintas:</p>
+      <div class="code-panel">
+        <div class="term-bar"><span></span><span></span><span></span></div>
+        <pre><code><span class="kw">class</span> Usuario:
+    <span class="kw">def</span> __init__(self, nombre, edad, *datos, nota=<span class="hl">0</span>):
+        self.nombre = nombre
+        self.edad = edad
+        self.nota = nota
+        self.datos = datos
+
+    <span class="kw">def</span> mostrar_datos(self):
+        print(<span class="kw">f</span><span class="str">"Nombre: {self.nombre}"</span>)
+        print(<span class="kw">f</span><span class="str">"Edad: {self.edad}"</span>)
+        print(<span class="kw">f</span><span class="str">"Nota: {self.nota}"</span>)
+        <span class="kw">for</span> dato <span class="kw">in</span> self.datos:
+            print(<span class="kw">f</span><span class="str">"Datos adicionales: {dato}"</span>)</code></pre>
+      </div>
+      <p>Aquí, <code class="inline">nota</code> es un parámetro por defecto (0 si no se indica) y <code class="inline">*datos</code> admite tantos datos adicionales como se quiera:</p>
+      <div class="code-panel">
+        <div class="term-bar"><span></span><span></span><span></span></div>
+        <pre><code>alumno = objetos.Usuario(
+    <span class="str">"Juan"</span>, <span class="hl">20</span>,
+    <span class="str">"Estudiante de Ingeniería"</span>, <span class="str">"Becado por la universidad"</span>, <span class="str">"Convalidaciones en curso"</span>,
+    nota=<span class="hl">9</span>,
+)
+alumno1 = objetos.Usuario(<span class="str">"Pedro"</span>, <span class="hl">22</span>)  <span class="com"># nota=0 y datos=()</span></code></pre>
+      </div>
+    </div>
+    <p>Además del constructor, una clase puede tener tantos métodos como haga falta &mdash; todos con <code class="inline">self</code> como primer parámetro, para acceder a las variables del propio objeto.</p>
+  </section>
+
+  <section class="tema" id="atributos">
+    <span class="section-num">02.2</span>
+    <h2 class="section-title">Atributos</h2>
+    <p>Los atributos representan las características del objeto &mdash; su estado &mdash; y su valor depende de cómo se haya creado cada instancia. Se definen nombrándolos en el constructor y asignándolos a través de <code class="inline">self</code>:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">class</span> Empleado:
+    <span class="kw">def</span> __init__(self, nombre, puesto, salario=<span class="hl">1500</span>, *tareas):
+        self.nombre = nombre
+        self.puesto = puesto
+        self.salario = salario</code></pre>
+    </div>
+    <p>Cada uno de estos atributos, definidos en el constructor, se llama <strong>atributo de instancia</strong>, porque pertenece al objeto. Para acceder a ellos desde un método basta con usar <code class="inline">self</code>:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code>    <span class="kw">def</span> mostrar_info(self):
+        print(<span class="kw">f</span><span class="str">"Nombre: {self.nombre}"</span>)
+        print(<span class="kw">f</span><span class="str">"Puesto: {self.puesto}"</span>)
+        print(<span class="kw">f</span><span class="str">"Salario: {self.salario} €"</span>)</code></pre>
+    </div>
+    <p>Además de los atributos de instancia, existen los <strong>atributos de clase</strong>: se definen dentro de la clase, pero no en el constructor ni asignados vía <code class="inline">self</code>, sino directamente.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">class</span> Empleado:
+    contratado = <span class="kw">True</span></code></pre>
+    </div>
+  </section>
+
+  <section class="tema" id="metodos">
+    <span class="section-num">02.3</span>
+    <h2 class="section-title">Métodos</h2>
+    <p>Si los atributos son las características del objeto, los métodos son la funcionalidad que puede ejecutar. Se definen como funciones normales (pudiendo usar valores por defecto, <code class="inline">*args</code> o <code class="inline">**kwargs</code>), con la particularidad de llevar <code class="inline">self</code> como primer parámetro &mdash; la instancia sobre la que se ejecuta el método &mdash; para poder acceder a sus atributos y demás métodos.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">class</span> Empleado:
+    contratado = <span class="kw">True</span>
+
+    <span class="kw">def</span> __init__(self, nombre, puesto, salario=<span class="hl">1500</span>, *tareas):
+        self.nombre = nombre
+        self.puesto = puesto
+        self.salario = salario
+        self.tareas = tareas
+
+    <span class="kw">def</span> mostrar_info(self):
+        print(<span class="kw">f</span><span class="str">"Nombre: {self.nombre}"</span>)
+        print(<span class="kw">f</span><span class="str">"Puesto: {self.puesto}"</span>)
+        print(<span class="kw">f</span><span class="str">"Salario: {self.salario} €"</span>)
+        print(<span class="kw">f</span><span class="str">"Contratado: {self.contratado}"</span>)
+        print(<span class="str">"Tareas asignadas:"</span>)
+        <span class="kw">if</span> self.tareas:
+            <span class="kw">for</span> t <span class="kw">in</span> self.tareas:
+                print(<span class="kw">f</span><span class="str">" - {t}"</span>)
+        <span class="kw">else</span>:
+            print(<span class="str">" (Sin tareas asignadas)"</span>)</code></pre>
+    </div>
+    <p>Un método definido <strong>sin</strong> <code class="inline">self</code> no pertenece al objeto (no puede acceder a sus atributos). Para llamar a un método normal (de instancia) hace falta un objeto de la clase:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code>empleado1 = objetos.Empleado(<span class="str">"Laura"</span>, <span class="str">"Recepcionista"</span>)
+empleado1.mostrar_info()</code></pre>
+    </div>
+    <p>La excepción es el <strong>método estático</strong>: se puede llamar directamente desde el nombre de la clase, sin necesidad de un objeto, marcándolo con el decorador <code class="inline">@staticmethod</code>.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code>    @staticmethod
+    <span class="kw">def</span> mostrar_informacion_estatica():
+        print(<span class="str">"Ejecución directa del método"</span>)</code></pre>
+    </div>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code>objetos.Empleado.mostrar_informacion_estatica()</code></pre>
+    </div>
+    <p class="small" style="color:var(--muted);font-size:13.5px;">Si se intentara llamar así a un método de instancia (con <code class="inline">self</code>), se obtendría un error por falta de ese parámetro.</p>
+  </section>
+
+  <section class="tema" id="principios">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Principios de la POO</h2>
+    <p>La POO organiza el código de forma modular, diferenciando elementos que se pueden tratar de manera independiente. Este modelado se apoya en cuatro principios: encapsulamiento, herencia, polimorfismo y abstracción.</p>
+  </section>
+
+  <section class="tema" id="abstraccion">
+    <span class="section-num">03.1</span>
+    <h2 class="section-title">Abstracción</h2>
+    <p>Consiste en ocultar los detalles internos de funcionamiento de un objeto, mostrando solo lo necesario para su uso. En programación se consigue creando clases que representan conceptos del mundo real, con sus atributos (datos) y métodos (comportamientos) &mdash; una de las grandes ventajas de la POO es precisamente poder crear un objeto que se asemeje a lo que se maneja en la vida real, facilitando proponer e implementar una solución sencilla.</p>
+  </section>
+
+  <section class="tema" id="encapsulamiento">
+    <span class="section-num">03.2</span>
+    <h2 class="section-title">Encapsulamiento</h2>
+    <p>Todo objeto tiene propiedades (atributos) y funcionalidades (métodos) definidos según las necesidades del programa. El <strong>encapsulamiento</strong> es el principio por el cual los datos de un objeto se protegen, para que no se puedan modificar directamente desde otra parte del programa. Otros lenguajes cuentan con modificadores de acceso para esto; en Python, al no existir, el control se hace mediante convenciones &mdash; anteponiendo <code class="inline">__</code> al nombre del atributo se marca como privado.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">class</span> Estudiante:
+    <span class="kw">def</span> __init__(self, nombre, nota):
+        self.nombre = nombre
+        self.__nota = nota
+
+    <span class="kw">def</span> modificar_nota(self, nueva_nota):
+        self.__nota = nueva_nota
+
+    <span class="kw">def</span> mostrar_nota(self):
+        print(<span class="kw">f</span><span class="str">"Nota: {self.__nota}"</span>)</code></pre>
+    </div>
+    <p>Para acceder a un atributo privado hace falta un método propio de la clase (un <em>getter</em>) &mdash; acceder a él directamente desde fuera da error:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">from</span> objetos <span class="kw">import</span> Estudiante
+
+estudiante = Estudiante(<span class="str">"Juan"</span>, <span class="hl">8</span>)
+estudiante.modificar_nota(<span class="hl">10</span>)
+estudiante.mostrar_nota()
+print(estudiante.__nota)  <span class="com"># error: no se puede acceder directamente a un atributo "privado"</span></code></pre>
+    </div>
+  </section>
+
+  <section class="tema" id="herencia">
+    <span class="section-num">03.3</span>
+    <h2 class="section-title">Herencia</h2>
+    <p>La <strong>herencia</strong> permite crear una clase nueva que aprovecha el comportamiento de otra ya existente &mdash; como si la nueva clase heredase todas las características de la original, pudiendo además añadir las suyas propias o modificar alguna de las heredadas. En vez de repetir código común entre varias clases, se coloca en una clase &ldquo;padre&rdquo; (o base), y las clases &ldquo;hijas&rdquo; (derivadas) heredan de ella.</p>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Antes de programar, diagrama de clases
+      </div>
+      <p>Antes de escribir código, conviene tener un diagrama de clases que muestre estas relaciones de herencia. Herramientas online gratuitas como <a href="https://www.lucidchart.com" target="_blank" rel="noopener">Lucidchart</a> traen plantillas ya preparadas para diagramas UML de clases.</p>
+    </div>
+    <p>Imagina un programa que controla los trabajadores de una empresa, diferenciando entre gerentes y desarrolladores &mdash; ambos comparten algunas características (nombre, salario) y difieren en otras (lenguaje de un desarrollador, departamento de un gerente). Habrá, por tanto, una clase común con lo compartido:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">class</span> Empleado:
+    <span class="kw">def</span> __init__(self, nombre, salario):
+        self.nombre = nombre
+        self.salario = salario
+
+    <span class="kw">def</span> mostrar_info(self):
+        print(<span class="kw">f</span><span class="str">"Empleado: {self.nombre}, Salario: ${self.salario}"</span>)</code></pre>
+    </div>
+    <p>Y las clases hijas, indicando entre paréntesis de quién heredan:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">class</span> Gerente(Empleado):
+    <span class="kw">def</span> __init__(self, nombre, salario, departamento):
+        super().__init__(nombre, salario)
+        self.departamento = departamento
+
+    <span class="kw">def</span> mostrar_info(self):
+        super().mostrar_info()
+        print(<span class="kw">f</span><span class="str">"Departamento a cargo: {self.departamento}"</span>)
+
+<span class="kw">class</span> Desarrollador(Empleado):
+    <span class="kw">def</span> __init__(self, nombre, salario, lenguaje):
+        super().__init__(nombre, salario)
+        self.lenguaje = lenguaje
+
+    <span class="kw">def</span> mostrar_info(self):
+        super().mostrar_info()
+        print(<span class="kw">f</span><span class="str">"Lenguaje de programación: {self.lenguaje}"</span>)</code></pre>
+    </div>
+    <p><code class="inline">super()</code> da acceso a lo definido en la superclase &mdash; se ve en <code class="inline">mostrar_info()</code>, y también se puede usar en el constructor, como aquí, para llamar al constructor de la clase padre. Usando estas clases:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code>desarrollador = Desarrollador(<span class="str">"Gilbert"</span>, <span class="hl">50000</span>, <span class="str">"Python"</span>)
+gerente = Gerente(<span class="str">"Laura"</span>, <span class="hl">70000</span>, <span class="str">"IT"</span>)
+desarrollador.mostrar_info()
+gerente.mostrar_info()</code></pre>
+    </div>
+    <div class="term">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code>Empleado: Gilbert, Salario: $50000
+Lenguaje de programación: Python
+Empleado: Laura, Salario: $70000
+Departamento a cargo: IT</code></pre>
+    </div>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Herencia múltiple
+      </div>
+      <p>A diferencia de otros lenguajes, en Python una clase puede heredar de varias a la vez. Retomando <code class="inline">Gerente</code> y <code class="inline">Desarrollador</code>:</p>
+      <div class="code-panel">
+        <div class="term-bar"><span></span><span></span><span></span></div>
+        <pre><code><span class="kw">class</span> DirectorTecnico(Gerente, Desarrollador):
+    <span class="kw">def</span> __init__(self, nombre, salario, departamento, lenguaje):
+        Gerente.__init__(self, nombre, salario, departamento)
+        Desarrollador.__init__(self, nombre, salario, lenguaje)
+
+    <span class="kw">def</span> mostrar_info(self):
+        super().mostrar_info()
+        print(<span class="kw">f</span><span class="str">"(También programa en: {self.lenguaje})"</span>)</code></pre>
+      </div>
+      <p><code class="inline">DirectorTecnico</code> hereda de ambas clases, accediendo a cada una con <code class="inline">NombreClase.__init__(...)</code> en el constructor. Cuando dos clases de las que se hereda tienen un método con el mismo nombre &mdash;aquí, <code class="inline">mostrar_info</code> está en <code class="inline">Gerente</code> y en <code class="inline">Desarrollador</code>&mdash; Python decide cuál usar con el <strong>MRO</strong> (<em>method resolution order</em>): se toma el método de la primera clase indicada en la firma, en este caso <code class="inline">Gerente</code>.</p>
+    </div>
+    <p class="small" style="color:var(--muted);font-size:13.5px;">La sobrescritura de métodos heredados sigue funcionando igual que se ha visto: no hace falta ninguna palabra reservada especial, basta con volver a definir el método con el nuevo comportamiento (usando <code class="inline">super()</code> si se quiere reutilizar también el de la clase superior).</p>
+  </section>
+
+  <section class="tema" id="polimorfismo">
+    <span class="section-num">03.4</span>
+    <h2 class="section-title">Polimorfismo</h2>
+    <p>El último principio es el <strong>polimorfismo</strong>: permite que un objeto tome formas distintas según cómo haya sido creado. Para aplicarlo hace falta antes una línea de herencia válida, que permita a la clase hija comportarse tanto como ella misma como en la forma de su clase padre.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">class</span> Empleado:
+    <span class="kw">def</span> __init__(self, nombre, salario):
+        self.nombre = nombre
+        self.salario = salario
+
+    <span class="kw">def</span> trabajar(self):
+        print(<span class="kw">f</span><span class="str">"{self.nombre} está trabajando en tareas generales."</span>)
+
+<span class="kw">class</span> Gerente(Empleado):
+    <span class="kw">def</span> __init__(self, nombre, salario, departamento):
+        super().__init__(nombre, salario)
+        self.departamento = departamento
+
+    <span class="kw">def</span> trabajar(self):
+        print(<span class="kw">f</span><span class="str">"{self.nombre} está gestionando el departamento de {self.departamento}."</span>)
+
+<span class="kw">class</span> Desarrollador(Empleado):
+    <span class="kw">def</span> __init__(self, nombre, salario, lenguaje):
+        super().__init__(nombre, salario)
+        self.lenguaje = lenguaje
+
+    <span class="kw">def</span> trabajar(self):
+        print(<span class="kw">f</span><span class="str">"{self.nombre} está programando en {self.lenguaje}."</span>)
+
+empleados = [
+    Gerente(<span class="str">"Ana"</span>, <span class="hl">5000</span>, <span class="str">"Marketing"</span>),
+    Desarrollador(<span class="str">"Luis"</span>, <span class="hl">4000</span>, <span class="str">"Python"</span>),
+    Empleado(<span class="str">"Marta"</span>, <span class="hl">3000</span>),
+]
+
+<span class="kw">for</span> empleado <span class="kw">in</span> empleados:
+    empleado.trabajar()</code></pre>
+    </div>
+    <p>Las tres clases se pueden instanciar por su cuenta con normalidad. Lo interesante del polimorfismo es que, como <code class="inline">Gerente</code> y <code class="inline">Desarrollador</code> heredan de <code class="inline">Empleado</code>, se pueden juntar en una misma lista y recorrerla llamando a un método común (<code class="inline">trabajar()</code>) &mdash; cada ejecución es distinta, porque lo que realmente se ejecuta es el método de la clase final de cada objeto, no el de <code class="inline">Empleado</code>.</p>
+  </section>
+
+  <section class="tema" id="ejercicio-poo">
+    <span class="section-num">&mdash;</span>
+    <h2 class="section-title">Ejercicio</h2>
+    <p>Estás desarrollando un pequeño sistema para una cafetería, que debe registrar distintos tipos de producto (cafés, tés, bollería), llevar el control de los pedidos y calcular el precio total.</p>
+    <ul>
+      <li>Una clase <code class="inline">Producto</code>, con nombre, precio y un método <code class="inline">mostrar_info</code>.</li>
+      <li>Tres clases derivadas de <code class="inline">Producto</code>, cada una sobrescribiendo <code class="inline">mostrar_info</code>:
+        <ul>
+          <li><code class="inline">Bebida</code>, con un atributo adicional <code class="inline">tipo</code> (string).</li>
+          <li><code class="inline">Comida</code>, con un atributo adicional <code class="inline">caliente</code> (boolean).</li>
+          <li><code class="inline">Menu</code>, con un atributo adicional <code class="inline">completo</code> (boolean).</li>
+        </ul>
+      </li>
+      <li>Una clase <code class="inline">Pedido</code>, que contenga tantos productos como el cliente necesite, y un atributo con el coste total calculado.</li>
+    </ul>
+    <p>Genera un par de pedidos con productos dentro, o construye un pequeño menú por consola para gestionarlos.</p>
+  </section>
+
+  <section class="tema">
+    <span class="section-num">&mdash;</span>
+    <h2 class="section-title">Conclusiones</h2>
+    <p>En este tema hemos visto los fundamentos de la programación orientada a objetos en Python: usar clases, atributos y métodos para modelar objetos del mundo real, y aplicar herencia, encapsulamiento, abstracción y polimorfismo para escribir código más limpio, reutilizable y fácil de mantener.</p>
+    <p>La POO organiza el código de forma estructurada, algo fundamental en proyectos medianos y grandes: permite dividir problemas complejos en partes más pequeñas, reutilizar soluciones ya construidas y facilitar el trabajo en equipo. Entender y aplicar bien estos conceptos no solo mejora la forma de programar, sino que prepara para usar frameworks y librerías modernas, la mayoría construidas sobre este mismo paradigma.</p>
+  </section>
+
+  <footer class="end">
+    Referencias: <a href="https://www.python.org" target="_blank" rel="noopener">python.org</a>, <a href="https://docs.python.org/es/3.13/tutorial/classes.html" target="_blank" rel="noopener">docs.python.org &mdash; clases</a>.
+  </footer>
+
+</div>

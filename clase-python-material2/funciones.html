@@ -603,24 +603,15 @@
 <div class="page">
 
   <header class="top">
-    <span class="eyebrow">RA3 &middot; Teoría &middot; En construcción</span>
+    <span class="eyebrow">RA3 &middot; Teoría</span>
     <h1>Funciones en Python</h1>
-    <p class="lede">Cómo dividir un programa en bloques reutilizables: definición y llamada de funciones, parámetros posicionales y nombrados, valores por defecto, y las formas de aceptar un número variable de argumentos.</p>
+    <p class="lede">Cómo dividir un programa en bloques reutilizables: definición y llamada de funciones, parámetros, retorno de valores, funciones lambda, y cómo organizar el código en módulos independientes.</p>
     <div class="meta-row">
       <span class="meta-chip">RA3</span>
       <span class="meta-chip">Programación modular</span>
-      <span class="meta-chip">Página incompleta</span>
     </div>
     <p style="margin-top:16px;"><a href="index.html" style="color:var(--accent-2);font-family:'IBM Plex Mono',monospace;font-size:13px;text-decoration:none;">&larr; Volver al índice del módulo</a></p>
   </header>
-
-  <div class="callout" style="margin-top:8px;">
-    <div class="callout-title">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-      Página en construcción
-    </div>
-    <p>Cubre la definición de funciones, sus parámetros y <code class="inline">*args</code>/<code class="inline">**kwargs</code>. Faltan por añadir: <strong>uso del retorno</strong>, <strong>funciones lambda</strong>, el apartado de <strong>modularidad</strong> (el paso de parámetros por valor y por referencia que pide el RA3), conclusiones y referencias &mdash; en cuanto se reciba ese contenido, se completa igual que el resto.</p>
-  </div>
 
   <nav class="toc">
     <p class="toc-title">Contenido</p>
@@ -629,6 +620,10 @@
       <li><a href="#parametros">Uso de parámetros</a></li>
       <li><a href="#tipos-parametros">Tipos de parámetros</a></li>
       <li><a href="#args-kwargs">Uso de *args y **kwargs</a></li>
+      <li><a href="#retorno">Uso del retorno</a></li>
+      <li><a href="#lambda">Funciones lambda</a></li>
+      <li><a href="#modularidad">Modularidad</a></li>
+      <li><a href="#ejercicio-funciones">Ejercicio</a></li>
     </ol>
   </nav>
 
@@ -758,11 +753,175 @@ calculo_media(<span class="hl">4</span>, <span class="hl">9</span>, <span class=
 
 importar_usuario(nombre=<span class="str">"Juan"</span>, apellido=<span class="str">"Gomez"</span>, edad=<span class="hl">25</span>, ciudad=<span class="str">"Madrid"</span>)</code></pre>
     </div>
-    <p>Cada parámetro nombrado pasa a formar parte de un diccionario, donde la clave es el nombre del parámetro y el valor, el dato asociado. Es especialmente útil cuando la información que hay que pasar a la función no es siempre la misma &mdash; la función puede convertir todos los datos recibidos en una única estructura. Ambos tipos, <code class="inline">*args</code> y <code class="inline">**kwargs</code>, se pueden combinar en la misma función.</p>
+    <p>Cada parámetro nombrado pasa a formar parte de un diccionario, donde la clave es el nombre del parámetro y el valor, el dato asociado. Es especialmente útil cuando la información que hay que pasar a la función no es siempre la misma &mdash; la función puede convertir todos los datos recibidos en una única estructura.</p>
+    <p>Ambos tipos se pueden combinar en la misma función: lo único que hay que respetar es el orden, ya que <code class="inline">*args</code> recoge los posicionales y <code class="inline">**kwargs</code> los nombrados.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">def</span> suma_mixta(*args, **kwargs):
+    suma = <span class="hl">0</span>
+    <span class="kw">for</span> i <span class="kw">in</span> args:
+        suma += i
+    print(<span class="kw">f</span><span class="str">"La suma de los argumentos es: {suma}"</span>)
+    <span class="kw">for</span> key, value <span class="kw">in</span> kwargs.items():
+        print(<span class="kw">f</span><span class="str">"{key}: {value}"</span>)
+
+suma_mixta(
+    <span class="hl">1</span>, <span class="hl">2</span>, <span class="hl">3</span>, <span class="hl">4</span>, <span class="hl">5</span>, <span class="hl">6</span>, <span class="hl">7</span>, <span class="hl">8</span>, <span class="hl">9</span>, <span class="hl">10</span>, proyecto=<span class="str">"Sumatorio"</span>, unidad=<span class="str">"2"</span>, curso=<span class="str">"python"</span>
+)</code></pre>
+    </div>
+    <p class="small" style="color:var(--muted);font-size:13.5px;">Los parámetros posicionales quedan en la tupla <code class="inline">args</code>, y los nombrados en el diccionario <code class="inline">kwargs</code>. Después de <code class="inline">**kwargs</code> no se puede definir ningún otro parámetro.</p>
+  </section>
+
+  <section class="tema" id="retorno">
+    <span class="section-num">02.4</span>
+    <h2 class="section-title">Uso del retorno</h2>
+    <p>Además de ejecutar el código de su bloque, una función puede <strong>retornar</strong> un valor para usarlo donde haga falta. Basta con escribir, como última línea relevante del método, la palabra reservada <code class="inline">return</code> seguida del dato a devolver.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">def</span> procesar_informe(*datos):
+    print(<span class="str">"Los datos se han recibido correctamente"</span>)
+    <span class="kw">if</span> len(datos) == <span class="hl">2</span>:
+        <span class="kw">return</span> <span class="kw">f</span><span class="str">"Nombre {datos[0]}\nApellido {datos[1]}"</span>
+    <span class="kw">elif</span> len(datos) &gt; <span class="hl">2</span>:
+        <span class="kw">return</span> <span class="str">"Cantidad de datos incorrecta"</span>
+    <span class="kw">else</span>:
+        <span class="kw">return</span> <span class="str">"No se han recibido datos"</span>
+
+print(procesar_informe(<span class="str">"Gilbert"</span>, <span class="str">"Martinez"</span>))</code></pre>
+    </div>
+    <p>La llamada a <code class="inline">procesar_informe</code> devuelve un string con los datos recibidos si son exactamente 2 (recuerda que <code class="inline">*datos</code> es una tupla); en caso contrario, devuelve un mensaje distinto según falten o sobren datos. Una vez llamada la función, el valor devuelto se puede usar desde cualquier parte &mdash; en el ejemplo, directamente dentro de <code class="inline">print()</code>.</p>
+  </section>
+
+  <section class="tema" id="lambda">
+    <span class="section-num">02.5</span>
+    <h2 class="section-title">Funciones lambda</h2>
+    <p>Hasta aquí, definir una función siempre ha requerido la palabra reservada <code class="inline">def</code>. Existe otro tipo de función, con la misma validez y el mismo comportamiento, pero más simple de escribir: las <strong>funciones lambda</strong> (o funciones flecha). Se llaman así porque no necesitan nombre propio &mdash; basta con asignarlas a una variable, o pasarlas directamente como parámetro de otra función.</p>
+    <p>Se crean con la palabra reservada <code class="inline">lambda</code>, seguida de sus parámetros y, tras <code class="inline">:</code>, el cuerpo de la función.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="com"># definición normal de la función</span>
+<span class="kw">def</span> suma(a, b):
+    <span class="kw">return</span> a + b
+
+<span class="com"># definición y uso de una función lambda</span>
+sumaVar = <span class="kw">lambda</span> a, b: a + b
+print(sumaVar(<span class="hl">7</span>, <span class="hl">9</span>))</code></pre>
+    </div>
+    <p>Esta forma cobra especial relevancia cuando se usa como parámetro dentro de otra función:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code>alumnos = [(<span class="str">"Ana"</span>, <span class="hl">7</span>), (<span class="str">"Luis"</span>, <span class="hl">5</span>), (<span class="str">"Pedro"</span>, <span class="hl">9</span>)]
+ordenados = sorted(alumnos, key=<span class="kw">lambda</span> x: x[<span class="hl">1</span>])
+print(ordenados)</code></pre>
+    </div>
+    <p>Aquí, la función lambda pasada en el parámetro <code class="inline">key</code> indica que la ordenación se hace sobre la segunda posición de cada tupla &mdash; es decir, sobre la nota.</p>
+  </section>
+
+  <section class="tema" id="modularidad">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Modularidad</h2>
+    <p>Cuando un programa crece y acumula muchas líneas de código, se vuelve cada vez más difícil de leer, mantener y reutilizar. Para evitar que todo quede mezclado en un único archivo enorme existe la <strong>modularidad</strong>: dividir el programa en partes más pequeñas y organizadas, que se puedan trabajar por separado y juntar cuando haga falta. En Python, esto se consigue con <strong>módulos</strong>.</p>
+    <p>Un módulo es, simplemente, un archivo <code class="inline">.py</code> que contiene funciones, variables o clases y que se puede usar desde otros archivos &mdash; por ejemplo, un archivo con todas las funciones matemáticas, otro con validaciones, otro con menús. Para poder usar un módulo hacen falta dos cosas:</p>
+    <ul>
+      <li>Que el archivo que se quiere utilizar esté completo, sin errores de codificación.</li>
+      <li>Que el archivo donde se va a usar incorpore la palabra reservada <code class="inline">import</code> &mdash; esto importa todo el contenido del fichero. Para importar solo una parte, se usa <code class="inline">from nombre_modulo import nombre_funcion</code>.</li>
+    </ul>
+    <p>Por ejemplo, en <code class="inline">operaciones.py</code> agrupamos las operaciones matemáticas que se van a reutilizar:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="com"># operaciones.py</span>
+<span class="kw">def</span> sumar(a, b):
+    <span class="kw">return</span> a + b
+
+<span class="kw">def</span> restar(a, b):
+    <span class="kw">return</span> a - b
+
+<span class="kw">def</span> multiplicar(a, b):
+    <span class="kw">return</span> a * b
+
+<span class="kw">def</span> dividir(a, b):
+    <span class="kw">if</span> b == <span class="hl">0</span>:
+        <span class="kw">return</span> <span class="str">"Error: no se puede dividir entre cero."</span>
+    <span class="kw">return</span> a / b
+
+<span class="kw">def</span> potencia(base, exponente):
+    <span class="kw">return</span> base ** exponente
+
+<span class="kw">def</span> raiz_cuadrada(x):
+    <span class="kw">if</span> x &lt; <span class="hl">0</span>:
+        <span class="kw">return</span> <span class="str">"Error: no se puede calcular la raíz de un número negativo."</span>
+    <span class="kw">return</span> x ** <span class="hl">0.5</span></code></pre>
+    </div>
+    <p>Y en <code class="inline">calculadora.py</code>, pedimos dos operandos al usuario y llamamos a las funciones ya definidas en el módulo anterior:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="com"># calculadora.py</span>
+<span class="kw">import</span> operaciones
+
+operando1 = int(input(<span class="str">"Introduce el operando 1: "</span>))
+operando2 = int(input(<span class="str">"Introduce el operando 2: "</span>))
+operacion = input(<span class="str">"Indica la operación a realizar: "</span>).strip()
+
+<span class="kw">if</span> operacion == <span class="str">"suma"</span>:
+    resultado = operaciones.sumar(operando1, operando2)
+<span class="kw">elif</span> operacion == <span class="str">"resta"</span>:
+    resultado = operaciones.restar(operando1, operando2)
+<span class="kw">elif</span> operacion == <span class="str">"multiplicacion"</span>:
+    resultado = operaciones.multiplicar(operando1, operando2)
+<span class="kw">elif</span> operacion == <span class="str">"division"</span>:
+    resultado = operaciones.dividir(operando1, operando2)
+<span class="kw">elif</span> operacion == <span class="str">"potencia"</span>:
+    resultado = operaciones.potencia(operando1, operando2)
+<span class="kw">elif</span> operacion == <span class="str">"raiz"</span>:
+    resultado = operaciones.raiz_cuadrada(operando1)
+<span class="kw">else</span>:
+    resultado = <span class="kw">None</span>
+
+print(<span class="kw">f</span><span class="str">"El resultado de la operación es: {resultado}"</span>)</code></pre>
+    </div>
+    <p>Si solo hace falta parte del módulo, se puede importar directamente con <code class="inline">from ... import ...</code>, sin necesidad de anteponer el nombre del módulo en cada llamada:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">from</span> operaciones <span class="kw">import</span> sumar, restar, multiplicar, dividir, potencia, raiz_cuadrada
+
+<span class="com"># a partir de aquí, se llama directamente: sumar(operando1, operando2)</span></code></pre>
+    </div>
+    <p>Además de módulos propios, se pueden importar módulos del sistema o descargados, para aprovechar funcionalidad que el lenguaje ya trae hecha:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">import</span> datetime
+
+now = datetime.datetime.now()
+print(<span class="str">"Fecha y hora actual:"</span>, now)
+
+fecha = datetime.datetime(<span class="hl">2025</span>, <span class="hl">5</span>, <span class="hl">15</span>)
+print(<span class="str">"Fecha personalizada:"</span>, fecha.strftime(<span class="str">"%d/%m/%Y"</span>))</code></pre>
+    </div>
+    <p class="small" style="color:var(--muted);font-size:13.5px;"><code class="inline">datetime</code> gestiona fechas: <code class="inline">datetime.now()</code> da la fecha y hora actuales, el constructor <code class="inline">datetime(año, mes, día)</code> crea una fecha concreta, y <code class="inline">strftime()</code> la formatea como texto.</p>
+  </section>
+
+  <section class="tema" id="ejercicio-funciones">
+    <span class="section-num">&mdash;</span>
+    <h2 class="section-title">Ejercicio</h2>
+    <p>Crea un programa en Python que gestione una lista de productos de una tienda, usando una función separada para cada una de estas acciones:</p>
+    <ul>
+      <li>Agregar productos, con su nombre y precio.</li>
+      <li>Mostrar todos los productos disponibles.</li>
+      <li>Buscar un producto por su nombre y mostrar su precio.</li>
+      <li>Calcular el precio total de todos los productos.</li>
+    </ul>
+    <p>El usuario debe poder elegir qué hacer mediante un menú simple. Necesitarás también una estructura de control tipo lista para almacenar los productos.</p>
+  </section>
+
+  <section class="tema">
+    <span class="section-num">&mdash;</span>
+    <h2 class="section-title">Conclusiones</h2>
+    <p>El uso de funciones y la aplicación del diseño modular son herramientas clave para escribir programas más eficientes, ordenados y fáciles de mantener. Saber dividir un problema en partes más pequeñas y tratables permite trabajar de forma más estructurada, comprender mejor el código propio y detectar errores con más facilidad.</p>
+    <p>Dominar estos conceptos prepara para afrontar proyectos complejos, donde la claridad y la reutilización del código son esenciales &mdash; y acerca a las buenas prácticas que se usan en el mundo laboral, haciendo que los programas sean más robustos y escalables.</p>
   </section>
 
   <footer class="end">
-    Pendiente de completar: uso del retorno, funciones lambda, modularidad (paso por valor/referencia), conclusiones y referencias.
+    Referencias: <a href="https://www.python.org" target="_blank" rel="noopener">python.org</a>, <a href="https://docs.python.org/es/3.13/tutorial/modules.html" target="_blank" rel="noopener">docs.python.org &mdash; módulos</a>, <a href="https://docs.python.org/es/3.13/library/functions.html" target="_blank" rel="noopener">docs.python.org &mdash; funciones</a>.
   </footer>
 
 </div>
