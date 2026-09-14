@@ -1,0 +1,819 @@
+<title>Sistemas de archivos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #2B6CB0;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #4C9AE0;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #6FA3D8;
+      --accent-ink: #0D1B2A;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #6FA3D8;
+    --accent-ink: #0D1B2A;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top {
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.08rem;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  section.block {
+    margin-top: 44px;
+  }
+
+  h2.block-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+
+  section.block p {
+    margin: 0 0 14px;
+  }
+
+  section.block ul {
+    margin: 0 0 14px;
+    padding-left: 22px;
+  }
+
+  section.block li {
+    margin-bottom: 6px;
+  }
+
+  h3.option-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: var(--ink);
+    margin: 40px 0 4px;
+  }
+
+  .checklist {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow);
+  }
+
+  .checklist li {
+    list-style: none;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 15px;
+    margin-bottom: 0;
+  }
+
+  .checklist ul { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+
+  .checklist svg {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    color: var(--accent-2);
+  }
+
+  .learn-list {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .learn-list li {
+    list-style: none;
+    padding-left: 20px;
+    position: relative;
+    color: var(--ink);
+    margin-bottom: 0;
+  }
+
+  .learn-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .step {
+    display: flex;
+    gap: 18px;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .step:first-of-type { border-top: none; padding-top: 0; }
+
+  .step-chip {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-body { flex: 1; min-width: 0; }
+
+  .step h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 4px 0 8px;
+  }
+
+  .step p {
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+
+  .step p.small {
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+
+  .term {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+
+  .term-bar span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--code-line);
+  }
+
+  .term pre {
+    margin: 0;
+    padding: 14px 16px 16px;
+    overflow-x: auto;
+  }
+
+  .term code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13.6px;
+    line-height: 1.7;
+    color: var(--code-ink);
+  }
+
+  .term .prompt { color: var(--code-muted); }
+  .term .cmt { color: var(--code-muted); }
+  .term .hl { color: var(--code-accent); }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .code-panel .term-bar { }
+
+  .code-panel pre {
+    margin: 0;
+    padding: 16px 18px 18px;
+    overflow-x: auto;
+  }
+
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+
+  .code-panel .tag { color: var(--accent-2); }
+  .code-panel .str { color: #C9D96B; }
+  .code-panel .kw { color: var(--code-accent); }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .prop { color: #8FB8FF; }
+  .code-panel .hl { color: var(--code-accent); }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+
+  .checkpoint p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .substep {
+    display: flex;
+    gap: 14px;
+    margin: 18px 0 0 16px;
+    padding-left: 16px;
+    border-left: 2px solid var(--line-soft);
+  }
+
+  .substep-chip {
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: var(--line-soft);
+    color: var(--muted);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 11.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .substep h4 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.98rem;
+    font-weight: 600;
+    margin: 2px 0 6px;
+  }
+
+  .substep p {
+    margin: 0 0 8px;
+    font-size: 14.5px;
+    color: var(--ink);
+  }
+
+  .substep .code-panel, .substep .term {
+    margin: 10px 0;
+  }
+
+  details.full-code {
+    margin-top: 16px;
+  }
+
+  details.full-code summary {
+    cursor: pointer;
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--accent-2);
+    list-style: none;
+  }
+
+  details.full-code summary::-webkit-details-marker { display: none; }
+
+  details.full-code summary::before {
+    content: "▸ ";
+  }
+
+  details.full-code[open] summary::before {
+    content: "▾ ";
+  }
+
+  .trouble {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .trouble-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .trouble-item .q {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    margin: 0 0 6px;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .trouble-item .q::before {
+    content: "?";
+    font-family: "IBM Plex Mono", monospace;
+    color: var(--accent-2);
+    font-weight: 500;
+  }
+
+  .trouble-item p {
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--muted);
+  }
+
+  .trouble-item p + p { margin-top: 8px; }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .step { transition: none; }
+  }
+
+  nav.toc {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 20px 0 0;
+    box-shadow: var(--shadow);
+  }
+  nav.toc .toc-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 12.5px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 10px;
+  }
+  nav.toc ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 24px; }
+  nav.toc li { font-size: 14px; margin-bottom: 6px; break-inside: avoid; }
+  nav.toc a { color: var(--ink); text-decoration: none; }
+  nav.toc a:hover { color: var(--accent-2); text-decoration: underline; }
+
+  .diagram {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    margin: 16px 0;
+    padding: 18px;
+    display: flex;
+    justify-content: center;
+    overflow-x: auto;
+  }
+  .diagram svg { max-width: 100%; height: auto; }
+  .diagram-caption {
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    margin: -8px 0 16px;
+  }
+
+  .notacion {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+  .notacion .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+  .notacion .term-bar span { width: 9px; height: 9px; border-radius: 50%; background: var(--code-line); }
+  .notacion pre { margin: 0; padding: 14px 18px 16px; overflow-x: auto; }
+  .notacion code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+  .notacion .kw { color: var(--code-accent); font-weight: 500; }
+  .notacion .ent { color: #8FB8FF; }
+  .notacion .attr { color: #C9D96B; }
+  .notacion .com { color: var(--code-muted); font-style: italic; }
+
+  h2.section-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 1.35rem;
+    margin: 0 0 4px;
+    scroll-margin-top: 24px;
+  }
+  .section-num {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    color: var(--accent-2);
+    display: block;
+    margin-bottom: 4px;
+  }
+  section.tema {
+    margin-top: 52px;
+    padding-top: 28px;
+    border-top: 1px solid var(--line-soft);
+  }
+  section.tema:first-of-type { border-top: none; }
+  h3.subtema {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    margin: 28px 0 8px;
+  }
+</style>
+
+
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">RA1 + RA2 &middot; Teoría</span>
+    <h1>Sistemas de archivos: de los ficheros a la base de datos</h1>
+    <p class="lede">Antes de que existieran los sistemas gestores de bases de datos, la información se guardaba directamente en archivos. Entender sus limitaciones es la mejor forma de entender por qué hoy usamos un SGBD.</p>
+    <div class="meta-row">
+      <span class="meta-chip">RA1</span>
+      <span class="meta-chip">Fundamentos</span>
+      <span class="meta-chip">Base del desafío FICHEROS_Y_MAS</span>
+    </div>
+    <p style="margin-top:16px;"><a href="index.html" style="color:var(--accent-2);font-family:'IBM Plex Mono',monospace;font-size:13px;text-decoration:none;">&larr; Volver al índice del módulo</a></p>
+  </header>
+
+  <nav class="toc">
+    <p class="toc-title">Contenido</p>
+    <ol>
+      <li><a href="#introduccion">Introducción</a></li>
+      <li><a href="#secuenciales">Archivos secuenciales</a></li>
+      <li><a href="#aleatorios">Archivos de acceso aleatorio</a></li>
+      <li><a href="#indexados">Archivos indexados</a></li>
+      <li><a href="#sgbd">Qué es un SGBD</a></li>
+      <li><a href="#niveles">Niveles de un SGBD</a></li>
+      <li><a href="#funciones">Funciones del SGBD</a></li>
+      <li><a href="#multicapa">Estructura multicapa</a></li>
+      <li><a href="#tipos-sgbd">Tipos de SGBD</a></li>
+    </ol>
+  </nav>
+
+  <section class="tema" id="introduccion">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Introducción</h2>
+    <p>Los <strong>datos</strong> son el objetivo de cualquier sistema informático: representan elementos de la realidad mediante números, nombres, fechas&hellip; Antiguamente, en informática, esos datos se almacenaban directamente en archivos. Hay cuatro tipos principales, que veremos en este orden:</p>
+    <ul>
+      <li>Archivos secuenciales.</li>
+      <li>Archivos de acceso aleatorio.</li>
+      <li>Archivos indexados.</li>
+      <li>Archivos hash.</li>
+    </ul>
+  </section>
+
+  <section class="tema" id="secuenciales">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Archivos secuenciales</h2>
+    <p>Los sistemas de almacenamiento más antiguos usaban cintas magnéticas. &ldquo;Secuencial&rdquo; significa que los registros están ordenados uno detrás de otro: para llegar a la posición 100, hay que pasar antes por las 99 anteriores &mdash; no existe forma de saltar directamente a un registro concreto.</p>
+    <p>Los archivos podían ser de texto libre, pero lo habitual era que tuvieran campos fijos. Por ejemplo, una entidad Persona con los campos <em>nombre, dirección, ciudad</em> se guardaría así, un registro detrás de otro, con una marca de fin de registro:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code>Juan Martínez
+Calle del Pez, 5
+Madrid
+&lt;FIN&gt;
+Comercial Martínez
+Calle de la cuesta, 10
+Sevilla
+&lt;FIN&gt;
+José Sánchez
+Calle Mayor, 7
+Salamanca
+&lt;FIN&gt;</code></pre>
+    </div>
+    <h3 class="subtema">Ventajas y desventajas</h3>
+    <ul>
+      <li>La lectura es en orden obligatorio, sin posibilidad de retroceso &mdash; para volver atrás hay que cerrar el archivo y abrirlo de nuevo.</li>
+      <li>Es monousuario: no permite acceso simultáneo de varios procesos.</li>
+      <li>Los campos van siempre en el mismo orden dentro del registro; un cambio en esa estructura obliga a modificar todos los programas que leen el archivo.</li>
+      <li>El modo de apertura es estricto: o escritura, o lectura, nunca las dos a la vez.</li>
+      <li>Añadir un registro implica reescribir todos los anteriores.</li>
+      <li>Necesita una marca de fin de fichero (o de registro, como <code class="inline">&lt;FIN&gt;</code>), que a su vez impide que esa misma cadena de texto pueda aparecer como dato real.</li>
+    </ul>
+    <p>El borrado se puede hacer de dos formas: reescribiendo todo el archivo sin el registro eliminado, o marcándolo como borrado (más complejo, pero evita la reescritura completa). La marca de fin de registro también permite dejar campos en blanco, simplemente no escribiéndolos.</p>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Longitud variable, incluso en los números
+      </div>
+      <p>Los campos y registros son de longitud variable. Incluso los números se guardan como texto, carácter a carácter: el número 100 ocupa 3 caracteres, mientras que el 99 solo ocupa 2. No hay un tamaño fijo que permita calcular dónde empieza el siguiente registro sin leer antes el actual entero.</p>
+    </div>
+  </section>
+
+  <section class="tema" id="aleatorios">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Archivos de acceso aleatorio</h2>
+    <p>Aparecen con los disquetes y los discos duros. A diferencia de la cinta, permiten colocar el cabezal de lectura directamente en una posición concreta. Para que esto funcione, el soporte se organiza en estructuras de tamaño fijo (sector o clúster), y dentro de cada una los datos ocupan también un número de bytes fijo y conocido de antemano.</p>
+
+    <h3 class="subtema">Cálculo de la posición de un registro</h3>
+    <p>Si se usan caracteres ANSI (1 byte cada uno) y un registro tiene estos campos:</p>
+    <ul>
+      <li>Nombre: 80 caracteres ANSI</li>
+      <li>Dirección: 100 caracteres ANSI</li>
+      <li>Población: 50 caracteres ANSI</li>
+    </ul>
+    <p>Cada registro ocupa 230 caracteres, es decir, 230 bytes. La posición de un registro se calcula con:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code>Pos = NumRegistro * LongitudRegistro</code></pre>
+    </div>
+    <p>El registro número 4 estaría en la posición 920 (4 &times; 230). Si en vez de ANSI se usa UTF-16 (2 bytes por carácter), cada registro pasa a ocupar 460 bytes, y la posición del cuarto registro sería 1840.</p>
+
+    <h3 class="subtema">Tipos numéricos</h3>
+    <p>Un número no se guarda dígito a dígito como en un archivo secuencial: se almacena en binario. Según el número de bytes reservados, cambia el rango representable:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="com">// sin signo</span>
+1 byte:  0 a 255
+2 bytes: 0 a 65536
+4 bytes: 0 a 4294967296
+
+<span class="com">// con signo, en complemento a 2</span>
+1 byte:  -128 a 127
+2 bytes: -32768 a 32767
+4 bytes: -2147483648 a 2147483647</code></pre>
+    </div>
+    <p>Para números reales se usa la norma <strong>IEEE&nbsp;754</strong>: el número se representa en notación científica y en binario, repartido en tres grupos de bits &mdash; un primer bit para el signo, un grupo de bits para el exponente (7 bits en 32 bits totales, 11 bits en 64), y el resto de bits para el valor (mantisa) del número.</p>
+
+    <h3 class="subtema">Ventajas y desventajas</h3>
+    <ul>
+      <li>Posicionamiento inmediato en un registro concreto, sin pasar por los anteriores.</li>
+      <li>Los registros son de longitud fija &mdash; es justo lo que hace posible calcular su posición.</li>
+      <li>Permite apertura simultánea en modo lectura y escritura.</li>
+      <li>Permite uso concurrente, multiusuario.</li>
+      <li>Tiene un número máximo de registros, fijado de antemano por el tamaño reservado.</li>
+      <li>El borrado se hace normalmente rellenando el registro con ceros, en vez de eliminarlo físicamente.</li>
+    </ul>
+  </section>
+
+  <section class="tema" id="indexados">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Archivos indexados</h2>
+    <p>Son una variante de los archivos de acceso aleatorio. En vez de calcular la posición de un registro a partir de su número de orden, se le añade una <strong>clave</strong> (un campo del propio registro) que permite localizarlo directamente.</p>
+    <p>Para ello se guarda una relación entre esa clave y la posición real del registro dentro del archivo &mdash; esta relación (la tabla de índice) se mantiene en memoria RAM para que la búsqueda sea rápida. Una forma habitual de organizar esa tabla es un <strong>árbol binario</strong>, en el que cada nodo guarda una clave y apunta como máximo a dos hijos: el de menor valor a la izquierda, el de mayor valor a la derecha. Tienes ejemplos completos de árboles binarios de índice en el <a href="desafio-ficheros-y-mas.html">desafío FICHEROS_Y_MAS</a>.</p>
+  </section>
+
+  <section class="tema" id="sgbd">
+    <span class="section-num">05</span>
+    <h2 class="section-title">Qué es un SGBD</h2>
+    <p>Un <strong>sistema gestor de bases de datos</strong> (SGBD) permite almacenar información sin tener que preocuparse por cómo se guarda físicamente &mdash; todo lo visto hasta ahora (secuenciales, aleatorios, indexados) pasa a ser responsabilidad del propio SGBD, no de quien programa la aplicación. Un SGBD proporciona:</p>
+    <ul>
+      <li>Programas y procedimientos para usar los datos.</li>
+      <li>Un lenguaje para expresar las operaciones (consultar, insertar, modificar&hellip;).</li>
+      <li>Seguridad de los datos.</li>
+      <li><strong>Independencia</strong> entre los datos lógicos (lo que ve quien programa o consulta) y su almacenamiento físico real.</li>
+    </ul>
+  </section>
+
+  <section class="tema" id="niveles">
+    <span class="section-num">06</span>
+    <h2 class="section-title">Niveles de un SGBD</h2>
+    <ul>
+      <li><strong>Esquema conceptual</strong>: qué almacena la base de datos &mdash; qué entidades hay y qué relación tienen entre sí. Es, precisamente, lo que se diseña con un <a href="teoria-entidad-relacion.html">diagrama Entidad/Relación</a>.</li>
+      <li><strong>Esquema externo</strong>, con dos subniveles: lo que ve directamente quien usa la base de datos (vistas, consultas), y las tablas que implementan el esquema conceptual.</li>
+    </ul>
+  </section>
+
+  <section class="tema" id="funciones">
+    <span class="section-num">07</span>
+    <h2 class="section-title">Funciones del SGBD</h2>
+    <h3 class="subtema">Descripción o definición de una base de datos</h3>
+    <ul>
+      <li><strong>Nivel interno</strong>: tamaño de los registros, tipos de datos.</li>
+      <li><strong>Nivel conceptual</strong>: definición de las entidades, sus características y sus relaciones.</li>
+    </ul>
+    <p>El SGBD se encarga de que esa descripción conceptual tenga su reflejo correcto tanto en el nivel interno como en el externo.</p>
+    <h3 class="subtema">Manipulación</h3>
+    <p>Añadir, quitar, modificar y buscar datos.</p>
+    <h3 class="subtema">Control</h3>
+    <p>Protección contra accesos indebidos, seguridad de los datos, y procedimientos de servicio con repercusión en el nivel interno.</p>
+  </section>
+
+  <section class="tema" id="multicapa">
+    <span class="section-num">08</span>
+    <h2 class="section-title">Estructura multicapa</h2>
+    <p>Una petición a la base de datos atraviesa varias capas hasta llegar al disco:</p>
+    <div class="diagram">
+      <svg viewBox="0 0 560 300" font-family="IBM Plex Sans, sans-serif">
+        <rect x="20" y="10" width="520" height="44" rx="6" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.5"/>
+        <text x="280" y="37" text-anchor="middle" font-size="14" fill="var(--ink)">Facilidades de usuario (programa, app, web&hellip;)</text>
+        <line x1="280" y1="54" x2="280" y2="72" stroke="var(--muted)" stroke-width="1.5"/>
+        <rect x="20" y="72" width="520" height="44" rx="6" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.5"/>
+        <text x="280" y="99" text-anchor="middle" font-size="14" fill="var(--ink)">Capa de acceso a datos (driver &mdash; traduce peticiones)</text>
+        <line x1="280" y1="116" x2="280" y2="134" stroke="var(--muted)" stroke-width="1.5"/>
+        <rect x="20" y="134" width="520" height="44" rx="6" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
+        <text x="280" y="161" text-anchor="middle" font-size="14" fill="var(--ink)">Diccionario de datos (metadatos)</text>
+        <line x1="280" y1="178" x2="280" y2="196" stroke="var(--muted)" stroke-width="1.5"/>
+        <rect x="20" y="196" width="520" height="44" rx="6" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.5"/>
+        <text x="280" y="223" text-anchor="middle" font-size="14" fill="var(--ink)">Núcleo (traduce a operaciones sobre el soporte físico)</text>
+        <line x1="280" y1="240" x2="280" y2="258" stroke="var(--muted)" stroke-width="1.5"/>
+        <rect x="20" y="258" width="520" height="34" rx="6" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.5"/>
+        <text x="280" y="280" text-anchor="middle" font-size="13.5" fill="var(--ink)">Sistema operativo (opera sobre los archivos en disco)</text>
+      </svg>
+    </div>
+    <ul>
+      <li><strong>Facilidades de usuario</strong>: el programa o la aplicación (web, de escritorio&hellip;) que accede a la base de datos.</li>
+      <li><strong>Capa de acceso a datos</strong>: un driver que conecta las facilidades de usuario con el diccionario de datos, traduciendo las peticiones.</li>
+      <li><strong>Diccionario de datos</strong>: contiene todos los metadatos, y se traduce al esquema interno.</li>
+      <li><strong>Núcleo</strong>: traduce lo que se pide a operaciones concretas sobre el soporte físico, y se lo solicita al sistema operativo.</li>
+      <li><strong>Sistema operativo</strong>: es quien realmente opera sobre los archivos en el disco.</li>
+    </ul>
+  </section>
+
+  <section class="tema" id="tipos-sgbd">
+    <span class="section-num">09</span>
+    <h2 class="section-title">Tipos de SGBD</h2>
+    <ul>
+      <li><strong>Modelo jerárquico.</strong> Uno de los más antiguos (IBM). Las relaciones entre entidades son jerárquicas: cada hijo tiene un único padre.</li>
+      <li><strong>Modelo de red (Codasyl).</strong> Similar al jerárquico, pero un hijo puede tener más de un padre.</li>
+      <li><strong>Modelo relacional.</strong> Postulado en 1970 por Edgar Frank Codd. Se basa en relaciones entre entidades &mdash; es el modelo que trabajamos en este módulo. La mayoría de SGBD relacionales actuales han evolucionado hacia un híbrido objeto-relacional.</li>
+      <li><strong>Modelo orientado a objetos.</strong> Relacionado con la programación orientada a objetos. Tras décadas, no ha llegado a sustituir a los relacionales.</li>
+      <li><strong>NoSQL.</strong> En auge en los últimos años, para casos donde el modelo relacional no encaja bien (grandes volúmenes, datos poco estructurados&hellip;).</li>
+    </ul>
+  </section>
+
+  <footer class="end">
+    Bibliografía: apuntes de la asignatura Diseño de Bases de Datos de la URJC (2005), Carlos Villarroel González.
+  </footer>
+
+</div>

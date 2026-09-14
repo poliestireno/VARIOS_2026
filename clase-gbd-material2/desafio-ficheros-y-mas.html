@@ -1,0 +1,804 @@
+<title>RA12_FICHEROS_Y_MAS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #2B6CB0;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #4C9AE0;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #6FA3D8;
+      --accent-ink: #0D1B2A;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #6FA3D8;
+    --accent-ink: #0D1B2A;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top {
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.08rem;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  section.block {
+    margin-top: 44px;
+  }
+
+  h2.block-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+
+  section.block p {
+    margin: 0 0 14px;
+  }
+
+  section.block ul {
+    margin: 0 0 14px;
+    padding-left: 22px;
+  }
+
+  section.block li {
+    margin-bottom: 6px;
+  }
+
+  h3.option-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: var(--ink);
+    margin: 40px 0 4px;
+  }
+
+  .checklist {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow);
+  }
+
+  .checklist li {
+    list-style: none;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 15px;
+    margin-bottom: 0;
+  }
+
+  .checklist ul { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+
+  .checklist svg {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    color: var(--accent-2);
+  }
+
+  .learn-list {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .learn-list li {
+    list-style: none;
+    padding-left: 20px;
+    position: relative;
+    color: var(--ink);
+    margin-bottom: 0;
+  }
+
+  .learn-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .step {
+    display: flex;
+    gap: 18px;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .step:first-of-type { border-top: none; padding-top: 0; }
+
+  .step-chip {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-body { flex: 1; min-width: 0; }
+
+  .step h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 4px 0 8px;
+  }
+
+  .step p {
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+
+  .step p.small {
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+
+  .term {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+
+  .term-bar span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--code-line);
+  }
+
+  .term pre {
+    margin: 0;
+    padding: 14px 16px 16px;
+    overflow-x: auto;
+  }
+
+  .term code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13.6px;
+    line-height: 1.7;
+    color: var(--code-ink);
+  }
+
+  .term .prompt { color: var(--code-muted); }
+  .term .cmt { color: var(--code-muted); }
+  .term .hl { color: var(--code-accent); }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .code-panel .term-bar { }
+
+  .code-panel pre {
+    margin: 0;
+    padding: 16px 18px 18px;
+    overflow-x: auto;
+  }
+
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+
+  .code-panel .tag { color: var(--accent-2); }
+  .code-panel .str { color: #C9D96B; }
+  .code-panel .kw { color: var(--code-accent); }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .prop { color: #8FB8FF; }
+  .code-panel .hl { color: var(--code-accent); }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+
+  .checkpoint p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .substep {
+    display: flex;
+    gap: 14px;
+    margin: 18px 0 0 16px;
+    padding-left: 16px;
+    border-left: 2px solid var(--line-soft);
+  }
+
+  .substep-chip {
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: var(--line-soft);
+    color: var(--muted);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 11.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .substep h4 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.98rem;
+    font-weight: 600;
+    margin: 2px 0 6px;
+  }
+
+  .substep p {
+    margin: 0 0 8px;
+    font-size: 14.5px;
+    color: var(--ink);
+  }
+
+  .substep .code-panel, .substep .term {
+    margin: 10px 0;
+  }
+
+  details.full-code {
+    margin-top: 16px;
+  }
+
+  details.full-code summary {
+    cursor: pointer;
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--accent-2);
+    list-style: none;
+  }
+
+  details.full-code summary::-webkit-details-marker { display: none; }
+
+  details.full-code summary::before {
+    content: "▸ ";
+  }
+
+  details.full-code[open] summary::before {
+    content: "▾ ";
+  }
+
+  .trouble {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .trouble-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .trouble-item .q {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    margin: 0 0 6px;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .trouble-item .q::before {
+    content: "?";
+    font-family: "IBM Plex Mono", monospace;
+    color: var(--accent-2);
+    font-weight: 500;
+  }
+
+  .trouble-item p {
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--muted);
+  }
+
+  .trouble-item p + p { margin-top: 8px; }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .step { transition: none; }
+  }
+
+  nav.toc {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 20px 0 0;
+    box-shadow: var(--shadow);
+  }
+  nav.toc .toc-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 12.5px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 10px;
+  }
+  nav.toc ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 24px; }
+  nav.toc li { font-size: 14px; margin-bottom: 6px; break-inside: avoid; }
+  nav.toc a { color: var(--ink); text-decoration: none; }
+  nav.toc a:hover { color: var(--accent-2); text-decoration: underline; }
+
+  .diagram {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    margin: 16px 0;
+    padding: 18px;
+    display: flex;
+    justify-content: center;
+    overflow-x: auto;
+  }
+  .diagram svg { max-width: 100%; height: auto; }
+  .diagram-caption {
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    margin: -8px 0 16px;
+  }
+
+  .notacion {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+  .notacion .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+  .notacion .term-bar span { width: 9px; height: 9px; border-radius: 50%; background: var(--code-line); }
+  .notacion pre { margin: 0; padding: 14px 18px 16px; overflow-x: auto; }
+  .notacion code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+  .notacion .kw { color: var(--code-accent); font-weight: 500; }
+  .notacion .ent { color: #8FB8FF; }
+  .notacion .attr { color: #C9D96B; }
+  .notacion .com { color: var(--code-muted); font-style: italic; }
+
+  h2.section-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 1.35rem;
+    margin: 0 0 4px;
+    scroll-margin-top: 24px;
+  }
+  .section-num {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    color: var(--accent-2);
+    display: block;
+    margin-bottom: 4px;
+  }
+  section.tema {
+    margin-top: 52px;
+    padding-top: 28px;
+    border-top: 1px solid var(--line-soft);
+  }
+  section.tema:first-of-type { border-top: none; }
+  h3.subtema {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    margin: 28px 0 8px;
+  }
+</style>
+
+
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">RA1 + RA2 &middot; Desafío &middot; 8 días</span>
+    <h1>RA12_FICHEROS_Y_MAS</h1>
+    <p class="lede">Dos fases: primero los ejercicios clásicos de ficheros secuenciales, de acceso directo e indexados; después, un recorrido práctico por lo que de verdad hay dentro de un archivo &mdash; su extensión, sus metadatos, y cómo manipularlos.</p>
+    <div class="meta-row">
+      <span class="meta-chip">RA1</span>
+      <span class="meta-chip">8 días</span>
+      <span class="meta-chip">Trabajo individual con pantallazos</span>
+    </div>
+    <p style="margin-top:16px;"><a href="index.html" style="color:var(--accent-2);font-family:'IBM Plex Mono',monospace;font-size:13px;text-decoration:none;">&larr; Volver al índice del módulo</a></p>
+  </header>
+
+  <section class="block">
+    <h2 class="block-title" id="practica">Fase 1 &middot; Ficheros clásicos</h2>
+    <p>Repasa antes la teoría de <a href="teoria-ficheros.html">Sistemas de archivos</a> si te hace falta &mdash; en concreto, secuenciales, acceso directo (aleatorio) e indexados.</p>
+
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Antes de empezar
+      </div>
+      <p>Un fichero de <strong>acceso directo</strong> es lo mismo que un fichero <strong>aleatorio</strong> &mdash; son dos nombres para el mismo concepto.</p>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">1</div>
+      <div class="step-body">
+        <h3>Agenda secuencial</h3>
+        <p>Crea un fichero de texto secuencial <code class="inline">agenda_secuencial.txt</code> con una agenda de teléfonos. Cada contacto debe incluir: Nombre, Apellidos, Dirección, Ciudad, Teléfono. Incluye un mínimo de diez contactos, de al menos cuatro ciudades distintas.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">2</div>
+      <div class="step-body">
+        <h3>La misma agenda, en acceso directo</h3>
+        <p>Partiendo de los datos del ejercicio anterior, crea un fichero de texto de acceso directo <code class="inline">agenda_acceso_directo.txt</code>. Presenta una justificación del número de caracteres que has elegido para cada campo &mdash; recuerda que, a diferencia del secuencial, aquí cada campo necesita un tamaño fijo.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">3</div>
+      <div class="step-body">
+        <h3>Indexar la agenda</h3>
+        <p>Copia <code class="inline">agenda_acceso_directo.txt</code> a un nuevo fichero llamado <code class="inline">agenda_indexada.txt</code>. Crea un fichero de índice <code class="inline">agenda_apellidos_nombre.txt</code> que lo ordene por apellidos y nombre, y otro <code class="inline">agenda_ciudad.txt</code> que lo ordene por ciudad.</p>
+        <p>Para cada fichero indexado, dibuja (con el programa que prefieras) el árbol binario correspondiente &mdash; el de menor valor siempre a la izquierda, el de mayor a la derecha. Dos ejemplos de cómo debe verse un árbol así:</p>
+        <div class="diagram">
+          <svg viewBox="0 0 500 340" font-family="IBM Plex Sans, sans-serif">
+            <text x="250" y="18" text-anchor="middle" font-size="12" fill="var(--muted)" font-family="IBM Plex Mono, monospace">raíz</text>
+            <line x1="250" y1="22" x2="250" y2="40" stroke="var(--muted)" stroke-width="1.5"/>
+            <rect x="220" y="40" width="60" height="34" rx="4" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
+            <text x="250" y="62" text-anchor="middle" font-size="14" font-weight="600" fill="var(--ink)">400</text>
+            <line x1="230" y1="74" x2="150" y2="118" stroke="var(--ink)" stroke-width="1.5"/>
+            <line x1="270" y1="74" x2="380" y2="118" stroke="var(--ink)" stroke-width="1.5"/>
+            <rect x="120" y="118" width="60" height="34" rx="4" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.5"/>
+            <text x="150" y="140" text-anchor="middle" font-size="14" fill="var(--ink)">100</text>
+            <rect x="350" y="118" width="60" height="34" rx="4" fill="var(--line-soft)" stroke="var(--muted)" stroke-width="1.5"/>
+            <text x="380" y="140" text-anchor="middle" font-size="14" fill="var(--muted)">700</text>
+            <line x1="135" y1="152" x2="80" y2="196" stroke="var(--ink)" stroke-width="1.5"/>
+            <line x1="165" y1="152" x2="220" y2="196" stroke="var(--ink)" stroke-width="1.5"/>
+            <rect x="50" y="196" width="60" height="34" rx="4" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.5"/>
+            <text x="80" y="218" text-anchor="middle" font-size="14" fill="var(--ink)">50</text>
+            <rect x="190" y="196" width="60" height="34" rx="4" fill="var(--line-soft)" stroke="var(--muted)" stroke-width="1.5"/>
+            <text x="220" y="218" text-anchor="middle" font-size="14" fill="var(--muted)">200</text>
+            <line x1="95" y1="230" x2="140" y2="274" stroke="var(--ink)" stroke-width="1.5"/>
+            <rect x="110" y="274" width="60" height="34" rx="4" fill="var(--line-soft)" stroke="var(--muted)" stroke-width="1.5"/>
+            <text x="140" y="296" text-anchor="middle" font-size="14" fill="var(--muted)">75</text>
+          </svg>
+        </div>
+        <p class="diagram-caption">Nodos en gris: hojas del árbol (sin hijos). El hijo izquierdo siempre es menor; el derecho, mayor.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">4</div>
+      <div class="step-body">
+        <h3>Borrar e insertar</h3>
+        <p>Borra un contacto cualquiera de <code class="inline">agenda_indexada.txt</code> e inserta un contacto nuevo, actualizando a la vez los ficheros de índice asociados (los árboles de los dos apartados anteriores).</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">5</div>
+      <div class="step-body">
+        <h3>SGBD actuales</h3>
+        <p>Consulta en internet información sobre las prestaciones de los SGBD comerciales y libres más utilizados hoy en día, y resúmelo brevemente.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Fase 2 &middot; La verdadera naturaleza de un archivo</h2>
+    <p>Tres partes para entender que la extensión de un archivo es solo una etiqueta, el peso real de sus metadatos, y cómo controlarlos con una herramienta de línea de comandos. Documenta cada respuesta con capturas de pantalla y un comentario propio.</p>
+
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Paso 0 &middot; antes de empezar
+      </div>
+      <p>Necesitas dos cosas: una <strong>imagen</strong> cualquiera (una foto hecha con el móvil sirve), guardada como <code class="inline">mi_foto_disney.jpg</code>; y <strong>ExifTool</strong> instalado (descárgalo desde <code class="inline">exiftool.org</code> y sigue las instrucciones para Windows). Abre después una terminal y navega hasta la carpeta donde vayas a guardar los archivos de prueba.</p>
+    </div>
+
+    <h3 class="subtema">Parte 1 &middot; La extensión es solo un disfraz</h3>
+
+    <div class="substep">
+      <div class="substep-chip">1.1</div>
+      <div class="substep-body">
+        <h4>Un cuento con extensión falsa</h4>
+        <p>Abre un editor de texto plano y escribe: <em>&ldquo;Érase una vez, en un lejano reino, vivía un príncipe que se enamoró de una misteriosa princesa. Al amanecer, ella se marchó, dejando tras de sí solo un zapato de cristal.&rdquo;</em> Guárdalo como <code class="inline">cuento_cenicienta.txt</code>. Cambia el nombre del archivo a <code class="inline">cuento_cenicienta.jpg</code> e intenta abrirlo con tu visualizador de imágenes. &iquest;Qué pasa? Coméntalo.</p>
+      </div>
+    </div>
+
+    <div class="substep">
+      <div class="substep-chip">1.2</div>
+      <div class="substep-body">
+        <h4>Descubrir la verdad con TrID</h4>
+        <p>Una herramienta como <strong>TrID</strong> analiza el contenido real del archivo, sin fiarse de su extensión. Utilízala sobre <code class="inline">cuento_cenicienta.jpg</code>. &iquest;Qué resultado da, y por qué?</p>
+      </div>
+    </div>
+
+    <h3 class="subtema">Parte 2 &middot; Por qué un .docx pesa más que un .txt</h3>
+
+    <div class="substep">
+      <div class="substep-chip">2.1</div>
+      <div class="substep-body">
+        <h4>Comparar tamaños</h4>
+        <p>Crea un archivo de texto con la frase <em>&ldquo;Los personajes de Disney son mágicos.&rdquo;</em>, guárdalo como <code class="inline">frase_magica.txt</code> y anota su tamaño (serán muy pocos bytes). Ahora escribe exactamente la misma frase en Word o LibreOffice y guárdala como <code class="inline">frase_magica.docx</code> (o <code class="inline">.odt</code>). Compara los dos tamaños &mdash; el <code class="inline">.docx</code> es mucho mayor, aunque el texto sea idéntico. &iquest;Por qué pasa esto? Coméntalo.</p>
+      </div>
+    </div>
+
+    <div class="substep">
+      <div class="substep-chip">2.2</div>
+      <div class="substep-body">
+        <h4>Un .docx es, en realidad, un .zip</h4>
+        <p>Cambia la extensión de <code class="inline">frase_magica.docx</code> a <code class="inline">.zip</code> y descomprímelo. Dentro encontrarás varias carpetas (<code class="inline">_rels</code>, <code class="inline">docProps</code>, <code class="inline">word</code>) y archivos XML. Abre <code class="inline">word/document.xml</code> con un editor de texto. &iquest;Qué puedes identificar ahí dentro? Explícalo.</p>
+      </div>
+    </div>
+
+    <h3 class="subtema">Parte 3 &middot; Metadatos con ExifTool</h3>
+
+    <div class="substep">
+      <div class="substep-chip">3.1</div>
+      <div class="substep-body">
+        <h4>Buscar pistas en la imagen</h4>
+        <p>Desde la terminal, en la carpeta de tu foto, ejecuta:</p>
+        <div class="term">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code><span class="prompt">$</span> exiftool mi_foto_disney.jpg</code></pre>
+        </div>
+        <p>Busca etiquetas que revelen información sobre la foto &mdash; modelo de cámara, fecha de creación, coordenadas GPS si las hay&hellip; Saca todas las que puedas y coméntalas.</p>
+      </div>
+    </div>
+
+    <div class="substep">
+      <div class="substep-chip">3.2</div>
+      <div class="substep-body">
+        <h4>Escribir tus propios metadatos</h4>
+        <p>Con ExifTool también puedes añadir o modificar metadatos, con la sintaxis <code class="inline">-[Etiqueta]="[Valor]"</code>:</p>
+        <div class="term">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code><span class="prompt">$</span> exiftool -Comment="Esta foto fue tomada en el Castillo de la Bella Durmiente" mi_foto_disney.jpg
+<span class="prompt">$</span> exiftool -Comment mi_foto_disney.jpg</code></pre>
+        </div>
+        <p class="small">La segunda línea comprueba que el comentario se ha guardado correctamente.</p>
+      </div>
+    </div>
+
+    <div class="substep">
+      <div class="substep-chip">3.3</div>
+      <div class="substep-body">
+        <h4>Borrando el rastro</h4>
+        <p>Para eliminar solo la posición GPS (si la hay):</p>
+        <div class="term">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code><span class="prompt">$</span> exiftool -GPSPosition= mi_foto_disney.jpg</code></pre>
+        </div>
+        <p>Para eliminar <strong>todos</strong> los metadatos de golpe (muy potente, úsalo con cuidado):</p>
+        <div class="term">
+          <div class="term-bar"><span></span><span></span><span></span></div>
+          <pre><code><span class="prompt">$</span> exiftool -all= mi_foto_disney.jpg
+<span class="prompt">$</span> exiftool mi_foto_disney.jpg</code></pre>
+        </div>
+        <p>La segunda ejecución debería mostrar la lista de metadatos casi vacía. Comenta qué ha pasado.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Trabaja siempre sobre una copia
+      </div>
+      <p>ExifTool crea automáticamente una copia de seguridad (<code class="inline">.jpg_original</code>) antes de modificar un archivo, pero sigue siendo buena práctica trabajar sobre una copia propia si no estás seguro del resultado.</p>
+    </div>
+  </section>
+
+  <footer class="end">
+    Entrega: documento con capturas de pantalla de cada paso (Fase 1 y Fase 2) y tus comentarios propios sobre cada pregunta.
+  </footer>
+
+</div>
