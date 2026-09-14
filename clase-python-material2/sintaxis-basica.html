@@ -1,0 +1,838 @@
+<title>Sintaxis básica</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #3776AB;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #4C9AE0;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #5B9BD5;
+      --accent-ink: #0D1B2A;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #5B9BD5;
+    --accent-ink: #0D1B2A;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top {
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.08rem;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  section.block {
+    margin-top: 44px;
+  }
+
+  h2.block-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+
+  section.block p {
+    margin: 0 0 14px;
+  }
+
+  section.block ul {
+    margin: 0 0 14px;
+    padding-left: 22px;
+  }
+
+  section.block li {
+    margin-bottom: 6px;
+  }
+
+  h3.option-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: var(--ink);
+    margin: 40px 0 4px;
+  }
+
+  .checklist {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow);
+  }
+
+  .checklist li {
+    list-style: none;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 15px;
+    margin-bottom: 0;
+  }
+
+  .checklist ul { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+
+  .checklist svg {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    color: var(--accent-2);
+  }
+
+  .learn-list {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .learn-list li {
+    list-style: none;
+    padding-left: 20px;
+    position: relative;
+    color: var(--ink);
+    margin-bottom: 0;
+  }
+
+  .learn-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .step {
+    display: flex;
+    gap: 18px;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .step:first-of-type { border-top: none; padding-top: 0; }
+
+  .step-chip {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-body { flex: 1; min-width: 0; }
+
+  .step h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 4px 0 8px;
+  }
+
+  .step p {
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+
+  .step p.small {
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+
+  .term {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+
+  .term-bar span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--code-line);
+  }
+
+  .term pre {
+    margin: 0;
+    padding: 14px 16px 16px;
+    overflow-x: auto;
+  }
+
+  .term code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13.6px;
+    line-height: 1.7;
+    color: var(--code-ink);
+  }
+
+  .term .prompt { color: var(--code-muted); }
+  .term .cmt { color: var(--code-muted); }
+  .term .hl { color: var(--code-accent); }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .code-panel .term-bar { }
+
+  .code-panel pre {
+    margin: 0;
+    padding: 16px 18px 18px;
+    overflow-x: auto;
+  }
+
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+
+  .code-panel .tag { color: var(--accent-2); }
+  .code-panel .str { color: #C9D96B; }
+  .code-panel .kw { color: var(--code-accent); }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .prop { color: #8FB8FF; }
+  .code-panel .hl { color: var(--code-accent); }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+
+  .checkpoint p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .substep {
+    display: flex;
+    gap: 14px;
+    margin: 18px 0 0 16px;
+    padding-left: 16px;
+    border-left: 2px solid var(--line-soft);
+  }
+
+  .substep-chip {
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: var(--line-soft);
+    color: var(--muted);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 11.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .substep h4 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.98rem;
+    font-weight: 600;
+    margin: 2px 0 6px;
+  }
+
+  .substep p {
+    margin: 0 0 8px;
+    font-size: 14.5px;
+    color: var(--ink);
+  }
+
+  .substep .code-panel, .substep .term {
+    margin: 10px 0;
+  }
+
+  details.full-code {
+    margin-top: 16px;
+  }
+
+  details.full-code summary {
+    cursor: pointer;
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--accent-2);
+    list-style: none;
+  }
+
+  details.full-code summary::-webkit-details-marker { display: none; }
+
+  details.full-code summary::before {
+    content: "▸ ";
+  }
+
+  details.full-code[open] summary::before {
+    content: "▾ ";
+  }
+
+  .trouble {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .trouble-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .trouble-item .q {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    margin: 0 0 6px;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .trouble-item .q::before {
+    content: "?";
+    font-family: "IBM Plex Mono", monospace;
+    color: var(--accent-2);
+    font-weight: 500;
+  }
+
+  .trouble-item p {
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--muted);
+  }
+
+  .trouble-item p + p { margin-top: 8px; }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .step { transition: none; }
+  }
+
+  nav.toc {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 20px 0 0;
+    box-shadow: var(--shadow);
+  }
+  nav.toc .toc-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 12.5px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 10px;
+  }
+  nav.toc ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 24px; }
+  nav.toc li { font-size: 14px; margin-bottom: 6px; break-inside: avoid; }
+  nav.toc a { color: var(--ink); text-decoration: none; }
+  nav.toc a:hover { color: var(--accent-2); text-decoration: underline; }
+
+  .diagram {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    margin: 16px 0;
+    padding: 18px;
+    display: flex;
+    justify-content: center;
+    overflow-x: auto;
+  }
+  .diagram svg { max-width: 100%; height: auto; }
+  .diagram-caption {
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    margin: -8px 0 16px;
+  }
+
+  .notacion {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+  .notacion .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+  .notacion .term-bar span { width: 9px; height: 9px; border-radius: 50%; background: var(--code-line); }
+  .notacion pre { margin: 0; padding: 14px 18px 16px; overflow-x: auto; }
+  .notacion code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+  .notacion .kw { color: var(--code-accent); font-weight: 500; }
+  .notacion .ent { color: #8FB8FF; }
+  .notacion .attr { color: #C9D96B; }
+  .notacion .com { color: var(--code-muted); font-style: italic; }
+
+  h2.section-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 1.35rem;
+    margin: 0 0 4px;
+    scroll-margin-top: 24px;
+  }
+  .section-num {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    color: var(--accent-2);
+    display: block;
+    margin-bottom: 4px;
+  }
+  section.tema {
+    margin-top: 52px;
+    padding-top: 28px;
+    border-top: 1px solid var(--line-soft);
+  }
+  section.tema:first-of-type { border-top: none; }
+  h3.subtema {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    margin: 28px 0 8px;
+  }
+</style>
+
+
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">RA1 + RA2 &middot; Teoría</span>
+    <h1>Sintaxis básica</h1>
+    <p class="lede">Comentarios, variables sin tipado explícito, indentación en vez de llaves, y los elementos base del lenguaje: variables, métodos y operadores.</p>
+    <div class="meta-row">
+      <span class="meta-chip">RA1</span>
+      <span class="meta-chip">RA2</span>
+      <span class="meta-chip">Base del lenguaje</span>
+    </div>
+    <p style="margin-top:16px;"><a href="index.html" style="color:var(--accent-2);font-family:'IBM Plex Mono',monospace;font-size:13px;text-decoration:none;">&larr; Volver al índice del módulo</a></p>
+  </header>
+
+  <nav class="toc">
+    <p class="toc-title">Contenido</p>
+    <ol>
+      <li><a href="#reglas-basicas">Reglas básicas de sintaxis</a></li>
+      <li><a href="#variables">Variables</a></li>
+      <li><a href="#metodos">Métodos</a></li>
+      <li><a href="#operadores">Operadores</a></li>
+      <li><a href="#ejercicio">Ejercicio</a></li>
+    </ol>
+  </nav>
+
+  <section class="tema" id="reglas-basicas">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Reglas básicas de sintaxis</h2>
+    <p>Python es un lenguaje interpretado: no necesita compilador, así que las líneas de código se ejecutan una a una. Por eso su sintaxis es bastante simple. Algunos elementos que conviene tener siempre presentes:</p>
+
+    <h3 class="subtema">Comentarios</h3>
+    <p>Son las partes del código que no se ejecutan, y sirven como documentación. Para una sola línea se usa <code class="inline">#</code>; para varias líneas, comillas triples <code class="inline">"""</code> o <code class="inline">'''</code>.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="com"># petición de datos al usuario</span>
+nombre = input(<span class="str">"¿Cuál es tu nombre? "</span>)
+correo = input(<span class="str">"¿Cuál es tu correo? "</span>)
+edad = int(input(<span class="str">"¿Cuál es tu edad? "</span>))
+
+<span class="str">"""
+salida de datos por consola
+método de salida por consola con print y mostrar los datos obtenidos
+"""</span>
+print(
+    <span class="kw">f</span><span class="str">"El correo de {nombre} es {correo}, el cual cuenta con {len(correo)} caracteres con {edad} años"</span>
+)</code></pre>
+    </div>
+
+    <h3 class="subtema">Variables sin tipado explícito</h3>
+    <p>Una variable no necesita que se indique su tipo: este se asigna en el momento de darle un valor.</p>
+
+    <h3 class="subtema">Bloques sin llaves</h3>
+    <p>Es una de las cosas que más llama la atención al llegar de otro lenguaje: un bloque (función, estructura de control&hellip;) no se delimita con <code class="inline">{ }</code>, sino con <strong>indentación</strong> (tabulación o sangría).</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">if</span> edad &lt; <span class="hl">18</span>:
+    print(<span class="str">"El usuario es menor de edad, por lo que no puede acceder a la plataforma"</span>)
+<span class="kw">else</span>:
+    print(
+        <span class="kw">f</span><span class="str">"El correo de {nombre} es {correo}, el cual cuenta con {len(correo)} caracteres con {edad} años"</span>
+    )</code></pre>
+    </div>
+
+    <h3 class="subtema">Sin punto y coma</h3>
+    <p>No hace falta <code class="inline">;</code> para indicar el final de una línea &mdash; el propio salto de línea (Enter) ya lo indica.</p>
+  </section>
+
+  <section class="tema" id="variables">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Variables</h2>
+    <p>Las variables almacenan datos para poder acceder a ellos (o modificarlos) desde distintas partes del código. No hace falta indicar el tipo al declararlas &mdash; se determina al asignarles un valor &mdash; pero sí conviene conocer los tipos principales:</p>
+    <ul>
+      <li><code class="inline">int</code>: números enteros, sin decimales.</li>
+      <li><code class="inline">float</code>: números con decimales, con el punto (<code class="inline">.</code>) como separador.</li>
+      <li><code class="inline">str</code>: cadena de caracteres, entre comillas.</li>
+      <li><code class="inline">bool</code>: <code class="inline">True</code> o <code class="inline">False</code>, muy usado en decisiones lógicas.</li>
+      <li><code class="inline">list</code>: lista ordenada y dinámica.</li>
+      <li><code class="inline">tuple</code>: lista ordenada y estática (no se puede modificar).</li>
+      <li><code class="inline">dict</code>: diccionario, asociando pares clave&ndash;valor.</li>
+    </ul>
+    <p>No son todos los tipos que existen &mdash; también se pueden crear tipos propios con objetos &mdash;, pero sí los principales.</p>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Cambiar de tipo y consultarlo
+      </div>
+      <p>Se puede convertir una variable a otro tipo llamando al tipo de destino como si fuera una función, pasándole la variable a convertir:</p>
+      <div class="code-panel">
+        <div class="term-bar"><span></span><span></span><span></span></div>
+        <pre><code>numeroDecimal = <span class="hl">34.87</span>
+numeroEntero = int(numeroDecimal)
+print(<span class="kw">f</span><span class="str">"El número decimal es {numeroDecimal} y el número entero es {numeroEntero}"</span>)</code></pre>
+      </div>
+      <p>Y para saber de qué tipo es una variable, el método <code class="inline">type()</code>:</p>
+      <div class="code-panel">
+        <div class="term-bar"><span></span><span></span><span></span></div>
+        <pre><code>print(type(numeroDecimal))</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="tema" id="metodos">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Métodos</h2>
+    <p>Los métodos son las funcionalidades que se pueden ejecutar sobre un objeto. Se pueden crear métodos propios o usar los que el lenguaje ya trae. Para ejecutar uno, basta con escribir su nombre y, entre paréntesis, los parámetros que necesite:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code>print(<span class="str">"Mensaje a mostrar"</span>)</code></pre>
+    </div>
+    <p>Algunos de los métodos más habituales:</p>
+    <ul>
+      <li><code class="inline">input()</code>: lee un dato por teclado. Recibe como parámetro el texto de la petición.</li>
+      <li><code class="inline">print()</code>: escribe por consola el texto indicado.</li>
+      <li><code class="inline">upper()</code>, <code class="inline">lower()</code>: pasan un texto a mayúsculas o minúsculas.</li>
+      <li><code class="inline">strip()</code>: elimina espacios en blanco al principio y al final de un texto.</li>
+      <li><code class="inline">replace()</code>: sustituye un grupo de caracteres por otro.</li>
+      <li><code class="inline">find()</code>: devuelve la posición de un grupo de caracteres dentro de una palabra.</li>
+      <li><code class="inline">len()</code>: devuelve la longitud del objeto &mdash; caracteres en un string, elementos en una lista.</li>
+      <li><code class="inline">type()</code>: devuelve la clase del objeto.</li>
+      <li><code class="inline">int()</code>, <code class="inline">float()</code>: convierten al tipo correspondiente.</li>
+    </ul>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="com"># Pedimos al usuario que introduzca su nombre</span>
+nombre = input(<span class="str">"Introduce tu nombre: "</span>)
+
+<span class="com"># Limpiamos los espacios en blanco</span>
+nombre_limpio = nombre.strip()
+
+<span class="com"># Mostramos el nombre en diferentes formatos</span>
+print(<span class="str">"En mayúsculas:"</span>, nombre_limpio.upper())
+print(<span class="str">"En minúsculas:"</span>, nombre_limpio.lower())
+
+<span class="com"># Reemplazamos un nombre por otro, por ejemplo si alguien se llama "Juan"</span>
+nombre_modificado = nombre_limpio.replace(<span class="str">"Juan"</span>, <span class="str">"Juanjo"</span>)
+print(<span class="str">"Nombre con modificación:"</span>, nombre_modificado)
+
+<span class="com"># Buscamos si el apellido "Gómez" está en el nombre</span>
+posicion = nombre_limpio.find(<span class="str">"Gómez"</span>)
+<span class="kw">if</span> posicion != -<span class="hl">1</span>:
+    print(<span class="str">"El apellido 'Gómez' empieza en la posición:"</span>, posicion)
+<span class="kw">else</span>:
+    print(<span class="str">"El apellido 'Gómez' no se encuentra en el nombre."</span>)
+
+<span class="com"># Mostramos la longitud del nombre</span>
+print(<span class="str">"Número de caracteres:"</span>, len(nombre_limpio))
+
+<span class="com"># Mostramos el tipo de dato que es la variable nombre_limpio</span>
+print(<span class="str">"El tipo de dato de la variable es:"</span>, type(nombre_limpio))
+
+<span class="com"># Convertimos edad a número entero</span>
+edad_str = input(<span class="str">"¿Cuántos años tienes? "</span>)
+edad = int(edad_str)
+print(<span class="str">"Edad como número entero:"</span>, edad)
+
+<span class="com"># Mostramos también esa edad como número decimal (float)</span>
+edad_float = float(edad)
+print(<span class="str">"Edad como número decimal:"</span>, edad_float)</code></pre>
+    </div>
+  </section>
+
+  <section class="tema" id="operadores">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Operadores</h2>
+
+    <h3 class="subtema">Aritméticos</h3>
+    <ul>
+      <li><code class="inline">+</code> suma, <code class="inline">-</code> resta, <code class="inline">*</code> multiplicación, <code class="inline">**</code> potencia.</li>
+      <li><code class="inline">/</code> división &mdash; entre dos enteros da como resultado un <code class="inline">float</code>.</li>
+      <li><code class="inline">//</code> división entera.</li>
+      <li><code class="inline">%</code> módulo (resto de la división).</li>
+    </ul>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code>a = <span class="hl">10</span>
+b = <span class="hl">3</span>
+
+suma = a + b              <span class="com"># 13</span>
+resta = a - b              <span class="com"># 7</span>
+multiplicacion = a * b     <span class="com"># 30</span>
+division = a / b           <span class="com"># 3.333... (float)</span>
+division_entera = a // b   <span class="com"># 3</span>
+modulo = a % b              <span class="com"># 1</span>
+potencia = a ** b          <span class="com"># 10^3 = 1000</span></code></pre>
+    </div>
+
+    <h3 class="subtema">De comparación</h3>
+    <p>Devuelven siempre un booleano: <code class="inline">&gt;</code>, <code class="inline">&gt;=</code>, <code class="inline">&lt;</code>, <code class="inline">&lt;=</code>, <code class="inline">==</code> (igual), <code class="inline">!=</code> (distinto).</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code>a = <span class="hl">10</span>
+b = <span class="hl">5</span>
+
+igual = a == b            <span class="com"># False</span>
+diferente = a != b        <span class="com"># True</span>
+mayor_que = a &gt; b         <span class="com"># True</span>
+menor_que = a &lt; b         <span class="com"># False</span>
+mayor_o_igual = a &gt;= b    <span class="com"># True</span>
+menor_o_igual = a &lt;= b    <span class="com"># False</span></code></pre>
+    </div>
+
+    <h3 class="subtema">Lógicos</h3>
+    <ul>
+      <li><code class="inline">and</code>: verdadero solo si todas las condiciones lo son. Si la primera es falsa, el resto no se evalúa.</li>
+      <li><code class="inline">or</code>: verdadero si al menos una condición lo es. Si la primera es verdadera, el resto no se evalúa.</li>
+      <li><code class="inline">not</code>: invierte el valor booleano.</li>
+    </ul>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code>a = <span class="kw">True</span>
+b = <span class="kw">False</span>
+
+resultado_and = a and b   <span class="com"># True si ambos son True</span>
+resultado_or = a or b     <span class="com"># True si al menos uno es True</span>
+resultado_not_a = <span class="kw">not</span> a   <span class="com"># invierte el valor de a</span></code></pre>
+    </div>
+  </section>
+
+  <section class="tema" id="ejercicio">
+    <span class="section-num">05</span>
+    <h2 class="section-title">Ejercicio</h2>
+    <p>Imagina que tienes dos jugadores que introducen sus puntuaciones. El programa debe:</p>
+    <ul>
+      <li>Pedir el nombre y la puntuación de cada jugador.</li>
+      <li>Mostrar operaciones aritméticas entre las puntuaciones (suma, diferencia, etc.).</li>
+      <li>Comparar las puntuaciones y mostrar los resultados (<code class="inline">==</code>, <code class="inline">&gt;</code>, <code class="inline">&lt;</code>, etc.).</li>
+      <li>Mostrar expresiones lógicas compuestas sobre quién tiene más puntos, si son iguales, etc.</li>
+      <li>Mostrar todos los resultados como parte de un resumen.</li>
+    </ul>
+  </section>
+
+  <footer class="end">
+    Siguiente: estructuras de control y datos &mdash; condicionales, bucles, y las colecciones (listas, tuplas, diccionarios, conjuntos).
+  </footer>
+
+</div>

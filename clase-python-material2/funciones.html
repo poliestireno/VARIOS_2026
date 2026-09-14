@@ -1,0 +1,768 @@
+<title>Funciones en Python</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #3776AB;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #4C9AE0;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #5B9BD5;
+      --accent-ink: #0D1B2A;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #5B9BD5;
+    --accent-ink: #0D1B2A;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top {
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.08rem;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  section.block {
+    margin-top: 44px;
+  }
+
+  h2.block-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+
+  section.block p {
+    margin: 0 0 14px;
+  }
+
+  section.block ul {
+    margin: 0 0 14px;
+    padding-left: 22px;
+  }
+
+  section.block li {
+    margin-bottom: 6px;
+  }
+
+  h3.option-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: var(--ink);
+    margin: 40px 0 4px;
+  }
+
+  .checklist {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow);
+  }
+
+  .checklist li {
+    list-style: none;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 15px;
+    margin-bottom: 0;
+  }
+
+  .checklist ul { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+
+  .checklist svg {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    color: var(--accent-2);
+  }
+
+  .learn-list {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .learn-list li {
+    list-style: none;
+    padding-left: 20px;
+    position: relative;
+    color: var(--ink);
+    margin-bottom: 0;
+  }
+
+  .learn-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .step {
+    display: flex;
+    gap: 18px;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .step:first-of-type { border-top: none; padding-top: 0; }
+
+  .step-chip {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-body { flex: 1; min-width: 0; }
+
+  .step h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 4px 0 8px;
+  }
+
+  .step p {
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+
+  .step p.small {
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+
+  .term {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+
+  .term-bar span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--code-line);
+  }
+
+  .term pre {
+    margin: 0;
+    padding: 14px 16px 16px;
+    overflow-x: auto;
+  }
+
+  .term code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13.6px;
+    line-height: 1.7;
+    color: var(--code-ink);
+  }
+
+  .term .prompt { color: var(--code-muted); }
+  .term .cmt { color: var(--code-muted); }
+  .term .hl { color: var(--code-accent); }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .code-panel .term-bar { }
+
+  .code-panel pre {
+    margin: 0;
+    padding: 16px 18px 18px;
+    overflow-x: auto;
+  }
+
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+
+  .code-panel .tag { color: var(--accent-2); }
+  .code-panel .str { color: #C9D96B; }
+  .code-panel .kw { color: var(--code-accent); }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .prop { color: #8FB8FF; }
+  .code-panel .hl { color: var(--code-accent); }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+
+  .checkpoint p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .substep {
+    display: flex;
+    gap: 14px;
+    margin: 18px 0 0 16px;
+    padding-left: 16px;
+    border-left: 2px solid var(--line-soft);
+  }
+
+  .substep-chip {
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: var(--line-soft);
+    color: var(--muted);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 11.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .substep h4 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.98rem;
+    font-weight: 600;
+    margin: 2px 0 6px;
+  }
+
+  .substep p {
+    margin: 0 0 8px;
+    font-size: 14.5px;
+    color: var(--ink);
+  }
+
+  .substep .code-panel, .substep .term {
+    margin: 10px 0;
+  }
+
+  details.full-code {
+    margin-top: 16px;
+  }
+
+  details.full-code summary {
+    cursor: pointer;
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--accent-2);
+    list-style: none;
+  }
+
+  details.full-code summary::-webkit-details-marker { display: none; }
+
+  details.full-code summary::before {
+    content: "▸ ";
+  }
+
+  details.full-code[open] summary::before {
+    content: "▾ ";
+  }
+
+  .trouble {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .trouble-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .trouble-item .q {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    margin: 0 0 6px;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .trouble-item .q::before {
+    content: "?";
+    font-family: "IBM Plex Mono", monospace;
+    color: var(--accent-2);
+    font-weight: 500;
+  }
+
+  .trouble-item p {
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--muted);
+  }
+
+  .trouble-item p + p { margin-top: 8px; }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .step { transition: none; }
+  }
+
+  nav.toc {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 20px 0 0;
+    box-shadow: var(--shadow);
+  }
+  nav.toc .toc-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 12.5px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 10px;
+  }
+  nav.toc ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 24px; }
+  nav.toc li { font-size: 14px; margin-bottom: 6px; break-inside: avoid; }
+  nav.toc a { color: var(--ink); text-decoration: none; }
+  nav.toc a:hover { color: var(--accent-2); text-decoration: underline; }
+
+  .diagram {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    margin: 16px 0;
+    padding: 18px;
+    display: flex;
+    justify-content: center;
+    overflow-x: auto;
+  }
+  .diagram svg { max-width: 100%; height: auto; }
+  .diagram-caption {
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    margin: -8px 0 16px;
+  }
+
+  .notacion {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+  .notacion .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+  .notacion .term-bar span { width: 9px; height: 9px; border-radius: 50%; background: var(--code-line); }
+  .notacion pre { margin: 0; padding: 14px 18px 16px; overflow-x: auto; }
+  .notacion code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+  .notacion .kw { color: var(--code-accent); font-weight: 500; }
+  .notacion .ent { color: #8FB8FF; }
+  .notacion .attr { color: #C9D96B; }
+  .notacion .com { color: var(--code-muted); font-style: italic; }
+
+  h2.section-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 1.35rem;
+    margin: 0 0 4px;
+    scroll-margin-top: 24px;
+  }
+  .section-num {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    color: var(--accent-2);
+    display: block;
+    margin-bottom: 4px;
+  }
+  section.tema {
+    margin-top: 52px;
+    padding-top: 28px;
+    border-top: 1px solid var(--line-soft);
+  }
+  section.tema:first-of-type { border-top: none; }
+  h3.subtema {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    margin: 28px 0 8px;
+  }
+</style>
+
+
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">RA3 &middot; Teoría &middot; En construcción</span>
+    <h1>Funciones en Python</h1>
+    <p class="lede">Cómo dividir un programa en bloques reutilizables: definición y llamada de funciones, parámetros posicionales y nombrados, valores por defecto, y las formas de aceptar un número variable de argumentos.</p>
+    <div class="meta-row">
+      <span class="meta-chip">RA3</span>
+      <span class="meta-chip">Programación modular</span>
+      <span class="meta-chip">Página incompleta</span>
+    </div>
+    <p style="margin-top:16px;"><a href="index.html" style="color:var(--accent-2);font-family:'IBM Plex Mono',monospace;font-size:13px;text-decoration:none;">&larr; Volver al índice del módulo</a></p>
+  </header>
+
+  <div class="callout" style="margin-top:8px;">
+    <div class="callout-title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+      Página en construcción
+    </div>
+    <p>Cubre la definición de funciones, sus parámetros y <code class="inline">*args</code>/<code class="inline">**kwargs</code>. Faltan por añadir: <strong>uso del retorno</strong>, <strong>funciones lambda</strong>, el apartado de <strong>modularidad</strong> (el paso de parámetros por valor y por referencia que pide el RA3), conclusiones y referencias &mdash; en cuanto se reciba ese contenido, se completa igual que el resto.</p>
+  </div>
+
+  <nav class="toc">
+    <p class="toc-title">Contenido</p>
+    <ol>
+      <li><a href="#definicion-y-uso">Definición y uso</a></li>
+      <li><a href="#parametros">Uso de parámetros</a></li>
+      <li><a href="#tipos-parametros">Tipos de parámetros</a></li>
+      <li><a href="#args-kwargs">Uso de *args y **kwargs</a></li>
+    </ol>
+  </nav>
+
+  <section class="tema">
+    <span class="section-num">00</span>
+    <h2 class="section-title">Presentación</h2>
+    <p>A medida que los programas crecen en tamaño y complejidad, se hace indispensable dividir el código en bloques manejables y reutilizables. Aquí entran las <strong>funciones</strong>: permiten organizar el código de forma lógica, mejorar su legibilidad y facilitar el mantenimiento.</p>
+    <p>Imagina un programa donde ciertas funcionalidades son muy similares, coincidiendo en la mayoría de sus líneas. Para quien empieza, escribir dos veces el mismo código en partes distintas del programa no supone gran esfuerzo; pero según se adquiere soltura, esa práctica se vuelve pesada y nada recomendable. Es muy habitual tener que repetir ciertas acciones, o querer organizar mejor el código &mdash; no solo para que funcione de forma más eficaz, sino para que sea más fácil de leer, mantener y reutilizar. Un código bien modularizado simplifica mucho la tarea de retomarlo tras un tiempo sin tocarlo, o de leer un código heredado de otro equipo.</p>
+    <p>Una función no es más que un bloque de código con nombre, que se puede ejecutar siempre que haga falta sin volver a escribir todo lo que contiene. La idea es que encapsule una tarea concreta: mostrar un mensaje, calcular un promedio, validar una entrada&hellip; En vez de repetir el mismo código varias veces, se define una sola vez en una función y se reutiliza cada vez que se necesite.</p>
+    <p>Muchas veces el código no es siempre exactamente igual &mdash; hay datos que cambian, aunque la estructura general se mantenga. Aquí entran los <strong>parámetros</strong>: datos de entrada que la función admite para &ldquo;personalizarse&rdquo; cada vez que se la llama.</p>
+    <p>Las funciones, además de evitar la repetición, permiten estructurar mejor el programa: en vez de tener todo el código seguido, se divide en partes pequeñas, cada una con una función clara &mdash; más comprensible, más fácil de mantener y de depurar, siguiendo uno de los principales dogmas de la informática: <em>divide y vencerás</em>. También facilitan el trabajo en equipo: cada persona puede encargarse de una parte del código contenida en funciones distintas, que después se combinan en el programa completo.</p>
+    <p>Python ya trae funciones predefinidas, como <code class="inline">print()</code>, <code class="inline">input()</code> o <code class="inline">len()</code> &mdash; pero también se pueden crear funciones propias e incorporarlas al programa.</p>
+  </section>
+
+  <section class="tema" id="definicion-y-uso">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Definición y uso</h2>
+    <p>Antes de ver las palabras reservadas, un inciso sobre cómo nombrar funciones: lo más recomendable es usar nombres que describan claramente lo que hacen &mdash; claros, específicos y descriptivos, evitando abreviaturas confusas o palabras genéricas. Por convención se usan minúsculas, y si el nombre tiene varias palabras se separan con guion bajo (<code class="inline">_</code>): es el conocido <strong>snake_case</strong>. Si una función calcula la media de una lista de notas, un buen nombre sería <code class="inline">calcular_media</code>, no algo genérico como <code class="inline">funcion1</code> o <code class="inline">mediaNotas</code>.</p>
+    <p>A diferencia de otros lenguajes, definir una función en Python es muy sencillo: al no existir modificadores de acceso, basta con la palabra reservada <code class="inline">def</code>, seguida del nombre de la función.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">def</span> saludar():
+    print(<span class="str">"Hola desde la primera funcion"</span>)</code></pre>
+    </div>
+    <p>De nuevo, no existen llaves para delimitar el bloque de la función: se hace con indentación (4 espacios). Para ejecutar el código de <code class="inline">saludar</code>, se la llama incluyendo los paréntesis:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code>print(<span class="str">"Vamos a proceder a la llamada de la funcion"</span>)
+saludar()</code></pre>
+    </div>
+  </section>
+
+  <section class="tema" id="parametros">
+    <span class="section-num">02.1</span>
+    <h2 class="section-title">Uso de parámetros</h2>
+    <p>Al crear una función se le puede indicar una serie de datos de entrada &mdash; los <strong>parámetros</strong> &mdash; para personalizar lo que la función hace en cada llamada. Un parámetro es solo la referencia del dato dentro de la función; hasta que la función no se llama, no tiene ningún valor real.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">def</span> saludar(nombre):
+    print(<span class="kw">f</span><span class="str">"Hola {nombre}, espero que te encuentres bien."</span>)
+
+saludar(<span class="str">"Juan"</span>)</code></pre>
+    </div>
+    <p>La función admite un parámetro, <code class="inline">nombre</code>, que hay que pasarle al llamarla &mdash; el resultado sería <em>&ldquo;Hola Juan, espero que te encuentres bien&rdquo;</em>. Si se llama sin pasar el parámetro, se obtiene un error. Se pueden indicar tantos parámetros como haga falta:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">def</span> saludar(nombre, apellido, repeticiones):
+    <span class="kw">for</span> i <span class="kw">in</span> range(repeticiones):
+        print(<span class="kw">f</span><span class="str">"Hola {nombre} {apellido}, espero que te encuentres bien."</span>)
+
+saludar(<span class="str">"Juan"</span>, <span class="str">"Gomez"</span>, <span class="hl">3</span>)</code></pre>
+    </div>
+    <p>Este ejemplo repite el saludo tres veces, incluyendo también el apellido.</p>
+    <p>Para evitar el error al no pasar un parámetro, se puede indicar un <strong>valor por defecto</strong>: un valor que se asigna al parámetro si no se indica nada en la llamada.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">def</span> saludar(nombre, apellido, repeticiones=<span class="hl">1</span>):
+    <span class="kw">for</span> i <span class="kw">in</span> range(repeticiones):
+        print(<span class="kw">f</span><span class="str">"Hola {nombre} {apellido}, espero que te encuentres bien."</span>)
+
+saludar(<span class="str">"Marta"</span>, <span class="str">"Jiménez"</span>)       <span class="com"># repeticiones toma el valor 1</span>
+saludar(<span class="str">"Marta"</span>, <span class="str">"Jiménez"</span>, <span class="hl">3</span>)    <span class="com"># repeticiones toma el valor 3</span></code></pre>
+    </div>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Los parámetros con valor por defecto van al final
+      </div>
+      <p>Es imprescindible que los parámetros con valor por defecto estén al final de la lista de parámetros:</p>
+      <div class="code-panel">
+        <div class="term-bar"><span></span><span></span><span></span></div>
+        <pre><code><span class="com"># ❌ uso incorrecto</span>
+<span class="kw">def</span> saludar(nombre=<span class="str">"Juan"</span>, apellido, edad): ...
+
+<span class="com"># ✅ uso correcto</span>
+<span class="kw">def</span> saludar(nombre, apellido, edad=<span class="hl">18</span>, experiencia=<span class="kw">True</span>): ...</code></pre>
+      </div>
+      <p>En la primera función, al usar parámetros asociados a una posición, sería imposible ubicar el segundo parámetro si no se indica el primero. En la segunda, la llamada solo es válida si no se indica ni <code class="inline">edad</code> ni <code class="inline">experiencia</code>, o si no se indica solo <code class="inline">experiencia</code> &mdash; nunca al revés.</p>
+    </div>
+  </section>
+
+  <section class="tema" id="tipos-parametros">
+    <span class="section-num">02.2</span>
+    <h2 class="section-title">Tipos de parámetros</h2>
+    <p>Los parámetros separados por comas, con o sin valor por defecto, se conocen como <strong>parámetros posicionales</strong>, porque se asocian a una posición concreta:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">def</span> funcionParametros(param1, param2, param3):
+    print(<span class="kw">f</span><span class="str">"param1: {param1}, param2: {param2}, param3: {param3}"</span>)
+
+funcionParametros(<span class="str">"valor1"</span>, <span class="str">"valor2"</span>, <span class="str">"valor3"</span>)</code></pre>
+    </div>
+    <p>Para mejorar la legibilidad de una llamada, se pueden usar <strong>parámetros nombrados</strong>, sustituyendo la posición por el nombre del parámetro:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code>funcionParametros(param1=<span class="str">"valor2"</span>, param2=<span class="str">"valor3"</span>, param3=<span class="str">"valor1"</span>)</code></pre>
+    </div>
+    <p>Así queda mucho más claro qué dato corresponde a cada parámetro.</p>
+  </section>
+
+  <section class="tema" id="args-kwargs">
+    <span class="section-num">02.3</span>
+    <h2 class="section-title">Uso de *args y **kwargs</h2>
+    <p>A veces hace falta pasar un número indeterminado de datos, y ni los parámetros posicionales ni los nombrados sirven &mdash; por ejemplo, una función que calcule la media de una serie de números sin saber de antemano cuántos son. Para eso está <code class="inline">*args</code>, que convierte todos los parámetros pasados en una tupla (no mutable) para usarla dentro de la función.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">def</span> calculo_media(*notas):
+    media = <span class="hl">0.0</span>
+    print(<span class="kw">f</span><span class="str">"Procedo a calcular la media de {len(notas)} notas"</span>)
+    <span class="kw">for</span> i <span class="kw">in</span> notas:
+        media += i
+
+    media = media / len(notas)
+    print(<span class="kw">f</span><span class="str">"La media obtenida es de: {media}"</span>)
+
+calculo_media(<span class="hl">1</span>, <span class="hl">5</span>, <span class="hl">7</span>, <span class="hl">3</span>)
+calculo_media(<span class="hl">4</span>, <span class="hl">9</span>, <span class="hl">6</span>)</code></pre>
+    </div>
+    <p class="small" style="color:var(--muted);font-size:13.5px;">Con <code class="inline">*args</code>, al llamar a la función se pueden pasar tantos parámetros como se quiera.</p>
+    <p>La otra posibilidad es <code class="inline">**kwargs</code>: muy similar, pero los parámetros deben ir nombrados, y se convierten en un <strong>diccionario</strong> dentro de la función.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">def</span> importar_usuario(**kwargs):
+    print(<span class="str">"Los datos pasados del usuario son:"</span>)
+    <span class="kw">for</span> key, value <span class="kw">in</span> kwargs.items():
+        print(<span class="kw">f</span><span class="str">"{key}: {value}"</span>)
+
+importar_usuario(nombre=<span class="str">"Juan"</span>, apellido=<span class="str">"Gomez"</span>, edad=<span class="hl">25</span>, ciudad=<span class="str">"Madrid"</span>)</code></pre>
+    </div>
+    <p>Cada parámetro nombrado pasa a formar parte de un diccionario, donde la clave es el nombre del parámetro y el valor, el dato asociado. Es especialmente útil cuando la información que hay que pasar a la función no es siempre la misma &mdash; la función puede convertir todos los datos recibidos en una única estructura. Ambos tipos, <code class="inline">*args</code> y <code class="inline">**kwargs</code>, se pueden combinar en la misma función.</p>
+  </section>
+
+  <footer class="end">
+    Pendiente de completar: uso del retorno, funciones lambda, modularidad (paso por valor/referencia), conclusiones y referencias.
+  </footer>
+
+</div>

@@ -1,0 +1,519 @@
+<title>Temario PEP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #3776AB;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #5B9BD5;
+      --accent-ink: #0D1B2A;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #5B9BD5;
+    --accent-ink: #0D1B2A;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top { margin-bottom: 36px; }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.9rem, 4.5vw, 2.5rem);
+    line-height: 1.14;
+    letter-spacing: -0.01em;
+    margin: 16px 0 8px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.05rem;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .meta-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .overview-wrap { overflow-x: auto; margin-top: 8px; }
+
+  table.overview {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    font-size: 14.5px;
+  }
+
+  table.overview th {
+    text-align: left;
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 12.5px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  table.overview td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--line-soft);
+    vertical-align: top;
+  }
+
+  table.overview tr:last-child td { border-bottom: none; }
+
+  table.overview td.num { font-variant-numeric: tabular-nums; color: var(--muted); }
+
+  table.overview .block-name { font-weight: 600; }
+  table.overview .block-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 8px;
+  }
+
+  section.phase { margin-top: 56px; }
+
+  .phase-head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+  }
+
+  .phase-num {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    color: var(--accent-2);
+    font-weight: 500;
+  }
+
+  h2.phase-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 1.4rem;
+    margin: 0;
+  }
+
+  .phase-meta {
+    color: var(--muted);
+    font-size: 13.5px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    margin-left: auto;
+    white-space: nowrap;
+  }
+
+  .phase-summary {
+    color: var(--muted);
+    font-size: 15px;
+    max-width: 62ch;
+    margin: 6px 0 24px;
+  }
+
+  .session {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-top: 12px;
+    box-shadow: var(--shadow);
+    display: flex;
+    gap: 14px;
+  }
+
+  .session-chip {
+    flex: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .session-body { flex: 1; min-width: 0; }
+
+  .session h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.02rem;
+    font-weight: 600;
+    margin: 0 0 5px;
+  }
+
+  .session h3 a {
+    color: inherit;
+    text-decoration: none;
+    background-image: linear-gradient(var(--accent-2), var(--accent-2));
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 0% 1.5px;
+    transition: background-size 0.15s ease;
+    padding-bottom: 1px;
+  }
+
+  .session h3 a:hover,
+  .session h3 a:focus-visible {
+    color: var(--accent-2);
+    background-size: 100% 1.5px;
+  }
+
+  .session h3 a::after {
+    content: " \2197";
+    font-size: 0.8em;
+    color: var(--muted);
+  }
+
+  .session p.objetivo {
+    margin: 0 0 8px;
+    color: var(--ink);
+    font-size: 14.5px;
+  }
+
+  .session .linea {
+    font-size: 13.5px;
+    color: var(--muted);
+    margin: 4px 0 0;
+  }
+
+  .session .linea strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .session .practica {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px dashed var(--line);
+    font-size: 13.5px;
+  }
+
+  .session .practica strong { color: var(--accent-2); }
+
+  .proximamente {
+    background: var(--surface);
+    border: 1px dashed var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-top: 12px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .proximamente strong { color: var(--ink); }
+
+  footer.end {
+    margin-top: 56px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+</style>
+
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">Temario de módulo &middot; 2&ordm; ASIR</span>
+    <h1>Programación en Python</h1>
+    <p class="lede">De la sintaxis básica a la programación orientada a objetos, con Python como hilo conductor. Todos los desafíos encajan en las evaluaciones 1 y 2; la evaluación 3 corresponde a la FFE (Formación en Centros de Trabajo), sin bloques de contenido propios.</p>
+    <div class="meta-row">
+      <span class="meta-chip">5 bloques (RA1&ndash;RA6)</span>
+      <span class="meta-chip">6 desafíos</span>
+      <span class="meta-chip">41 días de grupo</span>
+      <span class="meta-chip">Eval. 3 = FFE</span>
+    </div>
+  </header>
+
+  <div class="overview-wrap">
+    <table class="overview">
+      <thead>
+        <tr>
+          <th>Bloque</th>
+          <th>% eval.</th>
+          <th>Desafíos</th>
+          <th>Días</th>
+          <th>Evaluación</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="block-name"><span class="block-dot" style="background:#3776AB"></span>RA1 + RA2</td>
+          <td class="num">34%</td>
+          <td class="num">2</td>
+          <td class="num">12</td>
+          <td class="num">Eval. 1</td>
+        </tr>
+        <tr>
+          <td class="block-name"><span class="block-dot" style="background:#0F8B8D"></span>RA3</td>
+          <td class="num">33%</td>
+          <td class="num">2</td>
+          <td class="num">14</td>
+          <td class="num">Eval. 1 &rarr; 2</td>
+        </tr>
+        <tr>
+          <td class="block-name"><span class="block-dot" style="background:#E4572E"></span>RA4 + RA5</td>
+          <td class="num">33%</td>
+          <td class="num">2</td>
+          <td class="num">15</td>
+          <td class="num">Eval. 2</td>
+        </tr>
+        <tr>
+          <td class="block-name"><span class="block-dot" style="background:#7c6bd8"></span>RA6</td>
+          <td class="num">&mdash;</td>
+          <td class="num">&mdash;</td>
+          <td class="num">&mdash;</td>
+          <td class="num">&mdash;</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="color:var(--muted);font-size:13.5px;margin-top:10px;">Encaje orientativo, puede sufrir cambios. Las duraciones de los desafíos también son estimadas y ajustables.</p>
+
+  <!-- BLOQUE 1: RA1+RA2 -->
+  <section class="phase">
+    <div class="phase-head">
+      <span class="phase-num">Bloque 1 &middot; 34% de la evaluación</span>
+      <h2 class="phase-title">RA1 + RA2 &middot; Fundamentos del lenguaje</h2>
+      <span class="phase-meta">2 desafíos &middot; 12 días de grupo &middot; Eval. 1</span>
+    </div>
+    <p class="phase-summary"><strong>RA1.</strong> Reconoce la estructura de un programa informático, identificando y relacionando los elementos propios del lenguaje de programación utilizado. <strong>RA2.</strong> Escribe y depura código, analizando y utilizando las estructuras de control del lenguaje.</p>
+
+    <h3 style="font-family:'Lexend',sans-serif;font-weight:600;font-size:1.05rem;margin:28px 0 4px;">Teoría</h3>
+    <div class="session">
+      <div class="session-chip">T1</div>
+      <div class="session-body">
+        <h3><a href="presentacion.html">Presentación: qué es Python y cómo montar el entorno</a></h3>
+        <p class="objetivo">Qué es Python, para qué se usa, instalación del intérprete, y elección y configuración de VS Code con sus extensiones. Primer script de comprobación.</p>
+      </div>
+    </div>
+    <div class="session">
+      <div class="session-chip">T2</div>
+      <div class="session-body">
+        <h3><a href="sintaxis-basica.html">Sintaxis básica</a></h3>
+        <p class="objetivo">Comentarios, indentación en vez de llaves, variables sin tipado explícito, tipos de datos, métodos de uso común y operadores aritméticos, de comparación y lógicos.</p>
+      </div>
+    </div>
+    <div class="session">
+      <div class="session-chip">T3</div>
+      <div class="session-body">
+        <h3><a href="estructuras-control-y-datos.html#control-flujo">Estructuras de control</a></h3>
+        <p class="objetivo">Condicionales (if / if-else / if-elif-else, match) y bucles (for, while) &mdash; la parte de control del flujo de la unidad de estructuras de control y datos.</p>
+      </div>
+    </div>
+
+    <h3 style="font-family:'Lexend',sans-serif;font-weight:600;font-size:1.05rem;margin:28px 0 4px;">Desafíos</h3>
+    <div class="session">
+      <div class="session-chip">D1</div>
+      <div class="session-body">
+        <h3>RA12_EXTENSIONES_VSC_PYTHON</h3>
+        <p class="objetivo">A partir del nombre: configuración del entorno de Python en VS Code y sus extensiones.</p>
+        <p class="practica"><strong>Duración:</strong> 5 días</p>
+      </div>
+    </div>
+    <div class="session">
+      <div class="session-chip">D2</div>
+      <div class="session-body">
+        <h3>RA12_NAVARREDONDA_PYTHON</h3>
+        <p class="objetivo">Enunciado pendiente de recibir.</p>
+        <p class="practica"><strong>Duración:</strong> 7 días</p>
+      </div>
+    </div>
+    <div class="proximamente">
+      <strong>Enunciados pendientes.</strong> Igual que con GBD, en cuanto me pases el documento de cada desafío lo convierto en una página propia con sus pasos, en vez de quedarse solo en el título.
+    </div>
+  </section>
+
+  <!-- BLOQUE 2: RA3 -->
+  <section class="phase">
+    <div class="phase-head">
+      <span class="phase-num">Bloque 2 &middot; 33% de la evaluación</span>
+      <h2 class="phase-title">RA3 &middot; Programación modular</h2>
+      <span class="phase-meta">2 desafíos &middot; 14 días de grupo &middot; Eval. 1 &rarr; 2</span>
+    </div>
+    <p class="phase-summary"><strong>RA3.</strong> Escribe código utilizando programación modular. Conoce la diferencia entre el paso de parámetros por valor y por referencia.</p>
+
+    <h3 style="font-family:'Lexend',sans-serif;font-weight:600;font-size:1.05rem;margin:28px 0 4px;">Teoría</h3>
+    <div class="session">
+      <div class="session-chip">T4</div>
+      <div class="session-body">
+        <h3><a href="funciones.html">Funciones</a></h3>
+        <p class="objetivo">Definición y llamada de funciones, parámetros posicionales y nombrados, valores por defecto, <code class="inline">*args</code> y <code class="inline">**kwargs</code>.</p>
+        <p class="linea" style="margin-top:8px;">Página en construcción: faltan el uso del retorno, las funciones lambda y el apartado de modularidad &mdash; en cuanto me pases el resto del tema los añado.</p>
+      </div>
+    </div>
+
+    <h3 style="font-family:'Lexend',sans-serif;font-weight:600;font-size:1.05rem;margin:28px 0 4px;">Desafíos</h3>
+    <div class="session">
+      <div class="session-chip">D3</div>
+      <div class="session-body">
+        <h3>RA3_FASTEST_TURTLE</h3>
+        <p class="objetivo">A partir del nombre: probablemente un ejercicio con el módulo <code class="inline">turtle</code> de Python. Enunciado pendiente de recibir para confirmarlo.</p>
+        <p class="practica"><strong>Duración:</strong> 7 días</p>
+      </div>
+    </div>
+    <div class="session">
+      <div class="session-chip">D4</div>
+      <div class="session-body">
+        <h3>RA3_JUTGE_DREDD</h3>
+        <p class="objetivo">Enunciado pendiente de recibir.</p>
+        <p class="practica"><strong>Duración:</strong> 7 días</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOQUE 3: RA4+RA5 -->
+  <section class="phase">
+    <div class="phase-head">
+      <span class="phase-num">Bloque 3 &middot; 33% de la evaluación</span>
+      <h2 class="phase-title">RA4 + RA5 &middot; Tipos avanzados y E/S</h2>
+      <span class="phase-meta">2 desafíos &middot; 15 días de grupo &middot; Eval. 2</span>
+    </div>
+    <p class="phase-summary"><strong>RA4.</strong> Escribe programas que manipulen información, seleccionando y utilizando tipos avanzados de datos. <strong>RA5.</strong> Realiza operaciones de entrada y salida de información, utilizando procedimientos específicos del lenguaje y librerías de clases.</p>
+
+    <h3 style="font-family:'Lexend',sans-serif;font-weight:600;font-size:1.05rem;margin:28px 0 4px;">Teoría</h3>
+    <div class="session">
+      <div class="session-chip">T3</div>
+      <div class="session-body">
+        <h3><a href="estructuras-control-y-datos.html#estructuras-datos">Tipos avanzados de datos</a></h3>
+        <p class="objetivo">Listas, tuplas, diccionarios y conjuntos &mdash; creación, acceso, modificación y métodos habituales de cada uno. La parte de estructuras de datos de la misma unidad que el Bloque 1.</p>
+      </div>
+    </div>
+    <div class="proximamente">
+      <strong>Entrada/salida con librerías de clases (RA5).</strong> Todavía no hay teoría propia para esta parte &mdash; en el temario original vendría después de Funciones. Pendiente de recibir.
+    </div>
+
+    <h3 style="font-family:'Lexend',sans-serif;font-weight:600;font-size:1.05rem;margin:28px 0 4px;">Desafíos</h3>
+    <div class="session">
+      <div class="session-chip">D5</div>
+      <div class="session-body">
+        <h3>RA45_ATRACCIONES_PYTHON_VISUAL</h3>
+        <p class="objetivo">Enunciado pendiente de recibir.</p>
+        <p class="practica"><strong>Duración:</strong> 7 días</p>
+      </div>
+    </div>
+    <div class="session">
+      <div class="session-chip">D6</div>
+      <div class="session-body">
+        <h3>RA45_Flask_Gordon</h3>
+        <p class="objetivo">A partir del nombre: un desafío con el framework web <code class="inline">Flask</code>. Enunciado pendiente de recibir para confirmarlo.</p>
+        <p class="practica"><strong>Duración:</strong> 8 días</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOQUE 4: RA6 -->
+  <section class="phase">
+    <div class="phase-head">
+      <span class="phase-num">Bloque 4</span>
+      <h2 class="phase-title">RA6 &middot; Programación orientada a objetos</h2>
+      <span class="phase-meta">Sin desafíos todavía &middot; sin % asignado</span>
+    </div>
+    <p class="phase-summary"><strong>RA6.</strong> Desarrolla programas organizados en clases, analizando y aplicando los principios de la programación orientada a objetos.</p>
+    <div class="proximamente">
+      <strong>Sin teoría ni actividades todavía.</strong> Es el último tema del temario original (clases, objetos, herencia&hellip;), pendiente de recibir el contenido.
+    </div>
+  </section>
+
+  <footer class="end">
+    <p>Los bloques 1 y 2 (RA1+RA2 y RA3) van en la primera evaluación: primero los fundamentos del lenguaje, después la programación modular. El bloque 3 (RA4+RA5) se cierra en la segunda evaluación. El bloque 4 (RA6, POO) todavía no tiene desafíos ni porcentaje asignado. La evaluación 3 es la FFE, sin contenido de aula.</p>
+  </footer>
+
+</div>

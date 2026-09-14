@@ -1,0 +1,1016 @@
+<title>Estructuras de control y datos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #3776AB;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #4C9AE0;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #5B9BD5;
+      --accent-ink: #0D1B2A;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #5B9BD5;
+    --accent-ink: #0D1B2A;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top {
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.08rem;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  section.block {
+    margin-top: 44px;
+  }
+
+  h2.block-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+
+  section.block p {
+    margin: 0 0 14px;
+  }
+
+  section.block ul {
+    margin: 0 0 14px;
+    padding-left: 22px;
+  }
+
+  section.block li {
+    margin-bottom: 6px;
+  }
+
+  h3.option-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: var(--ink);
+    margin: 40px 0 4px;
+  }
+
+  .checklist {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow);
+  }
+
+  .checklist li {
+    list-style: none;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 15px;
+    margin-bottom: 0;
+  }
+
+  .checklist ul { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+
+  .checklist svg {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    color: var(--accent-2);
+  }
+
+  .learn-list {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .learn-list li {
+    list-style: none;
+    padding-left: 20px;
+    position: relative;
+    color: var(--ink);
+    margin-bottom: 0;
+  }
+
+  .learn-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .step {
+    display: flex;
+    gap: 18px;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .step:first-of-type { border-top: none; padding-top: 0; }
+
+  .step-chip {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-body { flex: 1; min-width: 0; }
+
+  .step h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 4px 0 8px;
+  }
+
+  .step p {
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+
+  .step p.small {
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+
+  .term {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+
+  .term-bar span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--code-line);
+  }
+
+  .term pre {
+    margin: 0;
+    padding: 14px 16px 16px;
+    overflow-x: auto;
+  }
+
+  .term code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13.6px;
+    line-height: 1.7;
+    color: var(--code-ink);
+  }
+
+  .term .prompt { color: var(--code-muted); }
+  .term .cmt { color: var(--code-muted); }
+  .term .hl { color: var(--code-accent); }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .code-panel .term-bar { }
+
+  .code-panel pre {
+    margin: 0;
+    padding: 16px 18px 18px;
+    overflow-x: auto;
+  }
+
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+
+  .code-panel .tag { color: var(--accent-2); }
+  .code-panel .str { color: #C9D96B; }
+  .code-panel .kw { color: var(--code-accent); }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .prop { color: #8FB8FF; }
+  .code-panel .hl { color: var(--code-accent); }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+
+  .checkpoint p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .substep {
+    display: flex;
+    gap: 14px;
+    margin: 18px 0 0 16px;
+    padding-left: 16px;
+    border-left: 2px solid var(--line-soft);
+  }
+
+  .substep-chip {
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: var(--line-soft);
+    color: var(--muted);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 11.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .substep h4 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.98rem;
+    font-weight: 600;
+    margin: 2px 0 6px;
+  }
+
+  .substep p {
+    margin: 0 0 8px;
+    font-size: 14.5px;
+    color: var(--ink);
+  }
+
+  .substep .code-panel, .substep .term {
+    margin: 10px 0;
+  }
+
+  details.full-code {
+    margin-top: 16px;
+  }
+
+  details.full-code summary {
+    cursor: pointer;
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--accent-2);
+    list-style: none;
+  }
+
+  details.full-code summary::-webkit-details-marker { display: none; }
+
+  details.full-code summary::before {
+    content: "▸ ";
+  }
+
+  details.full-code[open] summary::before {
+    content: "▾ ";
+  }
+
+  .trouble {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .trouble-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .trouble-item .q {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    margin: 0 0 6px;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .trouble-item .q::before {
+    content: "?";
+    font-family: "IBM Plex Mono", monospace;
+    color: var(--accent-2);
+    font-weight: 500;
+  }
+
+  .trouble-item p {
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--muted);
+  }
+
+  .trouble-item p + p { margin-top: 8px; }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .step { transition: none; }
+  }
+
+  nav.toc {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 20px 0 0;
+    box-shadow: var(--shadow);
+  }
+  nav.toc .toc-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 12.5px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 10px;
+  }
+  nav.toc ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 24px; }
+  nav.toc li { font-size: 14px; margin-bottom: 6px; break-inside: avoid; }
+  nav.toc a { color: var(--ink); text-decoration: none; }
+  nav.toc a:hover { color: var(--accent-2); text-decoration: underline; }
+
+  .diagram {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    margin: 16px 0;
+    padding: 18px;
+    display: flex;
+    justify-content: center;
+    overflow-x: auto;
+  }
+  .diagram svg { max-width: 100%; height: auto; }
+  .diagram-caption {
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    margin: -8px 0 16px;
+  }
+
+  .notacion {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+  .notacion .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+  .notacion .term-bar span { width: 9px; height: 9px; border-radius: 50%; background: var(--code-line); }
+  .notacion pre { margin: 0; padding: 14px 18px 16px; overflow-x: auto; }
+  .notacion code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+  .notacion .kw { color: var(--code-accent); font-weight: 500; }
+  .notacion .ent { color: #8FB8FF; }
+  .notacion .attr { color: #C9D96B; }
+  .notacion .com { color: var(--code-muted); font-style: italic; }
+
+  h2.section-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 1.35rem;
+    margin: 0 0 4px;
+    scroll-margin-top: 24px;
+  }
+  .section-num {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    color: var(--accent-2);
+    display: block;
+    margin-bottom: 4px;
+  }
+  section.tema {
+    margin-top: 52px;
+    padding-top: 28px;
+    border-top: 1px solid var(--line-soft);
+  }
+  section.tema:first-of-type { border-top: none; }
+  h3.subtema {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    margin: 28px 0 8px;
+  }
+</style>
+
+
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">RA1 + RA2 &middot; RA4 &middot; Teoría</span>
+    <h1>Estructuras de control y datos</h1>
+    <p class="lede">Cómo hacer que un programa tome decisiones y repita acciones (control del flujo), y cómo agrupar varios datos relacionados en una sola variable (listas, tuplas, diccionarios y conjuntos).</p>
+    <div class="meta-row">
+      <span class="meta-chip">RA2</span>
+      <span class="meta-chip">RA4</span>
+      <span class="meta-chip">if / for / while / colecciones</span>
+    </div>
+    <p style="margin-top:16px;"><a href="index.html" style="color:var(--accent-2);font-family:'IBM Plex Mono',monospace;font-size:13px;text-decoration:none;">&larr; Volver al índice del módulo</a></p>
+  </header>
+
+  <nav class="toc">
+    <p class="toc-title">Contenido</p>
+    <ol>
+      <li><a href="#control-flujo">Control del flujo</a></li>
+      <li><a href="#seleccion">Estructuras de selección</a></li>
+      <li><a href="#repeticion">Estructuras de repetición</a></li>
+      <li><a href="#estructuras-datos">Estructuras de datos</a></li>
+      <li><a href="#list">List</a></li>
+      <li><a href="#tuplas">Tuplas</a></li>
+      <li><a href="#diccionarios">Diccionarios</a></li>
+      <li><a href="#conjuntos">Conjuntos</a></li>
+    </ol>
+  </nav>
+
+  <section class="tema">
+    <span class="section-num">00</span>
+    <h2 class="section-title">Presentación</h2>
+    <p>En programación, rara vez un código se ejecuta de manera secuencial, línea por línea, sin necesidad de tomar decisiones o repetir partes. Las <strong>estructuras de control</strong> permiten que un programa &ldquo;elija&rdquo; distintos caminos de ejecución y repita acciones automáticamente, lo que resulta en un código más eficiente y manejable. Además, las <strong>estructuras de datos</strong> permiten guardar en una sola variable un conjunto de elementos para poder acceder a ellos de forma unificada &mdash; según lo que necesite el código, se usarán listas, tuplas, diccionarios o conjuntos.</p>
+  </section>
+
+  <section class="tema" id="control-flujo">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Control del flujo</h2>
+    <p>Estas estructuras son importantes por varios motivos:</p>
+    <ul>
+      <li>Permiten la toma de decisiones mediante estructuras condicionales o de selección: <code class="inline">if</code>, <code class="inline">if/else</code>, <code class="inline">if/elif/else</code>.</li>
+      <li>Permiten repetir código automáticamente, iterando sobre una colección o sobre una condición lógica: <code class="inline">for</code>, <code class="inline">while</code>.</li>
+      <li>Añaden claridad y facilidad de mantenimiento, al permitir modularizar el código y hacerlo más comprensible y gestionable.</li>
+    </ul>
+    <p>Separar bien las secciones de decisión y de iteración ayuda a estructurar el código, facilita su lectura y reduce errores al ampliarlo o corregirlo.</p>
+    <p>Antes de ver cada estructura, recuerda que en Python los bloques no se delimitan con llaves (como en Java, C# o JavaScript), sino con <strong>indentación</strong> (4 espacios). El bloque que pertenece a un <code class="inline">if</code>, un <code class="inline">for</code>, un <code class="inline">while</code> o una función debe llevar sangría; cuando la indentación vuelve al nivel anterior, el bloque termina.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code>edad = <span class="hl">10</span>
+<span class="kw">if</span> edad &lt; <span class="hl">18</span>:
+    print(<span class="str">"El usuario es menor de edad"</span>)
+<span class="kw">elif</span> edad &lt; <span class="hl">65</span>:
+    print(<span class="str">"El usuario está en edad laboral"</span>)
+<span class="kw">else</span>:
+    print(<span class="str">"El usuario ha alcanzado la jubilación"</span>)
+
+print(<span class="str">"Mensaje ejecutado fuera del bloque"</span>)</code></pre>
+    </div>
+  </section>
+
+  <section class="tema" id="seleccion">
+    <span class="section-num">01.1</span>
+    <h2 class="section-title">Estructuras de selección</h2>
+    <p>Permiten indicar qué parte del código se debe ejecutar en función de un valor o una condición lógica.</p>
+
+    <h3 class="subtema">if &mdash; if/else &mdash; if/elif/else</h3>
+    <p>Python ejecuta un bloque u otro según se cumpla o no una condición booleana. Se puede usar una sola condición (<code class="inline">if</code>), dos (<code class="inline">if/else</code>) o varias (<code class="inline">if/elif/else</code>) &mdash; solo una de ellas se considera correcta, y en cuanto se cumple una, el resto no se evalúan.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code>numero = int(input(<span class="str">"Por favor introduce el valor numérico que quieres evaluar "</span>))
+
+<span class="kw">if</span> numero &lt; <span class="hl">0</span> <span class="kw">or</span> numero &gt;= <span class="hl">100</span>:
+    print(<span class="str">"Valor no válido"</span>)
+<span class="kw">else</span>:
+    <span class="kw">if</span> numero &lt; <span class="hl">10</span>:
+        print(<span class="str">"valor entre 0 y 10"</span>)
+    <span class="kw">elif</span> numero &lt; <span class="hl">100</span>:
+        print(<span class="str">"valor de 2 cifras menor que 100"</span>)</code></pre>
+    </div>
+
+    <h3 class="subtema">match</h3>
+    <p>Cuando se quiere ejecutar un código directamente asociado al valor de una variable, encadenar <code class="inline">if</code> puede resultar tedioso. La estructura <code class="inline">match</code> evalúa el valor de una variable y ejecuta directamente el caso correspondiente, pudiendo definir un caso por defecto con <code class="inline">_</code>.</p>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Requiere Python 3.10+
+      </div>
+      <p>La estructura <code class="inline">match</code> solo funciona a partir de Python 3.10 &mdash; comprueba tu versión con <code class="inline">python --version</code> antes de usarla.</p>
+    </div>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code>opcion = input(<span class="str">"Selecciona una opción (1, 2, 3): "</span>)
+<span class="kw">match</span> opcion:
+    <span class="kw">case</span> <span class="str">"1"</span>:
+        print(<span class="str">"Has seleccionado la opción 1: Ver perfil."</span>)
+    <span class="kw">case</span> <span class="str">"2"</span>:
+        print(<span class="str">"Has seleccionado la opción 2: Editar perfil."</span>)
+    <span class="kw">case</span> <span class="str">"3"</span>:
+        print(<span class="str">"Has seleccionado la opción 3: Cerrar sesión."</span>)
+    <span class="kw">case</span> _:
+        print(<span class="str">"Opción no válida. Inténtalo de nuevo."</span>)</code></pre>
+    </div>
+  </section>
+
+  <section class="tema" id="repeticion">
+    <span class="section-num">01.2</span>
+    <h2 class="section-title">Estructuras de repetición</h2>
+    <p>Permiten ejecutar un bloque de código recurrente sin escribir n veces las mismas líneas &mdash; muy útiles para recorrer colecciones de datos o repetir una acción mientras se cumpla una condición.</p>
+
+    <h3 class="subtema">for</h3>
+    <p>Ejecuta un bloque en un rango determinado, usando <code class="inline">range()</code> con valor inicial, final e incremento. En cada iteración, la variable toma un nuevo valor.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">for</span> i <span class="kw">in</span> range(<span class="hl">1</span>, <span class="hl">10</span>, <span class="hl">3</span>):
+    print(i)
+<span class="com"># salida: 1, 4, 7</span></code></pre>
+    </div>
+    <p>Para un decremento, se usa un incremento negativo en <code class="inline">range()</code>:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">for</span> i <span class="kw">in</span> range(<span class="hl">10</span>, <span class="hl">1</span>, -<span class="hl">3</span>):
+    print(i)</code></pre>
+    </div>
+    <p>También se puede recorrer directamente una colección de datos, en vez de un rango &mdash; la variable toma cada uno de los elementos de la colección:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">for</span> i <span class="kw">in</span> [<span class="hl">1</span>,<span class="hl">2</span>,<span class="hl">3</span>,<span class="hl">4</span>,<span class="hl">5</span>,<span class="hl">6</span>,<span class="hl">7</span>,<span class="hl">8</span>,<span class="hl">9</span>,<span class="hl">10</span>]:
+    print(i)
+
+alumnos = [<span class="str">"Juan"</span>, <span class="str">"Maria"</span>, <span class="str">"Jorge"</span>, <span class="str">"Claudia"</span>, <span class="str">"Marcos"</span>, <span class="str">"Celia"</span>]
+<span class="kw">for</span> i <span class="kw">in</span> alumnos:
+    print(i)
+<span class="com"># i va tomando los valores de la colección</span></code></pre>
+    </div>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Bucles anidados
+      </div>
+      <p>Dentro de una estructura de control se pueden usar tantas estructuras como haga falta, incluso anidando el mismo tipo:</p>
+      <div class="code-panel">
+        <div class="term-bar"><span></span><span></span><span></span></div>
+        <pre><code><span class="kw">for</span> i <span class="kw">in</span> range(<span class="hl">1</span>, <span class="hl">10</span>):
+    print(<span class="kw">f</span><span class="str">"Tabla del {i}"</span>)
+    <span class="kw">for</span> j <span class="kw">in</span> range(<span class="hl">1</span>, <span class="hl">10</span>):
+        print(<span class="kw">f</span><span class="str">"{i}*{j}={i*j}"</span>)</code></pre>
+      </div>
+    </div>
+
+    <h3 class="subtema">while</h3>
+    <p>Repite un bloque mientras se cumpla una condición lógica. La condición se evalúa <strong>antes</strong> de ejecutar el bloque, así que puede llegar a no ejecutarse nunca.</p>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Cuidado con el bucle infinito
+      </div>
+      <p>La condición de evaluación tiene que cambiar en algún momento dentro del bloque. Si no, la repetición entra en un bucle infinito, a no ser que se use <code class="inline">break</code>.</p>
+    </div>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code>contador = <span class="hl">1</span>
+<span class="kw">while</span> contador &lt;= <span class="hl">5</span>:
+    print(<span class="str">"Valor:"</span>, contador)
+    contador += <span class="hl">1</span>
+print(<span class="str">"Saliendo del bloque while"</span>)</code></pre>
+    </div>
+    <p>Un ejemplo más cercano al mundo real: bloquear la aplicación hasta que el login sea correcto.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code>nombre = input(<span class="str">"introduce el nombre del usuario"</span>)
+password = input(<span class="str">"introduce la pass del usuario"</span>)
+
+<span class="kw">while</span> nombre != <span class="str">"admin"</span> <span class="kw">or</span> password != <span class="str">"admin"</span>:
+    print(<span class="str">"Login incorrecto"</span>)
+    nombre = input(<span class="str">"introduce el nombre del usuario"</span>)
+    password = input(<span class="str">"introduce la pass del usuario"</span>)
+
+print(<span class="str">"Login correcto, puedes continuar"</span>)</code></pre>
+    </div>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Python no tiene do-while
+      </div>
+      <p>Se puede simular con <code class="inline">while True</code> y un <code class="inline">break</code> cuando no se cumpla la condición de salida:</p>
+      <div class="code-panel">
+        <div class="term-bar"><span></span><span></span><span></span></div>
+        <pre><code><span class="kw">while</span> <span class="kw">True</span>:
+    numero = int(input(<span class="str">"Introduce la opción a mostrar: "</span>))
+    <span class="kw">if</span> numero == <span class="hl">7</span>:
+        print(<span class="str">"Has seleccionado la opción de salir"</span>)
+        <span class="kw">break</span>
+    print(<span class="str">"Vuelve a seleccionar una opción."</span>)
+print(<span class="str">"Saliendo"</span>)</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="tema" id="estructuras-datos">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Estructuras de datos</h2>
+    <p>Una variable guarda un dato para usarlo más adelante. Si se necesita guardar más de un valor, la primera opción es usar varias variables, pero no siempre es la mejor solución &mdash; ahí entran las estructuras de datos: un conjunto de datos guardados en una misma unidad. Las principales en Python son <strong>list</strong>, <strong>tuple</strong>, <strong>dict</strong> y <strong>set</strong>.</p>
+  </section>
+
+  <section class="tema" id="list">
+    <span class="section-num">02.1</span>
+    <h2 class="section-title">List</h2>
+    <p>Una lista es una estructura de datos <strong>ordenada</strong> (los elementos están asociados a posiciones, empezando por la 0) y <strong>mutable</strong>, con elementos de cualquier tipo. Se crea con <code class="inline">[ ]</code>:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code>listaElementos = [<span class="str">"Elemento1"</span>, <span class="str">"Elemento2"</span>, <span class="str">"Elemento3"</span>]</code></pre>
+    </div>
+    <p>Acciones básicas:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="com"># Acceder a un dato, por posición</span>
+print(listaElementos[<span class="hl">0</span>])
+
+<span class="com"># Modificar un dato, por posición</span>
+listaElementos[<span class="hl">0</span>] = <span class="str">"Elemento1 modificado"</span>
+
+<span class="com"># Agregar un elemento al final</span>
+listaElementos.append(<span class="str">"Elemento nuevo"</span>)
+
+<span class="com"># Agregar en una posición: el resto se desplaza a la derecha</span>
+listaElementos.insert(<span class="hl">1</span>, <span class="str">"Elemento adicional"</span>)
+
+<span class="com"># Eliminar por valor (borra la primera coincidencia)</span>
+listaElementos.remove(<span class="str">"Elemento1"</span>)
+
+<span class="com"># Eliminar por posición</span>
+<span class="kw">del</span> listaElementos[<span class="hl">0</span>]</code></pre>
+    </div>
+    <p>Algunas acciones más avanzadas:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="com"># Iterar sobre los elementos</span>
+<span class="kw">for</span> item <span class="kw">in</span> listaElementos:
+    print(item)
+
+<span class="com"># Obtener la posición de un elemento (ValueError si no existe)</span>
+listaElementos.index(<span class="str">"Elemento2"</span>)
+
+<span class="com"># Filtrar elementos: combinando for e if</span>
+p = [p <span class="kw">for</span> p <span class="kw">in</span> listaElementos <span class="kw">if</span> <span class="str">"2"</span> <span class="kw">in</span> p]
+
+<span class="com"># Ordenar, indicando opcionalmente la condición de ordenación</span>
+listaElementos.sort(key=len)</code></pre>
+    </div>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Posiciones negativas
+      </div>
+      <p>En Python se puede acceder a un elemento con posiciones negativas: la posición <code class="inline">-1</code> es el último elemento de la lista, <code class="inline">-2</code> el penúltimo, y así sucesivamente.</p>
+    </div>
+
+    <h3 class="subtema">Ejercicio</h3>
+    <p>Crea una aplicación en consola para gestionar las calificaciones de una asignatura, con un menú que permita:</p>
+    <ul>
+      <li><strong>Introducir notas</strong>: el usuario introduce notas hasta meter un <code class="inline">-1</code>, que indica el final. Después vuelve a aparecer el menú.</li>
+      <li><strong>Listar notas</strong>: muestra todas las notas, una a una.</li>
+      <li><strong>Obtener extremos</strong>: muestra la nota más alta y la más baja.</li>
+      <li><strong>Obtener información</strong>: total de notas introducidas, número de suspensos, número de aprobados, nota media.</li>
+    </ul>
+  </section>
+
+  <section class="tema" id="tuplas">
+    <span class="section-num">02.2</span>
+    <h2 class="section-title">Tuplas</h2>
+    <p>Muy similares a las listas, con la diferencia de que son <strong>no mutables</strong>: no se puede cambiar su tamaño (ni añadir ni eliminar elementos). Se crean indicando los elementos entre paréntesis:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code>trabajadores = (<span class="str">"Juan"</span>, <span class="str">"Patricia"</span>, <span class="str">"Maria"</span>)</code></pre>
+    </div>
+    <p>Acceso, modificación de valor (de un elemento existente), longitud y recorrido funcionan igual que en las listas &mdash; la diferencia es que no se pueden agregar ni quitar elementos, y se usan paréntesis en vez de corchetes para crearla.</p>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Desempaquetar una tupla
+      </div>
+      <p>Se pueden crear variables asignándolas directamente a cada elemento de la tupla:</p>
+      <div class="code-panel">
+        <div class="term-bar"><span></span><span></span><span></span></div>
+        <pre><code>datos = (<span class="str">"Ford"</span>, <span class="str">"Mustang"</span>, <span class="hl">2025</span>, <span class="hl">500</span>, <span class="hl">60000</span>)
+marca, modelo, anio, cv, precio = datos</code></pre>
+      </div>
+      <p>Las listas también admiten esto, aunque su uso es más marginal al ser una colección dinámica (se puede usar <code class="inline">*</code> junto a una variable para extraer una parte de la lista).</p>
+    </div>
+  </section>
+
+  <section class="tema" id="diccionarios">
+    <span class="section-num">02.3</span>
+    <h2 class="section-title">Diccionarios</h2>
+    <p>A diferencia de listas y tuplas, un diccionario permite guardar datos en una colección mutable relacionando una <strong>clave</strong> con un <strong>valor</strong>:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code>trabajador = {
+    <span class="str">"nombre"</span>: <span class="str">"Celia"</span>,
+    <span class="str">"edad"</span>: <span class="hl">23</span>,
+    <span class="str">"especialidad"</span>: <span class="str">"Informática"</span>,
+    <span class="str">"titulación"</span>: <span class="str">"Ingeniería"</span>,
+    <span class="str">"conocimientos"</span>: [<span class="str">"Programación"</span>, <span class="str">"Sistemas"</span>, <span class="str">"BigData"</span>]
+}</code></pre>
+    </div>
+    <p>Esto permite jerarquizar la información y acceder a ella por su clave. Las claves deben ser de un tipo no mutable (string, int, float, bool) y únicas dentro del mismo diccionario &mdash; no se puede repetir una clave.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="com"># Acceder a un elemento por su clave (también existe el método get)</span>
+print(trabajador[<span class="str">"nombre"</span>])
+
+<span class="com"># Modificar un elemento</span>
+trabajador[<span class="str">"edad"</span>] = trabajador[<span class="str">"edad"</span>] + <span class="hl">1</span>
+
+<span class="com"># Eliminar un elemento</span>
+<span class="kw">del</span> trabajador[<span class="str">"titulación"</span>]
+
+<span class="com"># Añadir un elemento nuevo (clave que no existía)</span>
+trabajador[<span class="str">"especialidad"</span>] = <span class="str">"Inteligencia artificial"</span>
+
+<span class="com"># Recorrer: for da las claves; con la clave se accede al valor</span>
+<span class="kw">for</span> item <span class="kw">in</span> trabajador:
+    print(<span class="kw">f</span><span class="str">"{item}: {trabajador[item]}"</span>)
+    <span class="kw">if</span> item == <span class="str">"conocimientos"</span>:
+        <span class="kw">for</span> c <span class="kw">in</span> trabajador[item]:
+            print(<span class="kw">f</span><span class="str">"\t{c}"</span>)</code></pre>
+    </div>
+    <p>Funciones avanzadas útiles:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="com"># Todos los valores</span>
+<span class="kw">for</span> item <span class="kw">in</span> trabajador.values():
+    print(item)
+
+<span class="com"># Todas las claves</span>
+<span class="kw">for</span> item <span class="kw">in</span> trabajador.keys():
+    print(item)
+
+<span class="com"># Comprobar si una clave existe, con el operador "in"</span></code></pre>
+    </div>
+  </section>
+
+  <section class="tema" id="conjuntos">
+    <span class="section-num">02.4</span>
+    <h2 class="section-title">Conjuntos</h2>
+    <p>Los conjuntos (<code class="inline">set</code>) son similares a las listas, con dos diferencias: no permiten elementos duplicados y no están ordenados. Se definen con <code class="inline">{ }</code> o con la función <code class="inline">set()</code>:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code>numeros = {<span class="hl">1</span>, <span class="hl">2</span>, <span class="hl">3</span>}
+numerosSet = set([<span class="hl">2</span>, <span class="hl">3</span>, <span class="hl">4</span>])</code></pre>
+    </div>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Duplicados eliminados automáticamente
+      </div>
+      <p>Si al crear un conjunto hay elementos duplicados, Python elimina automáticamente las repeticiones.</p>
+    </div>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="com"># Agregar</span>
+numeros.add(<span class="hl">4</span>)
+
+<span class="com"># Eliminar: discard no falla si no existe, remove sí da error</span>
+numeros.discard(<span class="hl">1</span>)
+numeros.remove(<span class="hl">5</span>)   <span class="com"># error si el 5 no está en el conjunto</span>
+
+<span class="com"># Vaciar</span>
+numeros.clear()
+
+<span class="com"># Recorrer</span>
+<span class="kw">for</span> i <span class="kw">in</span> numeros:
+    print(i)</code></pre>
+    </div>
+    <p class="small" style="color:var(--muted);font-size:13.5px;">Al no estar ordenado, un conjunto no se puede acceder por posición &mdash; solo recorrer. Para acceso directo, conviértelo antes a lista o tupla con <code class="inline">list()</code> o <code class="inline">tuple()</code>.</p>
+
+    <h3 class="subtema">Operaciones de conjuntos</h3>
+    <ul>
+      <li><strong>Unión</strong>: los valores de los dos conjuntos, sin duplicados.</li>
+      <li><strong>Intersección</strong>: solo los valores que están en ambos conjuntos.</li>
+      <li><strong>Diferencia</strong>: los valores que están en A pero no en B.</li>
+      <li><strong>Diferencia simétrica</strong>: los valores de A y B, excluyendo los comunes a ambos.</li>
+    </ul>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code>conjunto1 = {<span class="hl">1</span>, <span class="hl">2</span>, <span class="hl">3</span>, <span class="hl">4</span>, <span class="hl">5</span>}
+conjunto2 = {<span class="hl">3</span>, <span class="hl">4</span>, <span class="hl">5</span>, <span class="hl">6</span>, <span class="hl">7</span>}
+
+conjuntoUnion = conjunto1.union(conjunto2)                    <span class="com"># {1,2,3,4,5,6,7}</span>
+conjuntoInters = conjunto1.intersection(conjunto2)             <span class="com"># {3,4,5}</span>
+conjuntoDif = conjunto1.difference(conjunto2)                  <span class="com"># {1,2}</span>
+conjuntoDifSim = conjunto1.symmetric_difference(conjunto2)     <span class="com"># {1,2,6,7}</span></code></pre>
+    </div>
+
+    <h3 class="subtema">Ejercicio</h3>
+    <p>Crea una aplicación que gestione los proyectos de una empresa:</p>
+    <ul>
+      <li>Pregunta al usuario cuántos proyectos va a registrar.</li>
+      <li>Por cada proyecto, pide código, nombre, responsable y presupuesto.</li>
+      <li>Guarda la información de todos los proyectos en un diccionario (el código como clave, y como valor otro diccionario o lista con el resto de datos).</li>
+      <li>Muestra por consola solo el nombre y el presupuesto de cada proyecto.</li>
+    </ul>
+  </section>
+
+  <section class="tema">
+    <span class="section-num">&mdash;</span>
+    <h2 class="section-title">Conclusiones</h2>
+    <p>A lo largo de esta unidad hemos comprobado que las estructuras de control son un elemento básico para modelar y &ldquo;reconducir&rdquo; el código según condiciones lógicas o ejecuciones recurrentes. Y que las estructuras de datos permiten juntar distintos tipos de datos en un mismo elemento, para poder gestionarlos de forma conjunta y coherente.</p>
+  </section>
+
+  <footer class="end">
+    Referencias: <a href="https://www.python.org" target="_blank" rel="noopener">python.org</a>, <a href="https://www.w3schools.com/python/" target="_blank" rel="noopener">w3schools.com/python</a>, <a href="https://docs.python.org/3/tutorial/controlflow.html" target="_blank" rel="noopener">docs.python.org &mdash; control flow</a>, <a href="https://docs.python.org/3/tutorial/datastructures.html" target="_blank" rel="noopener">docs.python.org &mdash; data structures</a>.
+  </footer>
+
+</div>
