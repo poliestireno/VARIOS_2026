@@ -1,0 +1,1202 @@
+<title>Índice de ejercicios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #E4572E;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #FF8A5C;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #F2764C;
+      --accent-ink: #17110D;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #F2764C;
+    --accent-ink: #17110D;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top {
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.08rem;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  section.block {
+    margin-top: 44px;
+  }
+
+  h2.block-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+
+  section.block p {
+    margin: 0 0 14px;
+  }
+
+  section.block ul {
+    margin: 0 0 14px;
+    padding-left: 22px;
+  }
+
+  section.block li {
+    margin-bottom: 6px;
+  }
+
+  h3.option-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: var(--ink);
+    margin: 40px 0 4px;
+  }
+
+  .checklist {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow);
+  }
+
+  .checklist li {
+    list-style: none;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 15px;
+    margin-bottom: 0;
+  }
+
+  .checklist ul { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+
+  .checklist svg {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    color: var(--accent-2);
+  }
+
+  .learn-list {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .learn-list li {
+    list-style: none;
+    padding-left: 20px;
+    position: relative;
+    color: var(--ink);
+    margin-bottom: 0;
+  }
+
+  .learn-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .step {
+    display: flex;
+    gap: 18px;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .step:first-of-type { border-top: none; padding-top: 0; }
+
+  .step-chip {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-body { flex: 1; min-width: 0; }
+
+  .step h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 4px 0 8px;
+  }
+
+  .step p {
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+
+  .step p.small {
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+
+  .term {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+
+  .term-bar span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--code-line);
+  }
+
+  .term pre {
+    margin: 0;
+    padding: 14px 16px 16px;
+    overflow-x: auto;
+  }
+
+  .term code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13.6px;
+    line-height: 1.7;
+    color: var(--code-ink);
+  }
+
+  .term .prompt { color: var(--code-muted); }
+  .term .cmt { color: var(--code-muted); }
+  .term .hl { color: var(--code-accent); }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .code-panel .term-bar { }
+
+  .code-panel pre {
+    margin: 0;
+    padding: 16px 18px 18px;
+    overflow-x: auto;
+  }
+
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+
+  .code-panel .tag { color: var(--accent-2); }
+  .code-panel .str { color: #C9D96B; }
+  .code-panel .kw { color: var(--code-accent); }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .prop { color: #8FB8FF; }
+  .code-panel .hl { color: var(--code-accent); }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+
+  .checkpoint p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .substep {
+    display: flex;
+    gap: 14px;
+    margin: 18px 0 0 16px;
+    padding-left: 16px;
+    border-left: 2px solid var(--line-soft);
+  }
+
+  .substep-chip {
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: var(--line-soft);
+    color: var(--muted);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 11.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .substep h4 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.98rem;
+    font-weight: 600;
+    margin: 2px 0 6px;
+  }
+
+  .substep p {
+    margin: 0 0 8px;
+    font-size: 14.5px;
+    color: var(--ink);
+  }
+
+  .substep .code-panel, .substep .term {
+    margin: 10px 0;
+  }
+
+  details.full-code {
+    margin-top: 16px;
+  }
+
+  details.full-code summary {
+    cursor: pointer;
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--accent-2);
+    list-style: none;
+  }
+
+  details.full-code summary::-webkit-details-marker { display: none; }
+
+  details.full-code summary::before {
+    content: "▸ ";
+  }
+
+  details.full-code[open] summary::before {
+    content: "▾ ";
+  }
+
+  .trouble {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .trouble-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .trouble-item .q {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    margin: 0 0 6px;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .trouble-item .q::before {
+    content: "?";
+    font-family: "IBM Plex Mono", monospace;
+    color: var(--accent-2);
+    font-weight: 500;
+  }
+
+  .trouble-item p {
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--muted);
+  }
+
+  .trouble-item p + p { margin-top: 8px; }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .step { transition: none; }
+  }
+
+  .ej-summary {
+    color: var(--muted);
+    font-size: 14.5px;
+    max-width: 62ch;
+    margin: 4px 0 0;
+  }
+  .tipo-section { margin-top: 48px; }
+  .tipo-head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 4px;
+  }
+  .tipo-num {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    color: var(--accent-2);
+  }
+  h2.tipo-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+    margin: 0;
+  }
+  .ej-list {
+    margin-top: 14px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .ej-row {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .ej-row:last-child { border-bottom: none; }
+  .ej-head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 5px;
+  }
+  .ej-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--ink);
+  }
+  .ej-diff {
+    font-size: 11px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    padding: 2px 9px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .ej-statement {
+    font-size: 14.5px;
+    color: var(--ink);
+    margin: 0 0 8px;
+  }
+  .ej-link {
+    font-size: 13px;
+    color: var(--accent-2);
+    text-decoration: none;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+  .ej-link:hover { text-decoration: underline; }
+  .unclear-box {
+    margin-top: 56px;
+    padding: 18px 20px;
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+  }
+  .unclear-box h2 {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--accent);
+    margin: 0 0 10px;
+  }
+  .unclear-box ul { margin: 0; padding-left: 20px; font-size: 14px; }
+  .unclear-box li { margin-bottom: 6px; }
+</style>
+
+
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">PHP desde cero</span>
+    <h1>Índice de ejercicios</h1>
+    <p class="lede">Todos los ejercicios del curso &mdash; los de cada sesión y los extra &mdash; agrupados por tipo y ordenados de menor a mayor dificultad. Cada uno enlaza a la sesión donde encaja.</p>
+    <div class="meta-row">
+      <span class="meta-chip">63 ejercicios</span>
+      <span class="meta-chip">9 tipos</span>
+    </div>
+    <p style="margin-top:16px;"><a href="index.html" style="color:var(--accent-2);font-family:'IBM Plex Mono',monospace;font-size:13px;text-decoration:none;">&larr; Volver al índice del curso</a></p>
+  </header>
+
+
+  <section class="tipo-section">
+    <div class="tipo-head">
+      <span class="tipo-num">01</span>
+      <h2 class="tipo-title">Formularios y paso de datos entre páginas</h2>
+    </div>
+    <div class="ej-list">
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Formulario con nombre y edad</span>
+        <span class="ej-diff">Iniciación</span>
+      </div>
+      <p class="ej-statement">Formulario con dos campos (nombre y edad) que envía sus datos por POST a una segunda página, la cual saluda al usuario y calcula la edad que tendrá el año que viene.</p>
+      <a class="ej-link" href="sesion-01-entorno-y-primer-script.html#practica">Sesión 1 · Entorno y primer script &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Tres parámetros y concatenación</span>
+        <span class="ej-diff">Iniciación</span>
+      </div>
+      <p class="ej-statement">Crea un formulario con tres campos de texto que envíe sus valores por POST a otra página. Esa segunda página debe mostrarlos intercalados dentro de una frase y, con un botón aparte, concatenarlos todos seguidos.</p>
+      <a class="ej-link" href="sesion-01-entorno-y-primer-script.html#ej-post-tres-parametros">Sesión 1 · Entorno y primer script &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Suma de varios campos</span>
+        <span class="ej-diff">Iniciación</span>
+      </div>
+      <p class="ej-statement">Un formulario con varios campos numéricos que, al enviarse por POST, muestra en otra página la suma de todos ellos dentro de un nuevo campo de solo lectura.</p>
+      <a class="ej-link" href="sesion-01-entorno-y-primer-script.html#ej-post-suma-inputs">Sesión 1 · Entorno y primer script &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Guardar un dato y recuperarlo en otra página</span>
+        <span class="ej-diff">Iniciación</span>
+      </div>
+      <p class="ej-statement">Un formulario sencillo (por ejemplo, un nombre) que envía el valor por POST y lo muestra de nuevo al navegar a una segunda página.</p>
+      <a class="ej-link" href="sesion-01-entorno-y-primer-script.html#ej-guardar-datos-entre-paginas">Sesión 1 · Entorno y primer script &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Imágenes como enlaces</span>
+        <span class="ej-diff">Iniciación</span>
+      </div>
+      <p class="ej-statement">Dos imágenes en la misma página que funcionan como enlaces: al pulsar cada una, se navega a una página distinta.</p>
+      <a class="ej-link" href="sesion-01-entorno-y-primer-script.html#ej-enlaces-imagen">Sesión 1 · Entorno y primer script &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Lista generada según lo elegido</span>
+        <span class="ej-diff">Iniciación</span>
+      </div>
+      <p class="ej-statement">Un menú desplegable con varios números. Al enviarlo, otra página genera una lista HTML con tantos elementos como el número elegido.</p>
+      <a class="ej-link" href="sesion-03-control-de-flujo.html#ej-select-lista-html">Sesión 3 · Control de flujo &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Enviar una selección múltiple como array</span>
+        <span class="ej-diff">Básico</span>
+      </div>
+      <p class="ej-statement">Un formulario con varias casillas (checkbox) que comparten el mismo nombre terminado en <code class="inline">[]</code>. Al enviarlo por POST, la página siguiente recibe un array con todas las opciones marcadas y las muestra en una lista.</p>
+      <a class="ej-link" href="sesion-04-arrays-i.html#ej-post-checkbox-array">Sesión 4 · Arrays I &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Sorteo entre varios valores</span>
+        <span class="ej-diff">Intermedio</span>
+      </div>
+      <p class="ej-statement">Un formulario con varios campos numéricos que se envían como array por POST. La página siguiente elige uno de esos valores al azar y lo muestra como resultado del sorteo.</p>
+      <a class="ej-link" href="sesion-04-arrays-i.html#ej-sorteo-inputs">Sesión 4 · Arrays I &#8599;</a>
+    </div>
+    </div>
+  </section>
+
+  <section class="tipo-section">
+    <div class="tipo-head">
+      <span class="tipo-num">02</span>
+      <h2 class="tipo-title">Calculadoras y operaciones</h2>
+    </div>
+    <div class="ej-list">
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Calculadora básica en dos páginas</span>
+        <span class="ej-diff">Iniciación</span>
+      </div>
+      <p class="ej-statement">Un formulario con dos operandos y un operador (+, -, *, /) que envía los datos por POST a una segunda página, donde se calcula y se muestra el resultado.</p>
+      <a class="ej-link" href="sesion-02-sintaxis-php-i.html#ej-calc-basica">Sesión 2 · Sintaxis PHP I &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Calculadora con paso por referencia</span>
+        <span class="ej-diff">Básico</span>
+      </div>
+      <p class="ej-statement">Función que recibe dos operandos y un operador, y devuelve el resultado por referencia en un cuarto parámetro en vez de con <code class="inline">return</code>.</p>
+      <a class="ej-link" href="sesion-02-sintaxis-php-i.html#practica">Sesión 2 · Sintaxis PHP I &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Calculadora que también muestra la operación</span>
+        <span class="ej-diff">Básico</span>
+      </div>
+      <p class="ej-statement">Igual que la calculadora básica, pero la página de resultado debe mostrar también los dos operandos y el operador recibidos, además del resultado — por ejemplo: &ldquo;7 + 3 = 10&rdquo;.</p>
+      <a class="ej-link" href="sesion-02-sintaxis-php-i.html#ej-calc-muestra-parametros">Sesión 2 · Sintaxis PHP I &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">La misma calculadora, en una sola página</span>
+        <span class="ej-diff">Intermedio</span>
+      </div>
+      <p class="ej-statement">Repite el ejercicio anterior, pero sin cambiar de página: el mismo archivo PHP debe mostrar el formulario y, si ya se ha enviado, el resultado justo debajo.</p>
+      <a class="ej-link" href="sesion-02-sintaxis-php-i.html#ej-calc-una-pagina">Sesión 2 · Sintaxis PHP I &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Calculadora con mejor aspecto</span>
+        <span class="ej-diff">Intermedio</span>
+      </div>
+      <p class="ej-statement">Retoma cualquiera de las calculadoras anteriores y dale un aspecto de calculadora de verdad: botones alineados en cuadrícula, operandos bien diferenciados del resultado.</p>
+      <a class="ej-link" href="sesion-02-sintaxis-php-i.html#ej-calc-estilizada">Sesión 2 · Sintaxis PHP I &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Cadena de operaciones sobre un número</span>
+        <span class="ej-diff">Intermedio-alto</span>
+      </div>
+      <p class="ej-statement">Partiendo de un número inicial, aplica una serie de operaciones encadenadas (por ejemplo: duplicar, restar 5, elevar al cuadrado) guardadas en un array, mostrando el resultado parcial después de cada paso.</p>
+      <a class="ej-link" href="sesion-05-arrays-ii.html#ej-operaciones-encadenadas">Sesión 5 · Arrays II &#8599;</a>
+    </div>
+    </div>
+  </section>
+
+  <section class="tipo-section">
+    <div class="tipo-head">
+      <span class="tipo-num">03</span>
+      <h2 class="tipo-title">Patrones y figuras con bucles</h2>
+    </div>
+    <div class="ej-list">
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Triángulo de asteriscos</span>
+        <span class="ej-diff">Básico</span>
+      </div>
+      <p class="ej-statement">Dado un número N, imprime un triángulo de asteriscos centrado de altura N, usando dos bucles anidados por fila.</p>
+      <a class="ej-link" href="sesion-03-control-de-flujo.html#practica">Sesión 3 · Control de flujo &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Tabla de números con color</span>
+        <span class="ej-diff">Básico</span>
+      </div>
+      <p class="ej-statement">Genera una tabla HTML de N×N rellena con números aleatorios, coloreando de forma distinta las celdas de la diagonal principal.</p>
+      <a class="ej-link" href="sesion-03-control-de-flujo.html#ej-tabla-numeros-colores">Sesión 3 · Control de flujo &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Tabla de tamaño elegido por el usuario</span>
+        <span class="ej-diff">Básico</span>
+      </div>
+      <p class="ej-statement">Un formulario donde el usuario indica un número N; la página siguiente dibuja una tabla HTML de N filas por N columnas.</p>
+      <a class="ej-link" href="sesion-03-control-de-flujo.html#ej-tabla-nxn-post">Sesión 3 · Control de flujo &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Validar que un número es impar</span>
+        <span class="ej-diff">Básico</span>
+      </div>
+      <p class="ej-statement">Un formulario con un campo numérico que, al enviarse, comprueba si el número es impar. Si no lo es, muestra un mensaje de error en vez de continuar.</p>
+      <a class="ej-link" href="sesion-03-control-de-flujo.html#ej-validar-numero-impar">Sesión 3 · Control de flujo &#8599;</a>
+    </div>
+    </div>
+  </section>
+
+  <section class="tipo-section">
+    <div class="tipo-head">
+      <span class="tipo-num">04</span>
+      <h2 class="tipo-title">Matrices, tablas y juegos de cuadrícula</h2>
+    </div>
+    <div class="ej-list">
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Las cartas de un palo, hasta un número dado</span>
+        <span class="ej-diff">Iniciación</span>
+      </div>
+      <p class="ej-statement">Dado un número máximo, muestra en pantalla las cartas del palo de picas desde el As hasta esa carta (As, 2, 3&hellip; hasta el número indicado).</p>
+      <a class="ej-link" href="sesion-04-arrays-i.html#ej-carta-palo-picas">Sesión 4 · Arrays I &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Array de 12 elementos como matriz</span>
+        <span class="ej-diff">Básico</span>
+      </div>
+      <p class="ej-statement">A partir de un array asociativo de 12 elementos, imprime sus claves y sus valores como dos matrices HTML, en formato 3×4 y en formato 6×2.</p>
+      <a class="ej-link" href="sesion-04-arrays-i.html#practica">Sesión 4 · Arrays I &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Matriz del tamaño indicado</span>
+        <span class="ej-diff">Básico</span>
+      </div>
+      <p class="ej-statement">Dado un número introducido por el usuario, genera una matriz cuadrada de ese tamaño, rellena con valores de tu elección (números, letras o colores).</p>
+      <a class="ej-link" href="sesion-04-arrays-i.html#ej-matriz-tamano-elegido">Sesión 4 · Arrays I &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Operaciones sobre cinco números</span>
+        <span class="ej-diff">Básico</span>
+      </div>
+      <p class="ej-statement">Un formulario con cinco campos numéricos que se envían como array. La página siguiente calcula y muestra la suma total, el producto de todos ellos, la media, y la suma de los valores que ocupan una posición par dentro del array.</p>
+      <a class="ej-link" href="sesion-04-arrays-i.html#ej-array-operaciones-5">Sesión 4 · Arrays I &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Encuentra la casilla premiada</span>
+        <span class="ej-diff">Básico</span>
+      </div>
+      <p class="ej-statement">Una cuadrícula de 3×3 casillas. Al cargar la página se elige una casilla al azar como &ldquo;premiada&rdquo;. Al pulsar sobre una casilla, indica si has acertado o no.</p>
+      <a class="ej-link" href="sesion-04-arrays-i.html#ej-rejilla-bandera-simple">Sesión 4 · Arrays I &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">¿La siguiente carta es más alta o más baja?</span>
+        <span class="ej-diff">Básico</span>
+      </div>
+      <p class="ej-statement">Muestra una carta al azar de una baraja representada como array y pide al jugador que adivine si la siguiente carta será más alta o más baja, comprobando el acierto al revelarla.</p>
+      <a class="ej-link" href="sesion-04-arrays-i.html#ej-carta-alta-baja">Sesión 4 · Arrays I &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Tablero de cartas boca abajo</span>
+        <span class="ej-diff">Básico</span>
+      </div>
+      <p class="ej-statement">Una cuadrícula de cartas representadas como imágenes, guardadas en un array. Al pulsar sobre una, se navega a una página que muestra qué carta era.</p>
+      <a class="ej-link" href="sesion-04-arrays-i.html#ej-tabla-cartas-clicables">Sesión 4 · Arrays I &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Candado con dos combinaciones</span>
+        <span class="ej-diff">Básico</span>
+      </div>
+      <p class="ej-statement">Dos menús desplegables con dos valores cada uno (por ejemplo, sí/no) generan una combinación secreta al azar. El jugador elige una combinación en los mismos menús y se le indica si coincide con la secreta.</p>
+      <a class="ej-link" href="sesion-04-arrays-i.html#ej-candado-binario">Sesión 4 · Arrays I &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Matriz con suma, máximo y mínimo</span>
+        <span class="ej-diff">Intermedio</span>
+      </div>
+      <p class="ej-statement">Genera una matriz 3×3 con números aleatorios del 1 al 100. Debajo de la tabla, muestra la suma de todas las celdas, y cuál es el valor mayor y el menor. Reto: pinta la diagonal con asteriscos y cambia el color de fondo de esas celdas.</p>
+      <a class="ej-link" href="sesion-04-arrays-i.html#ej-matriz-suma-max-min">Sesión 4 · Arrays I &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Destacar el mayor y el menor de una matriz</span>
+        <span class="ej-diff">Intermedio</span>
+      </div>
+      <p class="ej-statement">Genera una matriz con números aleatorios y resalta visualmente (con un color de fondo distinto) la celda con el valor mayor y la celda con el valor menor.</p>
+      <a class="ej-link" href="sesion-04-arrays-i.html#ej-matriz-destacar-extremos">Sesión 4 · Arrays I &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">La misma búsqueda, con mejor diseño</span>
+        <span class="ej-diff">Intermedio</span>
+      </div>
+      <p class="ej-statement">Repite el ejercicio anterior cuidando el diseño: celdas más grandes, esquinas redondeadas y algún efecto visual al pasar el ratón por encima.</p>
+      <a class="ej-link" href="sesion-04-arrays-i.html#ej-rejilla-bandera-bonita">Sesión 4 · Arrays I &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Matriz con imágenes y diagonales</span>
+        <span class="ej-diff">Intermedio-alto</span>
+      </div>
+      <p class="ej-statement">Como el ejercicio anterior, pero coloca además dos imágenes fijas (una en el centro de la matriz y otra en una esquina), y elige la imagen de fondo de cada celda al azar entre varias guardadas en una carpeta local.</p>
+      <a class="ej-link" href="sesion-04-arrays-i.html#ej-matriz-imagenes">Sesión 4 · Arrays I &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Pistas según la distancia a la casilla premiada</span>
+        <span class="ej-diff">Intermedio-alto</span>
+      </div>
+      <p class="ej-statement">Sobre el mismo tipo de cuadrícula, en vez de acertar a la primera, cada clic debe mostrar una pista de color según lo cerca que esté esa casilla de la premiada (por ejemplo: rojo si está a menos de 2 casillas, verde si está a menos de 5).</p>
+      <a class="ej-link" href="sesion-04-arrays-i.html#ej-rejilla-pistas-distancia">Sesión 4 · Arrays I &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">La misma mecánica, con otra temática</span>
+        <span class="ej-diff">Intermedio-alto</span>
+      </div>
+      <p class="ej-statement">Reaprovecha el ejercicio de pistas por distancia cambiando su temática: en vez de buscar una casilla premiada, el jugador busca desactivar una bomba oculta, con el mismo sistema de pistas por cercanía.</p>
+      <a class="ej-link" href="sesion-04-arrays-i.html#ej-rejilla-tematica-bomba">Sesión 4 · Arrays I &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Buscaminas simplificado</span>
+        <span class="ej-diff">Intermedio-alto</span>
+      </div>
+      <p class="ej-statement">Una tercera variante del mismo juego de pistas por distancia: al pulsar una casilla, se colorea según lo cerca que esté de una mina oculta, hasta que el jugador logre localizarla.</p>
+      <a class="ej-link" href="sesion-04-arrays-i.html#ej-rejilla-buscaminas">Sesión 4 · Arrays I &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Hundir la flota</span>
+        <span class="ej-diff">Avanzado</span>
+      </div>
+      <p class="ej-statement">Versión más completa del juego de cuadrícula: coloca varios &ldquo;barcos&rdquo; (grupos de casillas consecutivas) al azar en un tablero, y deja que el jugador vaya marcando casillas hasta hundirlos todos, mostrando cuántos barcos quedan.</p>
+      <a class="ej-link" href="sesion-04-arrays-i.html#ej-hundir-la-flota">Sesión 4 · Arrays I &#8599;</a>
+    </div>
+    </div>
+  </section>
+
+  <section class="tipo-section">
+    <div class="tipo-head">
+      <span class="tipo-num">05</span>
+      <h2 class="tipo-title">Arrays: ordenar, combinar y simular</h2>
+    </div>
+    <div class="ej-list">
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Cartón de bingo</span>
+        <span class="ej-diff">Básico</span>
+      </div>
+      <p class="ej-statement">Genera un cartón de bingo con números aleatorios sin repetir. Después, simula el sorteo de números uno a uno e indica cuáles del cartón ya han sido cantados.</p>
+      <a class="ej-link" href="sesion-05-arrays-ii.html#ej-bingo-carton">Sesión 5 · Arrays II &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Ordenar un array con burbuja propia</span>
+        <span class="ej-diff">Intermedio</span>
+      </div>
+      <p class="ej-statement">Implementa tu propia función de ordenación por burbuja (sin usar <code class="inline">sort()</code>) y compárala con el resultado de la función nativa de PHP.</p>
+      <a class="ej-link" href="sesion-05-arrays-ii.html#practica">Sesión 5 · Arrays II &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Estadísticas de diez números</span>
+        <span class="ej-diff">Intermedio</span>
+      </div>
+      <p class="ej-statement">Un formulario con diez campos numéricos enviados como array. La página siguiente calcula suma, producto, máximo, mínimo, media y mediana del conjunto — para la mediana, recuerda ordenar el array antes de calcularla.</p>
+      <a class="ej-link" href="sesion-05-arrays-ii.html#ej-estadisticas-diez-numeros">Sesión 5 · Arrays II &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Matriz editable: sumar y restar celdas contiguas</span>
+        <span class="ej-diff">Intermedio-alto</span>
+      </div>
+      <p class="ej-statement">Sobre una matriz cuadrada del tamaño indicado por el usuario, añade dos botones por celda que sumen o resten 1 a esa celda y a las celdas contiguas, actualizando la tabla mostrada tras cada clic.</p>
+      <a class="ej-link" href="sesion-05-arrays-ii.html#ej-matriz-sumar-restar-contiguos">Sesión 5 · Arrays II &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Repartir manos de póker</span>
+        <span class="ej-diff">Intermedio-alto</span>
+      </div>
+      <p class="ej-statement">A partir de una baraja completa representada como array, y un número de jugadores elegido en un menú desplegable, reparte una mano de 5 cartas a cada jugador sin repetir ninguna carta entre manos.</p>
+      <a class="ej-link" href="sesion-05-arrays-ii.html#ej-repartir-manos-poker">Sesión 5 · Arrays II &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Carrera con probabilidad</span>
+        <span class="ej-diff">Intermedio-alto</span>
+      </div>
+      <p class="ej-statement">Varios corredores (por ejemplo, caracoles) guardados en un array, cada uno con su posición. En cada vuelta, cada corredor avanza una casilla con una probabilidad distinta, hasta que uno llega a la meta.</p>
+      <a class="ej-link" href="sesion-05-arrays-ii.html#ej-carrera-probabilidad">Sesión 5 · Arrays II &#8599;</a>
+    </div>
+    </div>
+  </section>
+
+  <section class="tipo-section">
+    <div class="tipo-head">
+      <span class="tipo-num">06</span>
+      <h2 class="tipo-title">Cadenas de texto y juegos de palabras</h2>
+    </div>
+    <div class="ej-list">
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Contar las vocales de un texto</span>
+        <span class="ej-diff">Iniciación</span>
+      </div>
+      <p class="ej-statement">Dado un texto introducido por el usuario, cuenta cuántas veces aparece cada vocal y muestra el resultado.</p>
+      <a class="ej-link" href="sesion-06-cadenas-y-expresiones-regulares.html#ej-contar-vocales">Sesión 6 · Cadenas y expresiones regulares &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Mensaje oculto en un párrafo</span>
+        <span class="ej-diff">Intermedio</span>
+      </div>
+      <p class="ej-statement">Dado un párrafo, extrae un mensaje oculto combinando una letra de cada palabra, según la posición de la palabra dentro del texto.</p>
+      <a class="ej-link" href="sesion-06-cadenas-y-expresiones-regulares.html#practica">Sesión 6 · Cadenas y expresiones regulares &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Wordle básico, sin memoria entre páginas</span>
+        <span class="ej-diff">Intermedio</span>
+      </div>
+      <p class="ej-statement">Elige una palabra fija y muestra al usuario, tras cada intento, qué letras de su propuesta están en la posición correcta, cuáles están en la palabra pero en otra posición, y cuáles no están. No hace falta recordar los intentos anteriores todavía.</p>
+      <a class="ej-link" href="sesion-06-cadenas-y-expresiones-regulares.html#ej-wordle-basico">Sesión 6 · Cadenas y expresiones regulares &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Generador de historias aleatorias</span>
+        <span class="ej-diff">Intermedio</span>
+      </div>
+      <p class="ej-statement">Define varias posibilidades para cada parte de una historia (inicio, nudo, desenlace, final), guardadas en arrays independientes. Cada vez que se carga la página, elige una opción al azar de cada array y compón una historia completa y coherente.</p>
+      <a class="ej-link" href="sesion-06-cadenas-y-expresiones-regulares.html#ej-generador-historias">Sesión 6 · Cadenas y expresiones regulares &#8599;</a>
+    </div>
+    </div>
+  </section>
+
+  <section class="tipo-section">
+    <div class="tipo-head">
+      <span class="tipo-num">07</span>
+      <h2 class="tipo-title">Bases de datos</h2>
+    </div>
+    <div class="ej-list">
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Consultar y mostrar productos</span>
+        <span class="ej-diff">Básico</span>
+      </div>
+      <p class="ej-statement">Conecta con la base de datos y muestra por pantalla todos los productos de una tabla, más un segundo listado filtrado por categoría con una sentencia preparada.</p>
+      <a class="ej-link" href="sesion-07-bases-de-datos-i.html#practica">Sesión 7 · Bases de datos en PHP I &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Listado de productos con filtros</span>
+        <span class="ej-diff">Intermedio</span>
+      </div>
+      <p class="ej-statement">Página de listado en tabla HTML con un formulario de filtro por categoría y por precio máximo, ambos opcionales e independientes entre sí.</p>
+      <a class="ej-link" href="sesion-08-bases-de-datos-ii.html#practica">Sesión 8 · Bases de datos en PHP II &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">CRUD completo de productos</span>
+        <span class="ej-diff">Intermedio</span>
+      </div>
+      <p class="ej-statement">Formularios de alta, edición y borrado sobre la tabla de productos, centralizados en un único archivo que decide la operación según un campo <code class="inline">accion</code>.</p>
+      <a class="ej-link" href="sesion-09-bases-de-datos-iii.html#practica">Sesión 9 · Bases de datos en PHP III &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Otro listado filtrado por dos campos</span>
+        <span class="ej-diff">Intermedio</span>
+      </div>
+      <p class="ej-statement">Practica de nuevo el patrón de filtros opcionales de la sesión 8, esta vez sobre una tabla y unos campos de tu elección distintos a los del ejemplo de clase.</p>
+      <a class="ej-link" href="sesion-08-bases-de-datos-ii.html#ej-filtro-dos-campos-variante">Sesión 8 · Bases de datos en PHP II &#8599;</a>
+    </div>
+    </div>
+  </section>
+
+  <section class="tipo-section">
+    <div class="tipo-head">
+      <span class="tipo-num">08</span>
+      <h2 class="tipo-title">Sesión y autenticación</h2>
+    </div>
+    <div class="ej-list">
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Guardar un dato en sesión</span>
+        <span class="ej-diff">Iniciación</span>
+      </div>
+      <p class="ej-statement">Antes de montar un login completo, practica lo básico: guarda cualquier dato en <code class="inline">$_SESSION</code> desde una página y recupéralo, sin formularios de por medio, desde otra distinta.</p>
+      <a class="ej-link" href="sesion-10-sesion-en-php-i.html#ej-sesion-simple">Sesión 10 · Sesión en PHP I &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Login funcional contra la base de datos</span>
+        <span class="ej-diff">Básico</span>
+      </div>
+      <p class="ej-statement">Login que valida usuario y contraseña contra una tabla en base de datos, con las contraseñas guardadas como hash.</p>
+      <a class="ej-link" href="sesion-10-sesion-en-php-i.html#practica">Sesión 10 · Sesión en PHP I &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Login sin base de datos</span>
+        <span class="ej-diff">Básico</span>
+      </div>
+      <p class="ej-statement">Un login con un usuario y contraseña fijos, escritos directamente en el código (sin tabla en base de datos todavía). Tras entrar, navega entre varias páginas protegidas y añade un enlace para cerrar sesión.</p>
+      <a class="ej-link" href="sesion-10-sesion-en-php-i.html#ej-login-sin-bd">Sesión 10 · Sesión en PHP I &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Cerrar sesión, proteger páginas y expiración</span>
+        <span class="ej-diff">Intermedio</span>
+      </div>
+      <p class="ej-statement">Amplía el login anterior con un botón de cerrar sesión, un archivo que protege cualquier página frente a accesos sin login, y expiración de la sesión por inactividad.</p>
+      <a class="ej-link" href="sesion-11-sesion-en-php-ii.html#practica">Sesión 11 · Sesión en PHP II &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Candado de cuatro dígitos</span>
+        <span class="ej-diff">Intermedio-alto</span>
+      </div>
+      <p class="ej-statement">Genera una combinación secreta de 4 dígitos (0-9). El jugador va probando combinaciones, y cada intento se guarda en sesión para mostrar el historial de intentos hasta acertar.</p>
+      <a class="ej-link" href="sesion-11-sesion-en-php-ii.html#ej-candado-cuatro-digitos">Sesión 11 · Sesión en PHP II &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Moverse por una cuadrícula con botones</span>
+        <span class="ej-diff">Intermedio-alto</span>
+      </div>
+      <p class="ej-statement">Una cuadrícula con una imagen (un jugador) en una posición inicial. Cuatro botones (arriba, abajo, izquierda, derecha) desplazan al jugador una casilla en esa dirección, recordando su posición en sesión entre pulsaciones.</p>
+      <a class="ej-link" href="sesion-11-sesion-en-php-ii.html#ej-matriz-movimiento-botones">Sesión 11 · Sesión en PHP II &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Laberinto: atrapa el tesoro</span>
+        <span class="ej-diff">Intermedio-alto</span>
+      </div>
+      <p class="ej-statement">Pide un tamaño de longitud y coloca en una línea de casillas a un jugador en un extremo y un tesoro en una posición aleatoria. Con dos botones (izquierda y derecha), el jugador se desplaza una casilla cada vez, recordando su posición en sesión, hasta alcanzar el tesoro.</p>
+      <a class="ej-link" href="sesion-11-sesion-en-php-ii.html#ej-laberinto-tesoro">Sesión 11 · Sesión en PHP II &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Mini MasterMind binario</span>
+        <span class="ej-diff">Avanzado</span>
+      </div>
+      <p class="ej-statement">Genera una combinación secreta de varias posiciones, cada una con dos valores posibles (por ejemplo, 0 y 1). El jugador propone combinaciones y, tras cada intento guardado en sesión, se le indica cuántas posiciones ha acertado exactamente y cuántos valores acertados están en la posición equivocada.</p>
+      <a class="ej-link" href="sesion-11-sesion-en-php-ii.html#ej-mastermind-binario">Sesión 11 · Sesión en PHP II &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Wordle con memoria de intentos</span>
+        <span class="ej-diff">Avanzado</span>
+      </div>
+      <p class="ej-statement">Amplía el Wordle básico de la sesión 6 para que recuerde en sesión todos los intentos anteriores del jugador y los siga mostrando en pantalla, uno debajo de otro, aunque la página se recargue.</p>
+      <a class="ej-link" href="sesion-11-sesion-en-php-ii.html#ej-wordle-con-sesion">Sesión 11 · Sesión en PHP II &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Ahorcado</span>
+        <span class="ej-diff">Avanzado</span>
+      </div>
+      <p class="ej-statement">El clásico juego de adivinar una palabra letra a letra: guarda en sesión la palabra secreta y las letras ya probadas, y ve revelando la palabra o contando los fallos según corresponda.</p>
+      <a class="ej-link" href="sesion-11-sesion-en-php-ii.html#ej-ahorcado-php">Sesión 11 · Sesión en PHP II &#8599;</a>
+    </div>
+    </div>
+  </section>
+
+  <section class="tipo-section">
+    <div class="tipo-head">
+      <span class="tipo-num">09</span>
+      <h2 class="tipo-title">Proyectos completos y retos avanzados</h2>
+    </div>
+    <div class="ej-list">
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Diseño de la base de datos del proyecto</span>
+        <span class="ej-diff">Intermedio</span>
+      </div>
+      <p class="ej-statement">Diagrama entidad-relación y reparto de páginas (vista de administración y vista de cliente) del proyecto final propio.</p>
+      <a class="ej-link" href="sesion-12-definicion-y-diseno.html#practica">Sesión 12 · Definición y diseño del proyecto &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Desarrollo y presentación del proyecto final</span>
+        <span class="ej-diff">Intermedio-alto</span>
+      </div>
+      <p class="ej-statement">Construcción completa del proyecto diseñado en la sesión anterior: base de datos, login, CRUD de administración y vista de cliente con datos propios de cada usuario.</p>
+      <a class="ej-link" href="sesion-13-desarrollo-y-presentacion.html#practica">Sesión 13 · Desarrollo y presentación del proyecto &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Mini Blackjack</span>
+        <span class="ej-diff">Intermedio-alto</span>
+      </div>
+      <p class="ej-statement">Una versión simplificada del Blackjack: reparte dos cartas al jugador y dos a la banca desde un array-baraja, calcula el valor de cada mano y decide quién gana según las reglas básicas del juego (el más cercano a 21 sin pasarse).</p>
+      <a class="ej-link" href="sesion-13-desarrollo-y-presentacion.html#ej-mini-blackjack">Sesión 13 · Desarrollo y presentación del proyecto &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Aplicación completa con selección múltiple</span>
+        <span class="ej-diff">Avanzado</span>
+      </div>
+      <p class="ej-statement">Amplía tu proyecto final con una tabla de gestión donde se puedan seleccionar varias filas a la vez (con casillas de verificación) y aplicar una actualización o un borrado masivo a todas las filas seleccionadas de golpe. Reto adicional: sustituye la tabla HTML normal por una librería como DataTables para añadir búsqueda y paginación automáticas.</p>
+      <a class="ej-link" href="sesion-13-desarrollo-y-presentacion.html#ej-app-completa-seleccion">Sesión 13 · Desarrollo y presentación del proyecto &#8599;</a>
+    </div>
+    <div class="ej-row">
+      <div class="ej-head">
+        <span class="ej-title">Blackjack completo</span>
+        <span class="ej-diff">Avanzado</span>
+      </div>
+      <p class="ej-statement">Amplía el Mini Blackjack anterior con la posibilidad de pedir más cartas (&ldquo;plantarse&rdquo; o &ldquo;pedir&rdquo;), controlando que la partida termine correctamente si el jugador se pasa de 21.</p>
+      <a class="ej-link" href="sesion-13-desarrollo-y-presentacion.html#ej-blackjack-completo">Sesión 13 · Desarrollo y presentación del proyecto &#8599;</a>
+    </div>
+    </div>
+  </section>
+
+
+  <div class="unclear-box">
+    <h2>Pendientes de concretar</h2>
+    <p style="font-size:14px;margin:0 0 10px;">Estos nombres de ejercicio no traían enunciado y su nombre no basta para deducir con seguridad qué piden, así que no están todavía en el listado de arriba. Manda una frase por cada uno y los añado:</p>
+    <ul><li>ANT</li><li>ARBOLES</li><li>Db / DB_EX01 (2021, sin descripción — probablemente ejercicios de base de datos sueltos)</li><li>GAMES / Db games (2021, sin descripción)</li><li>boletus</li><li>PADEL</li><li>Interfaces (2023, Proyecto 8 — sin descripción de qué interfaces)</li><li>ExInforme: "un poco de chofi y chofo" (2022 — no queda claro qué pide el ejercicio)</li><li>workspace/Trimestre2: "Aplicación completa también" (2021 — sin más detalle de qué la diferencia de appPrueba)</li></ul>
+  </div>
+
+</div>

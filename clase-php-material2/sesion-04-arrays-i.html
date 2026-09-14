@@ -597,7 +597,7 @@ sort(<span class="prop">$numeros</span>);                <span class="com">// or
   </section>
 
   <section class="block">
-    <h2 class="block-title">Práctica</h2>
+    <h2 class="block-title" id="practica">Práctica</h2>
     <p>Dado un array asociativo de 12 elementos (clave/valor de la temática que quieras &mdash; por ejemplo, meses del año y sus días), imprime en HTML, desde PHP:</p>
 
     <div class="step">
@@ -646,6 +646,132 @@ sort(<span class="prop">$numeros</span>);                <span class="com">// or
         Reto extra
       </div>
       <p>Convierte la parte que dibuja la tabla en una función <code class="inline">dibujarMatriz($lista, $filas, $columnas)</code> reutilizable, y llámala cuatro veces (claves 3&times;4, valores 3&times;4, claves 6&times;2, valores 6&times;2) en vez de repetir el bucle a mano cuatro veces.</p>
+    </div>
+  </section>
+
+
+  <section class="block">
+    <h2 class="block-title">Ejercicios adicionales</h2>
+    <p style="margin-bottom:24px;">Más práctica del mismo tipo que la de esta sesión, para quien quiera seguir entrenando. Consulta el <a href="ejercicios-indice.html">índice completo de ejercicios</a> para verlos todos ordenados por dificultad.</p>
+
+    <div class="step" id="ej-carta-palo-picas">
+      <div class="step-chip">&#9733;</div>
+      <div class="step-body">
+        <h3>Las cartas de un palo, hasta un número dado <span style="font-size:11px;font-weight:400;color:var(--muted);text-transform:none;letter-spacing:0;">&middot; Iniciación &middot; Matrices, tablas y juegos de cuadrícula</span></h3>
+        <p>Dado un número máximo, muestra en pantalla las cartas del palo de picas desde el As hasta esa carta (As, 2, 3&hellip; hasta el número indicado).</p>
+      </div>
+    </div>
+    <div class="step" id="ej-post-checkbox-array">
+      <div class="step-chip">&#9733;</div>
+      <div class="step-body">
+        <h3>Enviar una selección múltiple como array <span style="font-size:11px;font-weight:400;color:var(--muted);text-transform:none;letter-spacing:0;">&middot; Básico &middot; Formularios y paso de datos entre páginas</span></h3>
+        <p>Un formulario con varias casillas (checkbox) que comparten el mismo nombre terminado en <code class="inline">[]</code>. Al enviarlo por POST, la página siguiente recibe un array con todas las opciones marcadas y las muestra en una lista.</p>
+      </div>
+    </div>
+    <div class="step" id="ej-matriz-tamano-elegido">
+      <div class="step-chip">&#9733;</div>
+      <div class="step-body">
+        <h3>Matriz del tamaño indicado <span style="font-size:11px;font-weight:400;color:var(--muted);text-transform:none;letter-spacing:0;">&middot; Básico &middot; Matrices, tablas y juegos de cuadrícula</span></h3>
+        <p>Dado un número introducido por el usuario, genera una matriz cuadrada de ese tamaño, rellena con valores de tu elección (números, letras o colores).</p>
+      </div>
+    </div>
+    <div class="step" id="ej-array-operaciones-5">
+      <div class="step-chip">&#9733;</div>
+      <div class="step-body">
+        <h3>Operaciones sobre cinco números <span style="font-size:11px;font-weight:400;color:var(--muted);text-transform:none;letter-spacing:0;">&middot; Básico &middot; Matrices, tablas y juegos de cuadrícula</span></h3>
+        <p>Un formulario con cinco campos numéricos que se envían como array. La página siguiente calcula y muestra la suma total, el producto de todos ellos, la media, y la suma de los valores que ocupan una posición par dentro del array.</p>
+      </div>
+    </div>
+    <div class="step" id="ej-rejilla-bandera-simple">
+      <div class="step-chip">&#9733;</div>
+      <div class="step-body">
+        <h3>Encuentra la casilla premiada <span style="font-size:11px;font-weight:400;color:var(--muted);text-transform:none;letter-spacing:0;">&middot; Básico &middot; Matrices, tablas y juegos de cuadrícula</span></h3>
+        <p>Una cuadrícula de 3×3 casillas. Al cargar la página se elige una casilla al azar como &ldquo;premiada&rdquo;. Al pulsar sobre una casilla, indica si has acertado o no.</p>
+      </div>
+    </div>
+    <div class="step" id="ej-carta-alta-baja">
+      <div class="step-chip">&#9733;</div>
+      <div class="step-body">
+        <h3>¿La siguiente carta es más alta o más baja? <span style="font-size:11px;font-weight:400;color:var(--muted);text-transform:none;letter-spacing:0;">&middot; Básico &middot; Matrices, tablas y juegos de cuadrícula</span></h3>
+        <p>Muestra una carta al azar de una baraja representada como array y pide al jugador que adivine si la siguiente carta será más alta o más baja, comprobando el acierto al revelarla.</p>
+      </div>
+    </div>
+    <div class="step" id="ej-tabla-cartas-clicables">
+      <div class="step-chip">&#9733;</div>
+      <div class="step-body">
+        <h3>Tablero de cartas boca abajo <span style="font-size:11px;font-weight:400;color:var(--muted);text-transform:none;letter-spacing:0;">&middot; Básico &middot; Matrices, tablas y juegos de cuadrícula</span></h3>
+        <p>Una cuadrícula de cartas representadas como imágenes, guardadas en un array. Al pulsar sobre una, se navega a una página que muestra qué carta era.</p>
+      </div>
+    </div>
+    <div class="step" id="ej-candado-binario">
+      <div class="step-chip">&#9733;</div>
+      <div class="step-body">
+        <h3>Candado con dos combinaciones <span style="font-size:11px;font-weight:400;color:var(--muted);text-transform:none;letter-spacing:0;">&middot; Básico &middot; Matrices, tablas y juegos de cuadrícula</span></h3>
+        <p>Dos menús desplegables con dos valores cada uno (por ejemplo, sí/no) generan una combinación secreta al azar. El jugador elige una combinación en los mismos menús y se le indica si coincide con la secreta.</p>
+      </div>
+    </div>
+    <div class="step" id="ej-sorteo-inputs">
+      <div class="step-chip">&#9733;</div>
+      <div class="step-body">
+        <h3>Sorteo entre varios valores <span style="font-size:11px;font-weight:400;color:var(--muted);text-transform:none;letter-spacing:0;">&middot; Intermedio &middot; Formularios y paso de datos entre páginas</span></h3>
+        <p>Un formulario con varios campos numéricos que se envían como array por POST. La página siguiente elige uno de esos valores al azar y lo muestra como resultado del sorteo.</p>
+      </div>
+    </div>
+    <div class="step" id="ej-matriz-suma-max-min">
+      <div class="step-chip">&#9733;</div>
+      <div class="step-body">
+        <h3>Matriz con suma, máximo y mínimo <span style="font-size:11px;font-weight:400;color:var(--muted);text-transform:none;letter-spacing:0;">&middot; Intermedio &middot; Matrices, tablas y juegos de cuadrícula</span></h3>
+        <p>Genera una matriz 3×3 con números aleatorios del 1 al 100. Debajo de la tabla, muestra la suma de todas las celdas, y cuál es el valor mayor y el menor. Reto: pinta la diagonal con asteriscos y cambia el color de fondo de esas celdas.</p>
+      </div>
+    </div>
+    <div class="step" id="ej-matriz-destacar-extremos">
+      <div class="step-chip">&#9733;</div>
+      <div class="step-body">
+        <h3>Destacar el mayor y el menor de una matriz <span style="font-size:11px;font-weight:400;color:var(--muted);text-transform:none;letter-spacing:0;">&middot; Intermedio &middot; Matrices, tablas y juegos de cuadrícula</span></h3>
+        <p>Genera una matriz con números aleatorios y resalta visualmente (con un color de fondo distinto) la celda con el valor mayor y la celda con el valor menor.</p>
+      </div>
+    </div>
+    <div class="step" id="ej-rejilla-bandera-bonita">
+      <div class="step-chip">&#9733;</div>
+      <div class="step-body">
+        <h3>La misma búsqueda, con mejor diseño <span style="font-size:11px;font-weight:400;color:var(--muted);text-transform:none;letter-spacing:0;">&middot; Intermedio &middot; Matrices, tablas y juegos de cuadrícula</span></h3>
+        <p>Repite el ejercicio anterior cuidando el diseño: celdas más grandes, esquinas redondeadas y algún efecto visual al pasar el ratón por encima.</p>
+      </div>
+    </div>
+    <div class="step" id="ej-matriz-imagenes">
+      <div class="step-chip">&#9733;</div>
+      <div class="step-body">
+        <h3>Matriz con imágenes y diagonales <span style="font-size:11px;font-weight:400;color:var(--muted);text-transform:none;letter-spacing:0;">&middot; Intermedio-alto &middot; Matrices, tablas y juegos de cuadrícula</span></h3>
+        <p>Como el ejercicio anterior, pero coloca además dos imágenes fijas (una en el centro de la matriz y otra en una esquina), y elige la imagen de fondo de cada celda al azar entre varias guardadas en una carpeta local.</p>
+      </div>
+    </div>
+    <div class="step" id="ej-rejilla-pistas-distancia">
+      <div class="step-chip">&#9733;</div>
+      <div class="step-body">
+        <h3>Pistas según la distancia a la casilla premiada <span style="font-size:11px;font-weight:400;color:var(--muted);text-transform:none;letter-spacing:0;">&middot; Intermedio-alto &middot; Matrices, tablas y juegos de cuadrícula</span></h3>
+        <p>Sobre el mismo tipo de cuadrícula, en vez de acertar a la primera, cada clic debe mostrar una pista de color según lo cerca que esté esa casilla de la premiada (por ejemplo: rojo si está a menos de 2 casillas, verde si está a menos de 5).</p>
+      </div>
+    </div>
+    <div class="step" id="ej-rejilla-tematica-bomba">
+      <div class="step-chip">&#9733;</div>
+      <div class="step-body">
+        <h3>La misma mecánica, con otra temática <span style="font-size:11px;font-weight:400;color:var(--muted);text-transform:none;letter-spacing:0;">&middot; Intermedio-alto &middot; Matrices, tablas y juegos de cuadrícula</span></h3>
+        <p>Reaprovecha el ejercicio de pistas por distancia cambiando su temática: en vez de buscar una casilla premiada, el jugador busca desactivar una bomba oculta, con el mismo sistema de pistas por cercanía.</p>
+      </div>
+    </div>
+    <div class="step" id="ej-rejilla-buscaminas">
+      <div class="step-chip">&#9733;</div>
+      <div class="step-body">
+        <h3>Buscaminas simplificado <span style="font-size:11px;font-weight:400;color:var(--muted);text-transform:none;letter-spacing:0;">&middot; Intermedio-alto &middot; Matrices, tablas y juegos de cuadrícula</span></h3>
+        <p>Una tercera variante del mismo juego de pistas por distancia: al pulsar una casilla, se colorea según lo cerca que esté de una mina oculta, hasta que el jugador logre localizarla.</p>
+      </div>
+    </div>
+    <div class="step" id="ej-hundir-la-flota">
+      <div class="step-chip">&#9733;</div>
+      <div class="step-body">
+        <h3>Hundir la flota <span style="font-size:11px;font-weight:400;color:var(--muted);text-transform:none;letter-spacing:0;">&middot; Avanzado &middot; Matrices, tablas y juegos de cuadrícula</span></h3>
+        <p>Versión más completa del juego de cuadrícula: coloca varios &ldquo;barcos&rdquo; (grupos de casillas consecutivas) al azar en un tablero, y deja que el jugador vaya marcando casillas hasta hundirlos todos, mostrando cuántos barcos quedan.</p>
+      </div>
     </div>
   </section>
 

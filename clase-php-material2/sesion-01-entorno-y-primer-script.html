@@ -686,7 +686,7 @@
   </section>
 
   <section class="block">
-    <h2 class="block-title">Práctica</h2>
+    <h2 class="block-title" id="practica">Práctica</h2>
     <p>Crea dos archivos dentro de tu carpeta del curso.</p>
 
     <div class="step">
@@ -711,6 +711,41 @@
         Reto extra
       </div>
       <p><code class="inline">$_POST</code> siempre llega como texto, incluso el campo <code class="inline">edad</code>. Prueba a sumarle 1 directamente (<code class="inline">$_POST['edad'] + 1</code>) y comprueba que, sorprendentemente, funciona igual &mdash; PHP convierte el texto a número automáticamente en operaciones aritméticas. Lo veremos con detalle en la sesión 2.</p>
+    </div>
+  </section>
+
+
+  <section class="block">
+    <h2 class="block-title">Ejercicios adicionales</h2>
+    <p style="margin-bottom:24px;">Más práctica del mismo tipo que la de esta sesión, para quien quiera seguir entrenando. Consulta el <a href="ejercicios-indice.html">índice completo de ejercicios</a> para verlos todos ordenados por dificultad.</p>
+
+    <div class="step" id="ej-post-tres-parametros">
+      <div class="step-chip">&#9733;</div>
+      <div class="step-body">
+        <h3>Tres parámetros y concatenación <span style="font-size:11px;font-weight:400;color:var(--muted);text-transform:none;letter-spacing:0;">&middot; Iniciación &middot; Formularios y paso de datos entre páginas</span></h3>
+        <p>Crea un formulario con tres campos de texto que envíe sus valores por POST a otra página. Esa segunda página debe mostrarlos intercalados dentro de una frase y, con un botón aparte, concatenarlos todos seguidos.</p>
+      </div>
+    </div>
+    <div class="step" id="ej-post-suma-inputs">
+      <div class="step-chip">&#9733;</div>
+      <div class="step-body">
+        <h3>Suma de varios campos <span style="font-size:11px;font-weight:400;color:var(--muted);text-transform:none;letter-spacing:0;">&middot; Iniciación &middot; Formularios y paso de datos entre páginas</span></h3>
+        <p>Un formulario con varios campos numéricos que, al enviarse por POST, muestra en otra página la suma de todos ellos dentro de un nuevo campo de solo lectura.</p>
+      </div>
+    </div>
+    <div class="step" id="ej-guardar-datos-entre-paginas">
+      <div class="step-chip">&#9733;</div>
+      <div class="step-body">
+        <h3>Guardar un dato y recuperarlo en otra página <span style="font-size:11px;font-weight:400;color:var(--muted);text-transform:none;letter-spacing:0;">&middot; Iniciación &middot; Formularios y paso de datos entre páginas</span></h3>
+        <p>Un formulario sencillo (por ejemplo, un nombre) que envía el valor por POST y lo muestra de nuevo al navegar a una segunda página.</p>
+      </div>
+    </div>
+    <div class="step" id="ej-enlaces-imagen">
+      <div class="step-chip">&#9733;</div>
+      <div class="step-body">
+        <h3>Imágenes como enlaces <span style="font-size:11px;font-weight:400;color:var(--muted);text-transform:none;letter-spacing:0;">&middot; Iniciación &middot; Formularios y paso de datos entre páginas</span></h3>
+        <p>Dos imágenes en la misma página que funcionan como enlaces: al pulsar cada una, se navega a una página distinta.</p>
+      </div>
     </div>
   </section>
 

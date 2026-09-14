@@ -640,7 +640,7 @@ duplicarDeVerdad(<span class="prop">$x</span>);
   </section>
 
   <section class="block">
-    <h2 class="block-title">Práctica</h2>
+    <h2 class="block-title" id="practica">Práctica</h2>
     <p>Escribe una función <code class="inline">calcular($a, $b, $operador, &amp;$resultado)</code> que:</p>
     <div class="step">
       <div class="step-chip">1</div>
@@ -677,6 +677,41 @@ calcular(<span class="hl">4</span>, <span class="hl">5</span>, <span class="str"
         Reto extra
       </div>
       <p>Controla la división por cero: si <code class="inline">$operador</code> es <code class="inline">"/"</code> y <code class="inline">$b</code> es <code class="inline">0</code>, guarda en <code class="inline">$resultado</code> el texto <code class="inline">"Error: división por cero"</code> en vez de intentar dividir.</p>
+    </div>
+  </section>
+
+
+  <section class="block">
+    <h2 class="block-title">Ejercicios adicionales</h2>
+    <p style="margin-bottom:24px;">Más práctica del mismo tipo que la de esta sesión, para quien quiera seguir entrenando. Consulta el <a href="ejercicios-indice.html">índice completo de ejercicios</a> para verlos todos ordenados por dificultad.</p>
+
+    <div class="step" id="ej-calc-basica">
+      <div class="step-chip">&#9733;</div>
+      <div class="step-body">
+        <h3>Calculadora básica en dos páginas <span style="font-size:11px;font-weight:400;color:var(--muted);text-transform:none;letter-spacing:0;">&middot; Iniciación &middot; Calculadoras y operaciones</span></h3>
+        <p>Un formulario con dos operandos y un operador (+, -, *, /) que envía los datos por POST a una segunda página, donde se calcula y se muestra el resultado.</p>
+      </div>
+    </div>
+    <div class="step" id="ej-calc-muestra-parametros">
+      <div class="step-chip">&#9733;</div>
+      <div class="step-body">
+        <h3>Calculadora que también muestra la operación <span style="font-size:11px;font-weight:400;color:var(--muted);text-transform:none;letter-spacing:0;">&middot; Básico &middot; Calculadoras y operaciones</span></h3>
+        <p>Igual que la calculadora básica, pero la página de resultado debe mostrar también los dos operandos y el operador recibidos, además del resultado — por ejemplo: &ldquo;7 + 3 = 10&rdquo;.</p>
+      </div>
+    </div>
+    <div class="step" id="ej-calc-una-pagina">
+      <div class="step-chip">&#9733;</div>
+      <div class="step-body">
+        <h3>La misma calculadora, en una sola página <span style="font-size:11px;font-weight:400;color:var(--muted);text-transform:none;letter-spacing:0;">&middot; Intermedio &middot; Calculadoras y operaciones</span></h3>
+        <p>Repite el ejercicio anterior, pero sin cambiar de página: el mismo archivo PHP debe mostrar el formulario y, si ya se ha enviado, el resultado justo debajo.</p>
+      </div>
+    </div>
+    <div class="step" id="ej-calc-estilizada">
+      <div class="step-chip">&#9733;</div>
+      <div class="step-body">
+        <h3>Calculadora con mejor aspecto <span style="font-size:11px;font-weight:400;color:var(--muted);text-transform:none;letter-spacing:0;">&middot; Intermedio &middot; Calculadoras y operaciones</span></h3>
+        <p>Retoma cualquiera de las calculadoras anteriores y dale un aspecto de calculadora de verdad: botones alineados en cuadrícula, operandos bien diferenciados del resultado.</p>
+      </div>
     </div>
   </section>
 

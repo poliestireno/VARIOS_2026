@@ -596,7 +596,7 @@ preg_match(<span class="str">"/(\d+)/"</span>, <span class="str">"Tengo 32 años
   </section>
 
   <section class="block">
-    <h2 class="block-title">Práctica</h2>
+    <h2 class="block-title" id="practica">Práctica</h2>
     <p>Dado un párrafo, extrae el mensaje oculto: la <strong>primera</strong> letra de la primera palabra, la <strong>segunda</strong> letra de la segunda palabra, la <strong>tercera</strong> letra de la tercera palabra, y así hasta el final &mdash; en cada palabra, la posición de la letra se calcula con el <strong>módulo</strong> de su longitud (para no salirte si la palabra es más corta que la posición que toca).</p>
 
     <div class="step">
@@ -645,6 +645,34 @@ preg_match(<span class="str">"/(\d+)/"</span>, <span class="str">"Tengo 32 años
         Reto extra
       </div>
       <p>Haz un segundo script que use las 4 funciones <code class="inline">preg_match()</code>, <code class="inline">preg_replace()</code>, <code class="inline">preg_split()</code> y <code class="inline">preg_match_all()</code>, cada una al menos una vez, sobre un texto de tu elección (por ejemplo, validar un email, anonimizar números de teléfono, contar cuántas veces aparece una palabra).</p>
+    </div>
+  </section>
+
+
+  <section class="block">
+    <h2 class="block-title">Ejercicios adicionales</h2>
+    <p style="margin-bottom:24px;">Más práctica del mismo tipo que la de esta sesión, para quien quiera seguir entrenando. Consulta el <a href="ejercicios-indice.html">índice completo de ejercicios</a> para verlos todos ordenados por dificultad.</p>
+
+    <div class="step" id="ej-contar-vocales">
+      <div class="step-chip">&#9733;</div>
+      <div class="step-body">
+        <h3>Contar las vocales de un texto <span style="font-size:11px;font-weight:400;color:var(--muted);text-transform:none;letter-spacing:0;">&middot; Iniciación &middot; Cadenas de texto y juegos de palabras</span></h3>
+        <p>Dado un texto introducido por el usuario, cuenta cuántas veces aparece cada vocal y muestra el resultado.</p>
+      </div>
+    </div>
+    <div class="step" id="ej-wordle-basico">
+      <div class="step-chip">&#9733;</div>
+      <div class="step-body">
+        <h3>Wordle básico, sin memoria entre páginas <span style="font-size:11px;font-weight:400;color:var(--muted);text-transform:none;letter-spacing:0;">&middot; Intermedio &middot; Cadenas de texto y juegos de palabras</span></h3>
+        <p>Elige una palabra fija y muestra al usuario, tras cada intento, qué letras de su propuesta están en la posición correcta, cuáles están en la palabra pero en otra posición, y cuáles no están. No hace falta recordar los intentos anteriores todavía.</p>
+      </div>
+    </div>
+    <div class="step" id="ej-generador-historias">
+      <div class="step-chip">&#9733;</div>
+      <div class="step-body">
+        <h3>Generador de historias aleatorias <span style="font-size:11px;font-weight:400;color:var(--muted);text-transform:none;letter-spacing:0;">&middot; Intermedio &middot; Cadenas de texto y juegos de palabras</span></h3>
+        <p>Define varias posibilidades para cada parte de una historia (inicio, nudo, desenlace, final), guardadas en arrays independientes. Cada vez que se carga la página, elige una opción al azar de cada array y compón una historia completa y coherente.</p>
+      </div>
     </div>
   </section>
 

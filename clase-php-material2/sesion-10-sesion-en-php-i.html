@@ -613,7 +613,7 @@ require <span class="str">'conexion.php'</span>;
   </section>
 
   <section class="block">
-    <h2 class="block-title">Práctica</h2>
+    <h2 class="block-title" id="practica">Práctica</h2>
     <div class="step">
       <div class="step-chip">1</div>
       <div class="step-body">
@@ -654,6 +654,27 @@ require <span class="str">'conexion.php'</span>;
         Reto extra
       </div>
       <p>Añade una página <code class="inline">registro.php</code> que cree usuarios nuevos desde un formulario público, usando <code class="inline">password_hash()</code> igual que en <code class="inline">crear_usuario.php</code> &mdash; comprueba antes con una consulta <code class="inline">SELECT</code> que el nombre de usuario no exista ya.</p>
+    </div>
+  </section>
+
+
+  <section class="block">
+    <h2 class="block-title">Ejercicios adicionales</h2>
+    <p style="margin-bottom:24px;">Más práctica del mismo tipo que la de esta sesión, para quien quiera seguir entrenando. Consulta el <a href="ejercicios-indice.html">índice completo de ejercicios</a> para verlos todos ordenados por dificultad.</p>
+
+    <div class="step" id="ej-sesion-simple">
+      <div class="step-chip">&#9733;</div>
+      <div class="step-body">
+        <h3>Guardar un dato en sesión <span style="font-size:11px;font-weight:400;color:var(--muted);text-transform:none;letter-spacing:0;">&middot; Iniciación &middot; Sesión y autenticación</span></h3>
+        <p>Antes de montar un login completo, practica lo básico: guarda cualquier dato en <code class="inline">$_SESSION</code> desde una página y recupéralo, sin formularios de por medio, desde otra distinta.</p>
+      </div>
+    </div>
+    <div class="step" id="ej-login-sin-bd">
+      <div class="step-chip">&#9733;</div>
+      <div class="step-body">
+        <h3>Login sin base de datos <span style="font-size:11px;font-weight:400;color:var(--muted);text-transform:none;letter-spacing:0;">&middot; Básico &middot; Sesión y autenticación</span></h3>
+        <p>Un login con un usuario y contraseña fijos, escritos directamente en el código (sin tabla en base de datos todavía). Tras entrar, navega entre varias páginas protegidas y añade un enlace para cerrar sesión.</p>
+      </div>
     </div>
   </section>
 

@@ -606,7 +606,7 @@ session_start();
   </section>
 
   <section class="block">
-    <h2 class="block-title">Práctica</h2>
+    <h2 class="block-title" id="practica">Práctica</h2>
     <div class="step">
       <div class="step-chip">1</div>
       <div class="step-body">
@@ -641,6 +641,55 @@ session_start();
         Reto extra
       </div>
       <p>En <code class="inline">login.php</code>, muestra también un mensaje distinto si la URL trae <code class="inline">?expirada=1</code> (&ldquo;Tu sesión ha caducado por inactividad&rdquo;), diferenciado del mensaje de credenciales incorrectas de la sesión anterior.</p>
+    </div>
+  </section>
+
+
+  <section class="block">
+    <h2 class="block-title">Ejercicios adicionales</h2>
+    <p style="margin-bottom:24px;">Más práctica del mismo tipo que la de esta sesión, para quien quiera seguir entrenando. Consulta el <a href="ejercicios-indice.html">índice completo de ejercicios</a> para verlos todos ordenados por dificultad.</p>
+
+    <div class="step" id="ej-candado-cuatro-digitos">
+      <div class="step-chip">&#9733;</div>
+      <div class="step-body">
+        <h3>Candado de cuatro dígitos <span style="font-size:11px;font-weight:400;color:var(--muted);text-transform:none;letter-spacing:0;">&middot; Intermedio-alto &middot; Sesión y autenticación</span></h3>
+        <p>Genera una combinación secreta de 4 dígitos (0-9). El jugador va probando combinaciones, y cada intento se guarda en sesión para mostrar el historial de intentos hasta acertar.</p>
+      </div>
+    </div>
+    <div class="step" id="ej-matriz-movimiento-botones">
+      <div class="step-chip">&#9733;</div>
+      <div class="step-body">
+        <h3>Moverse por una cuadrícula con botones <span style="font-size:11px;font-weight:400;color:var(--muted);text-transform:none;letter-spacing:0;">&middot; Intermedio-alto &middot; Sesión y autenticación</span></h3>
+        <p>Una cuadrícula con una imagen (un jugador) en una posición inicial. Cuatro botones (arriba, abajo, izquierda, derecha) desplazan al jugador una casilla en esa dirección, recordando su posición en sesión entre pulsaciones.</p>
+      </div>
+    </div>
+    <div class="step" id="ej-laberinto-tesoro">
+      <div class="step-chip">&#9733;</div>
+      <div class="step-body">
+        <h3>Laberinto: atrapa el tesoro <span style="font-size:11px;font-weight:400;color:var(--muted);text-transform:none;letter-spacing:0;">&middot; Intermedio-alto &middot; Sesión y autenticación</span></h3>
+        <p>Pide un tamaño de longitud y coloca en una línea de casillas a un jugador en un extremo y un tesoro en una posición aleatoria. Con dos botones (izquierda y derecha), el jugador se desplaza una casilla cada vez, recordando su posición en sesión, hasta alcanzar el tesoro.</p>
+      </div>
+    </div>
+    <div class="step" id="ej-mastermind-binario">
+      <div class="step-chip">&#9733;</div>
+      <div class="step-body">
+        <h3>Mini MasterMind binario <span style="font-size:11px;font-weight:400;color:var(--muted);text-transform:none;letter-spacing:0;">&middot; Avanzado &middot; Sesión y autenticación</span></h3>
+        <p>Genera una combinación secreta de varias posiciones, cada una con dos valores posibles (por ejemplo, 0 y 1). El jugador propone combinaciones y, tras cada intento guardado en sesión, se le indica cuántas posiciones ha acertado exactamente y cuántos valores acertados están en la posición equivocada.</p>
+      </div>
+    </div>
+    <div class="step" id="ej-wordle-con-sesion">
+      <div class="step-chip">&#9733;</div>
+      <div class="step-body">
+        <h3>Wordle con memoria de intentos <span style="font-size:11px;font-weight:400;color:var(--muted);text-transform:none;letter-spacing:0;">&middot; Avanzado &middot; Sesión y autenticación</span></h3>
+        <p>Amplía el Wordle básico de la sesión 6 para que recuerde en sesión todos los intentos anteriores del jugador y los siga mostrando en pantalla, uno debajo de otro, aunque la página se recargue.</p>
+      </div>
+    </div>
+    <div class="step" id="ej-ahorcado-php">
+      <div class="step-chip">&#9733;</div>
+      <div class="step-body">
+        <h3>Ahorcado <span style="font-size:11px;font-weight:400;color:var(--muted);text-transform:none;letter-spacing:0;">&middot; Avanzado &middot; Sesión y autenticación</span></h3>
+        <p>El clásico juego de adivinar una palabra letra a letra: guarda en sesión la palabra secreta y las letras ya probadas, y ve revelando la palabra o contando los fallos según corresponda.</p>
+      </div>
     </div>
   </section>
 
