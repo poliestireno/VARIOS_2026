@@ -1,0 +1,1023 @@
+<title>Entidad/Relación</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #2B6CB0;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #4C9AE0;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #6FA3D8;
+      --accent-ink: #0D1B2A;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #6FA3D8;
+    --accent-ink: #0D1B2A;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top {
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.08rem;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  section.block {
+    margin-top: 44px;
+  }
+
+  h2.block-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+
+  section.block p {
+    margin: 0 0 14px;
+  }
+
+  section.block ul {
+    margin: 0 0 14px;
+    padding-left: 22px;
+  }
+
+  section.block li {
+    margin-bottom: 6px;
+  }
+
+  h3.option-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: var(--ink);
+    margin: 40px 0 4px;
+  }
+
+  .checklist {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow);
+  }
+
+  .checklist li {
+    list-style: none;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 15px;
+    margin-bottom: 0;
+  }
+
+  .checklist ul { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+
+  .checklist svg {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    color: var(--accent-2);
+  }
+
+  .learn-list {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .learn-list li {
+    list-style: none;
+    padding-left: 20px;
+    position: relative;
+    color: var(--ink);
+    margin-bottom: 0;
+  }
+
+  .learn-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .step {
+    display: flex;
+    gap: 18px;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .step:first-of-type { border-top: none; padding-top: 0; }
+
+  .step-chip {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-body { flex: 1; min-width: 0; }
+
+  .step h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 4px 0 8px;
+  }
+
+  .step p {
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+
+  .step p.small {
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+
+  .term {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+
+  .term-bar span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--code-line);
+  }
+
+  .term pre {
+    margin: 0;
+    padding: 14px 16px 16px;
+    overflow-x: auto;
+  }
+
+  .term code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13.6px;
+    line-height: 1.7;
+    color: var(--code-ink);
+  }
+
+  .term .prompt { color: var(--code-muted); }
+  .term .cmt { color: var(--code-muted); }
+  .term .hl { color: var(--code-accent); }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .code-panel .term-bar { }
+
+  .code-panel pre {
+    margin: 0;
+    padding: 16px 18px 18px;
+    overflow-x: auto;
+  }
+
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+
+  .code-panel .tag { color: var(--accent-2); }
+  .code-panel .str { color: #C9D96B; }
+  .code-panel .kw { color: var(--code-accent); }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .prop { color: #8FB8FF; }
+  .code-panel .hl { color: var(--code-accent); }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+
+  .checkpoint p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .substep {
+    display: flex;
+    gap: 14px;
+    margin: 18px 0 0 16px;
+    padding-left: 16px;
+    border-left: 2px solid var(--line-soft);
+  }
+
+  .substep-chip {
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: var(--line-soft);
+    color: var(--muted);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 11.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .substep h4 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.98rem;
+    font-weight: 600;
+    margin: 2px 0 6px;
+  }
+
+  .substep p {
+    margin: 0 0 8px;
+    font-size: 14.5px;
+    color: var(--ink);
+  }
+
+  .substep .code-panel, .substep .term {
+    margin: 10px 0;
+  }
+
+  details.full-code {
+    margin-top: 16px;
+  }
+
+  details.full-code summary {
+    cursor: pointer;
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--accent-2);
+    list-style: none;
+  }
+
+  details.full-code summary::-webkit-details-marker { display: none; }
+
+  details.full-code summary::before {
+    content: "▸ ";
+  }
+
+  details.full-code[open] summary::before {
+    content: "▾ ";
+  }
+
+  .trouble {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .trouble-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .trouble-item .q {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    margin: 0 0 6px;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .trouble-item .q::before {
+    content: "?";
+    font-family: "IBM Plex Mono", monospace;
+    color: var(--accent-2);
+    font-weight: 500;
+  }
+
+  .trouble-item p {
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--muted);
+  }
+
+  .trouble-item p + p { margin-top: 8px; }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .step { transition: none; }
+  }
+
+  nav.toc {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 20px 0 0;
+    box-shadow: var(--shadow);
+  }
+  nav.toc .toc-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 12.5px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 10px;
+  }
+  nav.toc ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 24px; }
+  nav.toc li { font-size: 14px; margin-bottom: 6px; break-inside: avoid; }
+  nav.toc a { color: var(--ink); text-decoration: none; }
+  nav.toc a:hover { color: var(--accent-2); text-decoration: underline; }
+
+  .diagram {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    margin: 16px 0;
+    padding: 18px;
+    display: flex;
+    justify-content: center;
+    overflow-x: auto;
+  }
+  .diagram svg { max-width: 100%; height: auto; }
+  .diagram-caption {
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    margin: -8px 0 16px;
+  }
+
+  .notacion {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+  .notacion .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+  .notacion .term-bar span { width: 9px; height: 9px; border-radius: 50%; background: var(--code-line); }
+  .notacion pre { margin: 0; padding: 14px 18px 16px; overflow-x: auto; }
+  .notacion code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+  .notacion .kw { color: var(--code-accent); font-weight: 500; }
+  .notacion .ent { color: #8FB8FF; }
+  .notacion .attr { color: #C9D96B; }
+  .notacion .com { color: var(--code-muted); font-style: italic; }
+
+  h2.section-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 1.35rem;
+    margin: 0 0 4px;
+    scroll-margin-top: 24px;
+  }
+  .section-num {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    color: var(--accent-2);
+    display: block;
+    margin-bottom: 4px;
+  }
+  section.tema {
+    margin-top: 52px;
+    padding-top: 28px;
+    border-top: 1px solid var(--line-soft);
+  }
+  section.tema:first-of-type { border-top: none; }
+  h3.subtema {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    margin: 28px 0 8px;
+  }
+</style>
+
+
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">RA1 + RA2 &middot; Teoría</span>
+    <h1>Diseño conceptual: el modelo Entidad/Relación</h1>
+    <p class="lede">Antes de crear una sola tabla, hay que entender qué información va a guardar la base de datos y cómo se relaciona entre sí. El modelo Entidad/Relación (E/R) es el lenguaje gráfico que usamos para dejar ese diseño por escrito, de forma clara y sin ambigüedad, antes de traducirlo a tablas.</p>
+    <div class="meta-row">
+      <span class="meta-chip">RA2</span>
+      <span class="meta-chip">Modelo conceptual</span>
+      <span class="meta-chip">Base de los desafíos ER_*</span>
+    </div>
+    <p style="margin-top:16px;"><a href="index.html" style="color:var(--accent-2);font-family:'IBM Plex Mono',monospace;font-size:13px;text-decoration:none;">&larr; Volver al índice del módulo</a></p>
+  </header>
+
+  <nav class="toc">
+    <p class="toc-title">Contenido</p>
+    <ol>
+      <li><a href="#diseno-conceptual">Diseño conceptual</a></li>
+      <li><a href="#notacion-general">Notación</a></li>
+      <li><a href="#entidades">Entidades</a></li>
+      <li><a href="#tipos-atributos">Tipos de atributos</a></li>
+      <li><a href="#relaciones">Relaciones</a></li>
+      <li><a href="#correspondencia">Correspondencia y cardinalidad</a></li>
+      <li><a href="#recursivas">Relaciones recursivas</a></li>
+      <li><a href="#ternarias">Relaciones ternarias</a></li>
+      <li><a href="#debiles">Entidades débiles</a></li>
+      <li><a href="#especializaciones">Herencia y especializaciones</a></li>
+    </ol>
+  </nav>
+
+  <section class="tema" id="diseno-conceptual">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Diseño conceptual</h2>
+    <p>Antes de dibujar ningún esquema hace falta obtener y analizar bien los requisitos. Normalmente se consiguen preguntando a quien necesita la base de datos (o la aplicación que la usa), mediante entrevistas cada vez más concretas a medida que se va entendiendo qué hace falta. En este módulo los requisitos llegan ya redactados en forma de enunciado, pero en un trabajo real hay que ir a buscarlos.</p>
+    <p>Una vez conseguidos, el siguiente paso es analizarlos y construir un <strong>esquema conceptual</strong> que cumpla tres objetivos:</p>
+    <ul>
+      <li>Dejar plasmada con claridad la estructura y el significado de la base de datos.</li>
+      <li>Ser una descripción <strong>estable</strong>: no debería cambiar en fases posteriores del diseño.</li>
+      <li>Facilitar la comunicación entre usuarios, analistas y diseñadores &mdash; personas con perfiles distintos que necesitan entenderse sobre el mismo sistema.</li>
+    </ul>
+    <p>Hay varias formas de expresar esto de manera formal. En este módulo usamos el <strong>modelo Entidad/Relación</strong>.</p>
+  </section>
+
+  <section class="tema" id="notacion-general">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Notación</h2>
+    <p>Un esquema E/R se construye con un puñado de elementos, cada uno con su propio símbolo gráfico. A lo largo de este tema veremos, en este orden:</p>
+    <ul>
+      <li>Entidades y entidades débiles.</li>
+      <li>Relaciones y relaciones débiles.</li>
+      <li>Atributos y sus distintos tipos.</li>
+      <li>Cardinalidad (o correspondencia).</li>
+      <li>Grado de una relación.</li>
+      <li>Especialización.</li>
+    </ul>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Dos formas de leer lo mismo
+      </div>
+      <p>Cada elemento tiene su dibujo &mdash; el que se usa en papel o en un editor de diagramas &mdash; y también una <strong>notación accesible</strong> en texto, útil para describir el mismo esquema sin depender de una imagen. En este tema verás ambas: primero el diagrama, después su equivalente en texto, con este aspecto:</p>
+    </div>
+    <div class="notacion">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">E</span> <span class="ent">Persona</span>: <span class="attr">DNI (c)</span>, <span class="attr">nombre</span>.</code></pre>
+    </div>
+    <p class="small" style="color:var(--muted);font-size:13.5px;">Leyenda rápida: <code class="inline">E</code> entidad, <code class="inline">Ed</code> entidad débil, <code class="inline">R</code> relación, <code class="inline">Re</code>/<code class="inline">Ri</code> relación débil (existencia/identificación), <code class="inline">Esp</code> especialización. Entre paréntesis tras un atributo: <code class="inline">(c)</code> clave, <code class="inline">(a)</code> alternativo, <code class="inline">(m)</code> multivaluado, <code class="inline">(o)</code> opcional.</p>
+  </section>
+
+  <section class="tema" id="entidades">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Entidades</h2>
+    <p>Una <strong>entidad</strong> (o instancia de entidad) representa un elemento del mundo real: un objeto físico, un concepto o un ser vivo. Cada entidad tiene una serie de características que la describen, llamadas <strong>atributos</strong>.</p>
+    <p>Uno de esos atributos destaca sobre los demás: el <strong>identificador o clave</strong>, aquel cuyo valor es único entre todas las instancias del mismo tipo. Un <em>tipo de entidad</em> es, por tanto, el esquema que describe a todo un conjunto de instancias que comparten la misma estructura &mdash; no una instancia en concreto.</p>
+    <p>Gráficamente, una entidad es un rectángulo con su nombre dentro:</p>
+    <div class="diagram">
+      <svg viewBox="0 0 500 210" font-family="IBM Plex Sans, sans-serif">
+        <line x1="140" y1="84" x2="222" y2="140" stroke="var(--muted)" stroke-width="1.5"/>
+        <line x1="360" y1="84" x2="272" y2="140" stroke="var(--muted)" stroke-width="1.5"/>
+        <ellipse cx="140" cy="58" rx="48" ry="26" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.5"/>
+        <text x="140" y="63" text-anchor="middle" font-size="14" fill="var(--ink)" style="text-decoration:underline;">DNI</text>
+        <ellipse cx="360" cy="58" rx="54" ry="26" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.5"/>
+        <text x="360" y="63" text-anchor="middle" font-size="14" fill="var(--ink)">Nombre</text>
+        <rect x="200" y="140" width="100" height="46" rx="4" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
+        <text x="250" y="168" text-anchor="middle" font-size="14.5" font-weight="600" fill="var(--ink)">Persona</text>
+      </svg>
+    </div>
+    <p class="diagram-caption">El atributo subrayado (DNI) es la clave: identifica a cada instancia de Persona.</p>
+    <div class="notacion">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">E</span> <span class="ent">Persona</span>: <span class="attr">DNI (c)</span>, <span class="attr">nombre</span>.
+<span class="kw">E</span> <span class="ent">Coche</span>: <span class="attr">matricula (c)</span>, <span class="attr">marca</span>.
+<span class="kw">E</span> <span class="ent">Ordenador</span>: <span class="attr">id_ordenador (c)</span>, <span class="attr">Ram</span>, <span class="attr">Placa base</span>, <span class="attr">Procesador</span>.</code></pre>
+    </div>
+    <p>Persona y Coche son entidades porque representan conjuntos de objetos del mundo real que comparten características comunes (un coche tiene mayoritariamente 4 ruedas, volante, motor&hellip;) y, a la vez, atributos que distinguen a cada ejemplar &mdash; y sobre todo, un atributo que identifica a cada uno sin ambigüedad.</p>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Entidad vs. instancia
+      </div>
+      <p>Un coche Ford concreto, con matrícula BBB-7432, <strong>no</strong> es una entidad: es una <em>instancia</em> (o ejemplar) de la entidad Coche. Los diagramas E/R representan tipos de entidad, nunca instancias individuales.</p>
+    </div>
+  </section>
+
+  <section class="tema" id="tipos-atributos">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Tipos de atributos</h2>
+    <p>No todos los atributos se comportan igual. Según su función, distinguimos varios tipos.</p>
+
+    <h3 class="subtema">Atributo ordinario</h3>
+    <p>Representa información que tiene cada instancia, pero que puede repetirse entre instancias distintas &mdash; por ejemplo, una fecha de nacimiento: dos personas pueden haber nacido el mismo día. Cada instancia tiene siempre un valor, y solo uno.</p>
+    <div class="notacion">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">E</span> <span class="ent">entidad</span>: <span class="attr">fecha_nacimiento</span>.</code></pre>
+    </div>
+
+    <h3 class="subtema">Atributo clave</h3>
+    <p>Tiene un valor único para cada instancia: si se aporta un valor de este atributo, coincide con una única instancia de la entidad (por ejemplo, el DNI en Persona). Si la clave está formada por varios atributos a la vez, hace falta el valor de todos ellos para identificar una instancia.</p>
+    <div class="notacion">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">E</span> <span class="ent">entidad</span>: <span class="attr">DNI (c)</span>.</code></pre>
+    </div>
+
+    <h3 class="subtema">Identificador alternativo</h3>
+    <p>Se comporta como la clave &mdash; identifica a una única instancia &mdash;, pero de forma independiente a ella. A veces hay varios candidatos a clave, y se elige uno como clave y el resto como alternativos. En Persona podría ser el NSS (número de la Seguridad Social); en Vehículo, la clave sería la matrícula y el alternativo el número de bastidor.</p>
+    <div class="notacion">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">E</span> <span class="ent">entidad</span>: <span class="attr">NSS (a)</span>.</code></pre>
+    </div>
+
+    <h3 class="subtema">Atributo multivaluado</h3>
+    <p>Como un atributo ordinario, pero puede tener varios valores a la vez para una misma instancia. El color de un coche: una instancia puede ser solo azul, y otra ser roja y negra a la vez.</p>
+    <div class="notacion">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">E</span> <span class="ent">entidad</span>: <span class="attr">colores (m)</span>.</code></pre>
+    </div>
+
+    <h3 class="subtema">Atributo opcional</h3>
+    <p>Una instancia concreta no tiene por qué tener valor en este atributo &mdash; puede quedar nulo o desconocido. En el diagrama clásico se dibuja con la línea que lo une a la entidad punteada.</p>
+    <div class="notacion">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">E</span> <span class="ent">entidad</span>: <span class="attr">estado_civil (o)</span>.</code></pre>
+    </div>
+
+    <h3 class="subtema">Atributo compuesto</h3>
+    <p>Un atributo formado, a su vez, por otros atributos. Un código de cuenta bancaria, por ejemplo, está formado por el código de entidad, el de oficina, el dígito de control y el número de cuenta &mdash; cada uno accesible por separado.</p>
+    <div class="notacion">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">E</span> <span class="ent">CuentaBancaria</span>: <span class="attr">NC (c: C.Entidad, C.Oficina, DC, N.Cuenta)</span>.</code></pre>
+    </div>
+  </section>
+
+  <section class="tema" id="relaciones">
+    <span class="section-num">05</span>
+    <h2 class="section-title">Relaciones</h2>
+    <p>Una <strong>relación</strong> es una asociación entre dos (o más) entidades. Se dibuja como un rombo con su nombre dentro, unido mediante líneas a las entidades que relaciona.</p>
+    <p>El <strong>grado</strong> de una relación es el número de entidades que une, es decir, el número de líneas que salen del rombo &mdash; si una misma entidad aparece dos veces (relación reflexiva), también cuenta para el grado. En este apartado veremos relaciones de grado dos; más adelante, recursivas y ternarias.</p>
+    <div class="diagram">
+      <svg viewBox="0 0 560 170" font-family="IBM Plex Sans, sans-serif">
+        <rect x="20" y="63" width="110" height="46" rx="4" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.5"/>
+        <text x="75" y="91" text-anchor="middle" font-size="14.5" fill="var(--ink)">Persona</text>
+        <rect x="430" y="63" width="110" height="46" rx="4" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.5"/>
+        <text x="485" y="91" text-anchor="middle" font-size="14.5" fill="var(--ink)">Coche</text>
+        <line x1="130" y1="86" x2="222" y2="86" stroke="var(--ink)" stroke-width="1.5"/>
+        <line x1="338" y1="86" x2="430" y2="86" stroke="var(--ink)" stroke-width="1.5"/>
+        <polygon points="222,86 280,56 338,86 280,116" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
+        <text x="280" y="91" text-anchor="middle" font-size="13.5" font-weight="600" fill="var(--ink)">Conduce</text>
+      </svg>
+    </div>
+    <div class="notacion">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">E</span> <span class="ent">Persona</span>: <span class="attr">DNI (c)</span>, <span class="attr">Nombre</span>.
+<span class="kw">E</span> <span class="ent">Coche</span>: <span class="attr">Matricula (c)</span>, <span class="attr">Marca</span>.
+<span class="kw">R</span> <span class="ent">Conduce</span> (<span class="ent">Persona</span>, <span class="ent">Coche</span>): <span class="attr">fecha</span>.</code></pre>
+    </div>
+    <p>Las relaciones también pueden tener atributos, igual que las entidades &mdash; pero aquí un atributo está asociado a la <strong>participación conjunta</strong> de una instancia de cada entidad, no a ninguna de las dos por separado. En el ejemplo, la fecha pertenece al hecho de que esa persona condujo ese coche, no a la persona ni al coche en general.</p>
+  </section>
+
+  <section class="tema" id="correspondencia">
+    <span class="section-num">05.1</span>
+    <h2 class="section-title">Correspondencia y cardinalidad</h2>
+    <p>Hasta ahora nos falta un dato importante: <strong>cuántas</strong> instancias de cada entidad participan en la relación. Se expresa con un mínimo y un máximo por cada entidad, escritos en cada extremo de la línea que la une a la relación.</p>
+    <div class="diagram">
+      <svg viewBox="0 0 560 170" font-family="IBM Plex Sans, sans-serif">
+        <rect x="20" y="63" width="110" height="46" rx="4" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.5"/>
+        <text x="75" y="91" text-anchor="middle" font-size="14.5" fill="var(--ink)">Persona</text>
+        <rect x="430" y="63" width="110" height="46" rx="4" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.5"/>
+        <text x="485" y="91" text-anchor="middle" font-size="14.5" fill="var(--ink)">Coche</text>
+        <line x1="130" y1="86" x2="222" y2="86" stroke="var(--ink)" stroke-width="1.5"/>
+        <line x1="338" y1="86" x2="430" y2="86" stroke="var(--ink)" stroke-width="1.5"/>
+        <polygon points="222,86 280,56 338,86 280,116" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
+        <text x="280" y="91" text-anchor="middle" font-size="13.5" font-weight="600" fill="var(--ink)">Conduce</text>
+        <text x="176" y="76" text-anchor="middle" font-size="13" fill="var(--accent-2)" font-family="IBM Plex Mono, monospace">(1,N)</text>
+        <text x="384" y="76" text-anchor="middle" font-size="13" fill="var(--accent-2)" font-family="IBM Plex Mono, monospace">(1,N)</text>
+      </svg>
+    </div>
+    <div class="notacion">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">R</span> <span class="ent">Conduce</span> <span class="ent">Persona</span> <span class="attr">(1,N)</span>, <span class="ent">Coche</span> <span class="attr">(1,N)</span>: <span class="attr">fecha</span>.</code></pre>
+    </div>
+    <p>Lectura: un coche puede ser conducido por una o varias personas (mínimo 1, máximo N); y una persona puede conducir uno o varios coches (mínimo 1, máximo N). Encaja con una empresa de VTC, donde cada coche lo conducen distintos conductores en días distintos.</p>
+    <p>Para averiguar cada número hay que formular una pregunta muy concreta. Para la correspondencia del lado Coche: <em>&ldquo;para un conductor, &iquest;cuántos coches puede conducir?&rdquo;</em> &mdash; el mínimo a la izquierda, el máximo a la derecha. Para el lado Persona, la misma pregunta en pasivo: <em>&ldquo;un solo coche, &iquest;por cuántos conductores puede ser conducido?&rdquo;</em>.</p>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        El enunciado cambia la cardinalidad
+      </div>
+      <p>Si en vez de una VTC hubiera coches autónomos y normales, el lado Persona pasaría a ser <code class="inline">(0,N)</code>: es opcional que haya conductor. La cardinalidad no es un dato fijo del modelo &mdash; depende siempre de lo que diga el enunciado concreto.</p>
+    </div>
+    <p>Otro ejemplo, con una relación más restrictiva:</p>
+    <div class="diagram">
+      <svg viewBox="0 0 560 170" font-family="IBM Plex Sans, sans-serif">
+        <rect x="20" y="63" width="110" height="46" rx="4" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.5"/>
+        <text x="75" y="91" text-anchor="middle" font-size="14.5" fill="var(--ink)">Edificio</text>
+        <rect x="430" y="63" width="110" height="46" rx="4" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.5"/>
+        <text x="485" y="91" text-anchor="middle" font-size="14.5" fill="var(--ink)">Sala</text>
+        <line x1="130" y1="86" x2="222" y2="86" stroke="var(--ink)" stroke-width="1.5"/>
+        <line x1="338" y1="86" x2="430" y2="86" stroke="var(--ink)" stroke-width="1.5"/>
+        <polygon points="222,86 280,56 338,86 280,116" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
+        <text x="280" y="91" text-anchor="middle" font-size="13.5" font-weight="600" fill="var(--ink)">Está</text>
+        <text x="176" y="76" text-anchor="middle" font-size="13" fill="var(--accent-2)" font-family="IBM Plex Mono, monospace">(1,1)</text>
+        <text x="384" y="76" text-anchor="middle" font-size="13" fill="var(--accent-2)" font-family="IBM Plex Mono, monospace">(1,N)</text>
+      </svg>
+    </div>
+    <div class="notacion">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">E</span> <span class="ent">Edificio</span>: <span class="attr">id (c)</span>.
+<span class="kw">E</span> <span class="ent">Sala</span>: <span class="attr">nombre (c)</span>.
+<span class="kw">R</span> <span class="ent">Está</span> <span class="ent">Edificio</span> <span class="attr">(1,1)</span>, <span class="ent">Sala</span> <span class="attr">(1,N)</span>.</code></pre>
+    </div>
+    <p>Una sala está, obligatoriamente, en un único edificio (mínimo y máximo 1). Un edificio tiene entre una y varias salas &mdash; se asume al menos una, porque si no sería macizo.</p>
+  </section>
+
+  <section class="tema" id="recursivas">
+    <span class="section-num">05.2</span>
+    <h2 class="section-title">Relaciones recursivas</h2>
+    <p>Es posible relacionar dos instancias de la <strong>misma</strong> entidad &mdash; por ejemplo, la relación padre&ndash;hijo dentro de la entidad Persona. Es una relación reflexiva de una entidad consigo misma, y sigue siendo de grado dos (Persona cuenta dos veces).</p>
+    <div class="diagram">
+      <svg viewBox="0 0 420 220" font-family="IBM Plex Sans, sans-serif">
+        <rect x="30" y="88" width="120" height="46" rx="4" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.5"/>
+        <text x="90" y="116" text-anchor="middle" font-size="14.5" fill="var(--ink)">Persona</text>
+        <polygon points="270,111 320,81 370,111 320,141" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
+        <text x="320" y="116" text-anchor="middle" font-size="12.5" font-weight="600" fill="var(--ink)">es_padre</text>
+        <path d="M150,98 C210,60 250,60 272,100" fill="none" stroke="var(--ink)" stroke-width="1.5"/>
+        <path d="M272,122 C250,165 210,165 150,124" fill="none" stroke="var(--ink)" stroke-width="1.5"/>
+        <text x="205" y="55" text-anchor="middle" font-size="13" fill="var(--accent-2)" font-family="IBM Plex Mono, monospace">(1,1)</text>
+        <text x="205" y="182" text-anchor="middle" font-size="13" fill="var(--accent-2)" font-family="IBM Plex Mono, monospace">(0,N)</text>
+      </svg>
+    </div>
+    <div class="notacion">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">E</span> <span class="ent">Persona</span>.
+<span class="kw">R</span> <span class="ent">es_padre</span>: <span class="ent">Persona</span> <span class="attr">(0,N)</span>, <span class="ent">Persona</span> <span class="attr">(1,1)</span>.</code></pre>
+    </div>
+    <p>Cómo se lee: en sentido antihorario &mdash; empezando en Persona, hacia la relación, y saliendo por la correspondencia <code class="inline">(1,1)</code> &mdash; se lee &ldquo;una persona tiene como padre a (1,1) persona&rdquo;: obligatoriamente un padre, uno y solo uno. En sentido horario, saliendo por <code class="inline">(0,N)</code>, se lee &ldquo;una persona puede ser padre de (0,N) personas&rdquo;: ninguna o varias.</p>
+    <p>No hay un orden fijo entre las dos correspondencias: se les da sentido en el momento de construir el diagrama. Podrían invertirse sus posiciones sin cambiar el significado, siempre que se invierta también la lectura.</p>
+  </section>
+
+  <section class="tema" id="ternarias">
+    <span class="section-num">05.3</span>
+    <h2 class="section-title">Relaciones ternarias y de grado mayor</h2>
+    <p>Una relación puede unir tres o más entidades, siempre que refleje <strong>una misma acción</strong> que las implica a la vez &mdash; no dos relaciones binarias disfrazadas de una ternaria.</p>
+    <p>Ejemplo claro: un profesor imparte un módulo a un grupo de alumnos. Implica a Profesor, Alumno y Módulo a la vez, porque:</p>
+    <ul>
+      <li>Relacionar solo Alumno y Profesor no dice de qué módulo se trata &mdash; un profesor puede impartir varios módulos al mismo grupo.</li>
+      <li>Relacionar solo Módulo y Profesor tampoco basta &mdash; puede haber varios grupos (1&ordm;A, 1&ordm;B&hellip;) con profesores distintos.</li>
+      <li>Relacionar solo Alumno y Módulo, por la misma razón, no dice qué profesor lo imparte.</li>
+    </ul>
+    <div class="diagram">
+      <svg viewBox="0 0 420 260" font-family="IBM Plex Sans, sans-serif">
+        <rect x="20" y="16" width="120" height="44" rx="4" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.5"/>
+        <text x="80" y="43" text-anchor="middle" font-size="13.5" fill="var(--ink)">Profesor</text>
+        <rect x="280" y="16" width="120" height="44" rx="4" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.5"/>
+        <text x="340" y="43" text-anchor="middle" font-size="13.5" fill="var(--ink)">Alumno</text>
+        <rect x="150" y="200" width="120" height="44" rx="4" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.5"/>
+        <text x="210" y="227" text-anchor="middle" font-size="13.5" fill="var(--ink)">Módulo</text>
+        <polygon points="210,90 260,130 210,170 160,130" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
+        <text x="210" y="134" text-anchor="middle" font-size="12" font-weight="600" fill="var(--ink)">imparte</text>
+        <line x1="90" y1="60" x2="185" y2="105" stroke="var(--ink)" stroke-width="1.5"/>
+        <line x1="330" y1="60" x2="235" y2="105" stroke="var(--ink)" stroke-width="1.5"/>
+        <line x1="210" y1="170" x2="210" y2="200" stroke="var(--ink)" stroke-width="1.5"/>
+        <text x="105" y="90" text-anchor="middle" font-size="12" fill="var(--accent-2)" font-family="IBM Plex Mono, monospace">(1,1)</text>
+        <text x="320" y="90" text-anchor="middle" font-size="12" fill="var(--accent-2)" font-family="IBM Plex Mono, monospace">(1,N)</text>
+        <text x="245" y="192" text-anchor="middle" font-size="12" fill="var(--accent-2)" font-family="IBM Plex Mono, monospace">(0,N)</text>
+      </svg>
+    </div>
+    <div class="notacion">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">E</span> <span class="ent">Profesor</span>: <span class="attr">nombre (c)</span>.
+<span class="kw">E</span> <span class="ent">Alumno</span>: <span class="attr">NIA (c)</span>.
+<span class="kw">E</span> <span class="ent">Módulo</span>: <span class="attr">nombre (c)</span>, <span class="attr">horas</span>.
+<span class="kw">R</span> <span class="ent">imparte</span> <span class="ent">Profesor</span> <span class="attr">(1,1)</span>, <span class="ent">Alumno</span> <span class="attr">(1,N)</span>, <span class="ent">Módulo</span> <span class="attr">(0,N)</span>.</code></pre>
+    </div>
+    <p>Cada correspondencia se obtiene fijando las otras dos entidades y preguntando cuántas hay de la tercera:</p>
+    <ul>
+      <li><strong>Para un profesor y un alumno</strong>, &iquest;cuántos módulos le imparte? Puede que ninguno, puede que varios &mdash; <code class="inline">(0,N)</code>.</li>
+      <li><strong>Para un profesor y un módulo</strong>, &iquest;a cuántos alumnos da clase? Como mínimo uno, como máximo varios &mdash; <code class="inline">(1,N)</code>.</li>
+      <li><strong>Para un alumno y un módulo</strong>, &iquest;cuántos profesores tiene? En FP, uno exactamente &mdash; <code class="inline">(1,1)</code>.</li>
+    </ul>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        No toda tripleta es una ternaria
+      </div>
+      <p>Un lector lee un libro, escrito por un autor. Podría parecer una ternaria (Lector, Libro, Escritor), pero escribir un libro solo compete a Escritor y Libro; que el lector lea ese libro es una relación aparte, entre Lector y Libro. Son dos relaciones binarias, no una ternaria.</p>
+    </div>
+  </section>
+
+  <section class="tema" id="debiles">
+    <span class="section-num">06</span>
+    <h2 class="section-title">Entidades débiles</h2>
+    <p>Algunas entidades dependen de otra para existir. Una sala depende de un edificio; una cuenta bancaria depende de una entidad bancaria. Hay dos formas distintas de depender:</p>
+    <h3 class="subtema">Dependencia en existencia</h3>
+    <p>Si el edificio desaparece, la sala también desaparece &mdash; pero el nombre de la sala no tiene por qué guardar relación con el del edificio. La sala se identifica de forma autónoma.</p>
+    <div class="diagram">
+      <svg viewBox="0 0 560 170" font-family="IBM Plex Sans, sans-serif">
+        <rect x="20" y="63" width="110" height="46" rx="4" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.5"/>
+        <text x="75" y="91" text-anchor="middle" font-size="14.5" fill="var(--ink)">Edificio</text>
+        <rect x="434" y="63" width="102" height="46" rx="4" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.5"/>
+        <rect x="438" y="67" width="94" height="38" rx="3" fill="none" stroke="var(--ink)" stroke-width="1.5"/>
+        <text x="485" y="91" text-anchor="middle" font-size="14" fill="var(--ink)">Sala</text>
+        <line x1="130" y1="86" x2="222" y2="86" stroke="var(--ink)" stroke-width="1.5"/>
+        <line x1="338" y1="86" x2="434" y2="86" stroke="var(--ink)" stroke-width="1.5"/>
+        <polygon points="222,86 280,56 338,86 280,116" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
+        <polygon points="228,86 280,62 332,86 280,110" fill="none" stroke="var(--accent)" stroke-width="1.5"/>
+        <text x="280" y="91" text-anchor="middle" font-size="13" font-weight="600" fill="var(--ink)">Está</text>
+      </svg>
+    </div>
+    <p class="diagram-caption">El doble borde marca la entidad débil y su relación de existencia.</p>
+    <div class="notacion">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">E</span> <span class="ent">Edificio</span>: <span class="attr">ID (c)</span>.
+<span class="kw">Ed</span> <span class="ent">Sala</span>: <span class="attr">nombre (c)</span>.
+<span class="kw">Re</span> <span class="ent">Está</span> (<span class="ent">Edificio</span>, <span class="ent">Sala</span>).</code></pre>
+    </div>
+    <p>Ejemplo con instancias: edificios A y B; salas 10, 11, 12, 13 y 14. Las salas 10, 12 y 13 están en el edificio A; la 11 y la 14, en el B. Ninguna sala existe sin su edificio, pero cada una se identifica por su propio nombre, sin necesitar el del edificio.</p>
+
+    <h3 class="subtema">Dependencia en identificación</h3>
+    <p>Si el banco desaparece, la cuenta también &mdash; y, además, el propio código de la cuenta incluye el código del banco: en <code class="inline">ES21 0112 1234 04 3412341234</code>, la parte <code class="inline">0112</code> es el código de entidad y <code class="inline">1234</code> el de la sucursal. El número de cuenta por sí solo no identifica nada, porque podría repetirse en otro banco.</p>
+    <div class="notacion">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">E</span> <span class="ent">EntidadBancaria</span>.
+<span class="kw">Ed</span> <span class="ent">CuentaBancaria</span>.
+<span class="kw">Ri</span> (<span class="ent">EntidadBancaria</span>, <span class="ent">CuentaBancaria</span>).</code></pre>
+    </div>
+    <p>Toda dependencia en identificación implica también dependencia en existencia &mdash; por eso <code class="inline">Ri</code> se dibuja igual que <code class="inline">Re</code> (doble línea), pero además la clave de la entidad débil incorpora la de la entidad fuerte.</p>
+  </section>
+
+  <section class="tema" id="especializaciones">
+    <span class="section-num">07</span>
+    <h2 class="section-title">Herencia y especializaciones</h2>
+    <p>Una especialización (o generalización) representa una jerarquía entre entidades &mdash; <strong>no</strong> es una relación entre entidades distintas. Un error habitual es escribir &ldquo;una Entidad puede ser otra Entidad&rdquo; como si fuera una relación llamada &ldquo;puede ser&rdquo;: eso nunca es una relación, siempre es una especialización.</p>
+    <p>Hay una entidad padre y varias entidades hijas. Ejemplo: Automóvil, con hijas Moto, Coche, Camión y Autobús.</p>
+    <div class="diagram">
+      <svg viewBox="0 0 560 260" font-family="IBM Plex Sans, sans-serif">
+        <rect x="220" y="14" width="120" height="44" rx="4" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.5"/>
+        <text x="280" y="41" text-anchor="middle" font-size="14" fill="var(--ink)">Automóvil</text>
+        <line x1="280" y1="58" x2="280" y2="92" stroke="var(--ink)" stroke-width="1.5"/>
+        <polygon points="255,92 305,92 280,132" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
+        <line x1="280" y1="132" x2="280" y2="152" stroke="var(--ink)" stroke-width="1.5"/>
+        <line x1="60" y1="180" x2="280" y2="152" stroke="var(--ink)" stroke-width="1.5"/>
+        <line x1="200" y1="180" x2="280" y2="152" stroke="var(--ink)" stroke-width="1.5"/>
+        <line x1="360" y1="180" x2="280" y2="152" stroke="var(--ink)" stroke-width="1.5"/>
+        <line x1="500" y1="180" x2="280" y2="152" stroke="var(--ink)" stroke-width="1.5"/>
+        <rect x="10" y="180" width="100" height="42" rx="4" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.5"/>
+        <text x="60" y="206" text-anchor="middle" font-size="13" fill="var(--ink)">Moto</text>
+        <rect x="150" y="180" width="100" height="42" rx="4" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.5"/>
+        <text x="200" y="206" text-anchor="middle" font-size="13" fill="var(--ink)">Coche</text>
+        <rect x="310" y="180" width="100" height="42" rx="4" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.5"/>
+        <text x="360" y="206" text-anchor="middle" font-size="13" fill="var(--ink)">Camión</text>
+        <rect x="450" y="180" width="100" height="42" rx="4" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.5"/>
+        <text x="500" y="206" text-anchor="middle" font-size="13" fill="var(--ink)">Autobús</text>
+        <text x="280" y="115" text-anchor="middle" font-size="12" font-weight="600" fill="var(--ink)">Esp</text>
+      </svg>
+    </div>
+    <div class="notacion">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">E</span> <span class="ent">Automóvil</span>: <span class="attr">matrícula (c)</span>, <span class="attr">marca</span>.
+<span class="kw">E</span> <span class="ent">Moto</span>.
+<span class="kw">E</span> <span class="ent">Coche</span>: <span class="attr">puertas</span>.
+<span class="kw">E</span> <span class="ent">Camión</span>: <span class="attr">ejes</span>.
+<span class="kw">E</span> <span class="ent">Autobús</span>: <span class="attr">ejes</span>.
+<span class="kw">Esp</span> <span class="ent">Automóvil</span>: <span class="ent">Moto</span>, <span class="ent">Coche</span>, <span class="ent">Camión</span>, <span class="ent">Autobús</span>.</code></pre>
+    </div>
+    <p>Los automóviles tienen matrícula (su clave) y marca. Cada tipo hereda esos dos atributos sin necesidad de repetirlos, y además añade los suyos propios: los coches tienen número de puertas; camiones y autobuses, número de ejes cada uno por su lado.</p>
+
+    <h3 class="subtema" id="especializacion-total">Especialización total</h3>
+    <p>Es <strong>total</strong> cuando un ejemplar de la entidad padre no puede existir si no es a través de una de las entidades hijas. En el ejemplo, no existe &ldquo;el automóvil&rdquo; sin más: todo automóvil es una moto, un coche, un camión o un autobús. Si apareciera un tipo nuevo (un quad, por ejemplo), habría que añadir una entidad hija nueva &mdash; sus ejemplares no encajan en ninguna de las cuatro ya definidas. Se marca con un círculo junto al triángulo.</p>
+    <div class="notacion">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">Esp (T)</span> <span class="ent">Automóvil</span>: <span class="ent">Moto</span>, <span class="ent">Coche</span>, <span class="ent">Camión</span>, <span class="ent">Autobús</span>.</code></pre>
+    </div>
+    <p>Lo contrario es una especialización <strong>no total</strong>: puede haber ejemplares de la entidad padre sin pertenecer a ninguna hija. Por ejemplo, Ventana especializada en Abatible y Basculante &mdash; puede existir una ventana que no se abra, perteneciendo solo a la entidad padre.</p>
+    <div class="notacion">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">E</span> <span class="ent">Ventana</span>.
+<span class="kw">E</span> <span class="ent">Basculante</span>.
+<span class="kw">E</span> <span class="ent">Abatible</span>.
+<span class="kw">Esp</span> <span class="ent">Ventana</span>: <span class="ent">Basculante</span>, <span class="ent">Abatible</span>.</code></pre>
+    </div>
+
+    <h3 class="subtema" id="especializacion-exclusiva">Especialización exclusiva</h3>
+    <p>Es <strong>exclusiva</strong> cuando cada ejemplar pertenece a una sola entidad hija, nunca a dos o más a la vez. Un automóvil no puede ser coche y moto simultáneamente. Se marca con un arco que cruza las líneas entre el triángulo y las entidades hijas.</p>
+    <div class="notacion">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">Esp (T,E)</span> <span class="ent">Automóvil</span>: <span class="ent">Moto</span>, <span class="ent">Coche</span>, <span class="ent">Camión</span>, <span class="ent">Autobús</span>.</code></pre>
+    </div>
+    <p>En este caso la especialización es total y exclusiva a la vez. Combinando ambas propiedades hay cuatro casos posibles:</p>
+    <ul>
+      <li><strong>Exclusiva y total</strong>: Automóvil respecto a Moto, Coche, Camión y Autobús.</li>
+      <li><strong>Exclusiva y no total.</strong></li>
+      <li><strong>No exclusiva y total.</strong></li>
+      <li><strong>No exclusiva y no total</strong>: Ventana respecto a Abatible y Basculante &mdash; una ventana podría, en otro dominio, ser abatible y basculante a la vez, o ninguna de las dos.</li>
+    </ul>
+  </section>
+
+  <footer class="end">
+    Siguiente paso: traducir este esquema conceptual a un modelo lógico/físico &mdash; tablas, claves primarias y foráneas &mdash; en el bloque de RA3.
+  </footer>
+
+</div>

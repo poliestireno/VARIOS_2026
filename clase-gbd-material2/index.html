@@ -1,0 +1,489 @@
+<title>Temario GBD</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #2B6CB0;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #6FA3D8;
+      --accent-ink: #0D1B2A;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #6FA3D8;
+    --accent-ink: #0D1B2A;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top { margin-bottom: 36px; }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.9rem, 4.5vw, 2.5rem);
+    line-height: 1.14;
+    letter-spacing: -0.01em;
+    margin: 16px 0 8px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.05rem;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .meta-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .overview-wrap { overflow-x: auto; margin-top: 8px; }
+
+  table.overview {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    font-size: 14.5px;
+  }
+
+  table.overview th {
+    text-align: left;
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 12.5px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  table.overview td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--line-soft);
+    vertical-align: top;
+  }
+
+  table.overview tr:last-child td { border-bottom: none; }
+
+  table.overview td.num { font-variant-numeric: tabular-nums; color: var(--muted); }
+
+  table.overview .block-name { font-weight: 600; }
+  table.overview .block-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 8px;
+  }
+
+  section.phase { margin-top: 56px; }
+
+  .phase-head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+  }
+
+  .phase-num {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    color: var(--accent-2);
+    font-weight: 500;
+  }
+
+  h2.phase-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 1.4rem;
+    margin: 0;
+  }
+
+  .phase-meta {
+    color: var(--muted);
+    font-size: 13.5px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    margin-left: auto;
+    white-space: nowrap;
+  }
+
+  .phase-summary {
+    color: var(--muted);
+    font-size: 15px;
+    max-width: 62ch;
+    margin: 6px 0 24px;
+  }
+
+  .session {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-top: 12px;
+    box-shadow: var(--shadow);
+    display: flex;
+    gap: 14px;
+  }
+
+  .session-chip {
+    flex: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .session-body { flex: 1; min-width: 0; }
+
+  .session h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.02rem;
+    font-weight: 600;
+    margin: 0 0 5px;
+  }
+
+  .session h3 a {
+    color: inherit;
+    text-decoration: none;
+    background-image: linear-gradient(var(--accent-2), var(--accent-2));
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 0% 1.5px;
+    transition: background-size 0.15s ease;
+    padding-bottom: 1px;
+  }
+
+  .session h3 a:hover,
+  .session h3 a:focus-visible {
+    color: var(--accent-2);
+    background-size: 100% 1.5px;
+  }
+
+  .session h3 a::after {
+    content: " \2197";
+    font-size: 0.8em;
+    color: var(--muted);
+  }
+
+  .session p.objetivo {
+    margin: 0 0 8px;
+    color: var(--ink);
+    font-size: 14.5px;
+  }
+
+  .session .linea {
+    font-size: 13.5px;
+    color: var(--muted);
+    margin: 4px 0 0;
+  }
+
+  .session .linea strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .session .practica {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px dashed var(--line);
+    font-size: 13.5px;
+  }
+
+  .session .practica strong { color: var(--accent-2); }
+
+  .proximamente {
+    background: var(--surface);
+    border: 1px dashed var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-top: 12px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .proximamente strong { color: var(--ink); }
+
+  .proximamente ul { margin: 8px 0 0; padding-left: 20px; }
+  .proximamente li { margin-bottom: 4px; }
+
+  footer.end {
+    margin-top: 56px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+</style>
+
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">Temario de módulo &middot; 1&ordm; ASIR</span>
+    <h1>Gestión de Bases de Datos</h1>
+    <p class="lede">Del diseño conceptual de una base de datos a su aseguramiento: modelos entidad/relación, diseño físico, consultas y modificación de datos con SQL, y salvaguarda de la información. Organizado en desafíos agrupados por resultado de aprendizaje (RA).</p>
+    <div class="meta-row">
+      <span class="meta-chip">5 bloques (RA1&ndash;RA6)</span>
+      <span class="meta-chip">13 desafíos</span>
+      <span class="meta-chip">94 días de grupo</span>
+      <span class="meta-chip">3 evaluaciones</span>
+    </div>
+  </header>
+
+  <div class="overview-wrap">
+    <table class="overview">
+      <thead>
+        <tr>
+          <th>Bloque</th>
+          <th>% eval.</th>
+          <th>Desafíos</th>
+          <th>Días</th>
+          <th>Evaluación</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="block-name"><span class="block-dot" style="background:#2B6CB0"></span>RA1 + RA2</td>
+          <td class="num">25%</td>
+          <td class="num">3</td>
+          <td class="num">21</td>
+          <td class="num">Eval. 1</td>
+        </tr>
+        <tr>
+          <td class="block-name"><span class="block-dot" style="background:#0F8B8D"></span>RA3</td>
+          <td class="num">25%</td>
+          <td class="num">3</td>
+          <td class="num">21</td>
+          <td class="num">Eval. 1</td>
+        </tr>
+        <tr>
+          <td class="block-name"><span class="block-dot" style="background:#E4572E"></span>RA4</td>
+          <td class="num">25%</td>
+          <td class="num">4</td>
+          <td class="num">24</td>
+          <td class="num">Eval. 2 &rarr; 3</td>
+        </tr>
+        <tr>
+          <td class="block-name"><span class="block-dot" style="background:#d4af37"></span>RA5</td>
+          <td class="num">25%</td>
+          <td class="num">3</td>
+          <td class="num">28</td>
+          <td class="num">Eval. 3</td>
+        </tr>
+        <tr>
+          <td class="block-name"><span class="block-dot" style="background:#7c6bd8"></span>RA6</td>
+          <td class="num">&mdash;</td>
+          <td class="num">&mdash;</td>
+          <td class="num">&mdash;</td>
+          <td class="num">&mdash;</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- BLOQUE 1: RA1+RA2 -->
+  <section class="phase">
+    <div class="phase-head">
+      <span class="phase-num">Bloque 1 &middot; 25% de la evaluación</span>
+      <h2 class="phase-title">RA1 + RA2 &middot; Elementos y modelo conceptual</h2>
+      <span class="phase-meta">3 desafíos &middot; 21 días de grupo &middot; Eval. 1</span>
+    </div>
+    <p class="phase-summary"><strong>RA1.</strong> Reconoce los elementos de las bases de datos analizando sus funciones y valorando la utilidad de los sistemas gestores. <strong>RA2.</strong> Diseña modelos lógicos normalizados interpretando diagramas entidad/relación.</p>
+
+    <h3 style="font-family:'Lexend',sans-serif;font-weight:600;font-size:1.05rem;margin:28px 0 4px;">Teoría</h3>
+    <div class="session">
+      <div class="session-chip">T1</div>
+      <div class="session-body">
+        <h3><a href="teoria-entidad-relacion.html">Diseño conceptual: el modelo Entidad/Relación</a></h3>
+        <p class="objetivo">Entidades, atributos, relaciones, correspondencias, entidades débiles y especializaciones &mdash; la notación completa para diseñar el esquema conceptual de una base de datos antes de tocar SQL.</p>
+      </div>
+    </div>
+    <div class="session">
+      <div class="session-chip">T2</div>
+      <div class="session-body">
+        <h3><a href="https://drive.google.com/drive/folders/12NEi7idy8f9mgFnITuPaEGX-RPtigrbx" target="_blank" rel="noopener">Sistemas de archivos: de los ficheros a la base de datos</a></h3>
+        <p class="objetivo">Material de apoyo sobre la gestión de datos en ficheros tradicionales y sus limitaciones, como punto de partida para justificar la necesidad de un SGBD.</p>
+        <p class="linea" style="margin-top:8px;">Carpeta de Drive todavía sin traer a esta página &mdash; en cuanto se pegue el contenido, se convierte en una página propia como la de Entidad/Relación.</p>
+      </div>
+    </div>
+
+    <h3 style="font-family:'Lexend',sans-serif;font-weight:600;font-size:1.05rem;margin:28px 0 4px;">Desafíos</h3>
+    <div class="session">
+      <div class="session-chip">D1</div>
+      <div class="session-body">
+        <h3><a href="https://docs.google.com/document/d/1pAedH7v7nGfvQmwRHZg74YDTu4jBz83Aac4n9iHhYCU/edit?tab=t.0" target="_blank" rel="noopener">RA12_FICHEROS_Y_MAS</a></h3>
+        <p class="objetivo">Desafío en torno a los sistemas de archivos y sus limitaciones frente a un SGBD.</p>
+        <p class="practica"><strong>Duración:</strong> 8 días</p>
+      </div>
+    </div>
+    <div class="session">
+      <div class="session-chip">D2</div>
+      <div class="session-body">
+        <h3><a href="https://docs.google.com/document/d/1DwR1gRBjH-RrgF1t6wpQFxw1aN--SfX8vyOtDYMcANM/edit?tab=t.0" target="_blank" rel="noopener">RA12_ER_SON_CANCIONES</a></h3>
+        <p class="objetivo">Práctica de diseño de un diagrama entidad/relación a partir de un enunciado propio.</p>
+        <p class="practica"><strong>Duración:</strong> 6 días</p>
+      </div>
+    </div>
+    <div class="session">
+      <div class="session-chip">D3</div>
+      <div class="session-body">
+        <h3><a href="https://docs.google.com/document/d/1eqLXnhKg0xDgwUVjIDQt-4V8d8-GlxViN_ZPHe6KumY/edit?tab=t.0" target="_blank" rel="noopener">RA12_ER_BIBLIHORAS</a></h3>
+        <p class="objetivo">Segunda práctica de diseño entidad/relación, con un enunciado propio distinto al anterior.</p>
+        <p class="practica"><strong>Duración:</strong> 7 días</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOQUE 2: RA3 -->
+  <section class="phase">
+    <div class="phase-head">
+      <span class="phase-num">Bloque 2 &middot; 25% de la evaluación</span>
+      <h2 class="phase-title">RA3 &middot; Diseño físico</h2>
+      <span class="phase-meta">3 desafíos &middot; 21 días de grupo &middot; Eval. 1</span>
+    </div>
+    <p class="phase-summary"><strong>RA3.</strong> Realiza el diseño físico de bases de datos utilizando asistentes, herramientas gráficas y el lenguaje de definición de datos.</p>
+    <div class="proximamente">
+      <strong>Próximamente.</strong> Desafíos de este bloque: <code class="inline">RA3_ER_TO_MR</code> (7 días), <code class="inline">RA3_ER_ORIGINAL</code> (7 días), <code class="inline">RA3_ER_TO_MR_CLANES</code> (7 días).
+    </div>
+  </section>
+
+  <!-- BLOQUE 3: RA4 -->
+  <section class="phase">
+    <div class="phase-head">
+      <span class="phase-num">Bloque 3 &middot; 25% de la evaluación</span>
+      <h2 class="phase-title">RA4 &middot; Consulta de datos</h2>
+      <span class="phase-meta">4 desafíos &middot; 24 días de grupo &middot; Eval. 2 &rarr; 3</span>
+    </div>
+    <p class="phase-summary"><strong>RA4.</strong> Consulta la información almacenada manejando asistentes, herramientas gráficas y el lenguaje de manipulación de datos.</p>
+    <div class="proximamente">
+      <strong>Próximamente.</strong> Desafíos de este bloque: <code class="inline">RA4_FORMAS_ESTUDIO</code> (4 días), <code class="inline">RA4_NORMAN_DESAFIOS</code> (7 días), <code class="inline">RA4_INSTALL_MYSQL</code> (5 días), <code class="inline">RA4_DESAFIO_SELECT_UNITABLA</code> (8 días). Empieza en la evaluación 2 y se cierra en la 3.
+    </div>
+  </section>
+
+  <!-- BLOQUE 4: RA5 -->
+  <section class="phase">
+    <div class="phase-head">
+      <span class="phase-num">Bloque 4 &middot; 25% de la evaluación</span>
+      <h2 class="phase-title">RA5 &middot; Modificación de datos</h2>
+      <span class="phase-meta">3 desafíos &middot; 28 días de grupo &middot; Eval. 3</span>
+    </div>
+    <p class="phase-summary"><strong>RA5.</strong> Modifica la información almacenada utilizando asistentes, herramientas gráficas y el lenguaje de manipulación de datos.</p>
+    <div class="proximamente">
+      <strong>Próximamente.</strong> Desafíos de este bloque: <code class="inline">RA5_DDL_COMPRADORES</code> (7 días), <code class="inline">RA5_DLL_EMPRESA_Y_MAS</code> (13 días), <code class="inline">RA5_DML_FUNCIONES02</code> (8 días).
+    </div>
+  </section>
+
+  <!-- BLOQUE 5: RA6 -->
+  <section class="phase">
+    <div class="phase-head">
+      <span class="phase-num">Bloque 5</span>
+      <h2 class="phase-title">RA6 &middot; Aseguramiento de la información</h2>
+      <span class="phase-meta">Sin desafíos todavía &middot; sin % asignado</span>
+    </div>
+    <p class="phase-summary"><strong>RA6.</strong> Ejecuta tareas de aseguramiento de la información, analizándolas y aplicando mecanismos de salvaguarda y transferencia.</p>
+    <div class="proximamente">
+      <strong>Sin actividades definidas todavía.</strong> Copias de seguridad, restauración y transferencia de datos &mdash; pendiente de desarrollar.
+    </div>
+  </section>
+
+  <footer class="end">
+    <p>Los bloques 1 y 2 (RA1+RA2 y RA3) se evalúan juntos en la primera evaluación: primero el modelo conceptual (entidad/relación), después su traducción al modelo físico. El bloque 3 (RA4, consulta) empieza en la segunda evaluación y se cierra en la tercera junto al bloque 4 (RA5, modificación de datos).</p>
+    <p style="margin-top:10px;color:var(--muted);font-size:13.5px;">Por ahora solo está desarrollado el bloque de RA1+RA2. Los desafíos de RA3 a RA5 aparecen con su duración, en espera de contenido propio.</p>
+  </footer>
+
+</div>
