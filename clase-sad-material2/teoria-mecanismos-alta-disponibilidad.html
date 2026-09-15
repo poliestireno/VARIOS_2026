@@ -1,0 +1,791 @@
+<title>Mecanismos de seguridad y HA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #2B6CB0;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #4C9AE0;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #6FA3D8;
+      --accent-ink: #0D1B2A;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #6FA3D8;
+    --accent-ink: #0D1B2A;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top {
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.08rem;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  section.block {
+    margin-top: 44px;
+  }
+
+  h2.block-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+
+  section.block p {
+    margin: 0 0 14px;
+  }
+
+  section.block ul {
+    margin: 0 0 14px;
+    padding-left: 22px;
+  }
+
+  section.block li {
+    margin-bottom: 6px;
+  }
+
+  h3.option-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: var(--ink);
+    margin: 40px 0 4px;
+  }
+
+  .checklist {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow);
+  }
+
+  .checklist li {
+    list-style: none;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 15px;
+    margin-bottom: 0;
+  }
+
+  .checklist ul { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+
+  .checklist svg {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    color: var(--accent-2);
+  }
+
+  .learn-list {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .learn-list li {
+    list-style: none;
+    padding-left: 20px;
+    position: relative;
+    color: var(--ink);
+    margin-bottom: 0;
+  }
+
+  .learn-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .step {
+    display: flex;
+    gap: 18px;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .step:first-of-type { border-top: none; padding-top: 0; }
+
+  .step-chip {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-body { flex: 1; min-width: 0; }
+
+  .step h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 4px 0 8px;
+  }
+
+  .step p {
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+
+  .step p.small {
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+
+  .term {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+
+  .term-bar span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--code-line);
+  }
+
+  .term pre {
+    margin: 0;
+    padding: 14px 16px 16px;
+    overflow-x: auto;
+  }
+
+  .term code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13.6px;
+    line-height: 1.7;
+    color: var(--code-ink);
+  }
+
+  .term .prompt { color: var(--code-muted); }
+  .term .cmt { color: var(--code-muted); }
+  .term .hl { color: var(--code-accent); }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .code-panel .term-bar { }
+
+  .code-panel pre {
+    margin: 0;
+    padding: 16px 18px 18px;
+    overflow-x: auto;
+  }
+
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+
+  .code-panel .tag { color: var(--accent-2); }
+  .code-panel .str { color: #C9D96B; }
+  .code-panel .kw { color: var(--code-accent); }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .prop { color: #8FB8FF; }
+  .code-panel .hl { color: var(--code-accent); }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+
+  .checkpoint p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .substep {
+    display: flex;
+    gap: 14px;
+    margin: 18px 0 0 16px;
+    padding-left: 16px;
+    border-left: 2px solid var(--line-soft);
+  }
+
+  .substep-chip {
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: var(--line-soft);
+    color: var(--muted);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 11.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .substep h4 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.98rem;
+    font-weight: 600;
+    margin: 2px 0 6px;
+  }
+
+  .substep p {
+    margin: 0 0 8px;
+    font-size: 14.5px;
+    color: var(--ink);
+  }
+
+  .substep .code-panel, .substep .term {
+    margin: 10px 0;
+  }
+
+  details.full-code {
+    margin-top: 16px;
+  }
+
+  details.full-code summary {
+    cursor: pointer;
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--accent-2);
+    list-style: none;
+  }
+
+  details.full-code summary::-webkit-details-marker { display: none; }
+
+  details.full-code summary::before {
+    content: "▸ ";
+  }
+
+  details.full-code[open] summary::before {
+    content: "▾ ";
+  }
+
+  .trouble {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .trouble-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .trouble-item .q {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    margin: 0 0 6px;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .trouble-item .q::before {
+    content: "?";
+    font-family: "IBM Plex Mono", monospace;
+    color: var(--accent-2);
+    font-weight: 500;
+  }
+
+  .trouble-item p {
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--muted);
+  }
+
+  .trouble-item p + p { margin-top: 8px; }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .step { transition: none; }
+  }
+
+  nav.toc {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 20px 0 0;
+    box-shadow: var(--shadow);
+  }
+  nav.toc .toc-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 12.5px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 10px;
+  }
+  nav.toc ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 24px; }
+  nav.toc li { font-size: 14px; margin-bottom: 6px; break-inside: avoid; }
+  nav.toc a { color: var(--ink); text-decoration: none; }
+  nav.toc a:hover { color: var(--accent-2); text-decoration: underline; }
+
+  .diagram {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    margin: 16px 0;
+    padding: 18px;
+    display: flex;
+    justify-content: center;
+    overflow-x: auto;
+  }
+  .diagram svg { max-width: 100%; height: auto; }
+  .diagram-caption {
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    margin: -8px 0 16px;
+  }
+
+  .notacion {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+  .notacion .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+  .notacion .term-bar span { width: 9px; height: 9px; border-radius: 50%; background: var(--code-line); }
+  .notacion pre { margin: 0; padding: 14px 18px 16px; overflow-x: auto; }
+  .notacion code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+  .notacion .kw { color: var(--code-accent); font-weight: 500; }
+  .notacion .ent { color: #8FB8FF; }
+  .notacion .attr { color: #C9D96B; }
+  .notacion .com { color: var(--code-muted); font-style: italic; }
+
+  h2.section-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 1.35rem;
+    margin: 0 0 4px;
+    scroll-margin-top: 24px;
+  }
+  .section-num {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    color: var(--accent-2);
+    display: block;
+    margin-bottom: 4px;
+  }
+  section.tema {
+    margin-top: 52px;
+    padding-top: 28px;
+    border-top: 1px solid var(--line-soft);
+  }
+  section.tema:first-of-type { border-top: none; }
+  h3.subtema {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    margin: 28px 0 8px;
+  }
+</style>
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">RA1 &middot; Teoría</span>
+    <h1>Mecanismos de seguridad y alta disponibilidad</h1>
+    <p class="lede">Cómo se clasifican las medidas de seguridad, la protección física de un CPD, los sistemas de alimentación ininterrumpida y las matrices RAID, las copias de seguridad, y las fases que sigue un ataque informático real.</p>
+    <div class="meta-row">
+      <span class="meta-chip">RA1</span>
+      <span class="meta-chip">Medidas de seguridad</span>
+      <span class="meta-chip">SAI &middot; RAID &middot; Backups</span>
+    </div>
+    <p style="margin-top:16px;"><a href="index.html" style="color:var(--accent-2);font-family:'IBM Plex Mono',monospace;font-size:13px;text-decoration:none;">&larr; Volver al índice del módulo</a></p>
+  </header>
+
+  <nav class="toc">
+    <p class="toc-title">Contenido</p>
+    <ol>
+      <li><a href="#mecanismos">Mecanismos de seguridad</a></li>
+      <li><a href="#medidas">Medidas de seguridad habituales</a></li>
+      <li><a href="#fisica">Seguridad física y ambiental</a></li>
+      <li><a href="#cpd">CPD / Data Center</a></li>
+      <li><a href="#sai">Sistemas de alimentación ininterrumpida (SAI)</a></li>
+      <li><a href="#almacenamiento">Protección de almacenamiento y RAID</a></li>
+      <li><a href="#backup">Copias de seguridad</a></li>
+      <li><a href="#fases-ataque">Fases de un ataque informático</a></li>
+      <li><a href="#malware-social">Malware e ingeniería social, de un vistazo</a></li>
+      <li><a href="#ha">Alta disponibilidad</a></li>
+    </ol>
+  </nav>
+
+  <section class="tema" id="mecanismos">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Mecanismos de seguridad</h2>
+    <p>Un <strong>mecanismo de seguridad informática</strong> es una técnica o herramienta que se utiliza para fortalecer la confidencialidad, la integridad y la disponibilidad de un sistema informático. Se clasifican de dos formas, según dos criterios independientes.</p>
+    <h3 class="subtema">Según el momento en que actúan</h3>
+    <ul>
+      <li><strong>Seguridad activa:</strong> todos los mecanismos que <strong>evitan</strong> que los sistemas informáticos sufran algún daño &mdash; actúan antes de que ocurra el hecho, en el día a día, combatiendo daños provocados sobre todo por el factor humano. Requieren la supervisión de un administrador. Ejemplo: instalación, configuración y supervisión de un firewall.</li>
+      <li><strong>Seguridad pasiva:</strong> una vez que ya se ha sido afectado por una amenaza, todos los mecanismos que permiten <strong>minimizar</strong> los efectos o desastres causados por un accidente, un usuario o un malware. Se aplican normalmente desde el principio de la instalación del sistema, para minimizar averías y malfuncionamiento en general. Ejemplo: instalación de una alarma antiincendios.</li>
+    </ul>
+    <h3 class="subtema">Según su función</h3>
+    <ul>
+      <li><strong>Preventivos:</strong> actúan antes de que el hecho ocurra; su función es detener agentes no deseados.</li>
+      <li><strong>Detectivos:</strong> actúan mientras el hecho ocurre (o justo después); su función es revelar la presencia de agentes no deseados en el sistema, enviar el aviso y registrar la incidencia.</li>
+      <li><strong>Correctivos:</strong> actúan después de ocurrido el hecho; su función es corregir sus consecuencias.</li>
+    </ul>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Dos ejes independientes
+      </div>
+      <p>Activa/pasiva y preventivo/detectivo/correctivo no son lo mismo &mdash; se pueden combinar. Un antivirus es activo y preventivo (impide la infección) pero también puede actuar como detectivo (avisa al detectarla) y correctivo (la elimina). Un SAI es pasivo y correctivo: no evita el corte eléctrico, pero minimiza su efecto dando tiempo a apagar el sistema de forma ordenada.</p>
+    </div>
+  </section>
+
+  <section class="tema" id="medidas">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Medidas de seguridad habituales</h2>
+    <p>En una organización real, estas medidas se combinan siempre, nunca se aplican de forma aislada:</p>
+    <ul>
+      <li>Política de contraseñas.</li>
+      <li>Listas de control de acceso.</li>
+      <li>Criptografía.</li>
+      <li>Política de almacenamiento.</li>
+      <li>Política de copia de seguridad.</li>
+      <li>Protección ante software malicioso (malware).</li>
+      <li>Securización del software utilizado.</li>
+      <li>Seguridad perimetral.</li>
+      <li>Alta disponibilidad.</li>
+    </ul>
+    <p>Y, en forma de mecanismos concretos que las implementan: sistemas de control de acceso, sistemas de seguridad de instalaciones, sistemas de vigilancia, autenticación, autorización, verificadores de integridad, cifrado, copias de seguridad, software anti-malware, firewall, sistemas de detección de intrusos (IDS), certificados y auditoría.</p>
+  </section>
+
+  <section class="tema" id="fisica">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Seguridad física y ambiental</h2>
+    <p>Antes de proteger los datos hay que proteger el hardware que los contiene. Los puntos clave son:</p>
+    <ul>
+      <li>Ubicación y protección de equipos y servidores.</li>
+      <li>Protección ante fallos del cableado &mdash; por ejemplo mediante <em>link aggregation</em> (bonding, IEEE 802.3ad), que agrupa varias conexiones físicas entre dos dispositivos en un único enlace lógico redundante: si un cable o puerto falla, el tráfico sigue circulando por los restantes.</li>
+      <li>Protección ante humedades e inundaciones.</li>
+      <li>Protección ante incendios y altas temperaturas.</li>
+      <li>Protección ante terremotos.</li>
+      <li>Protección ante problemas del suministro eléctrico.</li>
+      <li>Protección ante accesos no autorizados y robos.</li>
+    </ul>
+  </section>
+
+  <section class="tema" id="cpd">
+    <span class="section-num">04</span>
+    <h2 class="section-title">CPD / Data Center</h2>
+    <p>Un <strong>CPD</strong> (Centro de Procesamiento de Datos) debe ser eficiente, seguro y confiable, garantizando la disponibilidad de los datos y servicios que aloja. Se estructura en seis bloques:</p>
+    <ul>
+      <li><strong>Infraestructura física:</strong> edificio o sala, racks y bastidores, climatización, sistema de protección contra incendios.</li>
+      <li><strong>Equipos de energía:</strong> SAI/UPS, generadores, distribución eléctrica.</li>
+      <li><strong>Equipos informáticos:</strong> servidores, sistemas de almacenamiento, equipos de red.</li>
+      <li><strong>Sistemas de seguridad:</strong> control de acceso, videovigilancia, sistemas de monitoreo y alarma.</li>
+      <li><strong>Conectividad:</strong> redes de telecomunicaciones, cableado estructurado.</li>
+      <li><strong>Sistemas de gestión y monitoreo:</strong> software de gestión, monitoreo ambiental, gestión de energía (PDU).</li>
+    </ul>
+    <p>Los grandes proveedores cloud (Microsoft, Google, Amazon) operan CPD a escala masiva siguiendo exactamente esta misma estructura, multiplicada por cientos de racks y varias plantas de refrigeración redundante.</p>
+  </section>
+
+  <section class="tema" id="sai">
+    <span class="section-num">05</span>
+    <h2 class="section-title">Sistemas de alimentación ininterrumpida (SAI)</h2>
+    <p>Un <strong>SAI</strong> (o UPS, <em>Uninterruptible Power Supply</em>) protege los equipos frente a problemas del suministro eléctrico. Se describe en tres ejes:</p>
+    <ul>
+      <li><strong>Funciones:</strong> protección frente a picos de tensión (<em>surge protection</em>) y batería de respaldo (<em>battery backup</em>) que mantiene el equipo encendido durante un corte.</li>
+      <li><strong>Características clave:</strong> potencia máxima que puede entregar, y tiempo de autonomía (<em>runtime</em>) &mdash; cuánto tiempo aguanta con la carga conectada. A más carga (vatios), menor autonomía; añadir baterías extra alarga ese tiempo.</li>
+      <li><strong>Tipos de tomas:</strong> máster/controlada, críticas/no críticas, programables/no programables &mdash; permiten decidir qué equipos se apagan primero si se agota la batería.</li>
+    </ul>
+    <p>Un SAI es, por definición, una medida <strong>pasiva y correctiva</strong>: no evita el corte de luz, pero da tiempo a reaccionar antes de perder datos por un apagado brusco.</p>
+  </section>
+
+  <section class="tema" id="almacenamiento">
+    <span class="section-num">06</span>
+    <h2 class="section-title">Protección de almacenamiento y RAID</h2>
+    <p>La protección del almacenamiento se apoya en cuatro puntos: <strong>ubicación</strong>, <strong>tipo</strong> de almacenamiento, <strong>redundancia</strong> y <strong>alta disponibilidad</strong>.</p>
+    <p>La redundancia se implementa habitualmente con matrices <strong>RAID</strong> (<em>Redundant Array of Independent Disks</em>), que combinan varios discos físicos para ganar rendimiento, tolerancia a fallos, o ambas cosas:</p>
+    <ul>
+      <li><strong>RAID 0:</strong> reparte los datos entre discos (<em>striping</em>) sin redundancia &mdash; máximo rendimiento, pero si falla un disco se pierde todo.</li>
+      <li><strong>RAID 1:</strong> duplica los datos en dos discos (<em>mirroring</em>) &mdash; tolera el fallo de un disco a costa de la mitad de la capacidad.</li>
+      <li><strong>RAID 5:</strong> reparte datos y paridad entre al menos tres discos &mdash; tolera el fallo de un disco sin duplicar toda la capacidad.</li>
+      <li><strong>RAID anidados:</strong> combinan dos niveles, como <strong>RAID 10</strong> (1+0, varios espejos combinados en striping) o <strong>RAID 50</strong> (5+0, varios grupos RAID 5 combinados en striping) &mdash; más rendimiento y tolerancia a la vez, a cambio de más discos.</li>
+    </ul>
+    <p>A nivel de red, un servidor puede presentar almacenamiento remoto de un NAS como si fuera un disco local mediante <strong>iSCSI</strong>: el equipo Windows actúa de <em>initiator</em> y el NAS expone un <em>target</em> (LUN) construido sobre sus propios discos físicos.</p>
+  </section>
+
+  <section class="tema" id="backup">
+    <span class="section-num">07</span>
+    <h2 class="section-title">Copias de seguridad</h2>
+    <p>Una <strong>copia de seguridad</strong> (<em>backup</em>) es un archivo o conjunto de archivos, almacenado en una ubicación llamada <strong>destino</strong> (<em>destination</em>), que contiene una copia de los directorios y ficheros elegidos previamente por el usuario, llamados <strong>origen</strong> (<em>source</em>). Puede estar comprimida (para ocupar menos espacio) y cifrada (para evitar su lectura por personas no autorizadas).</p>
+    <p>Hay tres tipos de copia, según cuánto guardan cada vez:</p>
+    <ul>
+      <li><strong>Completa:</strong> copia todos los datos seleccionados cada vez &mdash; la más simple de restaurar, pero la que más espacio y tiempo consume.</li>
+      <li><strong>Diferencial:</strong> copia todo lo que ha cambiado <strong>desde la última copia completa</strong> &mdash; para restaurar hace falta la completa más la última diferencial.</li>
+      <li><strong>Incremental:</strong> copia solo lo que ha cambiado <strong>desde la última copia</strong> (completa o incremental) &mdash; la más rápida y ligera de generar, pero para restaurar hace falta la completa más toda la cadena de incrementales.</li>
+    </ul>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        El diferencial crece cada día
+      </div>
+      <p>La diferencial del viernes incluye todo lo cambiado desde el lunes &mdash; por eso su tamaño crece día a día hasta la siguiente copia completa. La incremental del viernes solo incluye lo cambiado desde el jueves &mdash; se mantiene pequeña, pero restaurar exige aplicar todos los incrementales en orden.</p>
+    </div>
+  </section>
+
+  <section class="tema" id="fases-ataque">
+    <span class="section-num">08</span>
+    <h2 class="section-title">Fases de un ataque informático</h2>
+    <p>Un ataque dirigido no ocurre de golpe &mdash; sigue, típicamente, cinco fases:</p>
+    <div class="notacion">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">1</span> <span class="ent">Reconocimiento</span>    <span class="com">(reconnaissance)</span>
+<span class="kw">2</span> <span class="ent">Escaneo</span>           <span class="com">(scanning)</span>
+<span class="kw">3</span> <span class="ent">Obtención de acceso</span> <span class="com">(gaining access)</span>
+<span class="kw">4</span> <span class="ent">Mantenimiento del acceso</span> <span class="com">(maintaining access)</span>
+<span class="kw">5</span> <span class="ent">Borrado de huellas</span>  <span class="com">(covering tracks)</span></code></pre>
+    </div>
+    <p>Primero se recopila información sobre el objetivo (reconocimiento), después se buscan puertos y servicios expuestos (escaneo), se explota una vulnerabilidad para entrar (obtención de acceso), se instalan mecanismos para poder volver más tarde &mdash; backdoors, nuevas cuentas &mdash; (mantenimiento del acceso), y por último se borran los registros que delatarían la intrusión (borrado de huellas). El Red Team sigue este mismo esquema para evaluar un sistema; el Blue Team intenta detectar y frenar cada fase.</p>
+  </section>
+
+  <section class="tema" id="malware-social">
+    <span class="section-num">09</span>
+    <h2 class="section-title">Malware e ingeniería social, de un vistazo</h2>
+    <p>Dos grandes familias de amenazas lógicas que se estudian a fondo más adelante:</p>
+    <h3 class="subtema">Tipos de malware</h3>
+    <p>Viruses, rootkits, macro malware, drive-by downloads, backdoors, trojans, worms, scareware, fileless malware, mobile malware, ransomware, spyware, adware, keyloggers, botnets, cryptojacking. Cada uno se define en detalle, con su técnica de ataque y casos reales, en <a href="teoria-malware.html">Tipos de malware</a> &mdash; base del desafío <a href="desafio-malwares.html">RA2_MALWARES</a>.</p>
+    <h3 class="subtema">Ataques por ingeniería social</h3>
+    <p>Phishing, vishing y smishing; baiting o gancho; <em>shoulder surfing</em>; <em>dumpster diving</em>; spam; fraudes online. Todos explotan la confianza o el descuido humano en vez de una vulnerabilidad técnica.</p>
+    <h3 class="subtema">Ataques a las conexiones</h3>
+    <p>Redes trampa, spoofing, ataques a cookies, ataques DDoS, inyección SQL, escaneo de puertos, <em>man in the middle</em>, sniffing. La inyección SQL y su prima el XSS se desarrollan con ejercicios prácticos en <a href="teoria-vulnerabilidades-web.html">Vulnerabilidades web</a>, dentro del desafío <a href="desafio-exploit-boom.html">RA2_EXPLOIT_BOOM</a>.</p>
+  </section>
+
+  <section class="tema" id="ha">
+    <span class="section-num">10</span>
+    <h2 class="section-title">Alta disponibilidad</h2>
+    <p>La <strong>alta disponibilidad</strong> es la capacidad de que aplicaciones y datos estén operativos para los usuarios en todo momento y sin interrupciones, debido principalmente a su carácter crítico. Ejemplos típicos: sistemas sanitarios, control aéreo, comercio electrónico, bancarios, transporte marítimo, militares.</p>
+    <p>Hay dos tipos de interrupciones:</p>
+    <ul>
+      <li><strong>Previstas:</strong> se producen cuando se paraliza el sistema deliberadamente para aplicar cambios o mejoras.</li>
+      <li><strong>Imprevistas:</strong> suceden por acontecimientos no planeados &mdash; un apagón, un error de hardware o software, un problema de seguridad, un desastre natural, un virus, un accidente, una caída involuntaria del sistema.</li>
+    </ul>
+    <p>Idea central que cierra este bloque: <strong>la seguridad de todo el sistema es igual a la de su punto más débil</strong>. Por muy avanzada que sea la tecnología que se implante, hace falta implicación de la directiva y una cultura de seguridad a todos los niveles de usuario &mdash; <em>sistema de seguridad = tecnología + organización</em>. Este eje se retoma con herramientas concretas (firewall, proxy, VPN, virtualización) en el bloque de RA4, RA5 y RA6, más adelante en el curso.</p>
+  </section>
+
+  <footer class="end">
+    Con esta base ya se puede entrar en materia: permisos en Linux (<a href="teoria-permisos-linux.html">teoría</a> / <a href="desafio-coman2-linux.html">desafío</a>) y simulación de ataques por fuerza bruta (<a href="teoria-ataques-fuerza-bruta.html">teoría</a> / <a href="desafio-attack-simulation.html">desafío</a>).
+  </footer>
+
+</div>

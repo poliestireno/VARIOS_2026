@@ -1,0 +1,839 @@
+<title>Permisos en Linux</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #2B6CB0;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #4C9AE0;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #6FA3D8;
+      --accent-ink: #0D1B2A;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #6FA3D8;
+    --accent-ink: #0D1B2A;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top {
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.08rem;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  section.block {
+    margin-top: 44px;
+  }
+
+  h2.block-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+
+  section.block p {
+    margin: 0 0 14px;
+  }
+
+  section.block ul {
+    margin: 0 0 14px;
+    padding-left: 22px;
+  }
+
+  section.block li {
+    margin-bottom: 6px;
+  }
+
+  h3.option-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: var(--ink);
+    margin: 40px 0 4px;
+  }
+
+  .checklist {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow);
+  }
+
+  .checklist li {
+    list-style: none;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 15px;
+    margin-bottom: 0;
+  }
+
+  .checklist ul { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+
+  .checklist svg {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    color: var(--accent-2);
+  }
+
+  .learn-list {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .learn-list li {
+    list-style: none;
+    padding-left: 20px;
+    position: relative;
+    color: var(--ink);
+    margin-bottom: 0;
+  }
+
+  .learn-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .step {
+    display: flex;
+    gap: 18px;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .step:first-of-type { border-top: none; padding-top: 0; }
+
+  .step-chip {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-body { flex: 1; min-width: 0; }
+
+  .step h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 4px 0 8px;
+  }
+
+  .step p {
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+
+  .step p.small {
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+
+  .term {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+
+  .term-bar span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--code-line);
+  }
+
+  .term pre {
+    margin: 0;
+    padding: 14px 16px 16px;
+    overflow-x: auto;
+  }
+
+  .term code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13.6px;
+    line-height: 1.7;
+    color: var(--code-ink);
+  }
+
+  .term .prompt { color: var(--code-muted); }
+  .term .cmt { color: var(--code-muted); }
+  .term .hl { color: var(--code-accent); }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .code-panel .term-bar { }
+
+  .code-panel pre {
+    margin: 0;
+    padding: 16px 18px 18px;
+    overflow-x: auto;
+  }
+
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+
+  .code-panel .tag { color: var(--accent-2); }
+  .code-panel .str { color: #C9D96B; }
+  .code-panel .kw { color: var(--code-accent); }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .prop { color: #8FB8FF; }
+  .code-panel .hl { color: var(--code-accent); }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+
+  .checkpoint p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .substep {
+    display: flex;
+    gap: 14px;
+    margin: 18px 0 0 16px;
+    padding-left: 16px;
+    border-left: 2px solid var(--line-soft);
+  }
+
+  .substep-chip {
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: var(--line-soft);
+    color: var(--muted);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 11.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .substep h4 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.98rem;
+    font-weight: 600;
+    margin: 2px 0 6px;
+  }
+
+  .substep p {
+    margin: 0 0 8px;
+    font-size: 14.5px;
+    color: var(--ink);
+  }
+
+  .substep .code-panel, .substep .term {
+    margin: 10px 0;
+  }
+
+  details.full-code {
+    margin-top: 16px;
+  }
+
+  details.full-code summary {
+    cursor: pointer;
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--accent-2);
+    list-style: none;
+  }
+
+  details.full-code summary::-webkit-details-marker { display: none; }
+
+  details.full-code summary::before {
+    content: "▸ ";
+  }
+
+  details.full-code[open] summary::before {
+    content: "▾ ";
+  }
+
+  .trouble {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .trouble-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .trouble-item .q {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    margin: 0 0 6px;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .trouble-item .q::before {
+    content: "?";
+    font-family: "IBM Plex Mono", monospace;
+    color: var(--accent-2);
+    font-weight: 500;
+  }
+
+  .trouble-item p {
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--muted);
+  }
+
+  .trouble-item p + p { margin-top: 8px; }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .step { transition: none; }
+  }
+
+  nav.toc {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 20px 0 0;
+    box-shadow: var(--shadow);
+  }
+  nav.toc .toc-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 12.5px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 10px;
+  }
+  nav.toc ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 24px; }
+  nav.toc li { font-size: 14px; margin-bottom: 6px; break-inside: avoid; }
+  nav.toc a { color: var(--ink); text-decoration: none; }
+  nav.toc a:hover { color: var(--accent-2); text-decoration: underline; }
+
+  .diagram {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    margin: 16px 0;
+    padding: 18px;
+    display: flex;
+    justify-content: center;
+    overflow-x: auto;
+  }
+  .diagram svg { max-width: 100%; height: auto; }
+  .diagram-caption {
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    margin: -8px 0 16px;
+  }
+
+  .notacion {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+  .notacion .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+  .notacion .term-bar span { width: 9px; height: 9px; border-radius: 50%; background: var(--code-line); }
+  .notacion pre { margin: 0; padding: 14px 18px 16px; overflow-x: auto; }
+  .notacion code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+  .notacion .kw { color: var(--code-accent); font-weight: 500; }
+  .notacion .ent { color: #8FB8FF; }
+  .notacion .attr { color: #C9D96B; }
+  .notacion .com { color: var(--code-muted); font-style: italic; }
+
+  h2.section-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 1.35rem;
+    margin: 0 0 4px;
+    scroll-margin-top: 24px;
+  }
+  .section-num {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    color: var(--accent-2);
+    display: block;
+    margin-bottom: 4px;
+  }
+  section.tema {
+    margin-top: 52px;
+    padding-top: 28px;
+    border-top: 1px solid var(--line-soft);
+  }
+  section.tema:first-of-type { border-top: none; }
+  h3.subtema {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    margin: 28px 0 8px;
+  }
+</style>
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">RA1 &middot; Teoría</span>
+    <h1>Permisos en Linux</h1>
+    <p class="lede">Los comandos que gestionan quién puede leer, escribir o ejecutar cada archivo: <code class="inline">chmod</code>, <code class="inline">chown</code>, <code class="inline">chgrp</code> y <code class="inline">umask</code>; los permisos especiales SUID, SGID y sticky bit; y las herramientas de búsqueda <code class="inline">grep</code>, <code class="inline">find</code> y <code class="inline">locate</code>. Base directa del desafío RA1_COMAN2_LINUX.</p>
+    <div class="meta-row">
+      <span class="meta-chip">RA1</span>
+      <span class="meta-chip">chmod &middot; chown &middot; umask</span>
+      <span class="meta-chip">SUID &middot; SGID &middot; sticky bit</span>
+    </div>
+    <p style="margin-top:16px;"><a href="index.html" style="color:var(--accent-2);font-family:'IBM Plex Mono',monospace;font-size:13px;text-decoration:none;">&larr; Volver al índice del módulo</a></p>
+  </header>
+
+  <nav class="toc">
+    <p class="toc-title">Contenido</p>
+    <ol>
+      <li><a href="#notacion">Notación de permisos</a></li>
+      <li><a href="#chmod">chmod</a></li>
+      <li><a href="#chown">chown</a></li>
+      <li><a href="#chgrp">chgrp</a></li>
+      <li><a href="#umask">umask</a></li>
+      <li><a href="#suid">SUID</a></li>
+      <li><a href="#sgid">SGID</a></li>
+      <li><a href="#sticky">Sticky bit</a></li>
+      <li><a href="#acl">ACL (permisos avanzados)</a></li>
+      <li><a href="#grep">grep</a></li>
+      <li><a href="#find">find</a></li>
+      <li><a href="#locate">locate</a></li>
+    </ol>
+  </nav>
+
+  <section class="tema" id="notacion">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Notación de permisos</h2>
+    <p>Cada fichero o directorio en Linux tiene tres niveles de permiso &mdash; propietario, grupo y otros &mdash; y tres tipos de permiso en cada nivel &mdash; lectura (<code class="inline">r</code>), escritura (<code class="inline">w</code>) y ejecución (<code class="inline">x</code>). Se leen con <code class="inline">ls -l</code>:</p>
+    <div class="term">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="prompt">$</span> ls -l archivo
+-rwxr-xr-x 1 usuario grupo 0 date archivo</code></pre>
+    </div>
+    <p>Cada bloque de tres letras se traduce también a un número, sumando 4 (lectura) + 2 (escritura) + 1 (ejecución): <code class="inline">rwx</code> = 7, <code class="inline">r-x</code> = 5, <code class="inline">r--</code> = 4, <code class="inline">rw-</code> = 6, etc. Así, <code class="inline">755</code> equivale a <code class="inline">rwxr-xr-x</code>.</p>
+  </section>
+
+  <section class="tema" id="chmod">
+    <span class="section-num">02</span>
+    <h2 class="section-title">chmod &mdash; cambiar permisos</h2>
+    <p>El comando <code class="inline">chmod</code> cambia los permisos de un archivo o directorio, en modo numérico o simbólico.</p>
+    <div class="term">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="prompt">$</span> chmod 755 archivo
+<span class="com"># rwx para el propietario, r-x para grupo y otros</span>
+<span class="prompt">$</span> ls -l archivo
+-rwxr-xr-x 1 usuario grupo 0 date archivo
+
+<span class="prompt">$</span> chmod +x script.sh
+<span class="com"># añade el permiso de ejecución al propietario</span>
+<span class="prompt">$</span> ls -l script.sh
+-rwxr--r-- 1 usuario grupo 0 date script.sh</code></pre>
+    </div>
+  </section>
+
+  <section class="tema" id="chown">
+    <span class="section-num">03</span>
+    <h2 class="section-title">chown &mdash; cambiar propietario y grupo</h2>
+    <p>El comando <code class="inline">chown</code> cambia el propietario y, opcionalmente, el grupo de un archivo o directorio.</p>
+    <div class="term">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="prompt">$</span> chown usuario:grupo archivo
+<span class="prompt">$</span> ls -l archivo
+-rwxr--r-- 1 usuario grupo 0 date archivo
+
+<span class="prompt">$</span> chown -R usuario:grupo /directorio
+<span class="com"># -R: recursivo, afecta también a subdirectorios y ficheros</span></code></pre>
+    </div>
+  </section>
+
+  <section class="tema" id="chgrp">
+    <span class="section-num">04</span>
+    <h2 class="section-title">chgrp &mdash; cambiar el grupo</h2>
+    <p>El comando <code class="inline">chgrp</code> cambia únicamente el grupo propietario de un archivo o directorio.</p>
+    <div class="term">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="prompt">$</span> chgrp nombre_grupo archivo
+<span class="prompt">$</span> chgrp -R nombre_grupo /directorio</code></pre>
+    </div>
+  </section>
+
+  <section class="tema" id="umask">
+    <span class="section-num">05</span>
+    <h2 class="section-title">umask &mdash; permisos por defecto</h2>
+    <p>El comando <code class="inline">umask</code> establece los permisos con los que se crean, por defecto, los nuevos archivos y directorios &mdash; restando su valor de los permisos máximos (666 para ficheros, 777 para directorios).</p>
+    <div class="term">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="prompt">$</span> umask 022
+<span class="prompt">$</span> touch nuevo_archivo && ls -l nuevo_archivo
+-rwxr-xr-x 1 usuario grupo 0 date nuevo_archivo
+
+<span class="prompt">$</span> umask 007
+<span class="prompt">$</span> touch otro_archivo && ls -l otro_archivo
+-rwxrwx--- 1 usuario grupo 0 date otro_archivo
+
+<span class="prompt">$</span> umask 002
+<span class="prompt">$</span> touch nuevo_archivo && ls -l nuevo_archivo
+-rwxrwxr-x 1 usuario grupo 0 date nuevo_archivo
+
+<span class="prompt">$</span> umask -S
+<span class="com"># muestra la umask actual en notación simbólica</span>
+u=rwx,g=rx,o=rx</code></pre>
+    </div>
+  </section>
+
+  <section class="tema" id="suid">
+    <span class="section-num">06</span>
+    <h2 class="section-title">SUID (Set User ID)</h2>
+    <p>El bit <strong>SUID</strong> permite que un archivo ejecutable se ejecute con los permisos de su <strong>propietario</strong>, en vez de con los del usuario que lo está ejecutando. Se usa para que programas concretos puedan realizar tareas que requieren permisos de superusuario (root) sin dar al usuario ese acceso de forma permanente.</p>
+    <div class="term">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="prompt">$</span> chmod u+s archivo
+<span class="prompt">$</span> ls -l archivo
+-rwsr--r-- 1 usuario grupo 0 date archivo
+<span class="com"># la "s" sustituye a la "x" del propietario</span></code></pre>
+    </div>
+  </section>
+
+  <section class="tema" id="sgid">
+    <span class="section-num">07</span>
+    <h2 class="section-title">SGID (Set Group ID)</h2>
+    <p>El bit <strong>SGID</strong> se comporta de forma distinta según se aplique a un fichero o a un directorio:</p>
+    <ul>
+      <li><strong>En ficheros ejecutables:</strong> el fichero se ejecuta con los permisos del <strong>grupo</strong> propietario del archivo, en vez de con los del grupo del usuario que lo ejecuta.</li>
+      <li><strong>En directorios:</strong> los archivos creados dentro de ese directorio heredan automáticamente el <strong>grupo del directorio</strong>, en vez del grupo del usuario que los crea &mdash; muy útil en entornos colaborativos.</li>
+    </ul>
+    <div class="term">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="prompt">$</span> chmod g+s directorio
+<span class="prompt">$</span> ls -l directorio
+drwxr-sr-x 1 usuario grupo 0 date directorio
+<span class="com"># la "s" sustituye a la "x" del grupo</span></code></pre>
+    </div>
+  </section>
+
+  <section class="tema" id="sticky">
+    <span class="section-num">08</span>
+    <h2 class="section-title">Sticky bit</h2>
+    <p>El <strong>sticky bit</strong> se aplica normalmente a directorios compartidos por muchos usuarios, como <code class="inline">/tmp</code>. Con él activo, solo el <strong>propietario de cada archivo</strong> (o el superusuario) puede eliminarlo o renombrarlo &mdash; aunque otros usuarios tengan permiso de escritura sobre el directorio.</p>
+    <div class="term">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="prompt">$</span> chmod +t directorio
+<span class="prompt">$</span> ls -ld directorio
+drwxr-xr-t 1 usuario grupo 0 date directorio
+<span class="com"># la "t" sustituye a la "x" de otros</span></code></pre>
+    </div>
+  </section>
+
+  <section class="tema" id="acl">
+    <span class="section-num">09</span>
+    <h2 class="section-title">ACL &mdash; permisos avanzados</h2>
+    <p>El esquema <code class="inline">rwx</code> solo distingue tres niveles: propietario, grupo y otros. Cuando hace falta dar un permiso concreto a un usuario o grupo <strong>adicional</strong> &mdash; sin que pertenezca al grupo propietario &mdash; se usan las <strong>ACL</strong> (<em>Access Control List</em>), permisos avanzados que se añaden por encima de los básicos.</p>
+    <div class="term">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="prompt">$</span> sudo apt install acl
+<span class="com"># instala setfacl / getfacl si no están ya disponibles</span>
+
+<span class="prompt">$</span> setfacl -m u:birmingan3:r archivo_critico.txt
+<span class="com"># -m: modifica la ACL, añadiendo lectura para el usuario birmingan3</span>
+
+<span class="prompt">$</span> getfacl archivo_critico.txt
+<span class="com"># muestra la lista completa de permisos ACL del archivo</span>
+
+<span class="prompt">$</span> setfacl -x u:birmingan3 archivo_critico.txt
+<span class="com"># -x: elimina la entrada ACL de ese usuario</span></code></pre>
+    </div>
+    <p>Un archivo con ACL añade un <code class="inline">+</code> al final de sus permisos en <code class="inline">ls -l</code> (por ejemplo <code class="inline">-rw-r-----+</code>), como aviso de que tiene permisos adicionales que no se ven en la notación básica.</p>
+  </section>
+
+  <section class="tema" id="grep">
+    <span class="section-num">10</span>
+    <h2 class="section-title">grep &mdash; búsqueda de contenido</h2>
+    <p>Busca texto dentro de archivos, línea a línea.</p>
+    <div class="term">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="prompt">$</span> grep "[CRIT]" log_error.2024
+<span class="com"># líneas que contienen la cadena</span>
+
+<span class="prompt">$</span> grep -r "PATH_CONFIG" Proyectos/
+<span class="com"># -r: recursivo, en todos los archivos del árbol de directorios</span>
+
+<span class="prompt">$</span> grep -c "Fallo" log_error.2024
+<span class="com"># -c: cuenta solo el número de líneas que coinciden</span>
+
+<span class="prompt">$</span> grep -v "^#" main.py
+<span class="com"># -v: invierte la búsqueda (líneas que NO coinciden)</span>
+<span class="com"># ^# : expresión regular, "empieza por #"</span></code></pre>
+    </div>
+  </section>
+
+  <section class="tema" id="find">
+    <span class="section-num">11</span>
+    <h2 class="section-title">find &mdash; búsqueda de archivos por propiedad</h2>
+    <p>Recorre un árbol de directorios buscando archivos que cumplan ciertas condiciones: nombre, tipo, tamaño, fecha de modificación&hellip;</p>
+    <div class="term">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="prompt">$</span> find . -name "*.ini"
+<span class="com"># archivos cuyo nombre termina en .ini</span>
+
+<span class="prompt">$</span> find . -type d -name "Logs"
+<span class="com"># -type d: solo directorios</span>
+
+<span class="prompt">$</span> find . -type f -size +1M
+<span class="com"># -type f: solo ficheros; -size +1M: mayores de 1 megabyte</span>
+
+<span class="prompt">$</span> find . -type f -mtime -1
+<span class="com"># modificados en el último día</span></code></pre>
+    </div>
+  </section>
+
+  <section class="tema" id="locate">
+    <span class="section-num">12</span>
+    <h2 class="section-title">locate &mdash; búsqueda rápida en base de datos</h2>
+    <p><code class="inline">locate</code> no recorre el disco en el momento de la búsqueda: consulta una base de datos indexada de antemano, por lo que es mucho más rápido que <code class="inline">find</code> &mdash; a cambio, si el archivo se acaba de crear puede no aparecer todavía.</p>
+    <div class="term">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="prompt">$</span> sudo updatedb
+<span class="com"># actualiza la base de datos si el archivo recién creado no aparece</span>
+
+<span class="prompt">$</span> locate config
+<span class="com"># ruta completa de todos los archivos con "config" en el nombre</span>
+
+<span class="prompt">$</span> locate -i informe_final.txt
+<span class="com"># -i: sin distinguir mayúsculas/minúsculas</span></code></pre>
+    </div>
+  </section>
+
+  <footer class="end">
+    Pon en práctica todo esto en el desafío <a href="desafio-coman2-linux.html">RA1_COMAN2_LINUX</a>: permisos multiusuario, SGID, sticky bit, umask, ACL y el reto de búsquedas avanzadas.
+  </footer>
+
+</div>

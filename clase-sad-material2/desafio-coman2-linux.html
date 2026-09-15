@@ -1,0 +1,904 @@
+<title>RA1_COMAN2_LINUX</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #2B6CB0;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #4C9AE0;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #6FA3D8;
+      --accent-ink: #0D1B2A;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #6FA3D8;
+    --accent-ink: #0D1B2A;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top {
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.08rem;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  section.block {
+    margin-top: 44px;
+  }
+
+  h2.block-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+
+  section.block p {
+    margin: 0 0 14px;
+  }
+
+  section.block ul {
+    margin: 0 0 14px;
+    padding-left: 22px;
+  }
+
+  section.block li {
+    margin-bottom: 6px;
+  }
+
+  h3.option-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: var(--ink);
+    margin: 40px 0 4px;
+  }
+
+  .checklist {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow);
+  }
+
+  .checklist li {
+    list-style: none;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 15px;
+    margin-bottom: 0;
+  }
+
+  .checklist ul { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+
+  .checklist svg {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    color: var(--accent-2);
+  }
+
+  .learn-list {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .learn-list li {
+    list-style: none;
+    padding-left: 20px;
+    position: relative;
+    color: var(--ink);
+    margin-bottom: 0;
+  }
+
+  .learn-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .step {
+    display: flex;
+    gap: 18px;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .step:first-of-type { border-top: none; padding-top: 0; }
+
+  .step-chip {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-body { flex: 1; min-width: 0; }
+
+  .step h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 4px 0 8px;
+  }
+
+  .step p {
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+
+  .step p.small {
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+
+  .term {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+
+  .term-bar span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--code-line);
+  }
+
+  .term pre {
+    margin: 0;
+    padding: 14px 16px 16px;
+    overflow-x: auto;
+  }
+
+  .term code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13.6px;
+    line-height: 1.7;
+    color: var(--code-ink);
+  }
+
+  .term .prompt { color: var(--code-muted); }
+  .term .cmt { color: var(--code-muted); }
+  .term .hl { color: var(--code-accent); }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .code-panel .term-bar { }
+
+  .code-panel pre {
+    margin: 0;
+    padding: 16px 18px 18px;
+    overflow-x: auto;
+  }
+
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+
+  .code-panel .tag { color: var(--accent-2); }
+  .code-panel .str { color: #C9D96B; }
+  .code-panel .kw { color: var(--code-accent); }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .prop { color: #8FB8FF; }
+  .code-panel .hl { color: var(--code-accent); }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+
+  .checkpoint p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .substep {
+    display: flex;
+    gap: 14px;
+    margin: 18px 0 0 16px;
+    padding-left: 16px;
+    border-left: 2px solid var(--line-soft);
+  }
+
+  .substep-chip {
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: var(--line-soft);
+    color: var(--muted);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 11.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .substep h4 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.98rem;
+    font-weight: 600;
+    margin: 2px 0 6px;
+  }
+
+  .substep p {
+    margin: 0 0 8px;
+    font-size: 14.5px;
+    color: var(--ink);
+  }
+
+  .substep .code-panel, .substep .term {
+    margin: 10px 0;
+  }
+
+  details.full-code {
+    margin-top: 16px;
+  }
+
+  details.full-code summary {
+    cursor: pointer;
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--accent-2);
+    list-style: none;
+  }
+
+  details.full-code summary::-webkit-details-marker { display: none; }
+
+  details.full-code summary::before {
+    content: "▸ ";
+  }
+
+  details.full-code[open] summary::before {
+    content: "▾ ";
+  }
+
+  .trouble {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .trouble-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .trouble-item .q {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    margin: 0 0 6px;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .trouble-item .q::before {
+    content: "?";
+    font-family: "IBM Plex Mono", monospace;
+    color: var(--accent-2);
+    font-weight: 500;
+  }
+
+  .trouble-item p {
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--muted);
+  }
+
+  .trouble-item p + p { margin-top: 8px; }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .step { transition: none; }
+  }
+
+  nav.toc {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 20px 0 0;
+    box-shadow: var(--shadow);
+  }
+  nav.toc .toc-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 12.5px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 10px;
+  }
+  nav.toc ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 24px; }
+  nav.toc li { font-size: 14px; margin-bottom: 6px; break-inside: avoid; }
+  nav.toc a { color: var(--ink); text-decoration: none; }
+  nav.toc a:hover { color: var(--accent-2); text-decoration: underline; }
+
+  .diagram {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    margin: 16px 0;
+    padding: 18px;
+    display: flex;
+    justify-content: center;
+    overflow-x: auto;
+  }
+  .diagram svg { max-width: 100%; height: auto; }
+  .diagram-caption {
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    margin: -8px 0 16px;
+  }
+
+  .notacion {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+  .notacion .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+  .notacion .term-bar span { width: 9px; height: 9px; border-radius: 50%; background: var(--code-line); }
+  .notacion pre { margin: 0; padding: 14px 18px 16px; overflow-x: auto; }
+  .notacion code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+  .notacion .kw { color: var(--code-accent); font-weight: 500; }
+  .notacion .ent { color: #8FB8FF; }
+  .notacion .attr { color: #C9D96B; }
+  .notacion .com { color: var(--code-muted); font-style: italic; }
+
+  h2.section-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 1.35rem;
+    margin: 0 0 4px;
+    scroll-margin-top: 24px;
+  }
+  .section-num {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    color: var(--accent-2);
+    display: block;
+    margin-bottom: 4px;
+  }
+  section.tema {
+    margin-top: 52px;
+    padding-top: 28px;
+    border-top: 1px solid var(--line-soft);
+  }
+  section.tema:first-of-type { border-top: none; }
+  h3.subtema {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    margin: 28px 0 8px;
+  }
+</style>
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">RA1 &middot; Desafío &middot; 7 días</span>
+    <h1>RA1_COMAN2_LINUX</h1>
+    <p class="lede">Permisos de archivos en Linux, de principio a fin: un entorno multiusuario simulado, el bit SGID para colaborar en un directorio, el sticky bit para proteger un directorio temporal compartido, umask, ACLs, y un reto final de búsquedas avanzadas con grep, find y locate.</p>
+    <div class="meta-row">
+      <span class="meta-chip">RA1</span>
+      <span class="meta-chip">7 días</span>
+      <span class="meta-chip">chmod &middot; SGID &middot; sticky bit &middot; ACL</span>
+    </div>
+    <p style="margin-top:16px;"><a href="index.html" style="color:var(--accent-2);font-family:'IBM Plex Mono',monospace;font-size:13px;text-decoration:none;">&larr; Volver al índice del módulo</a></p>
+  </header>
+
+  <div class="callout">
+    <div class="callout-title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+      Antes de empezar
+    </div>
+    <p>Repasa <a href="teoria-permisos-linux.html">Permisos en Linux</a> si te hace falta. Teoría asociada original: <a href="https://github.com/poliestireno/ASIR2_2025/blob/main/SAD/files/comandos_linux.md" target="_blank" rel="noopener">comandos_linux.md &#8599;</a>.</p>
+  </div>
+
+  <section class="block">
+    <h2 class="block-title">Fase 1 &middot; Permisos de archivos en Linux</h2>
+
+    <h3 class="subtema">Ejercicio 1 &middot; Gestión de permisos en un entorno de trabajo multiusuario</h3>
+    <p><strong>Escenario:</strong> eres el administrador de un equipo de desarrollo con varios usuarios, y necesitas configurar los permisos de un proyecto compartido entre tres usuarios: <strong>monon1</strong>, <strong>tronko2</strong> y <strong>birmingan3</strong>. Cada uno debe tener permisos específicos para un directorio de proyecto, de acuerdo con su rol.</p>
+
+    <div class="substep">
+      <div class="substep-chip">1.1</div>
+      <div class="substep-body">
+        <h4>Crear el entorno simulado</h4>
+        <p>Crea los tres usuarios y un grupo común llamado <code class="inline">devEria2</code>. Crea un directorio llamado <code class="inline">di_recto</code> para el proyecto y cambia su grupo propietario a <code class="inline">devEria2</code>.</p>
+      </div>
+    </div>
+    <div class="substep">
+      <div class="substep-chip">1.2</div>
+      <div class="substep-body">
+        <h4>Permisos básicos</h4>
+        <p>Configura los permisos para que solo los usuarios del grupo <code class="inline">devEria2</code> puedan escribir en el directorio. Verifica mostrando los permisos del directorio.</p>
+      </div>
+    </div>
+    <div class="substep">
+      <div class="substep-chip">1.3</div>
+      <div class="substep-body">
+        <h4>Permisos avanzados</h4>
+        <p><strong>monon1</strong> debe tener permisos completos (lectura, escritura, ejecución) en todo el proyecto: cambia el propietario del directorio a <strong>monon1</strong>. Los otros dos usuarios del grupo solo deben poder leer y ejecutar archivos, pero no modificarlos: cambia los permisos de modo que el grupo <code class="inline">devEria2</code> solo tenga permisos de lectura y ejecución.</p>
+      </div>
+    </div>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Preguntas
+      </div>
+      <p>&iquest;Qué sucede si un usuario fuera del grupo <code class="inline">devEria2</code> intenta acceder al directorio? &iquest;Qué sucede si <strong>tronko2</strong> intenta modificar un archivo dentro del directorio?</p>
+    </div>
+
+    <h3 class="subtema">Ejercicio 2 &middot; Control de acceso con el bit SGID en directorios</h3>
+    <p><strong>Escenario:</strong> el equipo necesita colaborar en un subdirectorio dentro de <code class="inline">di_recto</code>. Queremos asegurarnos de que cualquier archivo creado en ese subdirectorio tenga automáticamente el mismo grupo propietario (<code class="inline">devEria2</code>), para facilitar la colaboración.</p>
+    <div class="substep">
+      <div class="substep-chip">2.1</div>
+      <div class="substep-body">
+        <h4>Crear el subdirectorio</h4>
+        <p>Crea un subdirectorio llamado <code class="inline">di_afano</code> dentro de <code class="inline">/di_recto</code> y cambia su grupo propietario a <code class="inline">devEria2</code>.</p>
+      </div>
+    </div>
+    <div class="substep">
+      <div class="substep-chip">2.2</div>
+      <div class="substep-body">
+        <h4>Aplicar el bit SGID</h4>
+        <p>Aplica el bit SGID al subdirectorio <code class="inline">di_afano</code>, para que todos los archivos creados en él hereden el grupo propietario. Verifica y muestra los permisos del subdirectorio.</p>
+      </div>
+    </div>
+    <div class="substep">
+      <div class="substep-chip">2.3</div>
+      <div class="substep-body">
+        <h4>Crear un archivo de prueba</h4>
+        <p>Cambia al usuario <strong>tronko2</strong> y crea un archivo llamado <code class="inline">archivo_tronko2.txt</code> dentro de <code class="inline">di_afano</code>. Verifica y muestra los permisos y el grupo propietario del archivo.</p>
+      </div>
+    </div>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Preguntas
+      </div>
+      <p>&iquest;Cuál es el grupo propietario del archivo creado por <strong>tronko2</strong>? &iquest;Qué ventaja aporta el bit SGID en un entorno de colaboración?</p>
+    </div>
+
+    <h3 class="subtema">Ejercicio 3 &middot; Gestión de archivos temporales con sticky bit</h3>
+    <p><strong>Escenario:</strong> se ha creado un directorio temporal compartido entre todos los usuarios del sistema. Necesitas asegurarte de que los usuarios puedan crear y modificar sus propios archivos, pero no puedan eliminar o modificar los archivos de otros usuarios.</p>
+    <div class="substep">
+      <div class="substep-chip">3.1</div>
+      <div class="substep-body">
+        <h4>Crear el directorio temporal</h4>
+        <p>Crea un directorio llamado <code class="inline">tmp_rano</code> en <code class="inline">/tmp</code>. Cambia los permisos para que todos los usuarios puedan leer, escribir y ejecutar en el directorio.</p>
+      </div>
+    </div>
+    <div class="substep">
+      <div class="substep-chip">3.2</div>
+      <div class="substep-body">
+        <h4>Aplicar el sticky bit</h4>
+        <p>Aplica el sticky bit al directorio para evitar que los usuarios eliminen archivos de otros. Verifica los permisos del directorio.</p>
+      </div>
+    </div>
+    <div class="substep">
+      <div class="substep-chip">3.3</div>
+      <div class="substep-body">
+        <h4>Crear archivos de prueba</h4>
+        <p>Cambia al usuario <strong>monon1</strong> y crea un archivo en el directorio temporal. Cambia después a <strong>birmingan3</strong> y verifica si puede eliminar el archivo de <strong>monon1</strong>.</p>
+      </div>
+    </div>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Preguntas
+      </div>
+      <p>&iquest;Pudo <strong>birmingan3</strong> eliminar el archivo de <strong>monon1</strong>? &iquest;Por qué? &iquest;Cómo ayuda el sticky bit a mejorar la seguridad en directorios compartidos?</p>
+    </div>
+
+    <h3 class="subtema">Ejercicio 4 &middot; Configuración de umask y creación de archivos nuevos</h3>
+    <p><strong>Escenario:</strong> quieres configurar el entorno de trabajo para que todos los archivos nuevos creados por los usuarios tengan permisos predeterminados restrictivos (solo lectura y escritura para el propietario, sin acceso para el grupo y otros).</p>
+    <div class="substep">
+      <div class="substep-chip">4.1</div>
+      <div class="substep-body">
+        <h4>Configurar umask</h4>
+        <p>Verifica el valor actual de <code class="inline">umask</code>. Cámbialo a <code class="inline">077</code> para que los archivos creados sean accesibles solo por el propietario.</p>
+      </div>
+    </div>
+    <div class="substep">
+      <div class="substep-chip">4.2</div>
+      <div class="substep-body">
+        <h4>Crear archivos de prueba</h4>
+        <p>Crea un archivo nuevo llamado <code class="inline">gomaesp_umask</code> y verifica sus permisos.</p>
+      </div>
+    </div>
+    <div class="substep">
+      <div class="substep-chip">4.3</div>
+      <div class="substep-body">
+        <h4>Restablecer umask</h4>
+        <p>Restaura el valor predeterminado de <code class="inline">umask</code> (habitualmente <code class="inline">022</code>).</p>
+      </div>
+    </div>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Preguntas
+      </div>
+      <p>&iquest;Cómo afectó el valor de <code class="inline">umask</code> a los permisos de los nuevos archivos? &iquest;Cómo podrías usar <code class="inline">umask</code> para mejorar la seguridad de los archivos en un sistema multiusuario?</p>
+    </div>
+
+    <h3 class="subtema">Ejercicio 5 &middot; Implementación de ACLs</h3>
+    <p><strong>Escenario:</strong> queremos que <strong>birmingan3</strong> pueda leer un archivo específico dentro de un nuevo directorio llamado <code class="inline">archivos_criticos</code>, pero sin poder modificarlo.</p>
+    <div class="substep">
+      <div class="substep-chip">5.1</div>
+      <div class="substep-body">
+        <h4>Habilita ACLs si hace falta</h4>
+        <p>Comprueba si las ACL están habilitadas en el sistema de archivos; instala el paquete <code class="inline">acl</code> si no lo estuvieran ya (si ya lo están, omite este paso).</p>
+      </div>
+    </div>
+    <div class="substep">
+      <div class="substep-chip">5.2</div>
+      <div class="substep-body">
+        <h4>Crea el directorio y el archivo</h4>
+        <p>Crea el directorio <code class="inline">archivos_criticos</code> y, dentro, un archivo con contenido de ejemplo.</p>
+      </div>
+    </div>
+    <div class="substep">
+      <div class="substep-chip">5.3</div>
+      <div class="substep-body">
+        <h4>Concede el permiso con setfacl</h4>
+        <p>Usa <code class="inline">setfacl</code> para dar a <strong>birmingan3</strong> permiso de solo lectura sobre ese archivo, sin cambiar el propietario ni el grupo. Verifica con <code class="inline">getfacl</code> que el permiso se ha aplicado correctamente, y comprueba que birmingan3 no puede escribir en el archivo.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Fase 2 &middot; Reto de búsquedas avanzadas</h2>
+    <p><strong>Objetivo:</strong> uso efectivo de los comandos de búsqueda (<code class="inline">grep</code>, <code class="inline">find</code>, <code class="inline">locate</code>) y sus opciones para localizar información específica, archivos y directorios dentro del sistema de ficheros.</p>
+
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Setup inicial (en tu directorio personal)
+      </div>
+      <div class="term">
+        <div class="term-bar"><span></span><span></span><span></span></div>
+        <pre><code><span class="prompt">$</span> mkdir -p Documentos/Informes Documentos/Logs Proyectos/web Proyectos/app
+<span class="prompt">$</span> touch Documentos/Logs/log_acceso.2023 Documentos/Logs/log_error.2024
+<span class="prompt">$</span> touch Proyectos/web/index.html Proyectos/web/estilos.css
+<span class="prompt">$</span> touch Proyectos/app/main.py Proyectos/app/config_dev.ini
+<span class="prompt">$</span> touch Documentos/Informes/informe_final.txt</code></pre>
+      </div>
+      <p>Rellena el contenido de estos tres archivos (con <code class="inline">echo</code> o un editor como <code class="inline">nano</code>):</p>
+      <div class="term">
+        <div class="term-bar"><span></span><span></span><span></span></div>
+        <pre><code><span class="com"># Documentos/Logs/log_error.2024</span>
+[CRIT] Error en la base de datos.
+[WARN] Conexion lenta.
+[CRIT] Fallo de autenticacion.
+[INFO] Tarea completada.
+
+<span class="com"># Proyectos/app/main.py</span>
+# Este es el script principal
+PATH_CONFIG = '/etc/prod/config.ini' # Configuracion de produccion
+def iniciar_servidor():
+    pass
+# Funcion obsoleta: iniciar_antiguo()
+
+<span class="com"># Proyectos/app/config_dev.ini</span>
+[GENERAL]
+DEBUG = True
+PORT = 8080</code></pre>
+      </div>
+    </div>
+
+    <h3 class="subtema">I. Ejercicios con grep &mdash; búsqueda de contenido</h3>
+    <div class="substep">
+      <div class="substep-chip">I.1</div>
+      <div class="substep-body">
+        <h4>Busca errores críticos</h4>
+        <p>Muestra todas las líneas que contengan la palabra <code class="inline">[CRIT]</code> dentro de <code class="inline">Documentos/Logs/log_error.2024</code>.</p>
+      </div>
+    </div>
+    <div class="substep">
+      <div class="substep-chip">I.2</div>
+      <div class="substep-body">
+        <h4>Busca la configuración de producción</h4>
+        <p>Dentro del directorio <code class="inline">Proyectos</code>, busca recursivamente (<code class="inline">-r</code>) en todos los archivos la cadena <code class="inline">PATH_CONFIG</code>.</p>
+      </div>
+    </div>
+    <div class="substep">
+      <div class="substep-chip">I.3</div>
+      <div class="substep-body">
+        <h4>Contar fallos</h4>
+        <p>Muestra solo el número de líneas (<code class="inline">-c</code>) que contienen la palabra <code class="inline">Fallo</code> en <code class="inline">log_error.2024</code>.</p>
+      </div>
+    </div>
+    <div class="substep">
+      <div class="substep-chip">I.4</div>
+      <div class="substep-body">
+        <h4>Líneas sin comentarios</h4>
+        <p>Muestra todas las líneas de <code class="inline">Proyectos/app/main.py</code> que <strong>no</strong> (<code class="inline">-v</code>) empiecen por el símbolo de comentario (<code class="inline">#</code>). Pista: usa la expresión regular <code class="inline">^#</code> para indicar &ldquo;empieza por #&rdquo;.</p>
+      </div>
+    </div>
+
+    <h3 class="subtema">II. Ejercicios con find &mdash; búsqueda de archivos por propiedad</h3>
+    <div class="substep">
+      <div class="substep-chip">II.1</div>
+      <div class="substep-body">
+        <h4>Archivos de configuración</h4>
+        <p>Busca todos los archivos que terminen con la extensión <code class="inline">.ini</code> en todo el directorio de la práctica.</p>
+      </div>
+    </div>
+    <div class="substep">
+      <div class="substep-chip">II.2</div>
+      <div class="substep-body">
+        <h4>Directorios específicos</h4>
+        <p>Busca todos los elementos que sean directorios (<code class="inline">-type d</code>) y se llamen <code class="inline">Logs</code>.</p>
+      </div>
+    </div>
+    <div class="substep">
+      <div class="substep-chip">II.3</div>
+      <div class="substep-body">
+        <h4>Archivos grandes (simulación)</h4>
+        <p>Ejecuta <code class="inline">truncate -s 2M Documentos/Informes/informe_final.txt</code>. Ahora busca todos los archivos (<code class="inline">-type f</code>) dentro de la práctica que sean mayores de 1 megabyte (<code class="inline">-size +1M</code>).</p>
+      </div>
+    </div>
+    <div class="substep">
+      <div class="substep-chip">II.4</div>
+      <div class="substep-body">
+        <h4>Archivos modificados recientemente</h4>
+        <p>Busca todos los archivos (<code class="inline">-type f</code>) que hayan sido modificados (<code class="inline">-mtime</code>) en el último día (<code class="inline">-1</code>).</p>
+      </div>
+    </div>
+
+    <h3 class="subtema">III. Ejercicios con locate &mdash; búsqueda rápida en base de datos</h3>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Nota
+      </div>
+      <p>Si <code class="inline">locate</code> no encuentra los archivos recién creados, ejecuta <code class="inline">sudo updatedb</code> primero (si tienes permisos).</p>
+    </div>
+    <div class="substep">
+      <div class="substep-chip">III.1</div>
+      <div class="substep-body">
+        <h4>Búsqueda general</h4>
+        <p>Busca rápidamente la ruta completa de todos los archivos que contienen la palabra <code class="inline">config</code> en su nombre.</p>
+      </div>
+    </div>
+    <div class="substep">
+      <div class="substep-chip">III.2</div>
+      <div class="substep-body">
+        <h4>Búsqueda sin distinción de mayúsculas</h4>
+        <p>Busca el archivo <code class="inline">informe_final.txt</code> sin importar si el texto está en mayúsculas o minúsculas (<code class="inline">-i</code>).</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="end">
+    Entrega: documento o repositorio con los comandos ejecutados en cada apartado, los pantallazos de verificación, y las respuestas a todas las preguntas planteadas (Fase 1 y Fase 2).
+  </footer>
+
+</div>

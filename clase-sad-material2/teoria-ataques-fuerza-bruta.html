@@ -1,0 +1,745 @@
+<title>Diccionarios y fuerza bruta</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #2B6CB0;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #4C9AE0;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #6FA3D8;
+      --accent-ink: #0D1B2A;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #6FA3D8;
+    --accent-ink: #0D1B2A;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top {
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.08rem;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  section.block {
+    margin-top: 44px;
+  }
+
+  h2.block-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+
+  section.block p {
+    margin: 0 0 14px;
+  }
+
+  section.block ul {
+    margin: 0 0 14px;
+    padding-left: 22px;
+  }
+
+  section.block li {
+    margin-bottom: 6px;
+  }
+
+  h3.option-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: var(--ink);
+    margin: 40px 0 4px;
+  }
+
+  .checklist {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow);
+  }
+
+  .checklist li {
+    list-style: none;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 15px;
+    margin-bottom: 0;
+  }
+
+  .checklist ul { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+
+  .checklist svg {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    color: var(--accent-2);
+  }
+
+  .learn-list {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .learn-list li {
+    list-style: none;
+    padding-left: 20px;
+    position: relative;
+    color: var(--ink);
+    margin-bottom: 0;
+  }
+
+  .learn-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .step {
+    display: flex;
+    gap: 18px;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .step:first-of-type { border-top: none; padding-top: 0; }
+
+  .step-chip {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-body { flex: 1; min-width: 0; }
+
+  .step h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 4px 0 8px;
+  }
+
+  .step p {
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+
+  .step p.small {
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+
+  .term {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+
+  .term-bar span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--code-line);
+  }
+
+  .term pre {
+    margin: 0;
+    padding: 14px 16px 16px;
+    overflow-x: auto;
+  }
+
+  .term code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13.6px;
+    line-height: 1.7;
+    color: var(--code-ink);
+  }
+
+  .term .prompt { color: var(--code-muted); }
+  .term .cmt { color: var(--code-muted); }
+  .term .hl { color: var(--code-accent); }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .code-panel .term-bar { }
+
+  .code-panel pre {
+    margin: 0;
+    padding: 16px 18px 18px;
+    overflow-x: auto;
+  }
+
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+
+  .code-panel .tag { color: var(--accent-2); }
+  .code-panel .str { color: #C9D96B; }
+  .code-panel .kw { color: var(--code-accent); }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .prop { color: #8FB8FF; }
+  .code-panel .hl { color: var(--code-accent); }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+
+  .checkpoint p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .substep {
+    display: flex;
+    gap: 14px;
+    margin: 18px 0 0 16px;
+    padding-left: 16px;
+    border-left: 2px solid var(--line-soft);
+  }
+
+  .substep-chip {
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: var(--line-soft);
+    color: var(--muted);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 11.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .substep h4 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.98rem;
+    font-weight: 600;
+    margin: 2px 0 6px;
+  }
+
+  .substep p {
+    margin: 0 0 8px;
+    font-size: 14.5px;
+    color: var(--ink);
+  }
+
+  .substep .code-panel, .substep .term {
+    margin: 10px 0;
+  }
+
+  details.full-code {
+    margin-top: 16px;
+  }
+
+  details.full-code summary {
+    cursor: pointer;
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--accent-2);
+    list-style: none;
+  }
+
+  details.full-code summary::-webkit-details-marker { display: none; }
+
+  details.full-code summary::before {
+    content: "▸ ";
+  }
+
+  details.full-code[open] summary::before {
+    content: "▾ ";
+  }
+
+  .trouble {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .trouble-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .trouble-item .q {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    margin: 0 0 6px;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .trouble-item .q::before {
+    content: "?";
+    font-family: "IBM Plex Mono", monospace;
+    color: var(--accent-2);
+    font-weight: 500;
+  }
+
+  .trouble-item p {
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--muted);
+  }
+
+  .trouble-item p + p { margin-top: 8px; }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .step { transition: none; }
+  }
+
+  nav.toc {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 20px 0 0;
+    box-shadow: var(--shadow);
+  }
+  nav.toc .toc-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 12.5px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 10px;
+  }
+  nav.toc ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 24px; }
+  nav.toc li { font-size: 14px; margin-bottom: 6px; break-inside: avoid; }
+  nav.toc a { color: var(--ink); text-decoration: none; }
+  nav.toc a:hover { color: var(--accent-2); text-decoration: underline; }
+
+  .diagram {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    margin: 16px 0;
+    padding: 18px;
+    display: flex;
+    justify-content: center;
+    overflow-x: auto;
+  }
+  .diagram svg { max-width: 100%; height: auto; }
+  .diagram-caption {
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    margin: -8px 0 16px;
+  }
+
+  .notacion {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+  .notacion .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+  .notacion .term-bar span { width: 9px; height: 9px; border-radius: 50%; background: var(--code-line); }
+  .notacion pre { margin: 0; padding: 14px 18px 16px; overflow-x: auto; }
+  .notacion code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+  .notacion .kw { color: var(--code-accent); font-weight: 500; }
+  .notacion .ent { color: #8FB8FF; }
+  .notacion .attr { color: #C9D96B; }
+  .notacion .com { color: var(--code-muted); font-style: italic; }
+
+  h2.section-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 1.35rem;
+    margin: 0 0 4px;
+    scroll-margin-top: 24px;
+  }
+  .section-num {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    color: var(--accent-2);
+    display: block;
+    margin-bottom: 4px;
+  }
+  section.tema {
+    margin-top: 52px;
+    padding-top: 28px;
+    border-top: 1px solid var(--line-soft);
+  }
+  section.tema:first-of-type { border-top: none; }
+  h3.subtema {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    margin: 28px 0 8px;
+  }
+</style>
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">RA1 &middot; Teoría</span>
+    <h1>Diccionarios y fuerza bruta con Hydra</h1>
+    <p class="lede">Cómo se genera un diccionario de contraseñas con Pydictor y Dymerge, y cómo se usa Hydra para simular ataques de fuerza bruta contra SSH y contra un formulario web &mdash; con sus contramedidas. Preparación teórica del desafío RA1_ATTACK_SIMULATION.</p>
+    <div class="meta-row">
+      <span class="meta-chip">RA1</span>
+      <span class="meta-chip">Pydictor &middot; Dymerge &middot; Hydra</span>
+      <span class="meta-chip">Kali Purple</span>
+    </div>
+    <p style="margin-top:16px;"><a href="index.html" style="color:var(--accent-2);font-family:'IBM Plex Mono',monospace;font-size:13px;text-decoration:none;">&larr; Volver al índice del módulo</a></p>
+  </header>
+
+  <nav class="toc">
+    <p class="toc-title">Contenido</p>
+    <ol>
+      <li><a href="#recordatorio">Recordatorio: diccionario vs. fuerza bruta</a></li>
+      <li><a href="#pydictor">Pydictor</a></li>
+      <li><a href="#dymerge">Dymerge</a></li>
+      <li><a href="#hydra">Hydra</a></li>
+      <li><a href="#ssh">Ataque contra SSH</a></li>
+      <li><a href="#http">Ataque contra un formulario web (DVWA)</a></li>
+      <li><a href="#mitigar">Cómo mitigar estos ataques</a></li>
+    </ol>
+  </nav>
+
+  <section class="tema" id="recordatorio">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Recordatorio: diccionario vs. fuerza bruta</h2>
+    <p>Un <strong>ataque por diccionario</strong> prueba una lista concreta de palabras (un fichero de texto, una por línea) contra el campo de contraseña. Un <strong>ataque por fuerza bruta</strong> prueba todas las combinaciones posibles de caracteres. En la práctica se suele empezar por diccionario &mdash; es mucho más rápido &mdash; y recurrir a fuerza bruta solo si no funciona.</p>
+  </section>
+
+  <section class="tema" id="pydictor">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Pydictor</h2>
+    <p><strong>Pydictor</strong> es una herramienta escrita en Python que genera diccionarios de palabras para ataques de fuerza bruta. Sus rasgos principales:</p>
+    <ul>
+      <li>Genera listas de palabras tanto en texto plano como en distintos formatos cifrados (por ejemplo, base64).</li>
+      <li>Permite construir el diccionario a partir de reglas &mdash; longitud, conjunto de caracteres (números, mayúsculas, minúsculas, símbolos), o combinaciones concretas.</li>
+    </ul>
+    <div class="term">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="prompt">$</span> git clone https://github.com/LandGrey/pydictor.git
+<span class="prompt">$</span> cd pydictor
+<span class="prompt">$</span> python3 pydictor.py --len 4 6 -char 1 numbers -o numeros.txt
+<span class="com"># diccionario de solo números, entre 4 y 6 dígitos</span>
+
+<span class="prompt">$</span> python3 pydictor.py --len 4 6 -char 1 upper -o mayusculas.txt
+<span class="com"># diccionario de palabras en mayúsculas, entre 4 y 6 letras</span></code></pre>
+    </div>
+  </section>
+
+  <section class="tema" id="dymerge">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Dymerge</h2>
+    <p><strong>Dymerge</strong> (incluida junto a Pydictor) fusiona varios diccionarios en uno solo, eliminando duplicados.</p>
+    <div class="term">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="prompt">$</span> python3 dymerge.py numeros.txt mayusculas.txt -o diccionarion.txt
+<span class="com"># fusiona los dos diccionarios en uno solo, sin repetidos</span></code></pre>
+    </div>
+  </section>
+
+  <section class="tema" id="hydra">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Hydra</h2>
+    <p><strong>Hydra</strong> (THC-Hydra) es una herramienta de fuerza bruta contra servicios de autenticación en red &mdash; SSH, FTP, HTTP, bases de datos, y muchos más protocolos mediante módulos. Su forma general:</p>
+    <div class="term">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="prompt">$</span> hydra -l &lt;usuario&gt; -P &lt;diccionario&gt; &lt;objetivo&gt; &lt;servicio&gt;
+<span class="com"># -l: un único usuario fijo &mdash; -L: fichero con varios usuarios</span>
+<span class="com"># -P: fichero de contraseñas &mdash; -p: una única contraseña fija</span></code></pre>
+    </div>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Solo en tu propio laboratorio
+      </div>
+      <p>Hydra solo se debe usar contra máquinas y servicios propios, montados para practicar &mdash; nunca contra un sistema de terceros sin autorización explícita. Todo este desafío se ejecuta dentro de Kali Purple, contra servicios instalados en la propia máquina.</p>
+    </div>
+  </section>
+
+  <section class="tema" id="ssh">
+    <span class="section-num">05</span>
+    <h2 class="section-title">Ataque contra SSH</h2>
+    <p>Pasos para montar el laboratorio y lanzar el ataque:</p>
+    <div class="term">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="prompt">$</span> sudo apt install openssh-server
+<span class="prompt">$</span> sudo systemctl enable --now ssh
+<span class="com"># instala e inicia el servidor SSH</span>
+
+<span class="prompt">$</span> sudo useradd -m objetivo
+<span class="prompt">$</span> sudo passwd objetivo
+<span class="com"># crea el usuario que hará de víctima de la prueba</span>
+
+<span class="prompt">$</span> ssh objetivo@127.0.0.1
+<span class="com"># comprueba que el servicio responde y aceptas la clave del host</span>
+
+<span class="prompt">$</span> hydra -l objetivo -P diccionarion.txt ssh://127.0.0.1
+<span class="com"># ataque de fuerza bruta contra el servicio SSH local</span></code></pre>
+    </div>
+    <p>Los intentos de conexión quedan registrados en los logs del sistema (<code class="inline">/var/log/auth.log</code> en Debian/Ubuntu, o vía <code class="inline">journalctl -u ssh</code>). Revisarlos permite ver, desde el lado defensivo, cómo se detecta un ataque de este tipo en marcha: muchos intentos fallidos seguidos, desde la misma IP, en muy poco tiempo.</p>
+  </section>
+
+  <section class="tema" id="http">
+    <span class="section-num">06</span>
+    <h2 class="section-title">Ataque contra un formulario web (DVWA)</h2>
+    <p><strong>DVWA</strong> (<em>Damn Vulnerable Web Application</em>) es una aplicación PHP/MySQL deliberadamente vulnerable, pensada para practicar. Se instala sobre un servidor Apache local.</p>
+    <div class="term">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="prompt">$</span> git clone https://github.com/digininja/DVWA.git /var/www/html/dvwa
+<span class="com"># copia DVWA dentro del directorio raíz de Apache</span>
+<span class="com"># configura config/config.inc.php con los datos de la base de datos</span>
+<span class="com"># entra desde el navegador y pulsa "Create / Reset Database"</span></code></pre>
+    </div>
+    <p>Antes de atacar el formulario de login, hay que identificar sus detalles inspeccionando el HTML (nombre de los campos de usuario y contraseña, método del formulario, y el texto que aparece cuando el login falla &mdash; Hydra lo necesita para saber cuándo un intento no ha funcionado):</p>
+    <div class="term">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="prompt">$</span> hydra -l admin -P diccionarion.txt 127.0.0.1 http-post-form \
+  "/dvwa/login.php:username=^USER^&amp;password=^PASS^&amp;Login=Login:Login failed"
+<span class="com"># ^USER^ y ^PASS^ son sustituidos por Hydra en cada intento</span>
+<span class="com"># el texto final es la cadena que identifica un login fallido</span></code></pre>
+    </div>
+  </section>
+
+  <section class="tema" id="mitigar">
+    <span class="section-num">07</span>
+    <h2 class="section-title">Cómo mitigar estos ataques</h2>
+    <ul>
+      <li><strong>Bloqueo de cuenta o IP</strong> tras varios intentos fallidos (por ejemplo con <code class="inline">fail2ban</code> en SSH).</li>
+      <li><strong>Limitación de tasa</strong> (<em>rate limiting</em>) en el formulario o en el propio servicio.</li>
+      <li><strong>CAPTCHA</strong> en formularios web tras varios intentos.</li>
+      <li><strong>Verificación en dos pasos (2FA)</strong>, que vuelve inútil una contraseña adivinada por sí sola.</li>
+      <li><strong>Política de contraseñas fuertes</strong>: longitud mínima, complejidad, sin reutilizar contraseñas filtradas.</li>
+      <li>Desactivar el login directo de <code class="inline">root</code> por SSH y usar autenticación por clave pública en vez de contraseña siempre que sea posible.</li>
+    </ul>
+  </section>
+
+  <footer class="end">
+    Lleva esto a la práctica en el desafío <a href="desafio-attack-simulation.html">RA1_ATTACK_SIMULATION</a>, documentando cada paso en GitHub con capturas explicadas.
+  </footer>
+
+</div>

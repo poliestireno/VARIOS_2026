@@ -1,0 +1,877 @@
+<title>RA3_HACKING_TOOLKING_POLICE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #2B6CB0;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #4C9AE0;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #6FA3D8;
+      --accent-ink: #0D1B2A;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #6FA3D8;
+    --accent-ink: #0D1B2A;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top {
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.08rem;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  section.block {
+    margin-top: 44px;
+  }
+
+  h2.block-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+
+  section.block p {
+    margin: 0 0 14px;
+  }
+
+  section.block ul {
+    margin: 0 0 14px;
+    padding-left: 22px;
+  }
+
+  section.block li {
+    margin-bottom: 6px;
+  }
+
+  h3.option-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: var(--ink);
+    margin: 40px 0 4px;
+  }
+
+  .checklist {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow);
+  }
+
+  .checklist li {
+    list-style: none;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 15px;
+    margin-bottom: 0;
+  }
+
+  .checklist ul { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+
+  .checklist svg {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    color: var(--accent-2);
+  }
+
+  .learn-list {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .learn-list li {
+    list-style: none;
+    padding-left: 20px;
+    position: relative;
+    color: var(--ink);
+    margin-bottom: 0;
+  }
+
+  .learn-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .step {
+    display: flex;
+    gap: 18px;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .step:first-of-type { border-top: none; padding-top: 0; }
+
+  .step-chip {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-body { flex: 1; min-width: 0; }
+
+  .step h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 4px 0 8px;
+  }
+
+  .step p {
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+
+  .step p.small {
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+
+  .term {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+
+  .term-bar span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--code-line);
+  }
+
+  .term pre {
+    margin: 0;
+    padding: 14px 16px 16px;
+    overflow-x: auto;
+  }
+
+  .term code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13.6px;
+    line-height: 1.7;
+    color: var(--code-ink);
+  }
+
+  .term .prompt { color: var(--code-muted); }
+  .term .cmt { color: var(--code-muted); }
+  .term .hl { color: var(--code-accent); }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .code-panel .term-bar { }
+
+  .code-panel pre {
+    margin: 0;
+    padding: 16px 18px 18px;
+    overflow-x: auto;
+  }
+
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+
+  .code-panel .tag { color: var(--accent-2); }
+  .code-panel .str { color: #C9D96B; }
+  .code-panel .kw { color: var(--code-accent); }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .prop { color: #8FB8FF; }
+  .code-panel .hl { color: var(--code-accent); }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+
+  .checkpoint p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .substep {
+    display: flex;
+    gap: 14px;
+    margin: 18px 0 0 16px;
+    padding-left: 16px;
+    border-left: 2px solid var(--line-soft);
+  }
+
+  .substep-chip {
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: var(--line-soft);
+    color: var(--muted);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 11.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .substep h4 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.98rem;
+    font-weight: 600;
+    margin: 2px 0 6px;
+  }
+
+  .substep p {
+    margin: 0 0 8px;
+    font-size: 14.5px;
+    color: var(--ink);
+  }
+
+  .substep .code-panel, .substep .term {
+    margin: 10px 0;
+  }
+
+  details.full-code {
+    margin-top: 16px;
+  }
+
+  details.full-code summary {
+    cursor: pointer;
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--accent-2);
+    list-style: none;
+  }
+
+  details.full-code summary::-webkit-details-marker { display: none; }
+
+  details.full-code summary::before {
+    content: "▸ ";
+  }
+
+  details.full-code[open] summary::before {
+    content: "▾ ";
+  }
+
+  .trouble {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .trouble-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .trouble-item .q {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    margin: 0 0 6px;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .trouble-item .q::before {
+    content: "?";
+    font-family: "IBM Plex Mono", monospace;
+    color: var(--accent-2);
+    font-weight: 500;
+  }
+
+  .trouble-item p {
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--muted);
+  }
+
+  .trouble-item p + p { margin-top: 8px; }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .step { transition: none; }
+  }
+
+  nav.toc {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 20px 0 0;
+    box-shadow: var(--shadow);
+  }
+  nav.toc .toc-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 12.5px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 10px;
+  }
+  nav.toc ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 24px; }
+  nav.toc li { font-size: 14px; margin-bottom: 6px; break-inside: avoid; }
+  nav.toc a { color: var(--ink); text-decoration: none; }
+  nav.toc a:hover { color: var(--accent-2); text-decoration: underline; }
+
+  .diagram {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    margin: 16px 0;
+    padding: 18px;
+    display: flex;
+    justify-content: center;
+    overflow-x: auto;
+  }
+  .diagram svg { max-width: 100%; height: auto; }
+  .diagram-caption {
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    margin: -8px 0 16px;
+  }
+
+  .notacion {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+  .notacion .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+  .notacion .term-bar span { width: 9px; height: 9px; border-radius: 50%; background: var(--code-line); }
+  .notacion pre { margin: 0; padding: 14px 18px 16px; overflow-x: auto; }
+  .notacion code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+  .notacion .kw { color: var(--code-accent); font-weight: 500; }
+  .notacion .ent { color: #8FB8FF; }
+  .notacion .attr { color: #C9D96B; }
+  .notacion .com { color: var(--code-muted); font-style: italic; }
+
+  h2.section-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 1.35rem;
+    margin: 0 0 4px;
+    scroll-margin-top: 24px;
+  }
+  .section-num {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    color: var(--accent-2);
+    display: block;
+    margin-bottom: 4px;
+  }
+  section.tema {
+    margin-top: 52px;
+    padding-top: 28px;
+    border-top: 1px solid var(--line-soft);
+  }
+  section.tema:first-of-type { border-top: none; }
+  h3.subtema {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    margin: 28px 0 8px;
+  }
+</style>
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">RA3 &middot; Desafío &middot; 9 días</span>
+    <h1>RA3_HACKING_TOOLKING_POLICE</h1>
+    <p class="lede">Catálogo de herramientas de Phishing Toolkit, OSINT, Red Team y Blue Team. Para cada herramienta asignada: mini estudio, instalación y prueba, con un ejemplo real de esa prueba.</p>
+    <div class="meta-row">
+      <span class="meta-chip">RA3</span>
+      <span class="meta-chip">9 días</span>
+      <span class="meta-chip">Markdown en git &middot; PPT sin texto</span>
+    </div>
+    <p style="margin-top:16px;"><a href="index.html" style="color:var(--accent-2);font-family:'IBM Plex Mono',monospace;font-size:13px;text-decoration:none;">&larr; Volver al índice del módulo</a></p>
+  </header>
+
+  <div class="callout">
+    <div class="callout-title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+      Antes de empezar
+    </div>
+    <p>Repasa <a href="teoria-red-blue-purple-osint.html">OSINT, phishing y el toolkit de Red/Blue Team</a>. Para cada herramienta que te toque: un mini estudio (qué es, para qué sirve), instalarla y probarla, y aportar un ejemplo concreto de esa prueba.</p>
+  </div>
+
+  <section class="block">
+    <h2 class="block-title">Entrega</h2>
+    <ul>
+      <li>Markdown en git &mdash; un mini estudio por herramienta.</li>
+      <li>PPT <strong>sin texto</strong> &mdash; solo apoyo visual para la exposición.</li>
+      <li>Exposición <strong>sin leer</strong>.</li>
+    </ul>
+  </section>
+
+  <div class="checkpoint">
+    <div class="checkpoint-title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+      Alcance de este desafío
+    </div>
+    <p>Se hace <strong>hasta el marcador &ldquo;HASTA AQUÍ&rdquo;</strong>, al final del bloque OSINT: Phishing Toolkit y OSINT completos. Los bloques de Red Team, Blue Team y las bases de datos de vulnerabilidades quedan documentados a continuación como catálogo de referencia, para un desafío posterior.</p>
+  </div>
+
+  <section class="block">
+    <h2 class="block-title" id="phishing-toolkit">Phishing Toolkit</h2>
+
+    <h3 class="subtema">Cabeceras</h3>
+    <ul>
+      <li><a href="https://lnkd.in/d2kSSJ5y" target="_blank" rel="noopener">Message Header Analyzer</a></li>
+      <li><a href="https://lnkd.in/dtr7v9SE" target="_blank" rel="noopener">Mx ToolBox</a></li>
+      <li><a href="https://lnkd.in/dwgYTwtY" target="_blank" rel="noopener">WhatIsMyIP</a></li>
+      <li><a href="https://lnkd.in/dF-G8yGA" target="_blank" rel="noopener">Messageheader (Google)</a></li>
+      <li><a href="https://lnkd.in/dtr7v9SE" target="_blank" rel="noopener">Email Header Analyzer (DNS Checker)</a></li>
+    </ul>
+
+    <h3 class="subtema">IP</h3>
+    <ul>
+      <li><a href="https://lnkd.in/dnZppsWM" target="_blank" rel="noopener">Whois Lookup</a></li>
+      <li><a href="https://www.abuseipdb.com/" target="_blank" rel="noopener">Abuseipdb</a></li>
+      <li><a href="https://ipinfo.io/" target="_blank" rel="noopener">Ipinfo</a></li>
+      <li><a href="https://www.ipvoid.com/" target="_blank" rel="noopener">IPvoid</a></li>
+      <li><a href="https://lnkd.in/dEzkTcV5" target="_blank" rel="noopener">IPQualityScore</a></li>
+    </ul>
+
+    <h3 class="subtema">Links</h3>
+    <ul>
+      <li><a href="https://lnkd.in/dgwmjMtx" target="_blank" rel="noopener">Browserling</a></li>
+      <li><a href="https://lnkd.in/dKgBNU6n" target="_blank" rel="noopener">VirusTotal</a></li>
+      <li><a href="https://urlscan.io/" target="_blank" rel="noopener">Urlscan</a></li>
+      <li><a href="https://www.urlvoid.com/" target="_blank" rel="noopener">Urlvoid</a></li>
+      <li><a href="https://unshorten.it/" target="_blank" rel="noopener">Unshorten.it</a></li>
+      <li><a href="https://lnkd.in/dmTA9qEH" target="_blank" rel="noopener">Urlhaus</a></li>
+    </ul>
+
+    <h3 class="subtema">Adjuntos</h3>
+    <ul>
+      <li><a href="https://lnkd.in/d77Q2GMb" target="_blank" rel="noopener">Joe Sandbox</a></li>
+      <li><a href="https://any.run/" target="_blank" rel="noopener">Any.run</a></li>
+      <li><a href="https://lnkd.in/d4JPnUrJ" target="_blank" rel="noopener">Hybrid Analysis</a></li>
+      <li><a href="https://lnkd.in/d7XMSyPK" target="_blank" rel="noopener">VirusTotal</a></li>
+      <li><a href="https://lnkd.in/dZwsDr_c" target="_blank" rel="noopener">Metadefender Cloud</a></li>
+    </ul>
+
+    <h3 class="subtema">Email</h3>
+    <ul>
+      <li><a href="https://lnkd.in/dYeVY4GD" target="_blank" rel="noopener">Dmarcian</a></li>
+      <li><a href="https://lnkd.in/d5DF4BYc" target="_blank" rel="noopener">Smartfense</a></li>
+      <li><a href="https://lnkd.in/d4JPnUrJ" target="_blank" rel="noopener">Hybrid Analysis</a></li>
+      <li><a href="https://verifymail.io/" target="_blank" rel="noopener">Verify Email</a></li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title" id="osint">OSINT</h2>
+
+    <h3 class="subtema">Contraseñas</h3>
+    <ul>
+      <li><a href="https://lnkd.in/dtYksdmm" target="_blank" rel="noopener">HaveIBeenPwned</a></li>
+      <li><a href="https://www.dehashed.com/" target="_blank" rel="noopener">Dehashed</a></li>
+      <li><a href="https://lnkd.in/dHFXrdqx" target="_blank" rel="noopener">pwnedOrNot</a></li>
+      <li><a href="https://leakcheck.net/" target="_blank" rel="noopener">LeakCheck</a></li>
+      <li><a href="https://snusbase.com/" target="_blank" rel="noopener">Snusbase</a></li>
+    </ul>
+
+    <h3 class="subtema">Ingeniería social</h3>
+    <ul>
+      <li><a href="https://lnkd.in/deg7m-FY" target="_blank" rel="noopener">Urlcrazy</a></li>
+      <li><a href="https://lnkd.in/duYp5hyF" target="_blank" rel="noopener">Breach-parse</a></li>
+      <li><a href="https://lnkd.in/dbxxHieq" target="_blank" rel="noopener">Wifiphisher</a></li>
+      <li><a href="https://lnkd.in/dVKDCiVs" target="_blank" rel="noopener">Social Engineering Toolkit</a></li>
+      <li><a href="https://www.maltego.com/" target="_blank" rel="noopener">Maltego</a></li>
+    </ul>
+
+    <h3 class="subtema">E-mails</h3>
+    <ul>
+      <li><a href="https://epieos.com/" target="_blank" rel="noopener">Epieos</a></li>
+      <li><a href="https://hunter.io/" target="_blank" rel="noopener">Hunter</a></li>
+      <li><a href="https://lnkd.in/dkAG9Eyp" target="_blank" rel="noopener">Norbert</a></li>
+      <li><a href="https://email-checker.net/" target="_blank" rel="noopener">Email Checker</a></li>
+      <li><a href="https://emailrep.io/" target="_blank" rel="noopener">Simple Email Reputation</a></li>
+      <li><a href="https://phonebook.cz/" target="_blank" rel="noopener">Phonebook</a></li>
+      <li><a href="https://lnkd.in/dTmM-ghV" target="_blank" rel="noopener">iKy</a></li>
+      <li><a href="https://lnkd.in/d3439Ws3" target="_blank" rel="noopener">h8mail</a></li>
+    </ul>
+
+    <h3 class="subtema">Redes sociales</h3>
+    <ul>
+      <li><a href="https://lnkd.in/dKk_nYPZ" target="_blank" rel="noopener">OSINTgram</a></li>
+      <li><a href="https://lnkd.in/dF2un2cu" target="_blank" rel="noopener">SocialPwned</a></li>
+      <li><a href="https://socialbearing.com/" target="_blank" rel="noopener">Social Bearing</a></li>
+      <li><a href="https://lnkd.in/dWJKVZfF" target="_blank" rel="noopener">BlackBird</a></li>
+      <li><a href="https://namechk.com/" target="_blank" rel="noopener">Namechk</a></li>
+      <li><a href="https://lnkd.in/d9SGXvJT" target="_blank" rel="noopener">TweetDeck</a></li>
+      <li><a href="https://tinfoleak.com/" target="_blank" rel="noopener">Tinfoleak</a></li>
+      <li><a href="https://tweetbeaver.com/" target="_blank" rel="noopener">Tweetbeaver</a></li>
+    </ul>
+
+    <h3 class="subtema">Buscadores</h3>
+    <ul>
+      <li><a href="https://duckduckgo.com/" target="_blank" rel="noopener">DuckDuckGo</a></li>
+      <li><a href="https://www.baidu.com/" target="_blank" rel="noopener">Baidu</a></li>
+      <li><a href="https://yandex.com/" target="_blank" rel="noopener">Yandex</a></li>
+      <li><a href="https://tineye.com/" target="_blank" rel="noopener">Tineye</a></li>
+      <li><a href="https://www.shodan.io/" target="_blank" rel="noopener">Shodan</a></li>
+      <li><a href="https://www.spokeo.com/" target="_blank" rel="noopener">Spokeo</a></li>
+      <li><a href="https://www.zoomeye.org/" target="_blank" rel="noopener">Zoomeye</a></li>
+      <li><a href="https://lnkd.in/dy4WR_Mj" target="_blank" rel="noopener">Google Search Guide</a></li>
+      <li><a href="https://www.exploit-db.com/google-hacking-database" target="_blank" rel="noopener">Google Hacking Database</a></li>
+    </ul>
+
+    <h3 class="subtema">Páginas webs</h3>
+    <ul>
+      <li><a href="https://archive.org/web/" target="_blank" rel="noopener">Wayback Machine</a></li>
+      <li><a href="https://viewdns.info/" target="_blank" rel="noopener">ViewDNS</a></li>
+      <li><a href="https://spyonweb.com/" target="_blank" rel="noopener">SpyOnWeb</a></li>
+    </ul>
+  </section>
+
+  <div class="checkpoint">
+    <div class="checkpoint-title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+      &mdash; SE HACE HASTA AQUÍ &mdash;
+    </div>
+    <p>Todo lo que sigue es catálogo de referencia, fuera del alcance obligatorio de este desafío concreto.</p>
+  </div>
+
+  <section class="block">
+    <h2 class="block-title" id="referencia">Catálogo de referencia &middot; sin desarrollar todavía</h2>
+
+    <h3 class="subtema">Más herramientas de páginas web</h3>
+    <ul>
+      <li><a href="https://builtwith.com/" target="_blank" rel="noopener">BuiltWith</a></li>
+      <li><a href="https://dnslytics.com/" target="_blank" rel="noopener">DNSlytics</a></li>
+      <li><a href="https://visualping.io/" target="_blank" rel="noopener">VisualPing</a></li>
+      <li><a href="https://lnkd.in/d4u-cnUW" target="_blank" rel="noopener">BackLinkWatch</a></li>
+    </ul>
+
+    <h3 class="subtema">Red Team</h3>
+    <p class="small" style="color:var(--muted);font-size:13.5px;margin:0 0 10px;">Laboratorios, privilege escalation, phishing, C2, OSINT, reconnaissance, exfiltration y credential dumping.</p>
+    <div class="notacion">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">Laboratorios</span>       tryhackme.com &middot; hackthebox.com
+<span class="kw">Privilege escalation</span>  BloodHound &middot; BeRoot
+<span class="kw">Phishing</span>          Gophish &middot; King Phisher &middot; EvilURL
+<span class="kw">C2</span>                Empire Project &middot; Pupy &middot; Cobalt Strike
+<span class="kw">OSINT</span>             Maltego &middot; Spiderfoot &middot; OSINT Framework
+<span class="kw">Reconnaissance</span>    Nmap &middot; sqlmap &middot; OpenVAS &middot; Nikto &middot; Shodan &middot; Crt.sh &middot; RustScan &middot; Amass
+<span class="kw">Exfiltration</span>      SharpExfiltrate &middot; DNSExfiltrator &middot; Egress-Assess
+<span class="kw">Credential dumping</span>  Mimikatz &middot; Dumpert &middot; Lazagne &middot; forkatz &middot; Pypykatz &middot; nanodump</code></pre>
+    </div>
+    <details class="full-code">
+      <summary>Ver enlaces completos de Red Team</summary>
+      <ul>
+        <li><a href="https://tryhackme.com/" target="_blank" rel="noopener">TryHackMe</a></li>
+        <li><a href="https://www.hackthebox.com/" target="_blank" rel="noopener">Hack The Box</a></li>
+        <li><a href="https://lnkd.in/ddxtanZV" target="_blank" rel="noopener">BloodHound</a></li>
+        <li><a href="https://lnkd.in/drybarmR" target="_blank" rel="noopener">BeRoot</a></li>
+        <li><a href="https://getgophish.com" target="_blank" rel="noopener">Gophish</a></li>
+        <li><a href="https://lnkd.in/dtpMD8XZ" target="_blank" rel="noopener">King Phisher</a></li>
+        <li><a href="https://lnkd.in/du82nxhD" target="_blank" rel="noopener">EvilURL</a></li>
+        <li><a href="https://lnkd.in/dafJ6WAf" target="_blank" rel="noopener">Empire Project</a></li>
+        <li><a href="https://lnkd.in/dQqHe8wy" target="_blank" rel="noopener">Pupy</a></li>
+        <li><a href="https://lnkd.in/dw9hQtWQ" target="_blank" rel="noopener">Cobalt Strike</a></li>
+        <li><a href="https://www.maltego.com" target="_blank" rel="noopener">Maltego</a></li>
+        <li><a href="https://www.spiderfoot.net" target="_blank" rel="noopener">Spiderfoot</a></li>
+        <li><a href="https://osintframework.com" target="_blank" rel="noopener">OSINT Framework</a></li>
+        <li><a href="https://nmap.org" target="_blank" rel="noopener">Nmap</a></li>
+        <li><a href="https://sqlmap.org" target="_blank" rel="noopener">sqlmap</a></li>
+        <li><a href="https://www.openvas.org" target="_blank" rel="noopener">OpenVAS</a></li>
+        <li><a href="https://lnkd.in/dZz5gzZT" target="_blank" rel="noopener">Nikto</a></li>
+        <li><a href="https://www.shodan.io" target="_blank" rel="noopener">Shodan</a></li>
+        <li><a href="https://crt.sh" target="_blank" rel="noopener">Crt.sh</a></li>
+        <li><a href="https://lnkd.in/dQrhe8-X" target="_blank" rel="noopener">RustScan</a></li>
+        <li><a href="https://lnkd.in/dMU27YXS" target="_blank" rel="noopener">Amass</a></li>
+        <li><a href="https://lnkd.in/d8z-6HK5" target="_blank" rel="noopener">SharpExfiltrate</a></li>
+        <li><a href="https://lnkd.in/dmX76kqC" target="_blank" rel="noopener">DNSExfiltrator</a></li>
+        <li><a href="https://lnkd.in/dKJjhmhY" target="_blank" rel="noopener">Egress-Assess</a></li>
+        <li><a href="https://lnkd.in/dPcBT5Fk" target="_blank" rel="noopener">Mimikatz</a></li>
+        <li><a href="https://lnkd.in/dH66FJj4" target="_blank" rel="noopener">Dumpert</a></li>
+        <li><a href="https://lnkd.in/di8zz_47" target="_blank" rel="noopener">Lazagne</a></li>
+        <li><a href="https://lnkd.in/de-jtbjY" target="_blank" rel="noopener">forkatz</a></li>
+        <li><a href="https://lnkd.in/dkKequy6" target="_blank" rel="noopener">Pypykatz</a></li>
+        <li><a href="https://lnkd.in/dCHhtH3x" target="_blank" rel="noopener">nanodump</a></li>
+      </ul>
+    </details>
+
+    <h3 class="subtema">Blue Team</h3>
+    <p class="small" style="color:var(--muted);font-size:13.5px;margin:0 0 10px;">Análisis de red, análisis de sistema, gestión de incidentes, honeypots, threat intelligence, EDR y SIEM.</p>
+    <div class="notacion">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">Network analysis</span>     Wireshark &middot; pfSense &middot; Arkime &middot; Snort
+<span class="kw">OS analysis</span>          Helk &middot; Volatility &middot; RegRipper &middot; OSSEC &middot; osquery
+<span class="kw">Incident management</span>  TheHive &middot; GRR Rapid Response
+<span class="kw">Honeypots</span>            Kippo &middot; Cowrie &middot; Dockpot &middot; HonSSH
+<span class="kw">Threat intelligence</span>  Misp &middot; MSTICPy
+<span class="kw">EDR</span>                  Cortex XDR &middot; Cynet 360 &middot; FortiEDR
+<span class="kw">SIEM</span>                 OSSIM &middot; Splunk &middot; LogRhythm &middot; Wazuh</code></pre>
+    </div>
+    <details class="full-code">
+      <summary>Ver enlaces completos de Blue Team</summary>
+      <ul>
+        <li><a href="https://www.wireshark.org" target="_blank" rel="noopener">Wireshark</a></li>
+        <li><a href="https://www.pfsense.org" target="_blank" rel="noopener">pfSense</a></li>
+        <li><a href="https://arkime.com" target="_blank" rel="noopener">Arkime</a></li>
+        <li><a href="https://www.snort.org" target="_blank" rel="noopener">Snort</a></li>
+        <li><a href="https://lnkd.in/di4rQuNb" target="_blank" rel="noopener">Helk</a></li>
+        <li><a href="https://lnkd.in/dBr4yVYa" target="_blank" rel="noopener">Volatility</a></li>
+        <li><a href="https://lnkd.in/dq2hTNQw" target="_blank" rel="noopener">RegRipper</a></li>
+        <li><a href="https://www.ossec.net" target="_blank" rel="noopener">OSSEC</a></li>
+        <li><a href="https://osquery.io" target="_blank" rel="noopener">osquery</a></li>
+        <li><a href="https://lnkd.in/dkR-d4JB" target="_blank" rel="noopener">TheHive</a></li>
+        <li><a href="https://lnkd.in/d42-6faP" target="_blank" rel="noopener">GRR Rapid Response</a></li>
+        <li><a href="https://lnkd.in/d2ypa3j4" target="_blank" rel="noopener">Kippo</a></li>
+        <li><a href="https://lnkd.in/dAR68JQt" target="_blank" rel="noopener">Cowrie</a></li>
+        <li><a href="https://lnkd.in/dgn7MpQg" target="_blank" rel="noopener">Dockpot</a></li>
+        <li><a href="https://lnkd.in/dMKptyHz" target="_blank" rel="noopener">HonSSH</a></li>
+        <li><a href="https://lnkd.in/dkcbKsTN" target="_blank" rel="noopener">Misp</a></li>
+        <li><a href="https://lnkd.in/dBjgWVqY" target="_blank" rel="noopener">MSTICPy</a></li>
+        <li><a href="https://lnkd.in/devusd8T" target="_blank" rel="noopener">Cortex XDR</a></li>
+        <li><a href="https://lnkd.in/dZTXUwBE" target="_blank" rel="noopener">Cynet 360</a></li>
+        <li><a href="https://lnkd.in/daTMkVxb" target="_blank" rel="noopener">FortiEDR</a></li>
+        <li><a href="https://lnkd.in/dXegU3-5" target="_blank" rel="noopener">OSSIM</a></li>
+        <li><a href="https://www.splunk.com" target="_blank" rel="noopener">Splunk</a></li>
+        <li><a href="https://logrhythm.com" target="_blank" rel="noopener">LogRhythm</a></li>
+        <li><a href="https://wazuh.com" target="_blank" rel="noopener">Wazuh</a></li>
+      </ul>
+    </details>
+
+    <h3 class="subtema">Bases de datos de vulnerabilidades</h3>
+    <ul>
+      <li><a href="https://nvd.nist.gov/" target="_blank" rel="noopener">NVD &mdash; National Vulnerability Database</a></li>
+      <li><a href="https://www.cve.org/CVERecord/SearchResults?query=cloud" target="_blank" rel="noopener">CVE.org &mdash; búsqueda de registros</a></li>
+      <li><a href="https://cybermap.kaspersky.com/es" target="_blank" rel="noopener">Kaspersky Cyberthreat Map</a></li>
+    </ul>
+  </section>
+
+  <footer class="end">
+    Entrega: un Markdown por herramienta estudiada (mini estudio + instalación + prueba + ejemplo) en el repositorio de git del equipo, más una PPT sin texto para la exposición oral sin leer.
+  </footer>
+
+</div>

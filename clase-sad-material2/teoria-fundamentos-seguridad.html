@@ -1,0 +1,803 @@
+<title>Fundamentos de seguridad</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #2B6CB0;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #4C9AE0;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #6FA3D8;
+      --accent-ink: #0D1B2A;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #6FA3D8;
+    --accent-ink: #0D1B2A;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top {
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.08rem;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  section.block {
+    margin-top: 44px;
+  }
+
+  h2.block-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+
+  section.block p {
+    margin: 0 0 14px;
+  }
+
+  section.block ul {
+    margin: 0 0 14px;
+    padding-left: 22px;
+  }
+
+  section.block li {
+    margin-bottom: 6px;
+  }
+
+  h3.option-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: var(--ink);
+    margin: 40px 0 4px;
+  }
+
+  .checklist {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow);
+  }
+
+  .checklist li {
+    list-style: none;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 15px;
+    margin-bottom: 0;
+  }
+
+  .checklist ul { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+
+  .checklist svg {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    color: var(--accent-2);
+  }
+
+  .learn-list {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .learn-list li {
+    list-style: none;
+    padding-left: 20px;
+    position: relative;
+    color: var(--ink);
+    margin-bottom: 0;
+  }
+
+  .learn-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .step {
+    display: flex;
+    gap: 18px;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .step:first-of-type { border-top: none; padding-top: 0; }
+
+  .step-chip {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-body { flex: 1; min-width: 0; }
+
+  .step h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 4px 0 8px;
+  }
+
+  .step p {
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+
+  .step p.small {
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+
+  .term {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+
+  .term-bar span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--code-line);
+  }
+
+  .term pre {
+    margin: 0;
+    padding: 14px 16px 16px;
+    overflow-x: auto;
+  }
+
+  .term code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13.6px;
+    line-height: 1.7;
+    color: var(--code-ink);
+  }
+
+  .term .prompt { color: var(--code-muted); }
+  .term .cmt { color: var(--code-muted); }
+  .term .hl { color: var(--code-accent); }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .code-panel .term-bar { }
+
+  .code-panel pre {
+    margin: 0;
+    padding: 16px 18px 18px;
+    overflow-x: auto;
+  }
+
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+
+  .code-panel .tag { color: var(--accent-2); }
+  .code-panel .str { color: #C9D96B; }
+  .code-panel .kw { color: var(--code-accent); }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .prop { color: #8FB8FF; }
+  .code-panel .hl { color: var(--code-accent); }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+
+  .checkpoint p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .substep {
+    display: flex;
+    gap: 14px;
+    margin: 18px 0 0 16px;
+    padding-left: 16px;
+    border-left: 2px solid var(--line-soft);
+  }
+
+  .substep-chip {
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: var(--line-soft);
+    color: var(--muted);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 11.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .substep h4 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.98rem;
+    font-weight: 600;
+    margin: 2px 0 6px;
+  }
+
+  .substep p {
+    margin: 0 0 8px;
+    font-size: 14.5px;
+    color: var(--ink);
+  }
+
+  .substep .code-panel, .substep .term {
+    margin: 10px 0;
+  }
+
+  details.full-code {
+    margin-top: 16px;
+  }
+
+  details.full-code summary {
+    cursor: pointer;
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--accent-2);
+    list-style: none;
+  }
+
+  details.full-code summary::-webkit-details-marker { display: none; }
+
+  details.full-code summary::before {
+    content: "▸ ";
+  }
+
+  details.full-code[open] summary::before {
+    content: "▾ ";
+  }
+
+  .trouble {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .trouble-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .trouble-item .q {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    margin: 0 0 6px;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .trouble-item .q::before {
+    content: "?";
+    font-family: "IBM Plex Mono", monospace;
+    color: var(--accent-2);
+    font-weight: 500;
+  }
+
+  .trouble-item p {
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--muted);
+  }
+
+  .trouble-item p + p { margin-top: 8px; }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .step { transition: none; }
+  }
+
+  nav.toc {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 20px 0 0;
+    box-shadow: var(--shadow);
+  }
+  nav.toc .toc-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 12.5px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 10px;
+  }
+  nav.toc ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 24px; }
+  nav.toc li { font-size: 14px; margin-bottom: 6px; break-inside: avoid; }
+  nav.toc a { color: var(--ink); text-decoration: none; }
+  nav.toc a:hover { color: var(--accent-2); text-decoration: underline; }
+
+  .diagram {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    margin: 16px 0;
+    padding: 18px;
+    display: flex;
+    justify-content: center;
+    overflow-x: auto;
+  }
+  .diagram svg { max-width: 100%; height: auto; }
+  .diagram-caption {
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    margin: -8px 0 16px;
+  }
+
+  .notacion {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+  .notacion .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+  .notacion .term-bar span { width: 9px; height: 9px; border-radius: 50%; background: var(--code-line); }
+  .notacion pre { margin: 0; padding: 14px 18px 16px; overflow-x: auto; }
+  .notacion code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+  .notacion .kw { color: var(--code-accent); font-weight: 500; }
+  .notacion .ent { color: #8FB8FF; }
+  .notacion .attr { color: #C9D96B; }
+  .notacion .com { color: var(--code-muted); font-style: italic; }
+
+  h2.section-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 1.35rem;
+    margin: 0 0 4px;
+    scroll-margin-top: 24px;
+  }
+  .section-num {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    color: var(--accent-2);
+    display: block;
+    margin-bottom: 4px;
+  }
+  section.tema {
+    margin-top: 52px;
+    padding-top: 28px;
+    border-top: 1px solid var(--line-soft);
+  }
+  section.tema:first-of-type { border-top: none; }
+  h3.subtema {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    margin: 28px 0 8px;
+  }
+</style>
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">RA1 &middot; Teoría</span>
+    <h1>Fundamentos de la seguridad informática</h1>
+    <p class="lede">Por qué proteger un sistema informático es crítico, qué características debe tener un sistema seguro, y el vocabulario básico &mdash; confidencialidad, integridad, disponibilidad, amenaza, ataque, vulnerabilidad &mdash; que se usa durante todo el módulo.</p>
+    <div class="meta-row">
+      <span class="meta-chip">RA1</span>
+      <span class="meta-chip">Conceptos base</span>
+      <span class="meta-chip">Tríada CIA</span>
+    </div>
+    <p style="margin-top:16px;"><a href="index.html" style="color:var(--accent-2);font-family:'IBM Plex Mono',monospace;font-size:13px;text-decoration:none;">&larr; Volver al índice del módulo</a></p>
+  </header>
+
+  <nav class="toc">
+    <p class="toc-title">Contenido</p>
+    <ol>
+      <li><a href="#importancia">Por qué importa la seguridad</a></li>
+      <li><a href="#sistema-informatico">El sistema informático y sus elementos</a></li>
+      <li><a href="#definiciones">Ciberseguridad vs. seguridad informática</a></li>
+      <li><a href="#paradoja">La paradoja de la seguridad</a></li>
+      <li><a href="#cia">La tríada CIA</a></li>
+      <li><a href="#auth">Autenticación, autorización y no repudio</a></li>
+      <li><a href="#permisos">Permisos y ACL</a></li>
+      <li><a href="#amenaza-ataque-vuln">Amenaza, ataque y vulnerabilidad</a></li>
+      <li><a href="#tipos-amenazas">Tipos de amenazas</a></li>
+      <li><a href="#contrasenas">Ataques con contraseñas</a></li>
+      <li><a href="#equipos">Blue Team, Red Team y Purple Team</a></li>
+    </ol>
+  </nav>
+
+  <section class="tema" id="importancia">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Por qué importa la seguridad informática</h2>
+    <p>Prácticamente todo lo crítico de una sociedad moderna está controlado por ordenadores: cuentas bancarias, comercio internacional, plantas de energía eléctrica, ejércitos, satélites, el sistema judicial, el sistema sanitario&hellip; Un fallo de seguridad en cualquiera de estos sistemas no es un problema abstracto &mdash; puede mover la bolsa, dejar sin suministro a una ciudad o comprometer un sistema de defensa.</p>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        &ldquo;El único sistema seguro&rdquo;
+      </div>
+      <p>Eugene Spafford lo resumió así: <em>&ldquo;El único sistema seguro es aquel que está apagado y desconectado, enterrado en un refugio de cemento, rodeado por gas venenoso y custodiado por guardianes bien pagados y muy bien armados. Aún así, yo no apostaría mi vida por él&rdquo;.</em> La seguridad absoluta no existe: se trabaja siempre reduciendo riesgo, nunca eliminándolo del todo.</p>
+    </div>
+    <p>De ahí las conclusiones que guían todo el módulo:</p>
+    <ul>
+      <li>La <strong>protección</strong> de los sistemas y redes de computadoras es crítica.</li>
+      <li>La estrategia actual es adoptar <strong>medidas preventivas</strong> para adelantarse al atacante, no solo reaccionar después.</li>
+      <li>Hay que asegurar tres cosas a la vez: la <strong>infraestructura</strong>, la <strong>información</strong> y las <strong>comunicaciones</strong>.</li>
+    </ul>
+  </section>
+
+  <section class="tema" id="sistema-informatico">
+    <span class="section-num">02</span>
+    <h2 class="section-title">El sistema informático y sus elementos</h2>
+    <p>Un sistema informático se puede analizar desde cuatro ángulos, que reaparecerán constantemente en este módulo:</p>
+    <ul>
+      <li><strong>Características</strong> que debe cumplir: fiabilidad, confidencialidad, integridad y disponibilidad.</li>
+      <li><strong>Elementos vulnerables</strong>: hardware, software y datos &mdash; en ese orden, los datos suelen ser el activo más valioso y más difícil de reponer.</li>
+      <li><strong>Amenazas</strong> que lo ponen en riesgo: físicas y lógicas.</li>
+      <li><strong>Análisis forense</strong>: qué hacer una vez que el incidente ya ha ocurrido, para entender qué pasó y evitar que se repita.</li>
+    </ul>
+    <p>De las amenazas surgen las <strong>medidas de seguridad</strong>, que se clasifican de dos formas complementarias: por cuándo actúan (activas/pasivas) y por su objetivo (preventivas/paliativas). Se desarrollan en <a href="teoria-mecanismos-alta-disponibilidad.html">Mecanismos de seguridad y alta disponibilidad</a>.</p>
+  </section>
+
+  <section class="tema" id="definiciones">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Ciberseguridad, seguridad informática y seguridad de la información</h2>
+    <p>Los tres términos se usan a menudo como sinónimos, pero cada uno tiene un matiz distinto:</p>
+    <ul>
+      <li><strong>Ciberseguridad:</strong> la práctica de defender &mdash; con tecnologías o prácticas ofensivas &mdash; las computadoras, servidores, dispositivos móviles, sistemas electrónicos, redes y datos de ataques maliciosos.</li>
+      <li><strong>Seguridad informática:</strong> la disciplina que se encarga de proteger la integridad y la privacidad de la información almacenada en el sistema informático frente a cibercriminales.</li>
+      <li><strong>Seguridad de la información:</strong> el conjunto de medidas preventivas y reactivas que afectan al tratamiento de los datos almacenados, y que permiten almacenarlos y protegerlos &mdash; independientemente de si están en un ordenador o en papel.</li>
+    </ul>
+    <p>En la práctica, la ciberseguridad es la disciplina más amplia: las organizaciones tienen la responsabilidad de proteger su infraestructura para mantener la confianza del cliente y cumplir la normativa vigente, implementando procesos, controles y herramientas de seguridad.</p>
+  </section>
+
+  <section class="tema" id="paradoja">
+    <span class="section-num">04</span>
+    <h2 class="section-title">La paradoja de la seguridad</h2>
+    <p>Todo sistema se mueve en tensión entre tres vértices: <strong>funcionalidad</strong> (todo lo que el sistema puede hacer), <strong>seguridad</strong> (cuánto se restringe ese poder) y <strong>usabilidad</strong> (lo fácil que resulta usarlo). Cuanta más seguridad se añade, normalmente se sacrifica usabilidad o funcionalidad &mdash; y viceversa. No existe el punto perfecto: cada sistema encuentra su propio equilibrio según su contexto y su nivel de riesgo aceptable.</p>
+  </section>
+
+  <section class="tema" id="cia">
+    <span class="section-num">05</span>
+    <h2 class="section-title">La tríada CIA</h2>
+    <p>La tríada <strong>CIA</strong> (Confidencialidad, Integridad, Disponibilidad &mdash; <em>Confidentiality, Integrity, Availability</em>) ha sido la base de la ciberseguridad durante décadas. Estos tres principios se usan como marco para guiar las políticas, prácticas y controles de seguridad que se establecen en cualquier entorno tecnológico.</p>
+
+    <h3 class="subtema">Confidencialidad</h3>
+    <p>Capacidad de garantizar que la información <strong>no está disponible ni se revela</strong> a individuos sin autorización para consultarla. Implica controles como:</p>
+    <ul>
+      <li>La información almacenada no puede ser consultada por error o de forma intencionada sin autorización de quien la almacenó.</li>
+      <li>La información que viaja de un punto A a un punto B no puede ser interceptada por error o de forma intencionada sin autorización de quien la transmitió.</li>
+    </ul>
+
+    <h3 class="subtema">Integridad</h3>
+    <p>Capacidad de garantizar la <strong>exactitud y completitud</strong> de la información a lo largo de todo su ciclo de vida. Implica que:</p>
+    <ul>
+      <li>La información almacenada no puede ser modificada por error o de forma intencionada sin el conocimiento de quien la almacenó.</li>
+      <li>La información transmitida no puede ser modificada por error o de forma intencionada sin el conocimiento de quien la transmitió.</li>
+    </ul>
+
+    <h3 class="subtema">Disponibilidad</h3>
+    <p>Capacidad de garantizar que la información está accesible <strong>siempre que se necesite</strong>. Un dato perfectamente confidencial e íntegro no sirve de nada si nadie autorizado puede llegar a él cuando lo necesita &mdash; de aquí nace, más adelante, el bloque de alta disponibilidad.</p>
+  </section>
+
+  <section class="tema" id="auth">
+    <span class="section-num">06</span>
+    <h2 class="section-title">Autenticación, autorización y no repudio</h2>
+    <p>La tríada CIA no basta por sí sola: hace falta poder identificar quién hace cada cosa y demostrarlo después. Tres conceptos que suelen confundirse pero son distintos:</p>
+    <ul>
+      <li><strong>Autenticación:</strong> el proceso de verificar la identidad de un usuario &mdash; normalmente comparando unas credenciales (usuario y contraseña) con lo almacenado en el sistema. Si coinciden, el usuario es reconocido como legítimo.</li>
+      <li><strong>Autorización:</strong> el proceso que sigue a la autenticación &mdash; determina qué recursos puede acceder ese usuario ya identificado y qué acciones puede realizar sobre ellos, mediante políticas de autorización.</li>
+      <li><strong>No repudio:</strong> garantiza que, en un intercambio de información, ni el emisor puede negar haberla enviado ni el receptor puede negar haberla recibido.</li>
+    </ul>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Autenticación &ne; autorización
+      </div>
+      <p>Estar autenticado (haber demostrado quién eres) no implica estar autorizado a todo. Un usuario válido de un sistema puede, aun así, no tener permiso para leer un archivo concreto. La verificación en dos pasos (2FA) refuerza la autenticación combinando algo que el usuario <em>conoce</em> (la contraseña) con algo que <em>posee</em> (el móvil, una llave U2F/FIDO2).</p>
+    </div>
+  </section>
+
+  <section class="tema" id="permisos">
+    <span class="section-num">07</span>
+    <h2 class="section-title">Permisos y listas de control de acceso</h2>
+    <p>La autorización se implementa, en la práctica, mediante <strong>usuarios y grupos de usuarios</strong> combinados con <strong>listas de control de acceso</strong> (ACL, <em>Access Control List</em>): quién puede hacer qué sobre cada recurso.</p>
+    <p>Los permisos avanzados que puede tener un usuario o grupo sobre un recurso se agrupan en cuatro niveles:</p>
+    <ul>
+      <li><strong>Lectura:</strong> entrar en la carpeta / ejecutar el fichero, listar la carpeta / leer el fichero, leer atributos, leer permisos.</li>
+      <li><strong>Escritura:</strong> crear ficheros o carpetas, escribir o anexar datos, escribir atributos, eliminar subcarpetas y ficheros.</li>
+      <li><strong>Administración:</strong> tomar posesión del recurso, cambiar sus permisos.</li>
+      <li><strong>Control total:</strong> todo lo anterior combinado.</li>
+    </ul>
+    <p>En Windows esto se gestiona desde la pestaña <em>Seguridad</em> de las propiedades de un fichero o carpeta (grupos/usuarios con permiso, editar, opciones avanzadas). En Linux, el mismo concepto se resume en la notación <code class="inline">rwxrwxrwx</code>:</p>
+    <div class="notacion">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">-</span> <span class="attr">rwx</span> <span class="attr">rwx</span> <span class="attr">rwx</span>
+<span class="com">tipo  usuario grupo  otros</span></code></pre>
+    </div>
+    <p>El primer carácter indica el tipo de archivo (<code class="inline">-</code> fichero normal, <code class="inline">d</code> directorio); después, tres bloques de tres letras (lectura/escritura/ejecución) para el propietario, el grupo y el resto de usuarios. Este esquema se desarrolla a fondo, con todos sus comandos, en <a href="teoria-permisos-linux.html">Permisos en Linux</a>.</p>
+  </section>
+
+  <section class="tema" id="amenaza-ataque-vuln">
+    <span class="section-num">08</span>
+    <h2 class="section-title">Amenaza, ataque y vulnerabilidad</h2>
+    <p>Tres términos que se usan sin distinguir en el lenguaje coloquial, pero que en seguridad tienen significados precisos y encadenados:</p>
+    <ul>
+      <li><strong>Vulnerabilidad:</strong> una falla o debilidad en los procedimientos de seguridad de un sistema de información &mdash; en su diseño, implementación o controles internos &mdash; que podría explotarse accidental o intencionadamente, provocando una violación de los controles o de la política de seguridad del sistema.</li>
+      <li><strong>Amenaza:</strong> cualquier circunstancia o evento con el potencial de afectar negativamente a las operaciones de una organización, a sus activos o a individuos, a través del acceso no autorizado a un sistema, la destrucción, divulgación o modificación de información, y/o la denegación de servicio. Procede de <em>fuentes de amenaza</em>: actores (personas) o eventos accidentales.</li>
+      <li><strong>Ataque:</strong> el mecanismo concreto a través del cual una amenaza explota una vulnerabilidad para causar un impacto de seguridad que afecte a la confidencialidad, integridad o disponibilidad de un sistema de información.</li>
+    </ul>
+    <p>La relación entre los tres: unos <strong>activos</strong> tienen <strong>componentes</strong>, que pueden contener <strong>vulnerabilidades</strong>; frente a ellas se despliegan <strong>controles</strong>. Del <strong>entorno de amenazas</strong> (con sus fuentes: actores o eventos accidentales) surge un <strong>ataque</strong> dirigido contra esas vulnerabilidades, con el objetivo puesto en los activos.</p>
+    <p>Vigilar vulnerabilidades es una tarea constante, nunca puntual: se monitoriza el sistema, y cada vez que se encuentra una vulnerabilidad nueva se aplica la medida de protección correspondiente, para volver a vigilar de inmediato. La figura del administrador del sistema es central en este ciclo.</p>
+  </section>
+
+  <section class="tema" id="tipos-amenazas">
+    <span class="section-num">09</span>
+    <h2 class="section-title">Tipos de amenazas</h2>
+    <h3 class="subtema">Físicas</h3>
+    <ul>
+      <li>Desgracias sobrevenidas: incendios, inundaciones, terremotos.</li>
+      <li>Exceso de temperatura.</li>
+      <li>Picos de tensión y cortes en el suministro eléctrico.</li>
+      <li>Averías o fin de vida útil del hardware.</li>
+      <li>Robos.</li>
+      <li>Acceso no autorizado a ficheros o dispositivos.</li>
+    </ul>
+    <h3 class="subtema">Lógicas</h3>
+    <ul>
+      <li>Acceso ilegítimo al sistema informático.</li>
+      <li>Software malicioso (malware).</li>
+      <li>Privacidad de los datos y las comunicaciones.</li>
+    </ul>
+    <p>Detrás de la mayoría de amenazas lógicas &mdash; y de buena parte de las físicas &mdash; está el <strong>factor humano</strong>: error, descuido o mala intención. Por eso ninguna tecnología de seguridad funciona sin la implicación de la directiva y una cultura de seguridad a nivel de usuario &mdash; <em>sistema de seguridad = tecnología + organización</em>. La seguridad de todo el sistema es igual a la de su punto más débil.</p>
+  </section>
+
+  <section class="tema" id="contrasenas">
+    <span class="section-num">10</span>
+    <h2 class="section-title">Ataques con contraseñas</h2>
+    <p>Dos técnicas clásicas para intentar averiguar una contraseña sin conocerla:</p>
+    <ul>
+      <li><strong>Ataque por diccionario:</strong> mecanismo utilizado por intrusos para intentar averiguar una contraseña probando una lista de palabras contenidas en un diccionario &mdash; nombres propios, palabras comunes, contraseñas filtradas en brechas anteriores&hellip;</li>
+      <li><strong>Ataque por fuerza bruta:</strong> se realiza probando todas las combinaciones posibles de letras, números y caracteres especiales hasta encontrar la que permite el acceso. Es exhaustivo pero mucho más lento cuanto más larga y compleja es la contraseña.</li>
+    </ul>
+    <p>Esta técnica se pone en práctica en el desafío <a href="desafio-attack-simulation.html">RA1_ATTACK_SIMULATION</a>, con las herramientas Pydictor, Dymerge e Hydra.</p>
+  </section>
+
+  <section class="tema" id="equipos">
+    <span class="section-num">11</span>
+    <h2 class="section-title">Blue Team, Red Team y Purple Team</h2>
+    <ul>
+      <li><strong>Blue Team:</strong> orientado a ciberseguridad <strong>defensiva</strong>. Establece y mantiene las medidas de seguridad necesarias para proteger la infraestructura tecnológica de una organización.</li>
+      <li><strong>Red Team:</strong> orientado a ciberseguridad <strong>ofensiva</strong>. Su objetivo es probar la eficacia de las medidas implementadas por el Blue Team, simulando las acciones de atacantes reales &mdash; sin ánimo de causar daño, sino de identificar debilidades que deban corregirse.</li>
+      <li><strong>Purple Team:</strong> combina los dos roles. Su objetivo es que el Blue Team aprenda de las técnicas y tácticas usadas por el Red Team y mejore sus medidas de seguridad &mdash; colaboración y aprendizaje conjunto, en vez de confrontación.</li>
+    </ul>
+    <p>Esta clasificación es el hilo conductor del desafío <a href="desafio-hacking-toolking-police.html">RA3_HACKING_TOOLKING_POLICE</a>, donde se estudian herramientas propias de cada equipo.</p>
+  </section>
+
+  <footer class="end">
+    Siguiente paso: cómo se clasifican y aplican en la práctica las medidas de seguridad &mdash; en <a href="teoria-mecanismos-alta-disponibilidad.html">Mecanismos de seguridad y alta disponibilidad</a>.
+  </footer>
+
+</div>
