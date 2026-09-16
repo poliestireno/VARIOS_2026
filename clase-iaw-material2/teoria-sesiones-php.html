@@ -1,0 +1,767 @@
+<title>Sesiones en PHP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #2B6CB0;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #4C9AE0;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #6FA3D8;
+      --accent-ink: #0D1B2A;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #6FA3D8;
+    --accent-ink: #0D1B2A;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top {
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.08rem;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  section.block {
+    margin-top: 44px;
+  }
+
+  h2.block-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+
+  section.block p {
+    margin: 0 0 14px;
+  }
+
+  section.block ul {
+    margin: 0 0 14px;
+    padding-left: 22px;
+  }
+
+  section.block li {
+    margin-bottom: 6px;
+  }
+
+  h3.option-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: var(--ink);
+    margin: 40px 0 4px;
+  }
+
+  .checklist {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow);
+  }
+
+  .checklist li {
+    list-style: none;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 15px;
+    margin-bottom: 0;
+  }
+
+  .checklist ul { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+
+  .checklist svg {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    color: var(--accent-2);
+  }
+
+  .learn-list {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .learn-list li {
+    list-style: none;
+    padding-left: 20px;
+    position: relative;
+    color: var(--ink);
+    margin-bottom: 0;
+  }
+
+  .learn-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .step {
+    display: flex;
+    gap: 18px;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .step:first-of-type { border-top: none; padding-top: 0; }
+
+  .step-chip {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-body { flex: 1; min-width: 0; }
+
+  .step h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 4px 0 8px;
+  }
+
+  .step p {
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+
+  .step p.small {
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+
+  .term {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+
+  .term-bar span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--code-line);
+  }
+
+  .term pre {
+    margin: 0;
+    padding: 14px 16px 16px;
+    overflow-x: auto;
+  }
+
+  .term code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13.6px;
+    line-height: 1.7;
+    color: var(--code-ink);
+  }
+
+  .term .prompt { color: var(--code-muted); }
+  .term .cmt { color: var(--code-muted); }
+  .term .hl { color: var(--code-accent); }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .code-panel .term-bar { }
+
+  .code-panel pre {
+    margin: 0;
+    padding: 16px 18px 18px;
+    overflow-x: auto;
+  }
+
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+
+  .code-panel .tag { color: var(--accent-2); }
+  .code-panel .str { color: #C9D96B; }
+  .code-panel .kw { color: var(--code-accent); }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .prop { color: #8FB8FF; }
+  .code-panel .hl { color: var(--code-accent); }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+
+  .checkpoint p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .substep {
+    display: flex;
+    gap: 14px;
+    margin: 18px 0 0 16px;
+    padding-left: 16px;
+    border-left: 2px solid var(--line-soft);
+  }
+
+  .substep-chip {
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: var(--line-soft);
+    color: var(--muted);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 11.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .substep h4 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.98rem;
+    font-weight: 600;
+    margin: 2px 0 6px;
+  }
+
+  .substep p {
+    margin: 0 0 8px;
+    font-size: 14.5px;
+    color: var(--ink);
+  }
+
+  .substep .code-panel, .substep .term {
+    margin: 10px 0;
+  }
+
+  details.full-code {
+    margin-top: 16px;
+  }
+
+  details.full-code summary {
+    cursor: pointer;
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--accent-2);
+    list-style: none;
+  }
+
+  details.full-code summary::-webkit-details-marker { display: none; }
+
+  details.full-code summary::before {
+    content: "▸ ";
+  }
+
+  details.full-code[open] summary::before {
+    content: "▾ ";
+  }
+
+  .trouble {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .trouble-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .trouble-item .q {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    margin: 0 0 6px;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .trouble-item .q::before {
+    content: "?";
+    font-family: "IBM Plex Mono", monospace;
+    color: var(--accent-2);
+    font-weight: 500;
+  }
+
+  .trouble-item p {
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--muted);
+  }
+
+  .trouble-item p + p { margin-top: 8px; }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .step { transition: none; }
+  }
+
+  nav.toc {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 20px 0 0;
+    box-shadow: var(--shadow);
+  }
+  nav.toc .toc-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 12.5px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 10px;
+  }
+  nav.toc ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 24px; }
+  nav.toc li { font-size: 14px; margin-bottom: 6px; break-inside: avoid; }
+  nav.toc a { color: var(--ink); text-decoration: none; }
+  nav.toc a:hover { color: var(--accent-2); text-decoration: underline; }
+
+  .diagram {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    margin: 16px 0;
+    padding: 18px;
+    display: flex;
+    justify-content: center;
+    overflow-x: auto;
+  }
+  .diagram svg { max-width: 100%; height: auto; }
+  .diagram-caption {
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    margin: -8px 0 16px;
+  }
+
+  .notacion {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+  .notacion .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+  .notacion .term-bar span { width: 9px; height: 9px; border-radius: 50%; background: var(--code-line); }
+  .notacion pre { margin: 0; padding: 14px 18px 16px; overflow-x: auto; }
+  .notacion code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+  .notacion .kw { color: var(--code-accent); font-weight: 500; }
+  .notacion .ent { color: #8FB8FF; }
+  .notacion .attr { color: #C9D96B; }
+  .notacion .com { color: var(--code-muted); font-style: italic; }
+
+  h2.section-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 1.35rem;
+    margin: 0 0 4px;
+    scroll-margin-top: 24px;
+  }
+  .section-num {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    color: var(--accent-2);
+    display: block;
+    margin-bottom: 4px;
+  }
+  section.tema {
+    margin-top: 52px;
+    padding-top: 28px;
+    border-top: 1px solid var(--line-soft);
+  }
+  section.tema:first-of-type { border-top: none; }
+  h3.subtema {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    margin: 28px 0 8px;
+  }
+</style>
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">RA4 + RA6 &middot; Teoría</span>
+    <h1>Sesiones en PHP</h1>
+    <p class="lede">HTTP no recuerda nada entre peticiones. Con <code class="inline">$_SESSION</code> se identifica a un usuario a lo largo de varias páginas: login con contraseñas cifradas, proteger páginas frente a accesos sin sesión, expiración por inactividad, y cerrar sesión.</p>
+    <div class="meta-row">
+      <span class="meta-chip">RA4 + RA6</span>
+      <span class="meta-chip">$_SESSION</span>
+      <span class="meta-chip">password_hash()</span>
+    </div>
+    <p style="margin-top:16px;"><a href="index.html" style="color:var(--accent-2);font-family:'IBM Plex Mono',monospace;font-size:13px;text-decoration:none;">&larr; Volver al índice del módulo</a></p>
+  </header>
+
+  <nav class="toc">
+    <p class="toc-title">Contenido</p>
+    <ol>
+      <li><a href="#http-no-recuerda">El problema: HTTP no recuerda nada</a></li>
+      <li><a href="#password-hash">Contraseñas: password_hash() y password_verify()</a></li>
+      <li><a href="#login">Formulario de login y validación</a></li>
+      <li><a href="#proteger">Proteger páginas frente a accesos sin login</a></li>
+      <li><a href="#expiracion">Expiración de la sesión por tiempo</a></li>
+      <li><a href="#logout">Cerrar sesión</a></li>
+      <li><a href="#roles">Roles: superusuario y usuario normal</a></li>
+    </ol>
+  </nav>
+
+  <section class="tema" id="http-no-recuerda">
+    <span class="section-num">01</span>
+    <h2 class="section-title">El problema: HTTP no recuerda nada</h2>
+    <p>Cada petición HTTP es independiente de la anterior &mdash; el servidor, por sí solo, no sabe que dos peticiones seguidas vienen del mismo navegador. Las <strong>sesiones</strong> resuelven esto: PHP guarda una cookie con un identificador único en el navegador, y en el servidor asocia ese identificador a un array <code class="inline">$_SESSION</code> donde se puede guardar cualquier dato entre páginas.</p>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        session_start() antes que cualquier otra cosa
+      </div>
+      <p><code class="inline">session_start()</code> envía una cabecera HTTP (la cookie), y en PHP ninguna cabecera se puede enviar después de que ya haya salido algo de HTML &mdash; ni siquiera un espacio en blanco antes del <code class="inline">&lt;?php</code> de apertura. Es el error más común: &ldquo;headers already sent&rdquo;. Solución: <code class="inline">session_start()</code> siempre en la primerísima línea de cada página que use <code class="inline">$_SESSION</code>.</p>
+    </div>
+  </section>
+
+  <section class="tema" id="password-hash">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Contraseñas: password_hash() y password_verify()</h2>
+    <p>Nunca se guarda una contraseña tal cual en la base de datos &mdash; se guarda su <strong>hash</strong>, el resultado de una función que la transforma en un texto irreversible.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="prop">$hash</span> = password_hash(<span class="prop">$_POST</span>[<span class="str">'password'</span>], PASSWORD_DEFAULT);
+<span class="prop">$stmt</span> = <span class="prop">$pdo</span>-&gt;prepare(<span class="str">"INSERT INTO usuarios (usuario, password_hash, es_superusuario) VALUES (?, ?, ?)"</span>);
+<span class="prop">$stmt</span>-&gt;execute([<span class="prop">$_POST</span>[<span class="str">'usuario'</span>], <span class="prop">$hash</span>, <span class="prop">$_POST</span>[<span class="str">'superusuario'</span>] ?? 0]);</code></pre>
+    </div>
+    <p class="small" style="color:var(--muted);font-size:13.5px;"><code class="inline">password_hash()</code> genera un hash distinto cada vez, aunque la contraseña sea siempre la misma &mdash; es intencionado (incluye un &ldquo;salt&rdquo; aleatorio) y no afecta a que <code class="inline">password_verify()</code> lo siga reconociendo como válido.</p>
+  </section>
+
+  <section class="tema" id="login">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Formulario de login y validación</h2>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="com">&lt;?php
+// procesar_login.php</span>
+session_start();
+<span class="prop">$stmt</span> = <span class="prop">$pdo</span>-&gt;prepare(<span class="str">"SELECT * FROM usuarios WHERE usuario = ?"</span>);
+<span class="prop">$stmt</span>-&gt;execute([<span class="prop">$_POST</span>[<span class="str">'usuario'</span>]]);
+<span class="prop">$usuario</span> = <span class="prop">$stmt</span>-&gt;fetch(PDO::FETCH_ASSOC);
+
+<span class="kw">if</span> (<span class="prop">$usuario</span> &amp;&amp; password_verify(<span class="prop">$_POST</span>[<span class="str">'password'</span>], <span class="prop">$usuario</span>[<span class="str">'password_hash'</span>])) {
+  <span class="prop">$_SESSION</span>[<span class="str">'usuario_id'</span>] = <span class="prop">$usuario</span>[<span class="str">'id'</span>];
+  <span class="prop">$_SESSION</span>[<span class="str">'usuario_nombre'</span>] = <span class="prop">$usuario</span>[<span class="str">'usuario'</span>];
+  <span class="prop">$_SESSION</span>[<span class="str">'es_superusuario'</span>] = <span class="prop">$usuario</span>[<span class="str">'es_superusuario'</span>];
+  <span class="prop">$_SESSION</span>[<span class="str">'ultimo_acceso'</span>] = time();
+  header(<span class="str">"Location: app.php"</span>);
+} <span class="kw">else</span> {
+  header(<span class="str">"Location: login.php?error=1"</span>);
+}
+<span class="kw">exit</span>;</code></pre>
+    </div>
+    <p><code class="inline">password_verify($password_en_claro, $hash_guardado)</code> compara sin necesitar deshacer el hash &mdash; devuelve <code class="inline">true</code>/<code class="inline">false</code>.</p>
+  </section>
+
+  <section class="tema" id="proteger">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Proteger páginas frente a accesos sin login</h2>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="com">&lt;?php
+// requiere_login.php</span>
+session_start();
+<span class="kw">if</span> (!isset(<span class="prop">$_SESSION</span>[<span class="str">'usuario_id'</span>])) {
+  header(<span class="str">"Location: login.php"</span>);
+  <span class="kw">exit</span>;
+}</code></pre>
+    </div>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="com">&lt;?php
+// app.php</span>
+require <span class="str">'requiere_login.php'</span>; <span class="com">// si no hay sesión, ya redirige y para todo lo demás</span>
+?&gt;
+&lt;h1&gt;Bienvenido, &lt;?php <span class="kw">echo</span> <span class="prop">$_SESSION</span>[<span class="str">'usuario_nombre'</span>]; ?&gt;&lt;/h1&gt;</code></pre>
+    </div>
+    <p>Centralizar la comprobación en <code class="inline">requiere_login.php</code>, en vez de repetir el <code class="inline">if</code> en cada página, significa que si mañana cambia la lógica (por ejemplo, se añaden roles) solo hay que tocar un archivo.</p>
+  </section>
+
+  <section class="tema" id="expiracion">
+    <span class="section-num">05</span>
+    <h2 class="section-title">Expiración de la sesión por tiempo</h2>
+    <p>Se guarda un &ldquo;sello de tiempo&rdquo; cada vez que el usuario hace algo, y se compara en cada petición con el momento actual. Si ha pasado demasiado tiempo, se cierra la sesión igual que con el botón de logout.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="com">&lt;?php
+// requiere_login.php (con expiración)</span>
+session_start();
+<span class="prop">$limite</span> = <span class="hl">300</span>; <span class="com">// 5 minutos, en segundos</span>
+
+<span class="kw">if</span> (!isset(<span class="prop">$_SESSION</span>[<span class="str">'usuario_id'</span>])) {
+  header(<span class="str">"Location: login.php"</span>);
+  <span class="kw">exit</span>;
+}
+
+<span class="kw">if</span> (isset(<span class="prop">$_SESSION</span>[<span class="str">'ultimo_acceso'</span>]) &amp;&amp; (time() - <span class="prop">$_SESSION</span>[<span class="str">'ultimo_acceso'</span>] &gt; <span class="prop">$limite</span>)) {
+  <span class="prop">$_SESSION</span> = [];
+  session_destroy();
+  header(<span class="str">"Location: login.php?expirada=1"</span>);
+  <span class="kw">exit</span>;
+}
+
+<span class="prop">$_SESSION</span>[<span class="str">'ultimo_acceso'</span>] = time(); <span class="com">// se actualiza en cada página protegida visitada</span></code></pre>
+    </div>
+    <p><code class="inline">time()</code> devuelve el instante actual en segundos. El límite es de <strong>inactividad</strong>, no de tiempo total conectado: si el usuario sigue navegando entre páginas protegidas, la sesión no caduca.</p>
+  </section>
+
+  <section class="tema" id="logout">
+    <span class="section-num">06</span>
+    <h2 class="section-title">Cerrar sesión</h2>
+    <p>Cerrar sesión es, básicamente, deshacer lo que <code class="inline">session_start()</code> montó: vaciar <code class="inline">$_SESSION</code> y destruir la sesión en el servidor.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="com">&lt;?php
+// logout.php</span>
+session_start();
+<span class="prop">$_SESSION</span> = [];
+session_destroy();
+header(<span class="str">"Location: login.php"</span>);
+<span class="kw">exit</span>;</code></pre>
+    </div>
+  </section>
+
+  <section class="tema" id="roles">
+    <span class="section-num">07</span>
+    <h2 class="section-title">Roles: superusuario y usuario normal</h2>
+    <p>Con el rol guardado en <code class="inline">$_SESSION</code> al hacer login, cada página puede decidir qué mostrar sin volver a consultar la base de datos:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">if</span> (<span class="prop">$_SESSION</span>[<span class="str">'es_superusuario'</span>]) {
+  <span class="com">// ver todos los datos, modificar, borrar</span>
+} <span class="kw">else</span> {
+  <span class="com">// vista limitada: solo lectura de lo permitido</span>
+}</code></pre>
+    </div>
+    <p>Para una comprobación más estricta (por ejemplo, una página exclusiva de administración), se puede crear un segundo guion <code class="inline">requiere_superusuario.php</code> que, además de comprobar la sesión, verifique el rol y redirija si no coincide.</p>
+  </section>
+
+  <footer class="end">
+    Pon esto en práctica en <code class="inline">RA46_APP_SESSION_PHP</code>: registro, login con roles, sesión protegida y expiración por inactividad de 5 minutos.
+  </footer>
+
+</div>

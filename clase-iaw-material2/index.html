@@ -1,0 +1,784 @@
+<title>Temario IAW</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #2B6CB0;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #4C9AE0;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #6FA3D8;
+      --accent-ink: #0D1B2A;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #6FA3D8;
+    --accent-ink: #0D1B2A;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top {
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.08rem;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  section.block {
+    margin-top: 44px;
+  }
+
+  h2.block-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+
+  section.block p {
+    margin: 0 0 14px;
+  }
+
+  section.block ul {
+    margin: 0 0 14px;
+    padding-left: 22px;
+  }
+
+  section.block li {
+    margin-bottom: 6px;
+  }
+
+  h3.option-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: var(--ink);
+    margin: 40px 0 4px;
+  }
+
+  .checklist {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow);
+  }
+
+  .checklist li {
+    list-style: none;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 15px;
+    margin-bottom: 0;
+  }
+
+  .checklist ul { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+
+  .checklist svg {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    color: var(--accent-2);
+  }
+
+  .learn-list {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .learn-list li {
+    list-style: none;
+    padding-left: 20px;
+    position: relative;
+    color: var(--ink);
+    margin-bottom: 0;
+  }
+
+  .learn-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .step {
+    display: flex;
+    gap: 18px;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .step:first-of-type { border-top: none; padding-top: 0; }
+
+  .step-chip {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-body { flex: 1; min-width: 0; }
+
+  .step h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 4px 0 8px;
+  }
+
+  .step p {
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+
+  .step p.small {
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+
+  .term {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+
+  .term-bar span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--code-line);
+  }
+
+  .term pre {
+    margin: 0;
+    padding: 14px 16px 16px;
+    overflow-x: auto;
+  }
+
+  .term code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13.6px;
+    line-height: 1.7;
+    color: var(--code-ink);
+  }
+
+  .term .prompt { color: var(--code-muted); }
+  .term .cmt { color: var(--code-muted); }
+  .term .hl { color: var(--code-accent); }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .code-panel .term-bar { }
+
+  .code-panel pre {
+    margin: 0;
+    padding: 16px 18px 18px;
+    overflow-x: auto;
+  }
+
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+
+  .code-panel .tag { color: var(--accent-2); }
+  .code-panel .str { color: #C9D96B; }
+  .code-panel .kw { color: var(--code-accent); }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .prop { color: #8FB8FF; }
+  .code-panel .hl { color: var(--code-accent); }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+
+  .checkpoint p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .substep {
+    display: flex;
+    gap: 14px;
+    margin: 18px 0 0 16px;
+    padding-left: 16px;
+    border-left: 2px solid var(--line-soft);
+  }
+
+  .substep-chip {
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: var(--line-soft);
+    color: var(--muted);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 11.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .substep h4 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.98rem;
+    font-weight: 600;
+    margin: 2px 0 6px;
+  }
+
+  .substep p {
+    margin: 0 0 8px;
+    font-size: 14.5px;
+    color: var(--ink);
+  }
+
+  .substep .code-panel, .substep .term {
+    margin: 10px 0;
+  }
+
+  details.full-code {
+    margin-top: 16px;
+  }
+
+  details.full-code summary {
+    cursor: pointer;
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--accent-2);
+    list-style: none;
+  }
+
+  details.full-code summary::-webkit-details-marker { display: none; }
+
+  details.full-code summary::before {
+    content: "▸ ";
+  }
+
+  details.full-code[open] summary::before {
+    content: "▾ ";
+  }
+
+  .trouble {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .trouble-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .trouble-item .q {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    margin: 0 0 6px;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .trouble-item .q::before {
+    content: "?";
+    font-family: "IBM Plex Mono", monospace;
+    color: var(--accent-2);
+    font-weight: 500;
+  }
+
+  .trouble-item p {
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--muted);
+  }
+
+  .trouble-item p + p { margin-top: 8px; }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .step { transition: none; }
+  }
+
+  nav.toc {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 20px 0 0;
+    box-shadow: var(--shadow);
+  }
+  nav.toc .toc-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 12.5px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 10px;
+  }
+  nav.toc ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 24px; }
+  nav.toc li { font-size: 14px; margin-bottom: 6px; break-inside: avoid; }
+  nav.toc a { color: var(--ink); text-decoration: none; }
+  nav.toc a:hover { color: var(--accent-2); text-decoration: underline; }
+
+  .diagram {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    margin: 16px 0;
+    padding: 18px;
+    display: flex;
+    justify-content: center;
+    overflow-x: auto;
+  }
+  .diagram svg { max-width: 100%; height: auto; }
+  .diagram-caption {
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    margin: -8px 0 16px;
+  }
+
+  .notacion {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+  .notacion .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+  .notacion .term-bar span { width: 9px; height: 9px; border-radius: 50%; background: var(--code-line); }
+  .notacion pre { margin: 0; padding: 14px 18px 16px; overflow-x: auto; }
+  .notacion code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+  .notacion .kw { color: var(--code-accent); font-weight: 500; }
+  .notacion .ent { color: #8FB8FF; }
+  .notacion .attr { color: #C9D96B; }
+  .notacion .com { color: var(--code-muted); font-style: italic; }
+
+  h2.section-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 1.35rem;
+    margin: 0 0 4px;
+    scroll-margin-top: 24px;
+  }
+  .section-num {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    color: var(--accent-2);
+    display: block;
+    margin-bottom: 4px;
+  }
+  section.tema {
+    margin-top: 52px;
+    padding-top: 28px;
+    border-top: 1px solid var(--line-soft);
+  }
+  section.tema:first-of-type { border-top: none; }
+  h3.subtema {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    margin: 28px 0 8px;
+  }
+</style>
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">Temario de módulo &middot; 2&ordm; ASIR</span>
+    <h1>Implantación de Aplicaciones Web</h1>
+    <p class="lede">Del entorno de desarrollo (XAMPP, VS Code) a documentos web generados con PHP en servidor, con acceso a bases de datos, sesiones de usuario y caché con Redis. Organizado en desafíos agrupados por resultado de aprendizaje (RA).</p>
+    <div class="meta-row">
+      <span class="meta-chip">3 bloques (RA1&ndash;RA7)</span>
+      <span class="meta-chip">7 desafíos</span>
+      <span class="meta-chip">Eval. 1 + 2 &middot; Eval. 3 = FFE</span>
+    </div>
+  </header>
+
+  <div class="overview-wrap">
+    <table class="overview">
+      <thead>
+        <tr>
+          <th>Bloque</th>
+          <th>% eval.</th>
+          <th>Desafíos</th>
+          <th>Evaluación</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="block-name"><span class="block-dot" style="background:#2B6CB0"></span>RA1 + RA5</td>
+          <td class="num">50%</td>
+          <td class="num">3</td>
+          <td class="num">Eval. 1</td>
+        </tr>
+        <tr>
+          <td class="block-name"><span class="block-dot" style="background:#0F8B8D"></span>RA4 + RA6</td>
+          <td class="num">50%</td>
+          <td class="num">4</td>
+          <td class="num">Eval. 2</td>
+        </tr>
+        <tr>
+          <td class="block-name"><span class="block-dot" style="background:#7c6bd8"></span>RA2 + RA3 + RA7</td>
+          <td class="num">&mdash;</td>
+          <td class="num">&mdash;</td>
+          <td class="num">&mdash;</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- BLOQUE 1: RA1+RA5 -->
+  <section class="phase">
+    <div class="phase-head">
+      <span class="phase-num">Bloque 1 &middot; 50% de la evaluación</span>
+      <h2 class="phase-title">RA1 + RA5 &middot; Entorno y documentos con guiones de servidor</h2>
+      <span class="phase-meta">3 desafíos &middot; Eval. 1</span>
+    </div>
+    <p class="phase-summary"><strong>RA1.</strong> Prepara el entorno de desarrollo y los servidores de aplicaciones Web instalando e integrando las funcionalidades necesarias. <strong>RA5.</strong> Genera documentos Web utilizando lenguajes de guiones de servidor.</p>
+
+    <h3 style="font-family:'Lexend',sans-serif;font-weight:600;font-size:1.05rem;margin:28px 0 4px;">Teoría</h3>
+    <div class="session">
+      <div class="session-chip">T1</div>
+      <div class="session-body">
+        <h3><a href="teoria-entorno-desarrollo-web.html">Entorno de desarrollo web</a></h3>
+        <p class="objetivo">XAMPP, el primer script que mezcla HTML y PHP, las diez extensiones de VS Code para el día a día, y cómo activar la visualización de errores.</p>
+      </div>
+    </div>
+    <div class="session">
+      <div class="session-chip">T2</div>
+      <div class="session-body">
+        <h3><a href="teoria-sintaxis-php.html">Sintaxis de PHP y control de flujo</a></h3>
+        <p class="objetivo">Variables y tipos, operadores, constantes, funciones propias y paso por referencia, condicionales y bucles.</p>
+      </div>
+    </div>
+    <div class="session">
+      <div class="session-chip">T3</div>
+      <div class="session-body">
+        <h3><a href="teoria-arrays-cadenas-php.html">Arrays y cadenas en PHP</a></h3>
+        <p class="objetivo">Arrays indexados y asociativos, foreach, ordenar/filtrar/transformar, matrices multidimensionales, funciones de string y expresiones regulares.</p>
+      </div>
+    </div>
+
+    <h3 style="font-family:'Lexend',sans-serif;font-weight:600;font-size:1.05rem;margin:28px 0 4px;">Desafíos</h3>
+    <div class="session">
+      <div class="session-chip">D1</div>
+      <div class="session-body">
+        <h3><a href="https://github.com/poliestireno/VARIOS_2026_P/blob/main/clase-iaw-material2/privado/desafio-extensiones-vsc-iaw.md" target="_blank" rel="noopener">RA15_EXTENSIONES_VSC_IAW</a></h3>
+        <p class="objetivo">Monta el entorno de desarrollo completo: XAMPP, VS Code con sus diez extensiones, activación de errores, y el primer script PHP funcionando en local.</p>
+      </div>
+    </div>
+    <div class="session">
+      <div class="session-chip">D2</div>
+      <div class="session-body">
+        <h3><a href="https://github.com/poliestireno/VARIOS_2026_P/blob/main/clase-iaw-material2/privado/desafio-da2.md" target="_blank" rel="noopener">RA15_DA2</a></h3>
+        <p class="objetivo">Desafío con enunciado en vídeo: implementación en PHP con entrega de código y un vídeo de ejecución de menos de un minuto.</p>
+      </div>
+    </div>
+    <div class="session">
+      <div class="session-chip">D3</div>
+      <div class="session-body">
+        <h3><a href="https://github.com/poliestireno/VARIOS_2026_P/blob/main/clase-iaw-material2/privado/desafio-dos-manos-poker.md" target="_blank" rel="noopener">RA15_DOS_MANOS_POKER</a></h3>
+        <p class="objetivo">Página PHP que reparte dos manos de póker aleatorias (con repetición) de cinco cartas, muestra las imágenes de las cartas, y determina quién gana &mdash; con detección opcional de pareja, doble pareja o trío mostrada en un SweetAlert.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOQUE 2: RA4+RA6 -->
+  <section class="phase">
+    <div class="phase-head">
+      <span class="phase-num">Bloque 2 &middot; 50% de la evaluación</span>
+      <h2 class="phase-title">RA4 + RA6 &middot; Ofimática web y acceso a bases de datos</h2>
+      <span class="phase-meta">4 desafíos &middot; Eval. 2</span>
+    </div>
+    <p class="phase-summary"><strong>RA4.</strong> Gestiona aplicaciones de ofimática Web integrando funcionalidades y asegurando el acceso a la información. <strong>RA6.</strong> Genera documentos Web con acceso a bases de datos utilizando lenguajes de guiones de servidor.</p>
+
+    <h3 style="font-family:'Lexend',sans-serif;font-weight:600;font-size:1.05rem;margin:28px 0 4px;">Teoría</h3>
+    <div class="session">
+      <div class="session-chip">T4</div>
+      <div class="session-body">
+        <h3><a href="teoria-php-bases-de-datos.html">PHP y bases de datos</a></h3>
+        <p class="objetivo">Conexión con PDO, sentencias preparadas, tablas HTML con filtro, y el ciclo completo de alta, edición y borrado sobre una tabla.</p>
+      </div>
+    </div>
+    <div class="session">
+      <div class="session-chip">T5</div>
+      <div class="session-body">
+        <h3><a href="teoria-sesiones-php.html">Sesiones en PHP</a></h3>
+        <p class="objetivo">password_hash()/password_verify(), login, proteger páginas frente a accesos sin sesión, expiración por inactividad, logout, y roles de usuario.</p>
+      </div>
+    </div>
+    <div class="session">
+      <div class="session-chip">T6</div>
+      <div class="session-body">
+        <h3><a href="teoria-redis-cache-php.html">Redis desde PHP: caché y políticas de reemplazo</a></h3>
+        <p class="objetivo">php-redis, el patrón de caché delante de MySQL, y cinco políticas de reemplazo: actualización inmediata, invalidación, TTL, lazy loading y GilRan.</p>
+      </div>
+    </div>
+
+    <h3 style="font-family:'Lexend',sans-serif;font-weight:600;font-size:1.05rem;margin:28px 0 4px;">Desafíos</h3>
+    <div class="session">
+      <div class="session-chip">D4</div>
+      <div class="session-body">
+        <h3><a href="https://github.com/poliestireno/VARIOS_2026_P/blob/main/clase-iaw-material2/privado/desafio-db-games-php.md" target="_blank" rel="noopener">RA46_DB_GAMES_PHP</a></h3>
+        <p class="objetivo">Base de datos de juegos, jugadores y partidas (PLAYERS, GAMES, PARTIDAS), con páginas PHP de listado, alta, edición y borrado para cada tabla, más una página inicial con un resumen de control.</p>
+      </div>
+    </div>
+    <div class="session">
+      <div class="session-chip">D5</div>
+      <div class="session-body">
+        <h3><a href="https://github.com/poliestireno/VARIOS_2026_P/blob/main/clase-iaw-material2/privado/desafio-redis-challenge-fase02.md" target="_blank" rel="noopener">RA46_REDIS_CHALLENGE_FASE02</a></h3>
+        <p class="objetivo">Redis desde PHP con la extensión php-redis: conexión, hashes y listas, la app &ldquo;Aceitunas&rdquo; con MySQL + caché TTL, y su extensión con un panel de control web para elegir entre cinco políticas de reemplazo de caché.</p>
+      </div>
+    </div>
+    <div class="session">
+      <div class="session-chip">D6</div>
+      <div class="session-body">
+        <h3><a href="https://github.com/poliestireno/VARIOS_2026_P/blob/main/clase-iaw-material2/privado/desafio-pirata-ratanegra-php.md" target="_blank" rel="noopener">RA46_PIRATA_RATANEGRA_PHP</a></h3>
+        <p class="objetivo">&ldquo;El mar del Capitán Ratanegra&rdquo;: un buscaminas naval en PHP/HTML/CSS con matriz 10&times;10, barcos de distintos tamaños, tesoros y bombas ocultos, tres niveles de dificultad, y condiciones de victoria y derrota.</p>
+      </div>
+    </div>
+    <div class="session">
+      <div class="session-chip">D7</div>
+      <div class="session-body">
+        <h3><a href="https://github.com/poliestireno/VARIOS_2026_P/blob/main/clase-iaw-material2/privado/desafio-app-session-php.md" target="_blank" rel="noopener">RA46_APP_SESSION_PHP</a></h3>
+        <p class="objetivo">Web app con registro, login con contraseña cifrada, roles de superusuario y usuario normal, sesión protegida con expiración a los 5 minutos de inactividad, un juego del número oculto con ranking, y diseño previo del modelo relacional.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOQUE 3: RA2+RA3+RA7 -->
+  <section class="phase">
+    <div class="phase-head">
+      <span class="phase-num">Bloque 3</span>
+      <h2 class="phase-title">RA2 + RA3 + RA7 &middot; Gestores de contenidos</h2>
+      <span class="phase-meta">Sin desafíos todavía &middot; sin % asignado</span>
+    </div>
+    <p class="phase-summary"><strong>RA2.</strong> Implanta gestores de contenidos seleccionándolos y estableciendo la configuración de sus parámetros. <strong>RA3.</strong> Administra gestores de contenidos adaptándolos a los requerimientos y garantizando la integridad de la información. <strong>RA7.</strong> Realiza modificaciones en gestores de contenidos adaptando su apariencia y funcionalidades.</p>
+    <div class="proximamente">
+      <strong>Sin actividades definidas todavía.</strong>
+    </div>
+  </section>
+
+  <footer class="end">
+    <p>RA1+RA5 se evalúa en la primera evaluación: entorno de desarrollo y generación de documentos web con PHP. RA4+RA6 se cierra en la segunda evaluación: ofimática web con acceso a bases de datos, sesiones y caché. La tercera evaluación corresponde a la FFE (Formación en Centros de Trabajo).</p>
+    <p style="margin-top:10px;color:var(--muted);font-size:13.5px;">El enunciado completo de cada desafío vive en un repositorio privado &mdash; los enlaces de esta página solo se abren con acceso a él. El encaje entre evaluaciones es orientativo y puede ajustarse.</p>
+  </footer>
+
+</div>
