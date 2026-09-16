@@ -1,0 +1,817 @@
+<title>Redis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #2B6CB0;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #4C9AE0;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #6FA3D8;
+      --accent-ink: #0D1B2A;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #6FA3D8;
+    --accent-ink: #0D1B2A;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top {
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.08rem;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  section.block {
+    margin-top: 44px;
+  }
+
+  h2.block-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+
+  section.block p {
+    margin: 0 0 14px;
+  }
+
+  section.block ul {
+    margin: 0 0 14px;
+    padding-left: 22px;
+  }
+
+  section.block li {
+    margin-bottom: 6px;
+  }
+
+  h3.option-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: var(--ink);
+    margin: 40px 0 4px;
+  }
+
+  .checklist {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow);
+  }
+
+  .checklist li {
+    list-style: none;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 15px;
+    margin-bottom: 0;
+  }
+
+  .checklist ul { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+
+  .checklist svg {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    color: var(--accent-2);
+  }
+
+  .learn-list {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .learn-list li {
+    list-style: none;
+    padding-left: 20px;
+    position: relative;
+    color: var(--ink);
+    margin-bottom: 0;
+  }
+
+  .learn-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .step {
+    display: flex;
+    gap: 18px;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .step:first-of-type { border-top: none; padding-top: 0; }
+
+  .step-chip {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-body { flex: 1; min-width: 0; }
+
+  .step h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 4px 0 8px;
+  }
+
+  .step p {
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+
+  .step p.small {
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+
+  .term {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+
+  .term-bar span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--code-line);
+  }
+
+  .term pre {
+    margin: 0;
+    padding: 14px 16px 16px;
+    overflow-x: auto;
+  }
+
+  .term code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13.6px;
+    line-height: 1.7;
+    color: var(--code-ink);
+  }
+
+  .term .prompt { color: var(--code-muted); }
+  .term .cmt { color: var(--code-muted); }
+  .term .hl { color: var(--code-accent); }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .code-panel .term-bar { }
+
+  .code-panel pre {
+    margin: 0;
+    padding: 16px 18px 18px;
+    overflow-x: auto;
+  }
+
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+
+  .code-panel .tag { color: var(--accent-2); }
+  .code-panel .str { color: #C9D96B; }
+  .code-panel .kw { color: var(--code-accent); }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .prop { color: #8FB8FF; }
+  .code-panel .hl { color: var(--code-accent); }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+
+  .checkpoint p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .substep {
+    display: flex;
+    gap: 14px;
+    margin: 18px 0 0 16px;
+    padding-left: 16px;
+    border-left: 2px solid var(--line-soft);
+  }
+
+  .substep-chip {
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: var(--line-soft);
+    color: var(--muted);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 11.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .substep h4 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.98rem;
+    font-weight: 600;
+    margin: 2px 0 6px;
+  }
+
+  .substep p {
+    margin: 0 0 8px;
+    font-size: 14.5px;
+    color: var(--ink);
+  }
+
+  .substep .code-panel, .substep .term {
+    margin: 10px 0;
+  }
+
+  details.full-code {
+    margin-top: 16px;
+  }
+
+  details.full-code summary {
+    cursor: pointer;
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--accent-2);
+    list-style: none;
+  }
+
+  details.full-code summary::-webkit-details-marker { display: none; }
+
+  details.full-code summary::before {
+    content: "▸ ";
+  }
+
+  details.full-code[open] summary::before {
+    content: "▾ ";
+  }
+
+  .trouble {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .trouble-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .trouble-item .q {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    margin: 0 0 6px;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .trouble-item .q::before {
+    content: "?";
+    font-family: "IBM Plex Mono", monospace;
+    color: var(--accent-2);
+    font-weight: 500;
+  }
+
+  .trouble-item p {
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--muted);
+  }
+
+  .trouble-item p + p { margin-top: 8px; }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .step { transition: none; }
+  }
+
+  nav.toc {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 20px 0 0;
+    box-shadow: var(--shadow);
+  }
+  nav.toc .toc-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 12.5px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 10px;
+  }
+  nav.toc ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 24px; }
+  nav.toc li { font-size: 14px; margin-bottom: 6px; break-inside: avoid; }
+  nav.toc a { color: var(--ink); text-decoration: none; }
+  nav.toc a:hover { color: var(--accent-2); text-decoration: underline; }
+
+  .diagram {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    margin: 16px 0;
+    padding: 18px;
+    display: flex;
+    justify-content: center;
+    overflow-x: auto;
+  }
+  .diagram svg { max-width: 100%; height: auto; }
+  .diagram-caption {
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    margin: -8px 0 16px;
+  }
+
+  .notacion {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+  .notacion .term-bar {
+    display: flex;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--code-line);
+  }
+  .notacion .term-bar span { width: 9px; height: 9px; border-radius: 50%; background: var(--code-line); }
+  .notacion pre { margin: 0; padding: 14px 18px 16px; overflow-x: auto; }
+  .notacion code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+  .notacion .kw { color: var(--code-accent); font-weight: 500; }
+  .notacion .ent { color: #8FB8FF; }
+  .notacion .attr { color: #C9D96B; }
+  .notacion .com { color: var(--code-muted); font-style: italic; }
+
+  h2.section-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 1.35rem;
+    margin: 0 0 4px;
+    scroll-margin-top: 24px;
+  }
+  .section-num {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    color: var(--accent-2);
+    display: block;
+    margin-bottom: 4px;
+  }
+  section.tema {
+    margin-top: 52px;
+    padding-top: 28px;
+    border-top: 1px solid var(--line-soft);
+  }
+  section.tema:first-of-type { border-top: none; }
+  h3.subtema {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    margin: 28px 0 8px;
+  }
+</style>
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">RA5 + RA6 &middot; Teoría</span>
+    <h1>Redis: estructuras de datos en memoria</h1>
+    <p class="lede">Qué es Redis y para qué sirve, sus estructuras de datos básicas, cómo persiste en disco algo que vive en memoria, el TTL como política de expiración, y cómo se usa desde PHP &mdash; incluido como caché delante de una base de datos relacional.</p>
+    <div class="meta-row">
+      <span class="meta-chip">RA5 + RA6</span>
+      <span class="meta-chip">Clave-valor en memoria</span>
+      <span class="meta-chip">TTL &middot; caché</span>
+    </div>
+    <p style="margin-top:16px;"><a href="index.html" style="color:var(--accent-2);font-family:'IBM Plex Mono',monospace;font-size:13px;text-decoration:none;">&larr; Volver al índice del módulo</a></p>
+  </header>
+
+  <nav class="toc">
+    <p class="toc-title">Contenido</p>
+    <ol>
+      <li><a href="#que-es">Qué es Redis</a></li>
+      <li><a href="#instalar">Instalación y cliente</a></li>
+      <li><a href="#claves">Claves y expiración (TTL)</a></li>
+      <li><a href="#estructuras">Estructuras de datos</a></li>
+      <li><a href="#persistencia">Persistencia: RDB y AOF</a></li>
+      <li><a href="#admin">Administración y monitoreo</a></li>
+      <li><a href="#usos">Casos de uso típicos</a></li>
+      <li><a href="#php">Redis desde PHP</a></li>
+      <li><a href="#cache">Redis como caché delante de MySQL</a></li>
+    </ol>
+  </nav>
+
+  <section class="tema" id="que-es">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Qué es Redis</h2>
+    <p><strong>Redis</strong> (<em>REmote DIctionary Server</em>) es un almacén de datos <strong>clave-valor en memoria</strong>. Al vivir en RAM en vez de en disco, sus operaciones son órdenes de magnitud más rápidas que las de una base de datos relacional tradicional &mdash; a cambio de un límite de capacidad marcado por la memoria disponible, y de una gestión de la persistencia que hay que configurar explícitamente si no se quiere perder los datos al reiniciar.</p>
+  </section>
+
+  <section class="tema" id="instalar">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Instalación y cliente</h2>
+    <div class="term">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="prompt">$</span> sudo apt update &amp;&amp; sudo apt install redis-server -y
+<span class="prompt">$</span> sudo systemctl enable --now redis
+<span class="prompt">$</span> systemctl status redis
+
+<span class="prompt">$</span> redis-cli
+<span class="prompt">127.0.0.1:6379&gt;</span> PING
+PONG
+
+<span class="prompt">$</span> redis-cli -n 1
+<span class="com"># selecciona la base de datos número 1 (por defecto se usa la 0)</span></code></pre>
+    </div>
+  </section>
+
+  <section class="tema" id="claves">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Claves y expiración (TTL)</h2>
+    <div class="term">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="prompt">&gt;</span> SET clave valor
+<span class="prompt">&gt;</span> GET clave
+<span class="prompt">&gt;</span> DEL clave
+<span class="prompt">&gt;</span> EXISTS clave
+<span class="prompt">&gt;</span> RENAME clave nueva_clave
+
+<span class="prompt">&gt;</span> SETEX clave 10 valor
+<span class="com"># establece la clave con expiración a los 10 segundos</span>
+<span class="prompt">&gt;</span> TTL clave
+<span class="com"># tiempo restante en segundos (-1 = sin expiración, -2 = ya no existe)</span></code></pre>
+    </div>
+    <p>El <strong>TTL</strong> (<em>Time To Live</em>) es la política de expiración de Redis: cada clave puede llevar asociado un tiempo de vida, pasado el cual se elimina automáticamente. Es la base de Redis como <strong>caché</strong>: se guarda una copia temporal de un dato caro de calcular, con un TTL corto, para no tener que recalcularlo en cada petición.</p>
+  </section>
+
+  <section class="tema" id="estructuras">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Estructuras de datos</h2>
+    <p>A diferencia de una caché clave-valor simple, Redis permite que el valor sea una estructura completa:</p>
+    <div class="term">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="com"># Listas: colas y pilas</span>
+<span class="prompt">&gt;</span> LPUSH mi_lista valor1
+<span class="prompt">&gt;</span> RPUSH mi_lista valor2
+<span class="prompt">&gt;</span> LRANGE mi_lista 0 -1
+<span class="prompt">&gt;</span> LPOP mi_lista
+<span class="prompt">&gt;</span> RPOP mi_lista
+<span class="prompt">&gt;</span> LLEN mi_lista
+
+<span class="com"># Conjuntos: valores únicos, sin orden</span>
+<span class="prompt">&gt;</span> SADD mi_conjunto valor1 valor2
+<span class="prompt">&gt;</span> SMEMBERS mi_conjunto
+<span class="prompt">&gt;</span> SISMEMBER mi_conjunto valor1
+<span class="prompt">&gt;</span> SINTER conjunto1 conjunto2
+<span class="prompt">&gt;</span> SUNION conjunto1 conjunto2
+<span class="prompt">&gt;</span> SDIFF conjunto1 conjunto2
+
+<span class="com"># Hashes: un objeto con varios campos, como una fila en miniatura</span>
+<span class="prompt">&gt;</span> HSET mi_hash campo1 valor1
+<span class="prompt">&gt;</span> HGET mi_hash campo1
+<span class="prompt">&gt;</span> HGETALL mi_hash
+<span class="prompt">&gt;</span> HINCRBY mi_hash stock 5
+
+<span class="com"># Conjuntos ordenados: como un set, pero cada valor lleva una puntuación</span>
+<span class="prompt">&gt;</span> ZADD ranking 100 usuario1 200 usuario2
+<span class="prompt">&gt;</span> ZRANGE ranking 0 -1 WITHSCORES
+<span class="prompt">&gt;</span> ZREVRANK ranking usuario2</code></pre>
+    </div>
+    <p>Administración de bases de datos: <code class="inline">SELECT n</code> cambia de base, <code class="inline">KEYS *</code> lista las claves de la actual, <code class="inline">FLUSHDB</code> la vacía, <code class="inline">FLUSHALL</code> vacía todas las bases del servidor.</p>
+  </section>
+
+  <section class="tema" id="persistencia">
+    <span class="section-num">05</span>
+    <h2 class="section-title">Persistencia: RDB y AOF</h2>
+    <p>Que Redis viva en memoria no significa que los datos se pierdan siempre al reiniciar: soporta dos mecanismos de persistencia en disco (que pueden combinarse).</p>
+    <div class="term">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="prompt">&gt;</span> SAVE
+<span class="com"># snapshot síncrono (RDB): bloquea el servidor mientras escribe</span>
+
+<span class="prompt">&gt;</span> BGSAVE
+<span class="com"># snapshot asíncrono: Redis sigue respondiendo mientras guarda en segundo plano</span></code></pre>
+    </div>
+    <p>El otro mecanismo, <strong>AOF</strong> (<em>Append Only File</em>), registra cada operación de escritura en un log secuencial &mdash; más lento pero pierde menos datos ante un fallo, porque no depende de que se complete un snapshot periódico.</p>
+  </section>
+
+  <section class="tema" id="admin">
+    <span class="section-num">06</span>
+    <h2 class="section-title">Administración y monitoreo</h2>
+    <div class="term">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="prompt">&gt;</span> INFO
+<span class="com"># información general del servidor</span>
+<span class="prompt">&gt;</span> MONITOR
+<span class="com"># estadísticas/comandos en tiempo real</span>
+<span class="prompt">&gt;</span> CONFIG GET *
+<span class="prompt">&gt;</span> CONFIG SET maxmemory 256mb
+<span class="com"># lee / cambia configuración en caliente (mientras el servidor está en marcha)</span></code></pre>
+    </div>
+    <p><strong>RedisInsight</strong> es el cliente visual oficial: se conecta por defecto a <code class="inline">127.0.0.1:6379</code> y permite crear claves, insertar datos en listas o hashes, y ver las estructuras de forma gráfica.</p>
+  </section>
+
+  <section class="tema" id="usos">
+    <span class="section-num">07</span>
+    <h2 class="section-title">Casos de uso típicos</h2>
+    <ul>
+      <li><strong>Caché</strong> delante de una base de datos relacional, con TTL para no servir datos desactualizados eternamente.</li>
+      <li><strong>Almacén de sesiones</strong> de una aplicación web.</li>
+      <li><strong>Colas</strong> de tareas o notificaciones, con listas (<code class="inline">LPUSH</code>/<code class="inline">RPOP</code>).</li>
+      <li><strong>Rankings y leaderboards</strong>, con conjuntos ordenados (<code class="inline">ZADD</code>/<code class="inline">ZRANGE</code>).</li>
+      <li><strong>Contadores en tiempo real</strong> (visitas, likes&hellip;), con <code class="inline">INCR</code>/<code class="inline">HINCRBY</code>.</li>
+    </ul>
+  </section>
+
+  <section class="tema" id="php">
+    <span class="section-num">08</span>
+    <h2 class="section-title">Redis desde PHP</h2>
+    <div class="term">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="prompt">$</span> sudo apt install php-redis -y
+<span class="prompt">$</span> php -m | grep redis
+<span class="com"># si aparece "redis" en la lista, la extensión está activa</span></code></pre>
+    </div>
+    <p>En instalaciones basadas en XAMPP a veces la extensión no compila directamente por incompatibilidades de cabeceras con Linux (error &ldquo;C11 atomic&rdquo;); en ese caso hace falta compilar <code class="inline">phpredis</code> a mano contra los binarios de XAMPP (<code class="inline">phpize</code> + <code class="inline">configure --with-php-config=/opt/lampp/bin/php-config</code> + <code class="inline">make install</code>) y activar la extensión añadiendo <code class="inline">extension=redis.so</code> a <code class="inline">php.ini</code>.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="tag">&lt;?php</span>
+<span class="prop">$redis</span> = <span class="kw">new</span> Redis();
+<span class="prop">$redis</span>-&gt;connect(<span class="str">'127.0.0.1'</span>, 6379);
+
+<span class="kw">if</span> (<span class="prop">$redis</span>-&gt;ping()) {
+    <span class="kw">echo</span> <span class="str">"Conexión exitosa: "</span> . <span class="prop">$redis</span>-&gt;ping(); <span class="com">// PONG</span>
+}
+
+<span class="prop">$redis</span>-&gt;set(<span class="str">"curso"</span>, <span class="str">"ASIR - Redis en PHP"</span>);
+<span class="kw">echo</span> <span class="prop">$redis</span>-&gt;get(<span class="str">"curso"</span>);
+
+<span class="prop">$redis</span>-&gt;hSet(<span class="str">"usuario:1"</span>, <span class="str">"nombre"</span>, <span class="str">"Ana"</span>);
+<span class="prop">$usuario</span> = <span class="prop">$redis</span>-&gt;hGetAll(<span class="str">"usuario:1"</span>);
+
+<span class="prop">$redis</span>-&gt;lPush(<span class="str">"tareas"</span>, <span class="str">"Revisar PR"</span>);
+<span class="prop">$tareas</span> = <span class="prop">$redis</span>-&gt;lRange(<span class="str">"tareas"</span>, 0, -1);
+
+<span class="prop">$redis</span>-&gt;close();
+<span class="tag">?&gt;</span></code></pre>
+    </div>
+  </section>
+
+  <section class="tema" id="cache">
+    <span class="section-num">09</span>
+    <h2 class="section-title">Redis como caché delante de MySQL</h2>
+    <p>El patrón más habitual: al pedir un dato, primero se comprueba si ya está en Redis; si está (<em>cache hit</em>), se devuelve directamente, mucho más rápido que consultar MySQL. Si no está (<em>cache miss</em>), se consulta MySQL, se guarda el resultado en Redis con un TTL, y se devuelve. Las siguientes peticiones del mismo dato ya lo encontrarán en caché, hasta que expire.</p>
+    <div class="diagram">
+      <svg viewBox="0 0 600 200" font-family="IBM Plex Sans, sans-serif">
+        <rect x="20" y="60" width="120" height="80" rx="6" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.5"/>
+        <text x="80" y="95" text-anchor="middle" font-size="13" fill="var(--ink)">PHP Web</text>
+        <text x="80" y="112" text-anchor="middle" font-size="11" fill="var(--muted)">(cliente)</text>
+        <rect x="240" y="60" width="120" height="80" rx="6" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
+        <text x="300" y="95" text-anchor="middle" font-size="13" font-weight="600" fill="var(--ink)">Redis</text>
+        <text x="300" y="112" text-anchor="middle" font-size="11" fill="var(--muted)">(caché, TTL)</text>
+        <rect x="460" y="60" width="120" height="80" rx="6" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.5"/>
+        <text x="520" y="95" text-anchor="middle" font-size="13" fill="var(--ink)">MySQL</text>
+        <text x="520" y="112" text-anchor="middle" font-size="11" fill="var(--muted)">(origen)</text>
+        <line x1="140" y1="90" x2="240" y2="90" stroke="var(--ink)" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <line x1="240" y1="110" x2="140" y2="110" stroke="var(--accent-2)" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <line x1="360" y1="90" x2="460" y2="90" stroke="var(--ink)" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <line x1="460" y1="110" x2="360" y2="110" stroke="var(--ink)" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <defs>
+          <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="var(--muted)"/></marker>
+        </defs>
+      </svg>
+    </div>
+    <p class="diagram-caption">Petición &rarr; ¿está en Redis? Sí: se devuelve (rápido). No: se consulta MySQL, se guarda en Redis, se devuelve.</p>
+  </section>
+
+  <footer class="end">
+    Pon esto en práctica en <code class="inline">RA56_REDIS_CHALLENGE_FASE01</code> (instalación y comandos) y <code class="inline">RA56_REDIS_CHALLENGE_FASE02</code> (Redis desde PHP como caché de MySQL).
+  </footer>
+
+</div>
