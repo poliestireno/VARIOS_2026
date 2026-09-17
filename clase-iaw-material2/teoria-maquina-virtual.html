@@ -1,4 +1,4 @@
-<title>Temario IAW</title>
+<title>Máquina virtual</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -601,198 +601,89 @@
 <div class="page">
 
   <header class="top">
-    <span class="eyebrow">Temario de módulo &middot; 2&ordm; ASIR</span>
-    <h1>Implantación de Aplicaciones Web</h1>
-    <p class="lede">Del entorno de desarrollo (XAMPP, VS Code) a documentos web generados con PHP en servidor, con acceso a bases de datos, sesiones de usuario y caché con Redis. Organizado en desafíos agrupados por resultado de aprendizaje (RA).</p>
+    <span class="eyebrow">Antes de empezar</span>
+    <h1>La máquina virtual de desarrollo</h1>
+    <p class="lede">Todo el módulo se trabaja dentro de una máquina virtual con Linux Mint XFCE montada en VirtualBox &mdash; el mismo entorno para todas las prácticas, aislado de tu sistema anfitrión.</p>
     <div class="meta-row">
-      <span class="meta-chip">3 bloques (RA1&ndash;RA7)</span>
-      <span class="meta-chip">8 desafíos</span>
-      <span class="meta-chip">Eval. 1 + 2 &middot; Eval. 3 = FFE</span>
+      <span class="meta-chip">VirtualBox</span>
+      <span class="meta-chip">Linux Mint XFCE</span>
     </div>
+    <p style="margin-top:16px;"><a href="index.html" style="color:var(--accent-2);font-family:'IBM Plex Mono',monospace;font-size:13px;text-decoration:none;">&larr; Volver al índice del módulo</a></p>
   </header>
 
-  <div class="overview-wrap">
-    <table class="overview">
-      <thead>
-        <tr>
-          <th>Bloque</th>
-          <th>% eval.</th>
-          <th>Desafíos</th>
-          <th>Evaluación</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td class="block-name"><span class="block-dot" style="background:#2B6CB0"></span>RA1 + RA5</td>
-          <td class="num">50%</td>
-          <td class="num">3</td>
-          <td class="num">Eval. 1</td>
-        </tr>
-        <tr>
-          <td class="block-name"><span class="block-dot" style="background:#0F8B8D"></span>RA4 + RA6</td>
-          <td class="num">50%</td>
-          <td class="num">5</td>
-          <td class="num">Eval. 2</td>
-        </tr>
-        <tr>
-          <td class="block-name"><span class="block-dot" style="background:#7c6bd8"></span>RA2 + RA3 + RA7</td>
-          <td class="num">&mdash;</td>
-          <td class="num">&mdash;</td>
-          <td class="num">&mdash;</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  <nav class="toc">
+    <p class="toc-title">Contenido</p>
+    <ol>
+      <li><a href="#virtualbox">1. Instalar VirtualBox en tu anfitrión</a></li>
+      <li><a href="#iso">2. Descargar el ISO de Linux Mint XFCE</a></li>
+      <li><a href="#crear-vm">3. Crear la máquina virtual</a></li>
+      <li><a href="#config-previa">4. Configuración antes de arrancar</a></li>
+      <li><a href="#instalar-mint">5. Instalar Mint</a></li>
+      <li><a href="#guest-additions">6. Tras la instalación: Guest Additions</a></li>
+      <li><a href="#stack">7. Instalar el stack de desarrollo</a></li>
+    </ol>
+  </nav>
 
-  <!-- BLOQUE 1: RA1+RA5 -->
-  <section class="phase">
-    <div class="phase-head">
-      <span class="phase-num">Bloque 1 &middot; 50% de la evaluación</span>
-      <h2 class="phase-title">RA1 + RA5 &middot; Entorno y documentos con guiones de servidor</h2>
-      <span class="phase-meta">3 desafíos &middot; Eval. 1</span>
-    </div>
-    <p class="phase-summary"><strong>RA1.</strong> Prepara el entorno de desarrollo y los servidores de aplicaciones Web instalando e integrando las funcionalidades necesarias. <strong>RA5.</strong> Genera documentos Web utilizando lenguajes de guiones de servidor.</p>
-
-    <h3 style="font-family:'Lexend',sans-serif;font-weight:600;font-size:1.05rem;margin:28px 0 4px;">Teoría</h3>
-    <div class="session">
-      <div class="session-chip">T0</div>
-      <div class="session-body">
-        <h3><a href="teoria-maquina-virtual.html">La máquina virtual de desarrollo</a></h3>
-        <p class="objetivo">Antes de empezar: instalar VirtualBox, montar una VM con Linux Mint XFCE (4 GB RAM, 20-25 GB de disco), y dejar dentro el stack de desarrollo completo (VS Code, Python, Apache, MariaDB, PHP).</p>
-      </div>
-    </div>
-    <div class="session">
-      <div class="session-chip">T1</div>
-      <div class="session-body">
-        <h3><a href="teoria-entorno-desarrollo-web.html">Entorno de desarrollo web</a></h3>
-        <p class="objetivo">XAMPP, el primer script que mezcla HTML y PHP, las diez extensiones de VS Code para el día a día, y cómo activar la visualización de errores.</p>
-      </div>
-    </div>
-    <div class="session">
-      <div class="session-chip">T2</div>
-      <div class="session-body">
-        <h3><a href="teoria-sintaxis-php.html">Sintaxis de PHP y control de flujo</a></h3>
-        <p class="objetivo">Variables y tipos, operadores, constantes, funciones propias y paso por referencia, condicionales y bucles.</p>
-      </div>
-    </div>
-    <div class="session">
-      <div class="session-chip">T3</div>
-      <div class="session-body">
-        <h3><a href="teoria-arrays-cadenas-php.html">Arrays y cadenas en PHP</a></h3>
-        <p class="objetivo">Arrays indexados y asociativos, foreach, ordenar/filtrar/transformar, matrices multidimensionales, funciones de string y expresiones regulares.</p>
-      </div>
-    </div>
-
-    <h3 style="font-family:'Lexend',sans-serif;font-weight:600;font-size:1.05rem;margin:28px 0 4px;">Desafíos</h3>
-    <div class="session">
-      <div class="session-chip">D1</div>
-      <div class="session-body">
-        <h3><a href="https://github.com/poliestireno/VARIOS_2026_P/blob/main/clase-iaw-material2/privado/desafio-extensiones-vsc-iaw.md" target="_blank" rel="noopener">RA15_EXTENSIONES_VSC_IAW</a></h3>
-        <p class="objetivo">Monta el entorno de desarrollo completo: XAMPP, VS Code con sus diez extensiones, activación de errores, y el primer script PHP funcionando en local.</p>
-      </div>
-    </div>
-    <div class="session">
-      <div class="session-chip">D2</div>
-      <div class="session-body">
-        <h3><a href="https://github.com/poliestireno/VARIOS_2026_P/blob/main/clase-iaw-material2/privado/desafio-da2.md" target="_blank" rel="noopener">RA15_DA2</a></h3>
-        <p class="objetivo">Desafío con enunciado en vídeo: implementación en PHP con entrega de código y un vídeo de ejecución de menos de un minuto.</p>
-      </div>
-    </div>
-    <div class="session">
-      <div class="session-chip">D3</div>
-      <div class="session-body">
-        <h3><a href="https://github.com/poliestireno/VARIOS_2026_P/blob/main/clase-iaw-material2/privado/desafio-dos-manos-poker.md" target="_blank" rel="noopener">RA15_DOS_MANOS_POKER</a></h3>
-        <p class="objetivo">Página PHP que reparte dos manos de póker aleatorias (con repetición) de cinco cartas, muestra las imágenes de las cartas, y determina quién gana &mdash; con detección opcional de pareja, doble pareja o trío mostrada en un SweetAlert.</p>
-      </div>
-    </div>
+  <section class="tema" id="virtualbox">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Instalar VirtualBox en tu anfitrión</h2>
+    <p>Descárgalo desde <code class="inline">virtualbox.org</code> según tu sistema operativo (Windows, macOS o Linux). Instálalo con las opciones por defecto.</p>
   </section>
 
-  <!-- BLOQUE 2: RA4+RA6 -->
-  <section class="phase">
-    <div class="phase-head">
-      <span class="phase-num">Bloque 2 &middot; 50% de la evaluación</span>
-      <h2 class="phase-title">RA4 + RA6 &middot; Ofimática web y acceso a bases de datos</h2>
-      <span class="phase-meta">5 desafíos &middot; Eval. 2</span>
-    </div>
-    <p class="phase-summary"><strong>RA4.</strong> Gestiona aplicaciones de ofimática Web integrando funcionalidades y asegurando el acceso a la información. <strong>RA6.</strong> Genera documentos Web con acceso a bases de datos utilizando lenguajes de guiones de servidor.</p>
-
-    <h3 style="font-family:'Lexend',sans-serif;font-weight:600;font-size:1.05rem;margin:28px 0 4px;">Teoría</h3>
-    <div class="session">
-      <div class="session-chip">T4</div>
-      <div class="session-body">
-        <h3><a href="teoria-php-bases-de-datos.html">PHP y bases de datos</a></h3>
-        <p class="objetivo">Conexión con PDO, sentencias preparadas, tablas HTML con filtro, y el ciclo completo de alta, edición y borrado sobre una tabla.</p>
-      </div>
-    </div>
-    <div class="session">
-      <div class="session-chip">T5</div>
-      <div class="session-body">
-        <h3><a href="teoria-sesiones-php.html">Sesiones en PHP</a></h3>
-        <p class="objetivo">password_hash()/password_verify(), login, proteger páginas frente a accesos sin sesión, expiración por inactividad, logout, y roles de usuario.</p>
-      </div>
-    </div>
-    <div class="session">
-      <div class="session-chip">T6</div>
-      <div class="session-body">
-        <h3><a href="teoria-redis-cache-php.html">Redis desde PHP: caché y políticas de reemplazo</a></h3>
-        <p class="objetivo">php-redis, el patrón de caché delante de MySQL, y cinco políticas de reemplazo: actualización inmediata, invalidación, TTL, lazy loading y GilRan.</p>
-      </div>
-    </div>
-
-    <h3 style="font-family:'Lexend',sans-serif;font-weight:600;font-size:1.05rem;margin:28px 0 4px;">Desafíos</h3>
-    <div class="session">
-      <div class="session-chip">D4</div>
-      <div class="session-body">
-        <h3><a href="https://github.com/poliestireno/VARIOS_2026_P/blob/main/clase-iaw-material2/privado/desafio-db-games-php.md" target="_blank" rel="noopener">RA46_DB_GAMES_PHP</a></h3>
-        <p class="objetivo">Base de datos de juegos, jugadores y partidas (PLAYERS, GAMES, PARTIDAS), con páginas PHP de listado, alta, edición y borrado para cada tabla, más una página inicial con un resumen de control.</p>
-      </div>
-    </div>
-    <div class="session">
-      <div class="session-chip">D5</div>
-      <div class="session-body">
-        <h3><a href="https://github.com/poliestireno/VARIOS_2026_P/blob/main/clase-iaw-material2/privado/desafio-redis-challenge-fase02.md" target="_blank" rel="noopener">RA46_REDIS_CHALLENGE_FASE02</a></h3>
-        <p class="objetivo">Redis desde PHP con la extensión php-redis: conexión, hashes y listas, la app &ldquo;Aceitunas&rdquo; con MySQL + caché TTL, y su extensión con un panel de control web para elegir entre cinco políticas de reemplazo de caché.</p>
-      </div>
-    </div>
-    <div class="session">
-      <div class="session-chip">D6</div>
-      <div class="session-body">
-        <h3><a href="https://github.com/poliestireno/VARIOS_2026_P/blob/main/clase-iaw-material2/privado/desafio-pirata-ratanegra-php.md" target="_blank" rel="noopener">RA46_PIRATA_RATANEGRA_PHP</a></h3>
-        <p class="objetivo">&ldquo;El mar del Capitán Ratanegra&rdquo;: un buscaminas naval en PHP/HTML/CSS con matriz 10&times;10, barcos de distintos tamaños, tesoros y bombas ocultos, tres niveles de dificultad, y condiciones de victoria y derrota.</p>
-      </div>
-    </div>
-    <div class="session">
-      <div class="session-chip">D7</div>
-      <div class="session-body">
-        <h3><a href="https://github.com/poliestireno/VARIOS_2026_P/blob/main/clase-iaw-material2/privado/desafio-app-session-php.md" target="_blank" rel="noopener">RA46_APP_SESSION_PHP</a></h3>
-        <p class="objetivo">Web app con registro, login con contraseña cifrada, roles de superusuario y usuario normal, sesión protegida con expiración a los 5 minutos de inactividad, un juego del número oculto con ranking, y diseño previo del modelo relacional.</p>
-      </div>
-    </div>
-    <div class="session">
-      <div class="session-chip">D8</div>
-      <div class="session-body">
-        <h3><a href="https://github.com/poliestireno/VARIOS_2026_P/blob/main/clase-iaw-material2/privado/desafio-navapark2.md" target="_blank" rel="noopener">RA46_NAVAPARK2</a></h3>
-        <p class="objetivo">Sistema de gestión para un parque de atracciones: base de datos relacional de atracciones, viajeros y viajes; vista admin con control general y CRUD de atracciones; vista cliente con registro, registro de viajes propios y perfil con el historial de atracciones montadas.</p>
-      </div>
-    </div>
+  <section class="tema" id="iso">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Descargar el ISO de Linux Mint XFCE</h2>
+    <p>Desde <code class="inline">linuxmint.com/download.php</code>, elige la edición <strong>XFCE</strong> &mdash; el escritorio más ligero de las tres ediciones de Mint, ideal para una máquina virtual.</p>
   </section>
 
-  <!-- BLOQUE 3: RA2+RA3+RA7 -->
-  <section class="phase">
-    <div class="phase-head">
-      <span class="phase-num">Bloque 3</span>
-      <h2 class="phase-title">RA2 + RA3 + RA7 &middot; Gestores de contenidos</h2>
-      <span class="phase-meta">Sin desafíos todavía &middot; sin % asignado</span>
+  <section class="tema" id="crear-vm">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Crear la máquina virtual</h2>
+    <p>En VirtualBox: <strong>Nuevo</strong> &rarr; nombre (por ejemplo, <code class="inline">Mint-Dev</code>), tipo: <strong>Linux</strong>, versión: <strong>Ubuntu (64-bit)</strong> &mdash; Mint no aparece en la lista, pero es compatible con esa base.</p>
+    <ul>
+      <li><strong>RAM:</strong> 4096 MB (4 GB) si tu equipo lo permite, mínimo 2048 MB.</li>
+      <li><strong>Disco duro:</strong> crear uno nuevo, tipo VDI, reservado dinámicamente, 20-25 GB.</li>
+    </ul>
+  </section>
+
+  <section class="tema" id="config-previa">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Configuración antes de arrancar</h2>
+    <p>Importante para el rendimiento &mdash; en <em>Configuración</em> de la VM, antes de instalar:</p>
+    <ul>
+      <li><strong>Sistema &rarr; Procesador:</strong> asigna 2 núcleos.</li>
+      <li><strong>Pantalla &rarr; Memoria de vídeo:</strong> 128 MB, y activa &ldquo;Aceleración 3D&rdquo;.</li>
+      <li><strong>Almacenamiento:</strong> monta el ISO descargado en la unidad óptica virtual.</li>
+      <li><strong>Red:</strong> NAT suele bastar para desarrollo local; si necesitas acceder a la VM desde el host por IP fija, usa &ldquo;Adaptador puente&rdquo; o &ldquo;Red NAT&rdquo; con reenvío de puertos.</li>
+    </ul>
+  </section>
+
+  <section class="tema" id="instalar-mint">
+    <span class="section-num">05</span>
+    <h2 class="section-title">Instalar Mint</h2>
+    <p>Arranca la VM con el ISO montado, elige &ldquo;instalación mínima&rdquo; si aparece la opción, y sigue el asistente normal.</p>
+  </section>
+
+  <section class="tema" id="guest-additions">
+    <span class="section-num">06</span>
+    <h2 class="section-title">Tras la instalación: Guest Additions</h2>
+    <p>Instala las <strong>Guest Additions</strong> (menú <em>Dispositivos &rarr; Insertar imagen de CD de las Guest Additions</em>, dentro de la VM) &mdash; mejora mucho el rendimiento gráfico, el portapapeles compartido y las carpetas compartidas con el host.</p>
+  </section>
+
+  <section class="tema" id="stack">
+    <span class="section-num">07</span>
+    <h2 class="section-title">Instalar el stack de desarrollo</h2>
+    <p>Ya dentro de Mint:</p>
+    <div class="term">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="prompt">$</span> sudo apt update
+<span class="prompt">$</span> sudo apt install code python3 python3-pip apache2 mariadb-server php libapache2-mod-php</code></pre>
     </div>
-    <p class="phase-summary"><strong>RA2.</strong> Implanta gestores de contenidos seleccionándolos y estableciendo la configuración de sus parámetros. <strong>RA3.</strong> Administra gestores de contenidos adaptándolos a los requerimientos y garantizando la integridad de la información. <strong>RA7.</strong> Realiza modificaciones en gestores de contenidos adaptando su apariencia y funcionalidades.</p>
-    <div class="proximamente">
-      <strong>Sin actividades definidas todavía.</strong>
-    </div>
+    <p class="small" style="color:var(--muted);font-size:13.5px;">Este único stack cubre Python, PHP con Apache y MariaDB &mdash; todo lo que hace falta para el resto de este módulo.</p>
   </section>
 
   <footer class="end">
-    <p>RA1+RA5 se evalúa en la primera evaluación: entorno de desarrollo y generación de documentos web con PHP. RA4+RA6 se cierra en la segunda evaluación: ofimática web con acceso a bases de datos, sesiones y caché. La tercera evaluación corresponde a la FFE (Formación en Centros de Trabajo).</p>
-    <p style="margin-top:10px;color:var(--muted);font-size:13.5px;">El enunciado completo de cada desafío vive en un repositorio privado &mdash; los enlaces de esta página solo se abren con acceso a él. El encaje entre evaluaciones es orientativo y puede ajustarse.</p>
+    Con la VM lista y el stack instalado, ya se puede seguir con el resto del temario.
   </footer>
 
 </div>
