@@ -320,7 +320,6 @@
     <div class="meta-row">
       <span class="meta-chip">5 bloques (RA1&ndash;RA6)</span>
       <span class="meta-chip">13 desafíos</span>
-      <span class="meta-chip">94 días de grupo</span>
       <span class="meta-chip">3 evaluaciones</span>
     </div>
   </header>
@@ -332,7 +331,6 @@
           <th>Bloque</th>
           <th>% eval.</th>
           <th>Desafíos</th>
-          <th>Días</th>
           <th>Evaluación</th>
         </tr>
       </thead>
@@ -341,33 +339,28 @@
           <td class="block-name"><span class="block-dot" style="background:#2B6CB0"></span>RA1 + RA2</td>
           <td class="num">25%</td>
           <td class="num">3</td>
-          <td class="num">21</td>
           <td class="num">Eval. 1</td>
         </tr>
         <tr>
           <td class="block-name"><span class="block-dot" style="background:#0F8B8D"></span>RA3</td>
           <td class="num">25%</td>
           <td class="num">3</td>
-          <td class="num">21</td>
           <td class="num">Eval. 1</td>
         </tr>
         <tr>
           <td class="block-name"><span class="block-dot" style="background:#E4572E"></span>RA4</td>
           <td class="num">25%</td>
           <td class="num">4</td>
-          <td class="num">24</td>
           <td class="num">Eval. 2 &rarr; 3</td>
         </tr>
         <tr>
           <td class="block-name"><span class="block-dot" style="background:#d4af37"></span>RA5</td>
           <td class="num">25%</td>
           <td class="num">3</td>
-          <td class="num">28</td>
           <td class="num">Eval. 3</td>
         </tr>
         <tr>
           <td class="block-name"><span class="block-dot" style="background:#7c6bd8"></span>RA6</td>
-          <td class="num">&mdash;</td>
           <td class="num">&mdash;</td>
           <td class="num">&mdash;</td>
           <td class="num">&mdash;</td>
@@ -381,7 +374,7 @@
     <div class="phase-head">
       <span class="phase-num">Bloque 1 &middot; 25% de la evaluación</span>
       <h2 class="phase-title">RA1 + RA2 &middot; Elementos y modelo conceptual</h2>
-      <span class="phase-meta">3 desafíos &middot; 21 días de grupo &middot; Eval. 1</span>
+      <span class="phase-meta">3 desafíos &middot; Eval. 1</span>
     </div>
     <p class="phase-summary"><strong>RA1.</strong> Reconoce los elementos de las bases de datos analizando sus funciones y valorando la utilidad de los sistemas gestores. <strong>RA2.</strong> Diseña modelos lógicos normalizados interpretando diagramas entidad/relación.</p>
 
@@ -405,28 +398,22 @@
     <div class="session">
       <div class="session-chip">D1</div>
       <div class="session-body">
-        <h3><a href="desafio-ficheros-y-mas.html">RA12_FICHEROS_Y_MAS</a></h3>
+        <h3><a href="https://github.com/poliestireno/VARIOS_2026_P/blob/main/clase-gbd-material2/privado/desafio-ficheros-y-mas.md" target="_blank" rel="noopener">RA12_FICHEROS_Y_MAS</a></h3>
         <p class="objetivo">Fase 1: agenda de teléfonos en fichero secuencial, de acceso directo e indexado, con sus árboles binarios. Fase 2: qué hay realmente dentro de un archivo &mdash; extensiones falsas, por qué un .docx pesa más que un .txt, y manipular metadatos con ExifTool.</p>
-        <p class="practica"><strong>Duración:</strong> 8 días &middot; <a href="https://docs.google.com/document/d/1pAedH7v7nGfvQmwRHZg74YDTu4jBz83Aac4n9iHhYCU/edit?tab=t.0" target="_blank" rel="noopener">Enunciado original &#8599;</a></p>
       </div>
     </div>
     <div class="session">
       <div class="session-chip">D2</div>
       <div class="session-body">
-        <h3>RA12_ER_SON_CANCIONES</h3>
-        <p class="objetivo">Diseña un esquema E/R que guarde canciones (nombre, duración), quién o quiénes las han compuesto, a qué disco pertenecen y en qué posición del disco están. Un disco puede ser tributo de otro disco, o de ninguno; y un disco puede a su vez ser tributado por varios discos distintos. De cada compositor se sabe su nombre y, si pertenece a un grupo, a cuál &mdash; como mucho a uno.</p>
-        <p class="practica"><strong>Duración:</strong> 6 días &middot; Incluye también las tablas de instancias de las entidades y relaciones, con datos inventados pero realistas &middot; <a href="https://docs.google.com/document/d/1DwR1gRBjH-RrgF1t6wpQFxw1aN--SfX8vyOtDYMcANM/edit?tab=t.0" target="_blank" rel="noopener">Enunciado original &#8599;</a></p>
+        <h3><a href="https://github.com/poliestireno/VARIOS_2026_P/blob/main/clase-gbd-material2/privado/desafio-er-son-canciones.md" target="_blank" rel="noopener">RA12_ER_SON_CANCIONES</a></h3>
+        <p class="objetivo">Esquema E/R de canciones, sus compositores y los discos a los que pertenecen, con discos que pueden ser tributo de otros discos &mdash; más las tablas de instancias con datos inventados pero realistas.</p>
       </div>
     </div>
     <div class="session">
       <div class="session-chip">D3</div>
       <div class="session-body">
-        <h3>RA12_ER_BIBLIHORAS</h3>
-        <p class="objetivo">Tres esquemas E/R independientes, uno por dominio:</p>
-        <p class="linea"><strong>Biblioteca:</strong> títulos de libros con varios ejemplares físicos cada uno; el libro tiene ISBN y una única editorial; cada ejemplar tiene un identificador (que incluye el ISBN) y si está deteriorado; los autores (identificador, nombre) pueden colaborar varios en un mismo libro; un socio (nombre, apellidos, dirección, teléfono, DNI, código de socio) realiza préstamos, cada uno con fecha de préstamo, fecha límite y fecha real de devolución.</p>
-        <p class="linea"><strong>Hormiguero:</strong> cada hormiguero (nombre) tiene hormigas (identificador, edad) de tres tipos &mdash; reina, soldado, obrera; de las reinas se guarda además el número de huevos puestos; cada hormiguero tiene salas (identificador, fecha de construcción); las obreras traen comida (nombre, tipo) y la dejan en una sala, cada comida traída por una única hormiga.</p>
-        <p class="linea"><strong>Astros:</strong> cada astro tiene identificador alfanumérico, nombre y masa, y puede orbitar alrededor de otro astro (en cuyo caso se guarda el radio orbital); los tipos son estrella, planeta, planeta enano, asteroide o satélite; de las estrellas se sabe su brillo, de los planetas su albedo y si tienen anillos; las misiones de exploración envían naves (nombre) que pueden visitar uno o varios planetas.</p>
-        <p class="practica"><strong>Duración:</strong> 7 días &middot; Presenta cada uno de los tres en una imagen, dentro de un único documento &middot; <a href="https://docs.google.com/document/d/1eqLXnhKg0xDgwUVjIDQt-4V8d8-GlxViN_ZPHe6KumY/edit?tab=t.0" target="_blank" rel="noopener">Enunciado original &#8599;</a></p>
+        <h3><a href="https://github.com/poliestireno/VARIOS_2026_P/blob/main/clase-gbd-material2/privado/desafio-er-bibliheras.md" target="_blank" rel="noopener">RA12_ER_BIBLIHORAS</a></h3>
+        <p class="objetivo">Tres esquemas E/R independientes, uno por dominio: una biblioteca con libros, ejemplares, autores y préstamos; un hormiguero con hormigas de distintos tipos y sus salas; y un sistema de astros con distintos tipos de cuerpo celeste y misiones de exploración.</p>
       </div>
     </div>
   </section>
@@ -436,11 +423,11 @@
     <div class="phase-head">
       <span class="phase-num">Bloque 2 &middot; 25% de la evaluación</span>
       <h2 class="phase-title">RA3 &middot; Diseño físico</h2>
-      <span class="phase-meta">3 desafíos &middot; 21 días de grupo &middot; Eval. 1</span>
+      <span class="phase-meta">3 desafíos &middot; Eval. 1</span>
     </div>
     <p class="phase-summary"><strong>RA3.</strong> Realiza el diseño físico de bases de datos utilizando asistentes, herramientas gráficas y el lenguaje de definición de datos.</p>
     <div class="proximamente">
-      <strong>Próximamente.</strong> Desafíos de este bloque: <code class="inline">RA3_ER_TO_MR</code> (7 días), <code class="inline">RA3_ER_ORIGINAL</code> (7 días), <code class="inline">RA3_ER_TO_MR_CLANES</code> (7 días).
+      <strong>Próximamente.</strong> Desafíos de este bloque: <code class="inline">RA3_ER_TO_MR</code>, <code class="inline">RA3_ER_ORIGINAL</code>, <code class="inline">RA3_ER_TO_MR_CLANES</code>.
     </div>
   </section>
 
@@ -449,11 +436,11 @@
     <div class="phase-head">
       <span class="phase-num">Bloque 3 &middot; 25% de la evaluación</span>
       <h2 class="phase-title">RA4 &middot; Consulta de datos</h2>
-      <span class="phase-meta">4 desafíos &middot; 24 días de grupo &middot; Eval. 2 &rarr; 3</span>
+      <span class="phase-meta">4 desafíos &middot; Eval. 2 &rarr; 3</span>
     </div>
     <p class="phase-summary"><strong>RA4.</strong> Consulta la información almacenada manejando asistentes, herramientas gráficas y el lenguaje de manipulación de datos.</p>
     <div class="proximamente">
-      <strong>Próximamente.</strong> Desafíos de este bloque: <code class="inline">RA4_FORMAS_ESTUDIO</code> (4 días), <code class="inline">RA4_NORMAN_DESAFIOS</code> (7 días), <code class="inline">RA4_INSTALL_MYSQL</code> (5 días), <code class="inline">RA4_DESAFIO_SELECT_UNITABLA</code> (8 días). Empieza en la evaluación 2 y se cierra en la 3.
+      <strong>Próximamente.</strong> Desafíos de este bloque: <code class="inline">RA4_FORMAS_ESTUDIO</code>, <code class="inline">RA4_NORMAN_DESAFIOS</code>, <code class="inline">RA4_INSTALL_MYSQL</code>, <code class="inline">RA4_DESAFIO_SELECT_UNITABLA</code>. Empieza en la evaluación 2 y se cierra en la 3.
     </div>
   </section>
 
@@ -462,11 +449,11 @@
     <div class="phase-head">
       <span class="phase-num">Bloque 4 &middot; 25% de la evaluación</span>
       <h2 class="phase-title">RA5 &middot; Modificación de datos</h2>
-      <span class="phase-meta">3 desafíos &middot; 28 días de grupo &middot; Eval. 3</span>
+      <span class="phase-meta">3 desafíos &middot; Eval. 3</span>
     </div>
     <p class="phase-summary"><strong>RA5.</strong> Modifica la información almacenada utilizando asistentes, herramientas gráficas y el lenguaje de manipulación de datos.</p>
     <div class="proximamente">
-      <strong>Próximamente.</strong> Desafíos de este bloque: <code class="inline">RA5_DDL_COMPRADORES</code> (7 días), <code class="inline">RA5_DLL_EMPRESA_Y_MAS</code> (13 días), <code class="inline">RA5_DML_FUNCIONES02</code> (8 días).
+      <strong>Próximamente.</strong> Desafíos de este bloque: <code class="inline">RA5_DDL_COMPRADORES</code>, <code class="inline">RA5_DLL_EMPRESA_Y_MAS</code>, <code class="inline">RA5_DML_FUNCIONES02</code>.
     </div>
   </section>
 
@@ -485,7 +472,7 @@
 
   <footer class="end">
     <p>Los bloques 1 y 2 (RA1+RA2 y RA3) se evalúan juntos en la primera evaluación: primero el modelo conceptual (entidad/relación), después su traducción al modelo físico. El bloque 3 (RA4, consulta) empieza en la segunda evaluación y se cierra en la tercera junto al bloque 4 (RA5, modificación de datos).</p>
-    <p style="margin-top:10px;color:var(--muted);font-size:13.5px;">Por ahora solo está desarrollado el bloque de RA1+RA2. Los desafíos de RA3 a RA5 aparecen con su duración, en espera de contenido propio.</p>
+    <p style="margin-top:10px;color:var(--muted);font-size:13.5px;">Por ahora solo está desarrollado el bloque de RA1+RA2. Los desafíos de RA3 a RA5 aparecen nombrados, en espera de contenido propio. El enunciado completo de cada desafío desarrollado vive en un repositorio privado &mdash; los enlaces de esta página solo se abren con acceso a él.</p>
   </footer>
 
 </div>
