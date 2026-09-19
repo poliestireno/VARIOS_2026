@@ -597,6 +597,59 @@
     font-size: 1.05rem;
     margin: 28px 0 8px;
   }
+
+  .diagram-panel {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 18px 20px 14px;
+    margin: 18px 0 22px;
+    box-shadow: var(--shadow);
+  }
+
+  .diagram-panel svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .diagram-panel .dg-outer-label,
+  .diagram-panel .dg-inner-label {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .diagram-panel .dg-outer-label { fill: var(--muted); font-size: 11px; }
+  .diagram-panel .dg-inner-label { fill: var(--accent); font-size: 11px; font-weight: 600; }
+
+  .diagram-panel .dg-box-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    fill: var(--ink);
+  }
+
+  .diagram-panel .dg-box-code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 12.5px;
+    fill: var(--accent-2);
+  }
+
+  .diagram-panel .dg-sub { font-family: "IBM Plex Sans", ui-sans-serif, sans-serif; font-size: 10.5px; fill: var(--muted); }
+
+  .diagram-panel .dg-arrow {
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 2;
+  }
+
+  .diagram-panel .dg-caption {
+    margin: 12px 0 0;
+    font-size: 13px;
+    color: var(--muted);
+  }
 </style>
 <div class="page">
 
@@ -643,6 +696,64 @@
 <span class="tag">&lt;/html&gt;</span></code></pre>
     </div>
     <p>El navegador nunca ve el código PHP &mdash; solo el HTML resultante, ya con los valores calculados. Se comprueba abriendo la URL correspondiente dentro de <code class="inline">htdocs</code>, no abriendo el archivo directamente con doble clic (eso solo mostraría el código fuente, sin pasar por Apache).</p>
+
+    <div class="diagram-panel">
+      <svg viewBox="0 0 640 400" role="img" aria-labelledby="dgTitle dgDesc">
+        <title id="dgTitle">Cómo procesa Apache una petición PHP</title>
+        <desc id="dgDesc">El navegador pide una página; Apache ejecuta el script.php correspondiente, que puede consultar la base de datos, genera el HTML y Apache se lo devuelve al navegador.</desc>
+        <defs>
+          <marker id="dgArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="var(--ink)"></path>
+          </marker>
+        </defs>
+
+        <!-- Navegador -->
+        <rect x="10" y="90" width="110" height="200" rx="8" fill="var(--surface)" stroke="var(--line)" stroke-width="1.5"></rect>
+        <circle cx="65" cy="132" r="20" fill="none" stroke="var(--muted)" stroke-width="1.5"></circle>
+        <path d="M45,132 h40 M65,112 v40 M50,118 c10,10 20,10 30,0 M50,146 c10,-10 20,-10 30,0" fill="none" stroke="var(--muted)" stroke-width="1.2"></path>
+        <text x="65" y="178" class="dg-box-title" text-anchor="middle">Navegador</text>
+
+        <!-- Servidor (contenedor externo) -->
+        <rect x="170" y="14" width="460" height="350" rx="12" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-dasharray="5 5"></rect>
+        <text x="618" y="32" class="dg-outer-label" text-anchor="end">Servidor</text>
+
+        <!-- Apache (contenedor interno) -->
+        <rect x="192" y="46" width="270" height="170" rx="10" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="4 4"></rect>
+        <text x="202" y="64" class="dg-inner-label">Apache</text>
+
+        <!-- Router / index.php -->
+        <rect x="210" y="76" width="234" height="52" rx="6" fill="color-mix(in srgb, var(--accent-2) 10%, var(--surface))" stroke="var(--accent-2)" stroke-width="1.5"></rect>
+        <text x="327" y="98" class="dg-box-title" text-anchor="middle">Recibe la petición</text>
+        <text x="327" y="114" class="dg-sub" text-anchor="middle">index.php / router</text>
+
+        <!-- HTML generado -->
+        <rect x="210" y="148" width="234" height="52" rx="6" fill="color-mix(in srgb, var(--accent-2) 10%, var(--surface))" stroke="var(--accent-2)" stroke-width="1.5"></rect>
+        <text x="327" y="170" class="dg-box-title" text-anchor="middle">Archivo HTML</text>
+        <text x="327" y="186" class="dg-sub" text-anchor="middle">respuesta ya renderizada</text>
+
+        <!-- script.php -->
+        <rect x="482" y="76" width="130" height="52" rx="6" fill="var(--surface)" stroke="var(--accent-2)" stroke-width="1.5"></rect>
+        <text x="547" y="106" class="dg-box-code" text-anchor="middle">script.php</text>
+
+        <!-- Motor PHP -->
+        <rect x="330" y="254" width="190" height="60" rx="8" fill="color-mix(in srgb, var(--accent) 10%, var(--surface))" stroke="var(--accent)" stroke-width="1.5"></rect>
+        <text x="425" y="280" class="dg-box-title" text-anchor="middle">Procesa PHP</text>
+        <text x="425" y="296" class="dg-sub" text-anchor="middle">ejecuta el código del servidor</text>
+
+        <!-- Base de datos (cilindro) -->
+        <path d="M540,258 a40,10 0 1,0 80,0 a40,10 0 1,0 -80,0 M540,258 v52 a40,10 0 0,0 80,0 v-52" fill="color-mix(in srgb, var(--accent) 14%, var(--surface))" stroke="var(--accent)" stroke-width="1.5"></path>
+        <text x="580" y="342" class="dg-box-title" text-anchor="middle">Base de datos</text>
+
+        <!-- Flechas -->
+        <path class="dg-arrow" marker-end="url(#dgArrow)" d="M120,112 L206,100"></path>
+        <path class="dg-arrow" marker-end="url(#dgArrow)" d="M206,178 L120,188"></path>
+        <path class="dg-arrow" marker-end="url(#dgArrow)" d="M444,102 L478,102"></path>
+        <path class="dg-arrow" marker-end="url(#dgArrow)" d="M547,128 C547,190 470,190 440,250"></path>
+        <path class="dg-arrow" marker-end="url(#dgArrow)" d="M365,254 C320,240 300,225 296,204"></path>
+        <path class="dg-arrow" marker-start="url(#dgArrow)" marker-end="url(#dgArrow)" d="M524,282 L536,280"></path>
+      </svg>
+      <p class="dg-caption">Así procesa Apache cada petición: recibe la llamada del navegador, ejecuta el <code class="inline">.php</code> correspondiente (que puede leer o escribir en la base de datos) y devuelve el HTML resultante &mdash; el navegador nunca ve el código PHP, solo el HTML final.</p>
+    </div>
   </section>
 
   <section class="tema" id="primer-script">
