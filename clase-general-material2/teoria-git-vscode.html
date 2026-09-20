@@ -1,0 +1,616 @@
+<title>Git básico desde VS Code</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #2F855A;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #F0B429;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #68D391;
+      --accent-ink: #0B2118;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #68D391;
+    --accent-ink: #0B2118;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page { max-width: 700px; margin: 0 auto; padding: 56px 24px 96px; }
+
+  header.top { margin-bottom: 40px; }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede { color: var(--muted); font-size: 1.08rem; max-width: 62ch; margin: 0; }
+
+  .meta-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+  .term-bar { display: flex; gap: 6px; padding: 9px 12px; border-bottom: 1px solid var(--code-line); }
+  .term-bar span { width: 9px; height: 9px; border-radius: 50%; background: var(--code-line); }
+  .code-panel pre { margin: 0; padding: 16px 18px 18px; overflow-x: auto; }
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .hl { color: var(--code-accent); }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+  .checkpoint p { margin: 0; font-size: 14px; color: var(--ink); }
+
+  .step { display: flex; gap: 18px; margin-top: 32px; padding-top: 32px; border-top: 1px solid var(--line-soft); }
+  .step:first-of-type { border-top: none; padding-top: 0; }
+  .step-chip {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .step-body { flex: 1; min-width: 0; }
+  .step h3 { font-family: "Lexend", ui-sans-serif, system-ui, sans-serif; font-size: 1.15rem; font-weight: 600; margin: 4px 0 8px; }
+  .step p { margin: 0 0 12px; color: var(--ink); }
+  .step p.small { color: var(--muted); font-size: 14.5px; }
+
+  .checklist {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow);
+    margin: 14px 0;
+  }
+  .checklist li { list-style: none; display: flex; gap: 12px; align-items: flex-start; font-size: 15px; margin-bottom: 0; }
+  .checklist ul { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+  .checklist svg { flex: none; width: 18px; height: 18px; margin-top: 2px; color: var(--accent-2); }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+
+  nav.toc {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 20px 0 0;
+    box-shadow: var(--shadow);
+  }
+  nav.toc .toc-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 12.5px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 10px;
+  }
+  nav.toc ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 24px; }
+  nav.toc li { font-size: 14px; margin-bottom: 6px; break-inside: avoid; }
+  nav.toc a { color: var(--ink); text-decoration: none; }
+  nav.toc a:hover { color: var(--accent-2); text-decoration: underline; }
+
+  h2.section-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 1.35rem;
+    margin: 0 0 4px;
+    scroll-margin-top: 24px;
+  }
+  .section-num { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 13px; color: var(--accent-2); display: block; margin-bottom: 4px; }
+  section.tema { margin-top: 52px; padding-top: 28px; border-top: 1px solid var(--line-soft); }
+  section.tema:first-of-type { margin-top: 40px; }
+  section.tema p { margin: 0 0 14px; }
+  section.tema ul { margin: 0 0 14px; padding-left: 22px; }
+  section.tema li { margin-bottom: 6px; }
+
+  h3.subtema { font-family: "Lexend", ui-sans-serif, system-ui, sans-serif; font-weight: 600; font-size: 1.05rem; margin: 28px 0 8px; }
+
+  kbd {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.82em;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-bottom-width: 2px;
+    border-radius: 5px;
+    padding: 0.15em 0.5em;
+    box-shadow: var(--shadow);
+  }
+
+  .diagram-panel {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 18px 20px 14px;
+    margin: 18px 0 22px;
+    box-shadow: var(--shadow);
+  }
+  .diagram-panel svg { width: 100%; height: auto; display: block; }
+  .diagram-panel .dg-outer-label {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    fill: var(--muted);
+    font-size: 11px;
+  }
+  .diagram-panel .dg-box-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    fill: var(--ink);
+  }
+  .diagram-panel .dg-sub { font-family: "IBM Plex Sans", ui-sans-serif, sans-serif; font-size: 10.5px; fill: var(--muted); }
+  .diagram-panel .dg-action {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 11px;
+    fill: var(--accent-2);
+  }
+  .diagram-panel .dg-arrow { fill: none; stroke: var(--ink); stroke-width: 2; }
+  .diagram-panel .dg-caption { margin: 12px 0 0; font-size: 13px; color: var(--muted); }
+</style>
+
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">Material general &middot; Referencia</span>
+    <h1>Git básico desde VS Code</h1>
+    <p class="lede">Clonar, guardar cambios, subirlos y bajar los de los demás &mdash; todo desde el panel de Control de código fuente de VS Code, sin escribir un solo comando en una terminal.</p>
+    <div class="meta-row">
+      <span class="meta-chip">Panel Source Control</span>
+      <span class="meta-chip">Ctrl+Shift+G</span>
+      <span class="meta-chip">Sin línea de comandos</span>
+    </div>
+    <p style="margin-top:16px;"><a href="index.html" style="color:var(--accent-2);font-family:'IBM Plex Mono',monospace;font-size:13px;text-decoration:none;">&larr; Volver al índice del módulo</a></p>
+  </header>
+
+  <nav class="toc">
+    <p class="toc-title">Contenido</p>
+    <ol>
+      <li><a href="#repositorio">Qué es un repositorio</a></li>
+      <li><a href="#clonar">Clonar un repositorio</a></li>
+      <li><a href="#panel">El panel de Control de código fuente</a></li>
+      <li><a href="#commit">Guardar cambios: stage y commit</a></li>
+      <li><a href="#sync">Subir y bajar: Sync / Push / Pull</a></li>
+      <li><a href="#ramas">Ramas (branches)</a></li>
+      <li><a href="#conflictos">Fusionar y resolver conflictos</a></li>
+      <li><a href="#historial">Historial y comparar cambios</a></li>
+      <li><a href="#deshacer">Deshacer cambios</a></li>
+      <li><a href="#gitignore">El archivo .gitignore</a></li>
+      <li><a href="#practicas">Buenas prácticas</a></li>
+    </ol>
+  </nav>
+
+  <section class="tema" id="repositorio">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Qué es un repositorio</h2>
+    <p>Git guarda un historial de versiones de un proyecto. Cada <strong>commit</strong> (confirmación) es una fotografía fija del código en un momento dado, con quién la hizo, cuándo y un mensaje explicando qué cambió. Un <strong>repositorio</strong> es esa carpeta de proyecto más todo su historial de commits.</p>
+    <p>Un repositorio puede existir solo en tu ordenador (<strong>local</strong>) o tener además una copia en un servicio como GitHub (<strong>remoto</strong>). Lo habitual es tener ambos, y mantenerlos sincronizados: trabajas y confirmas cambios en local, y de vez en cuando los subes al remoto (o bajas los que otra persona haya subido).</p>
+
+    <div class="diagram-panel">
+      <svg viewBox="0 0 640 260" role="img" aria-labelledby="gitDgTitle gitDgDesc">
+        <title id="gitDgTitle">Flujo de un cambio desde el archivo hasta GitHub</title>
+        <desc id="gitDgDesc">Un archivo editado pasa a cambios preparados, luego a un commit en el repositorio local, y con Sync se sube o se baja del repositorio remoto en GitHub.</desc>
+        <defs>
+          <marker id="gitArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="var(--ink)"></path>
+          </marker>
+        </defs>
+
+        <!-- Tu ordenador -->
+        <rect x="4" y="16" width="522" height="208" rx="12" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-dasharray="5 5"></rect>
+        <text x="16" y="34" class="dg-outer-label">Tu ordenador</text>
+
+        <!-- Remoto -->
+        <rect x="544" y="16" width="92" height="208" rx="12" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="4 4"></rect>
+        <text x="636" y="34" class="dg-outer-label" text-anchor="end">Remoto</text>
+
+        <!-- Box 1: archivos -->
+        <rect x="20" y="64" width="150" height="108" rx="8" fill="var(--surface)" stroke="var(--line)" stroke-width="1.5"></rect>
+        <text x="95" y="112" class="dg-box-title" text-anchor="middle">Tus archivos</text>
+        <text x="95" y="128" class="dg-sub" text-anchor="middle">sin guardar en git</text>
+
+        <!-- Box 2: preparados -->
+        <rect x="204" y="64" width="150" height="108" rx="8" fill="color-mix(in srgb, var(--accent-2) 10%, var(--surface))" stroke="var(--accent-2)" stroke-width="1.5"></rect>
+        <text x="279" y="112" class="dg-box-title" text-anchor="middle">Preparados</text>
+        <text x="279" y="128" class="dg-sub" text-anchor="middle">staged / index</text>
+
+        <!-- Box 3: repo local -->
+        <rect x="388" y="64" width="126" height="108" rx="8" fill="color-mix(in srgb, var(--accent) 10%, var(--surface))" stroke="var(--accent)" stroke-width="1.5"></rect>
+        <text x="451" y="112" class="dg-box-title" text-anchor="middle">Repositorio</text>
+        <text x="451" y="128" class="dg-sub" text-anchor="middle">local · tus commits</text>
+
+        <!-- Box 4: GitHub -->
+        <rect x="568" y="64" width="52" height="108" rx="8" fill="var(--surface)" stroke="var(--accent)" stroke-width="1.5"></rect>
+        <text x="594" y="122" class="dg-box-title" text-anchor="middle">GitHub</text>
+
+        <!-- Flechas -->
+        <path class="dg-arrow" marker-end="url(#gitArrow)" d="M172,118 L202,118"></path>
+        <text x="187" y="102" class="dg-action" text-anchor="middle">+</text>
+
+        <path class="dg-arrow" marker-end="url(#gitArrow)" d="M356,118 L386,118"></path>
+        <text x="371" y="102" class="dg-action" text-anchor="middle">✓</text>
+
+        <path class="dg-arrow" marker-end="url(#gitArrow)" d="M516,100 L566,100"></path>
+        <text x="541" y="84" class="dg-action" text-anchor="middle">Push</text>
+
+        <path class="dg-arrow" marker-end="url(#gitArrow)" d="M566,140 L516,140"></path>
+        <text x="541" y="162" class="dg-action" text-anchor="middle">Pull</text>
+      </svg>
+      <p class="dg-caption">El botón <code class="inline">+</code> prepara un archivo, el &#10003; de Commit lo guarda como un punto fijo del historial local, y Sync intercambia commits con GitHub en ambas direcciones.</p>
+    </div>
+  </section>
+
+  <section class="tema" id="clonar">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Clonar un repositorio</h2>
+    <p>Clonar es descargar una copia completa de un repositorio remoto (con todo su historial) a tu ordenador, ya conectada a ese remoto para poder subir y bajar cambios después.</p>
+
+    <div class="step">
+      <div class="step-chip">1</div>
+      <div class="step-body">
+        <h3>Copia la URL del repositorio</h3>
+        <p>En la página del repositorio en GitHub, botón verde <strong>Code</strong> &rarr; pestaña <strong>HTTPS</strong> &rarr; icono de copiar.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">2</div>
+      <div class="step-body">
+        <h3>Clona desde VS Code</h3>
+        <p>Paleta de comandos (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>) &rarr; escribe <code class="inline">Git: Clone</code> &rarr; pega la URL &rarr; elige la carpeta local donde guardarlo &rarr; cuando termine, pulsa <strong>Open</strong> en el aviso que aparece.</p>
+        <p class="small">Si VS Code se abre sin ninguna carpeta, la pantalla de inicio tiene directamente un botón <strong>Clone Git Repository&hellip;</strong> que hace lo mismo.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Primera vez con GitHub en VS Code
+      </div>
+      <p>Es normal que pida iniciar sesión: botón <strong>Sign in with GitHub</strong>, autorizar en el navegador que se abre, y volver a VS Code. Con eso queda recordado para siempre en ese ordenador.</p>
+    </div>
+  </section>
+
+  <section class="tema" id="panel">
+    <span class="section-num">03</span>
+    <h2 class="section-title">El panel de Control de código fuente</h2>
+    <p>Es el centro de operaciones de Git en VS Code: icono con forma de rama en la barra lateral, o atajo <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>G</kbd>. Ahí aparece una lista de <strong>Cambios</strong> con todos los archivos que se han modificado desde el último commit, cada uno con una letra:</p>
+    <ul>
+      <li><code class="inline">M</code> &mdash; Modified: el archivo ya existía y ha cambiado.</li>
+      <li><code class="inline">U</code> &mdash; Untracked: archivo nuevo que Git todavía no sigue.</li>
+      <li><code class="inline">D</code> &mdash; Deleted: el archivo se ha borrado.</li>
+    </ul>
+    <p>Haz clic en cualquier archivo de la lista para abrir su <strong>diff</strong>: una vista con lo que había antes a la izquierda y lo que hay ahora a la derecha, en rojo lo eliminado y en verde lo añadido.</p>
+    <div class="checkpoint">
+      <div class="checkpoint-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        En el propio editor
+      </div>
+      <p>Mientras editas, un archivo con cambios sin guardar en Git muestra una barra de color en el margen izquierdo de cada línea: verde para líneas añadidas, azul para líneas modificadas &mdash; sin necesidad de abrir el panel.</p>
+    </div>
+  </section>
+
+  <section class="tema" id="commit">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Guardar cambios: stage y commit</h2>
+    <p>Guardar un cambio en Git son dos pasos. <strong>Preparar (stage)</strong> es elegir qué cambios van a formar parte del próximo commit &mdash; puedes haber tocado tres archivos y querer confirmar solo uno. <strong>Confirmar (commit)</strong> es lo que realmente crea ese punto fijo en el historial.</p>
+
+    <div class="step">
+      <div class="step-chip">1</div>
+      <div class="step-body">
+        <h3>Prepara los cambios</h3>
+        <p>Pasa el ratón sobre un archivo en la lista de <strong>Cambios</strong> y pulsa el icono <code class="inline">+</code> que aparece a la derecha &mdash; se mueve a la sección <strong>Cambios preparados</strong>. El <code class="inline">+</code> de la cabecera de la sección prepara todos los archivos de golpe.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">2</div>
+      <div class="step-body">
+        <h3>Escribe el mensaje y confirma</h3>
+        <p>En el cuadro de texto de la parte superior del panel, describe qué cambia. Después, el botón &#10003; <strong>Commit</strong> (o <kbd>Ctrl</kbd>+<kbd>Enter</kbd> con el cuadro de texto seleccionado).</p>
+        <p class="small">Si pulsas Commit sin haber preparado nada, VS Code pregunta si quiere preparar y confirmar todos los cambios a la vez &mdash; cómodo cuando el commit va a incluir todo lo que has tocado.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Un buen mensaje de commit
+      </div>
+      <p>Corto, en presente, y diciendo qué cambia: <code class="inline">Añade validación del formulario de login</code> en vez de <code class="inline">cambios</code> o <code class="inline">arreglos varios</code>. Dentro de unas semanas, ese mensaje es lo único que te va a recordar por qué se hizo el cambio.</p>
+    </div>
+  </section>
+
+  <section class="tema" id="sync">
+    <span class="section-num">05</span>
+    <h2 class="section-title">Subir y bajar cambios: Sync / Push / Pull</h2>
+    <p><strong>Push</strong> sube tus commits locales al repositorio remoto. <strong>Pull</strong> baja al repositorio local los commits que otras personas hayan subido. <strong>Sync</strong> hace ambas cosas seguidas: primero pull, después push.</p>
+    <p>En VS Code, el botón está en la barra de estado (abajo, con dos flechas &uarr;&darr; y un número que indica cuántos commits hay pendientes de subir o bajar) y también arriba del panel de Control de código fuente.</p>
+    <div class="checkpoint">
+      <div class="checkpoint-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        Orden recomendado
+      </div>
+      <p>Pull al empezar a trabajar (para partir de la última versión) y de nuevo justo antes de hacer push, si ha pasado tiempo &mdash; evita la mayoría de los conflictos por trabajar sobre una versión desactualizada.</p>
+    </div>
+  </section>
+
+  <section class="tema" id="ramas">
+    <span class="section-num">06</span>
+    <h2 class="section-title">Ramas (branches)</h2>
+    <p>Una <strong>rama</strong> es una línea de trabajo independiente y paralela a la principal (normalmente llamada <code class="inline">main</code>), para probar algo o desarrollar una funcionalidad sin tocar el código estable hasta que esté lista.</p>
+
+    <div class="step">
+      <div class="step-chip">1</div>
+      <div class="step-body">
+        <h3>Crea una rama</h3>
+        <p>El nombre de la rama actual aparece siempre en la barra de estado, abajo a la izquierda. Haz clic ahí &rarr; <strong>Create new branch&hellip;</strong> &rarr; escribe un nombre (por ejemplo <code class="inline">formulario-contacto</code>) &rarr; Enter. VS Code cambia automáticamente a esa rama nueva.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">2</div>
+      <div class="step-body">
+        <h3>Cambia entre ramas</h3>
+        <p>Mismo sitio, clic en el nombre de la rama &rarr; aparece la lista de ramas existentes &rarr; selecciona a cuál quieres cambiar.</p>
+        <p class="small">Cambiar de rama con cambios sin confirmar puede fallar o arrastrarlos a la otra rama &mdash; lo más seguro es confirmar (o descartar) antes de cambiar.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="tema" id="conflictos">
+    <span class="section-num">07</span>
+    <h2 class="section-title">Fusionar ramas y resolver conflictos</h2>
+    <p><strong>Fusionar (merge)</strong> trae los commits de una rama a la rama en la que estás. Desde el panel de Control de código fuente: menú <strong>&hellip;</strong> &rarr; <strong>Branch</strong> &rarr; <strong>Merge Branch&hellip;</strong> &rarr; elige la rama que quieres traer.</p>
+    <p>Un <strong>conflicto</strong> aparece cuando Git no puede decidir solo cómo combinar un cambio &mdash; normalmente porque dos ramas modificaron la misma línea de forma distinta. VS Code marca el archivo afectado y, dentro del propio editor, muestra los dos bloques enfrentados con cuatro botones encima:</p>
+    <ul>
+      <li><strong>Accept Current Change</strong> &mdash; se queda con la versión de tu rama actual.</li>
+      <li><strong>Accept Incoming Change</strong> &mdash; se queda con la versión que viene de la otra rama.</li>
+      <li><strong>Accept Both Changes</strong> &mdash; conserva las dos, una detrás de otra.</li>
+      <li><strong>Compare Changes</strong> &mdash; abre un diff lado a lado para decidir con más detalle.</li>
+    </ul>
+    <p>Resuelto el conflicto en todos los archivos afectados, guárdalos, prepáralos con <code class="inline">+</code> y confirma el commit &mdash; ese commit cierra la fusión.</p>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Si ves <code class="inline">&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code> en el archivo
+      </div>
+      <p>Son los marcadores de conflicto en bruto: todo lo que hay entre <code class="inline">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</code> y <code class="inline">=======</code> es tu versión, y lo que hay entre <code class="inline">=======</code> y <code class="inline">&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code> es la entrante. Los botones de VS Code hacen justo eso: borrar lo que sobra y dejar solo el texto final.</p>
+    </div>
+  </section>
+
+  <section class="tema" id="historial">
+    <span class="section-num">08</span>
+    <h2 class="section-title">Historial y comparar cambios</h2>
+    <p>En el explorador de archivos, la sección <strong>Timeline</strong> (parte inferior del panel lateral, con un archivo abierto) lista sus commits anteriores en orden. Haz clic en cualquiera para ver el diff de ese cambio concreto.</p>
+    <p>Para un historial más completo &mdash; por rama, por autor, en forma de grafo &mdash; la extensión <strong>GitLens</strong> añade una vista de <strong>Commit Graph</strong> con todo el árbol de commits del repositorio, y anota al lado de cada línea quién la escribió y cuándo (<em>blame</em> en línea).</p>
+  </section>
+
+  <section class="tema" id="deshacer">
+    <span class="section-num">09</span>
+    <h2 class="section-title">Deshacer cambios</h2>
+    <h3 class="subtema">Descartar cambios sin confirmar</h3>
+    <p>Sobre un archivo modificado en la lista de <strong>Cambios</strong>, el icono de flecha circular (<strong>Discard Changes</strong>) lo devuelve exactamente a como estaba en el último commit.</p>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Es irreversible
+      </div>
+      <p>Descartar borra el trabajo sin confirmar para siempre &mdash; no hay una papelera de la que recuperarlo. Antes de usarlo, comprueba en el diff que de verdad quieres perder ese cambio.</p>
+    </div>
+    <h3 class="subtema">Deshacer el último commit</h3>
+    <p>Menú <strong>&hellip;</strong> del panel &rarr; <strong>Commit</strong> &rarr; <strong>Undo Last Commit</strong>. El commit desaparece del historial, pero los cambios que contenía vuelven a <strong>Cambios preparados</strong> &mdash; nada se pierde, solo se deshace el punto de confirmación.</p>
+  </section>
+
+  <section class="tema" id="gitignore">
+    <span class="section-num">10</span>
+    <h2 class="section-title">El archivo .gitignore</h2>
+    <p>Un archivo de texto llamado exactamente <code class="inline">.gitignore</code>, en la raíz del proyecto, con un patrón por línea de lo que Git debe ignorar por completo: ni lo rastrea, ni aparece en <strong>Cambios</strong>, ni se puede subir por accidente.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="com"># dependencias instaladas: se reinstalan con un comando, no hace falta subirlas</span>
+node_modules/
+vendor/
+
+<span class="com"># configuración local con datos sensibles (contraseñas, claves de API)</span>
+.env
+
+<span class="com"># carpeta de salida generada al compilar el proyecto</span>
+/dist
+
+<span class="com"># archivos propios de cada sistema operativo</span>
+.DS_Store</code></pre>
+    </div>
+    <div class="checkpoint">
+      <div class="checkpoint-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        Solo afecta a partir de ahora
+      </div>
+      <p>Si un archivo ya se había confirmado antes de añadirlo al <code class="inline">.gitignore</code>, Git lo sigue rastreando &mdash; el archivo hay que quitarlo aparte. <code class="inline">.gitignore</code> solo evita que se empiecen a rastrear archivos nuevos que coincidan con sus patrones.</p>
+    </div>
+  </section>
+
+  <section class="tema" id="practicas">
+    <span class="section-num">11</span>
+    <h2 class="section-title">Buenas prácticas</h2>
+    <div class="checklist">
+      <ul>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span>Commits pequeños y frecuentes &mdash; uno por cada cambio con sentido propio, no uno gigante al final del día.</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span>Revisa el diff antes de confirmar &mdash; es fácil colar un <code class="inline">console.log</code> o un archivo que no tocaba ir.</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span>Nunca subas contraseñas, claves de API ni archivos <code class="inline">.env</code> &mdash; ponlos en <code class="inline">.gitignore</code> antes del primer commit del proyecto.</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span>Pull antes de empezar a trabajar cada sesión, para partir siempre de la última versión.</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <footer class="end">
+    <p>Con esto ya se puede trabajar en equipo sobre un mismo repositorio sin pisarse el trabajo. El mensaje de cada commit y la descripción de cada Pull Request son, precisamente, el sitio donde se aplica <a href="teoria-markdown.html">la sintaxis de Markdown</a>.</p>
+  </footer>
+
+</div>

@@ -1,0 +1,814 @@
+<title>Markdown: sintaxis completa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #2F855A;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #F0B429;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #68D391;
+      --accent-ink: #0B2118;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #68D391;
+    --accent-ink: #0B2118;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.top { margin-bottom: 40px; }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede { color: var(--muted); font-size: 1.08rem; max-width: 62ch; margin: 0; }
+
+  .meta-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .term-bar { display: flex; gap: 6px; padding: 9px 12px; border-bottom: 1px solid var(--code-line); }
+  .term-bar span { width: 9px; height: 9px; border-radius: 50%; background: var(--code-line); }
+
+  .code-panel pre { margin: 0; padding: 16px 18px 18px; overflow-x: auto; }
+
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+
+  .code-panel .tag { color: var(--accent-2); }
+  .code-panel .str { color: #C9D96B; }
+  .code-panel .kw { color: var(--code-accent); }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .prop { color: #8FB8FF; }
+  .code-panel .hl { color: var(--code-accent); }
+  .code-panel .md-h { color: var(--code-accent); font-weight: 600; }
+  .code-panel .md-em { color: #C9D96B; }
+  .code-panel .md-punct { color: #8FB8FF; }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+  .checkpoint p { margin: 0; font-size: 14px; color: var(--ink); }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+
+  nav.toc {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 20px 0 0;
+    box-shadow: var(--shadow);
+  }
+  nav.toc .toc-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 12.5px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 10px;
+  }
+  nav.toc ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 24px; }
+  nav.toc li { font-size: 14px; margin-bottom: 6px; break-inside: avoid; }
+  nav.toc a { color: var(--ink); text-decoration: none; }
+  nav.toc a:hover { color: var(--accent-2); text-decoration: underline; }
+
+  h2.section-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 1.35rem;
+    margin: 0 0 4px;
+    scroll-margin-top: 24px;
+  }
+  .section-num {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    color: var(--accent-2);
+    display: block;
+    margin-bottom: 4px;
+  }
+  section.tema { margin-top: 52px; padding-top: 28px; border-top: 1px solid var(--line-soft); }
+  section.tema:first-of-type { border-top: none; }
+  section.tema p { margin: 0 0 14px; }
+  section.tema ul { margin: 0 0 14px; padding-left: 22px; }
+  section.tema li { margin-bottom: 6px; }
+
+  h3.subtema {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    margin: 28px 0 8px;
+  }
+
+  /* --- par código / vista previa --- */
+  .md-pair { margin: 14px 0 22px; }
+  .md-pair .code-panel { margin-bottom: 10px; }
+
+  .md-preview {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .md-preview-label {
+    display: block;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  .md-preview h1, .md-preview h2, .md-preview h3, .md-preview h4 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    margin: 0 0 8px;
+    line-height: 1.25;
+    color: var(--ink);
+  }
+  .md-preview h1 { font-size: 1.6rem; }
+  .md-preview h2 { font-size: 1.3rem; }
+  .md-preview h3 { font-size: 1.1rem; }
+  .md-preview h4 { font-size: 1rem; }
+
+  .md-preview p { margin: 0 0 10px; color: var(--ink); }
+  .md-preview p:last-child { margin-bottom: 0; }
+
+  .md-preview ul, .md-preview ol { margin: 0 0 10px; padding-left: 24px; color: var(--ink); }
+  .md-preview li { margin-bottom: 4px; }
+
+  .md-preview ul.task-list { list-style: none; padding-left: 2px; }
+  .md-preview ul.task-list li { display: flex; align-items: baseline; gap: 8px; }
+  .md-preview ul.task-list input { margin: 0; }
+
+  .md-preview blockquote {
+    margin: 0 0 10px;
+    padding: 2px 0 2px 14px;
+    border-left: 3px solid var(--accent-2);
+  }
+  .md-preview blockquote p { margin: 0 0 6px; color: var(--muted); }
+  .md-preview blockquote p:last-child { margin-bottom: 0; }
+
+  .md-preview table { border-collapse: collapse; width: 100%; font-size: 14px; margin-bottom: 10px; }
+  .md-preview th, .md-preview td { border: 1px solid var(--line); padding: 6px 10px; text-align: left; }
+  .md-preview th { background: var(--line-soft); font-family: "Lexend", sans-serif; font-weight: 600; }
+
+  .md-preview code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .md-preview pre {
+    background: var(--code-bg);
+    color: var(--code-ink);
+    padding: 12px 14px;
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 0 0 10px;
+  }
+  .md-preview pre code { background: none; border: none; padding: 0; font-size: 13px; }
+
+  .md-preview a { color: var(--accent-2); }
+  .md-preview hr { border: none; border-top: 1px solid var(--line); margin: 14px 0; }
+  .md-preview del { color: var(--muted); }
+
+  .md-preview .placeholder-img {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 96px;
+    border: 1.5px dashed var(--line);
+    border-radius: 8px;
+    color: var(--muted);
+    font-size: 13px;
+    background: var(--line-soft);
+  }
+  .md-preview .placeholder-img svg { width: 20px; height: 20px; flex: none; }
+
+  .md-preview sup.fn-ref { color: var(--accent-2); font-weight: 600; }
+  .md-preview .footnote { font-size: 12.5px; color: var(--muted); border-top: 1px solid var(--line-soft); margin-top: 10px; padding-top: 8px; }
+
+  .md-preview details {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 10px 14px;
+  }
+  .md-preview summary { cursor: pointer; font-weight: 600; font-family: "Lexend", sans-serif; }
+  .md-preview details[open] summary { margin-bottom: 8px; }
+
+  .gfm-alert {
+    border-left: 4px solid var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    border-radius: 6px;
+    padding: 10px 14px;
+    margin: 0 0 10px;
+    font-size: 14px;
+  }
+  .gfm-alert:last-child { margin-bottom: 0; }
+  .gfm-alert .gfm-alert-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: "Lexend", sans-serif;
+    font-weight: 700;
+    font-size: 12.5px;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--accent-2);
+  }
+  .gfm-alert.warning { border-color: #D97706; background: color-mix(in srgb, #D97706 10%, var(--surface)); }
+  .gfm-alert.warning .gfm-alert-title { color: #D97706; }
+  .gfm-alert.important { border-color: #7C3AED; background: color-mix(in srgb, #7C3AED 10%, var(--surface)); }
+  .gfm-alert.important .gfm-alert-title { color: #7C3AED; }
+  .gfm-alert.caution { border-color: #DC2626; background: color-mix(in srgb, #DC2626 10%, var(--surface)); }
+  .gfm-alert.caution .gfm-alert-title { color: #DC2626; }
+  .gfm-alert.tip { border-color: #16A34A; background: color-mix(in srgb, #16A34A 10%, var(--surface)); }
+  .gfm-alert.tip .gfm-alert-title { color: #16A34A; }
+</style>
+
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">Material general &middot; Referencia</span>
+    <h1>Markdown: sintaxis completa</h1>
+    <p class="lede">Todo lo necesario para escribir un README, el enunciado de un desafío o cualquier documento con formato &mdash; el código fuente y, justo debajo, cómo se ve ya renderizado.</p>
+    <div class="meta-row">
+      <span class="meta-chip">GitHub Flavored Markdown</span>
+      <span class="meta-chip">Vista previa: Ctrl+Shift+V</span>
+      <span class="meta-chip">14 bloques</span>
+    </div>
+    <p style="margin-top:16px;"><a href="index.html" style="color:var(--accent-2);font-family:'IBM Plex Mono',monospace;font-size:13px;text-decoration:none;">&larr; Volver al índice del módulo</a></p>
+  </header>
+
+  <nav class="toc">
+    <p class="toc-title">Contenido</p>
+    <ol>
+      <li><a href="#intro">Qué es Markdown</a></li>
+      <li><a href="#encabezados">Encabezados</a></li>
+      <li><a href="#enfasis">Énfasis</a></li>
+      <li><a href="#listas">Listas</a></li>
+      <li><a href="#tareas">Listas de tareas</a></li>
+      <li><a href="#enlaces">Enlaces</a></li>
+      <li><a href="#imagenes">Imágenes</a></li>
+      <li><a href="#codigo">Código</a></li>
+      <li><a href="#citas">Citas</a></li>
+      <li><a href="#tablas">Tablas</a></li>
+      <li><a href="#lineas">Líneas y saltos</a></li>
+      <li><a href="#notas-pie">Notas al pie</a></li>
+      <li><a href="#html-embebido">HTML y escapado</a></li>
+      <li><a href="#extras-github">Extras de GitHub</a></li>
+    </ol>
+  </nav>
+
+  <section class="tema" id="intro">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Qué es Markdown</h2>
+    <p>Markdown es un lenguaje de marcado ligero: texto plano con una sintaxis mínima (almohadillas, asteriscos, guiones&hellip;) que un programa convierte en HTML con formato. Se guarda en archivos <code class="inline">.md</code> y se usa en READMEs de GitHub, issues y Pull Requests, Notion, Discord, Slack &mdash; y en todo el material de este curso, que empezó siendo Markdown antes de convertirse en estas páginas.</p>
+    <p>La variante concreta que usa GitHub se llama <strong>GFM</strong> (GitHub Flavored Markdown): añade extras sobre el Markdown original, como listas de tareas o tablas, que no existen en todas las plataformas pero sí en GitHub.</p>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Vista previa en VS Code
+      </div>
+      <p>Con un archivo <code class="inline">.md</code> abierto, <code class="inline">Ctrl+Shift+V</code> abre la vista previa renderizada; <code class="inline">Ctrl+K V</code> la abre al lado, en pantalla partida, para ver el código y el resultado a la vez &mdash; justo como en esta página.</p>
+    </div>
+  </section>
+
+  <section class="tema" id="encabezados">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Encabezados</h2>
+    <p>Del <code class="inline">#</code> (nivel 1) al <code class="inline">######</code> (nivel 6), siempre con un espacio después de la almohadilla.</p>
+    <div class="md-pair">
+      <div class="code-panel">
+        <div class="term-bar"><span></span><span></span><span></span></div>
+        <pre><code><span class="md-punct"># </span>Título de nivel 1
+<span class="md-punct">## </span>Título de nivel 2
+<span class="md-punct">### </span>Título de nivel 3
+<span class="md-punct">#### </span>Título de nivel 4</code></pre>
+      </div>
+      <div class="md-preview">
+        <span class="md-preview-label">Vista previa</span>
+        <h1>Título de nivel 1</h1>
+        <h2>Título de nivel 2</h2>
+        <h3>Título de nivel 3</h3>
+        <h4>Título de nivel 4</h4>
+      </div>
+    </div>
+  </section>
+
+  <section class="tema" id="enfasis">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Énfasis</h2>
+    <p>Negrita con dos asteriscos, cursiva con uno, tachado con dos virgulillas. Se pueden combinar.</p>
+    <div class="md-pair">
+      <div class="code-panel">
+        <div class="term-bar"><span></span><span></span><span></span></div>
+        <pre><code>Esto es <span class="md-punct">**</span><span class="md-em">negrita</span><span class="md-punct">**</span> y esto es <span class="md-punct">*</span><span class="md-em">cursiva</span><span class="md-punct">*</span>.
+También se pueden <span class="md-punct">***</span><span class="md-em">combinar ambas***</span>,
+o tachar texto con <span class="md-punct">~~</span><span class="md-em">tachado</span><span class="md-punct">~~</span>.</code></pre>
+      </div>
+      <div class="md-preview">
+        <span class="md-preview-label">Vista previa</span>
+        <p>Esto es <strong>negrita</strong> y esto es <em>cursiva</em>.
+        También se pueden <strong><em>combinar ambas</em></strong>,
+        o tachar texto con <del>tachado</del>.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="tema" id="listas">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Listas</h2>
+    <h3 class="subtema">Sin ordenar</h3>
+    <p><code class="inline">-</code>, <code class="inline">*</code> o <code class="inline">+</code> funcionan igual como marcador; anidar una lista es indentarla dos espacios.</p>
+    <div class="md-pair">
+      <div class="code-panel">
+        <div class="term-bar"><span></span><span></span><span></span></div>
+        <pre><code><span class="md-punct">- </span>Primer elemento
+<span class="md-punct">- </span>Segundo elemento
+  <span class="md-punct">- </span>Elemento anidado
+  <span class="md-punct">- </span>Otro elemento anidado
+<span class="md-punct">- </span>Tercer elemento</code></pre>
+      </div>
+      <div class="md-preview">
+        <span class="md-preview-label">Vista previa</span>
+        <ul>
+          <li>Primer elemento</li>
+          <li>Segundo elemento
+            <ul>
+              <li>Elemento anidado</li>
+              <li>Otro elemento anidado</li>
+            </ul>
+          </li>
+          <li>Tercer elemento</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 class="subtema">Ordenada</h3>
+    <div class="md-pair">
+      <div class="code-panel">
+        <div class="term-bar"><span></span><span></span><span></span></div>
+        <pre><code><span class="md-punct">1. </span>Paso uno
+<span class="md-punct">2. </span>Paso dos
+<span class="md-punct">3. </span>Paso tres</code></pre>
+      </div>
+      <div class="md-preview">
+        <span class="md-preview-label">Vista previa</span>
+        <ol>
+          <li>Paso uno</li>
+          <li>Paso dos</li>
+          <li>Paso tres</li>
+        </ol>
+      </div>
+    </div>
+    <p>El número que escribas casi no importa &mdash; Markdown renumera solo. Poner <code class="inline">1.</code> en todas las líneas también funciona y evita errores al reordenar pasos a mano.</p>
+  </section>
+
+  <section class="tema" id="tareas">
+    <span class="section-num">05</span>
+    <h2 class="section-title">Listas de tareas</h2>
+    <p>Extensión de GFM: una lista normal donde cada elemento empieza por <code class="inline">[ ]</code> (pendiente) o <code class="inline">[x]</code> (hecho). Muy usada en el README de un proyecto o en la descripción de un Pull Request &mdash; en GitHub incluso se pueden marcar haciendo clic, sin editar el Markdown a mano.</p>
+    <div class="md-pair">
+      <div class="code-panel">
+        <div class="term-bar"><span></span><span></span><span></span></div>
+        <pre><code><span class="md-punct">- [x] </span>Instalar VS Code
+<span class="md-punct">- [x] </span>Clonar el repositorio
+<span class="md-punct">- [ ] </span>Hacer el primer commit
+<span class="md-punct">- [ ] </span>Subir los cambios</code></pre>
+      </div>
+      <div class="md-preview">
+        <span class="md-preview-label">Vista previa</span>
+        <ul class="task-list">
+          <li><input type="checkbox" checked disabled> Instalar VS Code</li>
+          <li><input type="checkbox" checked disabled> Clonar el repositorio</li>
+          <li><input type="checkbox" disabled> Hacer el primer commit</li>
+          <li><input type="checkbox" disabled> Subir los cambios</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="tema" id="enlaces">
+    <span class="section-num">06</span>
+    <h2 class="section-title">Enlaces</h2>
+    <div class="md-pair">
+      <div class="code-panel">
+        <div class="term-bar"><span></span><span></span><span></span></div>
+        <pre><code><span class="md-punct">[</span>Visita el repositorio<span class="md-punct">](</span>https://github.com<span class="md-punct">)</span>
+
+Con título: <span class="md-punct">[</span>Guía de Markdown<span class="md-punct">](</span>https://www.markdownguide.org <span class="str">"Se muestra al pasar el ratón"</span><span class="md-punct">)</span>
+
+Enlace directo, sin texto: <span class="md-punct">&lt;</span>https://github.com<span class="md-punct">&gt;</span></code></pre>
+      </div>
+      <div class="md-preview">
+        <span class="md-preview-label">Vista previa</span>
+        <p><a href="https://github.com">Visita el repositorio</a></p>
+        <p>Con título: <a href="https://www.markdownguide.org" title="Se muestra al pasar el ratón">Guía de Markdown</a></p>
+        <p>Enlace directo, sin texto: <a href="https://github.com">https://github.com</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="tema" id="imagenes">
+    <span class="section-num">07</span>
+    <h2 class="section-title">Imágenes</h2>
+    <p>Igual que un enlace, con un <code class="inline">!</code> delante. El texto entre corchetes es el <strong>texto alternativo</strong> &mdash; lo que se lee si la imagen no carga, y lo que usa un lector de pantalla.</p>
+    <div class="md-pair">
+      <div class="code-panel">
+        <div class="term-bar"><span></span><span></span><span></span></div>
+        <pre><code><span class="md-punct">![</span>Captura del panel de control de XAMPP<span class="md-punct">](</span>capturas/xampp.png<span class="md-punct">)</span>
+
+Imagen que además es un enlace:
+<span class="md-punct">[![</span>Captura<span class="md-punct">](</span>capturas/xampp.png<span class="md-punct">)](</span>https://github.com<span class="md-punct">)</span></code></pre>
+      </div>
+      <div class="md-preview">
+        <span class="md-preview-label">Vista previa (imagen de ejemplo)</span>
+        <div class="placeholder-img">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+          Captura del panel de control de XAMPP
+        </div>
+      </div>
+    </div>
+    <p>La ruta puede ser relativa (un archivo dentro del propio repositorio, como en el ejemplo) o una URL completa a una imagen en otro sitio.</p>
+  </section>
+
+  <section class="tema" id="codigo">
+    <span class="section-num">08</span>
+    <h2 class="section-title">Código</h2>
+    <h3 class="subtema">En línea</h3>
+    <div class="md-pair">
+      <div class="code-panel">
+        <div class="term-bar"><span></span><span></span><span></span></div>
+        <pre><code>Usa <span class="md-punct">`</span>código<span class="md-punct">`</span> para resaltar algo corto, como <span class="md-punct">`</span>$nombre_variable<span class="md-punct">`</span> o <span class="md-punct">`</span>npm install<span class="md-punct">`</span>.</code></pre>
+      </div>
+      <div class="md-preview">
+        <span class="md-preview-label">Vista previa</span>
+        <p>Usa <code>código</code> para resaltar algo corto, como <code>$nombre_variable</code> o <code>npm install</code>.</p>
+      </div>
+    </div>
+
+    <h3 class="subtema">En bloque, con resaltado de sintaxis</h3>
+    <p>Tres acentos graves, el nombre del lenguaje pegado a los acentos, el código, y otros tres acentos graves para cerrar. GitHub (y la vista previa de VS Code) colorean automáticamente según el lenguaje indicado.</p>
+    <div class="md-pair">
+      <div class="code-panel">
+        <div class="term-bar"><span></span><span></span><span></span></div>
+        <pre><code><span class="md-punct">```php</span>
+<span class="kw">&lt;?php</span>
+<span class="kw">echo</span> <span class="str">"Hola mundo"</span>;
+<span class="kw">?&gt;</span>
+<span class="md-punct">```</span></code></pre>
+      </div>
+      <div class="md-preview">
+        <span class="md-preview-label">Vista previa &mdash; resaltado como PHP</span>
+        <pre><code><span class="kw">&lt;?php</span>
+<span class="kw">echo</span> <span class="str">"Hola mundo"</span>;
+<span class="kw">?&gt;</span></code></pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="tema" id="citas">
+    <span class="section-num">09</span>
+    <h2 class="section-title">Citas</h2>
+    <p>Un <code class="inline">&gt;</code> al principio de la línea. Una línea con solo <code class="inline">&gt;</code> separa párrafos dentro de la misma cita.</p>
+    <div class="md-pair">
+      <div class="code-panel">
+        <div class="term-bar"><span></span><span></span><span></span></div>
+        <pre><code><span class="md-punct">&gt; </span>Esto es una cita. Puede ocupar
+<span class="md-punct">&gt; </span>varias líneas seguidas.
+<span class="md-punct">&gt;</span>
+<span class="md-punct">&gt; </span>Y un segundo párrafo, dentro de la misma cita.</code></pre>
+      </div>
+      <div class="md-preview">
+        <span class="md-preview-label">Vista previa</span>
+        <blockquote>
+          <p>Esto es una cita. Puede ocupar varias líneas seguidas.</p>
+          <p>Y un segundo párrafo, dentro de la misma cita.</p>
+        </blockquote>
+      </div>
+    </div>
+  </section>
+
+  <section class="tema" id="tablas">
+    <span class="section-num">10</span>
+    <h2 class="section-title">Tablas</h2>
+    <p>Una fila de encabezado, una fila separadora con guiones, y una fila por registro. No hace falta alinear las barras verticales a mano &mdash; solo que estén en el mismo orden en cada fila.</p>
+    <div class="md-pair">
+      <div class="code-panel">
+        <div class="term-bar"><span></span><span></span><span></span></div>
+        <pre><code><span class="md-punct">| </span>Nombre<span class="md-punct"> | </span>Edad<span class="md-punct"> | </span>Ciudad<span class="md-punct"> |</span>
+<span class="md-punct">| --- | --- | --- |</span>
+<span class="md-punct">| </span>Ana<span class="md-punct"> | </span>30<span class="md-punct"> | </span>Madrid<span class="md-punct"> |</span>
+<span class="md-punct">| </span>Luis<span class="md-punct"> | </span>25<span class="md-punct"> | </span>Sevilla<span class="md-punct"> |</span></code></pre>
+      </div>
+      <div class="md-preview">
+        <span class="md-preview-label">Vista previa</span>
+        <table>
+          <thead><tr><th>Nombre</th><th>Edad</th><th>Ciudad</th></tr></thead>
+          <tbody>
+            <tr><td>Ana</td><td>30</td><td>Madrid</td></tr>
+            <tr><td>Luis</td><td>25</td><td>Sevilla</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <p>Los dos puntos en la fila separadora fijan la alineación de esa columna: <code class="inline">:---</code> izquierda, <code class="inline">:---:</code> centro, <code class="inline">---:</code> derecha.</p>
+    <div class="md-pair">
+      <div class="code-panel">
+        <div class="term-bar"><span></span><span></span><span></span></div>
+        <pre><code><span class="md-punct">| </span>Izquierda<span class="md-punct"> | </span>Centro<span class="md-punct"> | </span>Derecha<span class="md-punct"> |</span>
+<span class="md-punct">| :--- | :---: | ---: |</span>
+<span class="md-punct">| </span>a<span class="md-punct"> | </span>b<span class="md-punct"> | </span>c<span class="md-punct"> |</span></code></pre>
+      </div>
+      <div class="md-preview">
+        <span class="md-preview-label">Vista previa</span>
+        <table>
+          <thead><tr><th style="text-align:left;">Izquierda</th><th style="text-align:center;">Centro</th><th style="text-align:right;">Derecha</th></tr></thead>
+          <tbody><tr><td style="text-align:left;">a</td><td style="text-align:center;">b</td><td style="text-align:right;">c</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="tema" id="lineas">
+    <span class="section-num">11</span>
+    <h2 class="section-title">Líneas horizontales y saltos de línea</h2>
+    <p>Tres guiones (o asteriscos) en su propia línea dibujan un separador horizontal.</p>
+    <div class="md-pair">
+      <div class="code-panel">
+        <div class="term-bar"><span></span><span></span><span></span></div>
+        <pre><code>Sección uno.
+
+<span class="md-punct">---</span>
+
+Sección dos.</code></pre>
+      </div>
+      <div class="md-preview">
+        <span class="md-preview-label">Vista previa</span>
+        <p>Sección uno.</p>
+        <hr>
+        <p>Sección dos.</p>
+      </div>
+    </div>
+    <div class="checkpoint">
+      <div class="checkpoint-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        El truco de las líneas en blanco
+      </div>
+      <p>Una línea en blanco separa párrafos. Si escribes dos líneas seguidas <strong>sin</strong> línea en blanco entre medias, Markdown las junta en un único párrafo. Para forzar un salto de línea sin crear un párrafo nuevo, se dejan <strong>dos espacios al final</strong> de la línea (invisibles, fáciles de perder sin querer) o se usa directamente la etiqueta HTML <code class="inline">&lt;br&gt;</code>.</p>
+    </div>
+  </section>
+
+  <section class="tema" id="notas-pie">
+    <span class="section-num">12</span>
+    <h2 class="section-title">Notas al pie</h2>
+    <p>Extensión de GFM: una referencia <code class="inline">[^etiqueta]</code> en el texto, y en cualquier parte del documento su definición con <code class="inline">[^etiqueta]:</code>. Se renderizan como una nota numerada al final del documento, con enlace de ida y vuelta.</p>
+    <div class="md-pair">
+      <div class="code-panel">
+        <div class="term-bar"><span></span><span></span><span></span></div>
+        <pre><code>El proyecto usa PDO para acceder a la base de datos<span class="md-punct">[^1]</span>.
+
+<span class="md-punct">[^1]:</span> No <span class="md-punct">`</span>mysqli<span class="md-punct">`</span>, para poder cambiar de motor de base de datos sin reescribir las consultas.</code></pre>
+      </div>
+      <div class="md-preview">
+        <span class="md-preview-label">Vista previa</span>
+        <p>El proyecto usa PDO para acceder a la base de datos<sup class="fn-ref">[1]</sup>.</p>
+        <div class="footnote">[1] No <code>mysqli</code>, para poder cambiar de motor de base de datos sin reescribir las consultas.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="tema" id="html-embebido">
+    <span class="section-num">13</span>
+    <h2 class="section-title">HTML embebido y caracteres especiales</h2>
+    <p>Dentro de un archivo Markdown se puede mezclar HTML normal &mdash; útil para lo que Markdown no cubre, como un bloque plegable con <code class="inline">&lt;details&gt;</code>.</p>
+    <div class="md-pair">
+      <div class="code-panel">
+        <div class="term-bar"><span></span><span></span><span></span></div>
+        <pre><code><span class="tag">&lt;details&gt;</span>
+<span class="tag">&lt;summary&gt;</span>Haz clic para ver la solución<span class="tag">&lt;/summary&gt;</span>
+
+Aquí va el contenido oculto, que puede seguir siendo Markdown.
+
+<span class="tag">&lt;/details&gt;</span></code></pre>
+      </div>
+      <div class="md-preview">
+        <span class="md-preview-label">Vista previa (interactiva)</span>
+        <details>
+          <summary>Haz clic para ver la solución</summary>
+          <p>Aquí va el contenido oculto, que puede seguir siendo Markdown.</p>
+        </details>
+      </div>
+    </div>
+    <p>Cuando un carácter especial de Markdown (<code class="inline">* _ # \` [ ]</code>&hellip;) tiene que aparecer literal y no como sintaxis, se escapa con una barra invertida delante.</p>
+    <div class="md-pair">
+      <div class="code-panel">
+        <div class="term-bar"><span></span><span></span><span></span></div>
+        <pre><code><span class="md-punct">\*</span>Esto no es una lista<span class="md-punct">\*</span>, son asteriscos literales.</code></pre>
+      </div>
+      <div class="md-preview">
+        <span class="md-preview-label">Vista previa</span>
+        <p>*Esto no es una lista*, son asteriscos literales.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="tema" id="extras-github">
+    <span class="section-num">14</span>
+    <h2 class="section-title">Extras de GitHub</h2>
+
+    <h3 class="subtema">Alertas</h3>
+    <p>Una cita especial cuya primera línea es <code class="inline">[!NOTE]</code>, <code class="inline">[!TIP]</code>, <code class="inline">[!IMPORTANT]</code>, <code class="inline">[!WARNING]</code> o <code class="inline">[!CAUTION]</code>. GitHub la pinta como un aviso de color, con icono &mdash; solo se renderiza así en GitHub, no en la vista previa genérica de Markdown.</p>
+    <div class="md-pair">
+      <div class="code-panel">
+        <div class="term-bar"><span></span><span></span><span></span></div>
+        <pre><code><span class="md-punct">&gt; [!WARNING]</span>
+<span class="md-punct">&gt; </span>Este comando borra la base de datos sin pedir confirmación.</code></pre>
+      </div>
+      <div class="md-preview">
+        <span class="md-preview-label">Vista previa (solo en GitHub)</span>
+        <div class="gfm-alert warning">
+          <div class="gfm-alert-title">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            Warning
+          </div>
+          Este comando borra la base de datos sin pedir confirmación.
+        </div>
+      </div>
+    </div>
+
+    <h3 class="subtema">Menciones y referencias</h3>
+    <p><code class="inline">@usuario</code> menciona a alguien (le llega una notificación) y <code class="inline">#123</code> enlaza automáticamente al issue o Pull Request número 123 del mismo repositorio. Solo funcionan dentro de GitHub, no en un editor de Markdown genérico.</p>
+
+    <h3 class="subtema">Emojis</h3>
+    <p>Los códigos cortos <code class="inline">:tada:</code>, <code class="inline">:bug:</code>, <code class="inline">:rocket:</code>&hellip; se convierten en emoji (&#127881; &#128027; &#128640;) en GitHub, Slack y Discord &mdash; no en todas las plataformas de Markdown.</p>
+  </section>
+
+  <footer class="end">
+    <p>Con esto ya está cubierto el Markdown que hace falta para un README, el enunciado de un desafío o la descripción de un Pull Request. El siguiente paso es <a href="teoria-git-vscode.html">Git básico desde VS Code</a>, para versionar y subir todo esto a un repositorio.</p>
+  </footer>
+
+</div>

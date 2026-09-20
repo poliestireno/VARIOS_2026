@@ -1,0 +1,210 @@
+<title>Material general</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #2F855A;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #68D391;
+      --accent-ink: #0B2118;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #68D391;
+    --accent-ink: #0B2118;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page { max-width: 780px; margin: 0 auto; padding: 56px 24px 96px; }
+
+  header.top { margin-bottom: 40px; }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.9rem, 4.5vw, 2.5rem);
+    line-height: 1.14;
+    letter-spacing: -0.01em;
+    margin: 16px 0 8px;
+    text-wrap: balance;
+  }
+
+  .lede { color: var(--muted); font-size: 1.05rem; max-width: 62ch; margin: 0; }
+
+  .meta-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  section.phase { margin-top: 40px; }
+
+  .phase-summary { color: var(--muted); font-size: 15px; max-width: 62ch; margin: 0 0 20px; }
+
+  .session {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-top: 14px;
+    box-shadow: var(--shadow);
+    display: flex;
+    gap: 16px;
+    text-decoration: none;
+  }
+
+  .session-chip {
+    flex: none;
+    width: 38px;
+    height: 38px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .session-chip svg { width: 19px; height: 19px; }
+
+  .session-body { flex: 1; min-width: 0; }
+
+  .session h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.08rem;
+    font-weight: 600;
+    margin: 0 0 6px;
+  }
+  .session h3 { color: var(--ink); }
+  .session:hover h3 { color: var(--accent-2); }
+
+  .session p.objetivo { margin: 0 0 8px; color: var(--ink); font-size: 14.5px; }
+
+  .session .linea { font-size: 13.5px; color: var(--muted); margin: 4px 0 0; }
+  .session .linea strong { color: var(--ink); font-weight: 600; }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+</style>
+
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">Material general</span>
+    <h1>Recursos transversales</h1>
+    <p class="lede">Guías de referencia que no pertenecen a ningún módulo concreto &mdash; herramientas que se usan en todos ellos, empezando por cómo escribir y versionar el propio material de cada desafío.</p>
+    <div class="meta-row">
+      <span class="meta-chip">2 guías</span>
+      <span class="meta-chip">Referencia, no temario</span>
+    </div>
+  </header>
+
+  <section class="phase">
+    <p class="phase-summary">Antes de entregar cualquier desafío hacen falta estas dos cosas: saber escribir el README o el enunciado con formato (Markdown), y saber subir el código a un repositorio sin perder nada por el camino (Git). Ninguna de las dos es específica de PHP, IAW o ningún otro módulo &mdash; se usan siempre.</p>
+
+    <a class="session" href="teoria-markdown.html">
+      <div class="session-chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 20 4 20 7"></polyline><line x1="9" y1="20" x2="15" y2="20"></line><line x1="12" y1="4" x2="12" y2="20"></line></svg>
+      </div>
+      <div class="session-body">
+        <h3>Markdown: sintaxis completa</h3>
+        <p class="objetivo">Encabezados, listas, enlaces, imágenes, código, tablas, notas al pie y los extras de GitHub &mdash; cada uno con el código fuente y su resultado ya renderizado, uno junto al otro.</p>
+        <p class="linea"><strong>Para qué sirve:</strong> escribir el README de un proyecto, el enunciado de un desafío, o la descripción de un Pull Request.</p>
+      </div>
+    </a>
+
+    <a class="session" href="teoria-git-vscode.html">
+      <div class="session-chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="18" r="3"></circle><circle cx="6" cy="6" r="3"></circle><path d="M6 21V9a9 9 0 0 0 9 9"></path></svg>
+      </div>
+      <div class="session-body">
+        <h3>Git básico desde VS Code</h3>
+        <p class="objetivo">Clonar, preparar y confirmar cambios, subir y bajar con Sync, crear ramas, y resolver un conflicto de fusión &mdash; todo desde el panel de Control de código fuente, sin terminal.</p>
+        <p class="linea"><strong>Para qué sirve:</strong> guardar y compartir el trabajo de cada desafío sin depender de copiar carpetas a mano.</p>
+      </div>
+    </a>
+  </section>
+
+  <footer class="end">
+    <p>Esta carpeta reúne material de referencia común a todos los módulos. Se irá ampliando con más guías transversales según haga falta.</p>
+  </footer>
+
+</div>
