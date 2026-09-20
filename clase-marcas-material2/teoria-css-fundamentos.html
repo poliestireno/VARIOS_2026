@@ -1,0 +1,432 @@
+<title>Fundamentos de CSS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #E44D26;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #F2A65A;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #FF7A50;
+      --accent-ink: #2B0D02;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #FF7A50;
+    --accent-ink: #2B0D02;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page { max-width: 700px; margin: 0 auto; padding: 56px 24px 96px; }
+
+  header.top { margin-bottom: 40px; }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede { color: var(--muted); font-size: 1.08rem; max-width: 62ch; margin: 0; }
+
+  .meta-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+  .term-bar { display: flex; gap: 6px; padding: 9px 12px; border-bottom: 1px solid var(--code-line); }
+  .term-bar span { width: 9px; height: 9px; border-radius: 50%; background: var(--code-line); }
+  .code-panel pre { margin: 0; padding: 16px 18px 18px; overflow-x: auto; }
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+  .code-panel .tag { color: var(--accent-2); }
+  .code-panel .str { color: #C9D96B; }
+  .code-panel .kw { color: var(--code-accent); }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .prop { color: #8FB8FF; }
+  .code-panel .hl { color: var(--code-accent); }
+  .code-panel .sel { color: #F2A65A; font-weight: 600; }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+  .checkpoint p { margin: 0; font-size: 14px; color: var(--ink); }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+
+  nav.toc {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 20px 0 0;
+    box-shadow: var(--shadow);
+  }
+  nav.toc .toc-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 12.5px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 10px;
+  }
+  nav.toc ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 24px; }
+  nav.toc li { font-size: 14px; margin-bottom: 6px; break-inside: avoid; }
+  nav.toc a { color: var(--ink); text-decoration: none; }
+  nav.toc a:hover { color: var(--accent-2); text-decoration: underline; }
+
+  h2.section-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 1.35rem;
+    margin: 0 0 4px;
+    scroll-margin-top: 24px;
+  }
+  .section-num { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 13px; color: var(--accent-2); display: block; margin-bottom: 4px; }
+  section.tema { margin-top: 52px; padding-top: 28px; border-top: 1px solid var(--line-soft); }
+  section.tema:first-of-type { border-top: none; }
+  section.tema p { margin: 0 0 14px; }
+  section.tema ul { margin: 0 0 14px; padding-left: 22px; }
+  section.tema li { margin-bottom: 6px; }
+
+  h3.subtema { font-family: "Lexend", ui-sans-serif, system-ui, sans-serif; font-weight: 600; font-size: 1.05rem; margin: 28px 0 8px; }
+
+  .diagram-panel {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 18px 20px 14px;
+    margin: 18px 0 22px;
+    box-shadow: var(--shadow);
+  }
+  .diagram-panel svg { width: 100%; height: auto; display: block; }
+  .diagram-panel .dg-box-title { font-family: "Lexend", ui-sans-serif, system-ui, sans-serif; font-weight: 600; font-size: 12.5px; fill: var(--ink); }
+  .diagram-panel .dg-sub { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 11px; fill: var(--muted); }
+  .diagram-panel .dg-caption { margin: 12px 0 0; font-size: 13px; color: var(--muted); }
+</style>
+
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">RA1 + RA2 &middot; Teoría</span>
+    <h1>Fundamentos de CSS</h1>
+    <p class="lede">Cómo darle estilo a una página: selectores, el modelo de caja, Flexbox y Grid para maquetar, posicionamiento para carteles y réplicas exactas, y diseño responsive.</p>
+    <div class="meta-row">
+      <span class="meta-chip">RA1 + RA2</span>
+      <span class="meta-chip">Flexbox + Grid</span>
+      <span class="meta-chip">Responsive</span>
+    </div>
+    <p style="margin-top:16px;"><a href="index.html" style="color:var(--accent-2);font-family:'IBM Plex Mono',monospace;font-size:13px;text-decoration:none;">&larr; Volver al índice del módulo</a></p>
+  </header>
+
+  <nav class="toc">
+    <p class="toc-title">Contenido</p>
+    <ol>
+      <li><a href="#selectores">Selectores y cascada</a></li>
+      <li><a href="#caja">El modelo de caja</a></li>
+      <li><a href="#flexbox">Flexbox</a></li>
+      <li><a href="#grid">Grid</a></li>
+      <li><a href="#posicionamiento">Posicionamiento</a></li>
+      <li><a href="#responsive">Diseño responsive</a></li>
+      <li><a href="#clonar">Clonar una página con DevTools</a></li>
+    </ol>
+  </nav>
+
+  <section class="tema" id="selectores">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Selectores y cascada</h2>
+    <p>CSS se enlaza con <code class="inline">&lt;link rel="stylesheet" href="estilos.css"&gt;</code> dentro del <code class="inline">&lt;head&gt;</code>. Cada regla es un selector (a qué elementos aplica) más un bloque de declaraciones (propiedad: valor).</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="sel">h1</span> {                 <span class="com">/* por etiqueta */</span>
+  <span class="prop">color</span>: <span class="hl">#E44D26</span>;
+}
+<span class="sel">.tarjeta</span> {           <span class="com">/* por clase: class="tarjeta" */</span>
+  <span class="prop">border-radius</span>: <span class="hl">8px</span>;
+}
+<span class="sel">#cabecera</span> {          <span class="com">/* por id: id="cabecera", único en la página */</span>
+  <span class="prop">background</span>: <span class="str">black</span>;
+}
+<span class="sel">.tarjeta h2</span> {        <span class="com">/* descendiente: h2 dentro de .tarjeta */</span>
+  <span class="prop">margin-top</span>: <span class="hl">0</span>;
+}
+<span class="sel">.tarjeta:hover</span> {     <span class="com">/* pseudo-clase: al pasar el ratón */</span>
+  <span class="prop">box-shadow</span>: <span class="hl">0 4px 12px rgba(0,0,0,.2)</span>;
+}</code></pre>
+    </div>
+    <p>Cuando dos reglas afectan al mismo elemento, gana la más específica (un id gana a una clase, una clase gana a una etiqueta); a igualdad de especificidad, gana la que aparece más abajo en el archivo. Es la "cascada" que le da nombre a CSS.</p>
+  </section>
+
+  <section class="tema" id="caja">
+    <span class="section-num">02</span>
+    <h2 class="section-title">El modelo de caja</h2>
+    <p>Todo elemento HTML es, para CSS, una caja rectangular con cuatro capas, de dentro hacia fuera: <strong>contenido</strong>, <code class="inline">padding</code> (espacio interior), <code class="inline">border</code> (borde) y <code class="inline">margin</code> (espacio exterior, entre cajas).</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="sel">*</span> {
+  <span class="prop">box-sizing</span>: <span class="str">border-box</span>; <span class="com">/* casi siempre, ver aviso debajo */</span>
+}
+<span class="sel">.tarjeta</span> {
+  <span class="prop">width</span>: <span class="hl">300px</span>;
+  <span class="prop">padding</span>: <span class="hl">16px</span>;
+  <span class="prop">border</span>: <span class="hl">2px</span> <span class="str">solid</span> <span class="hl">#333</span>;
+  <span class="prop">margin</span>: <span class="hl">0</span> <span class="str">auto</span> <span class="hl">20px</span>; <span class="com">/* auto centra horizontalmente */</span>
+}</code></pre>
+    </div>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        content-box vs. border-box
+      </div>
+      <p>Por defecto (<code class="inline">content-box</code>), <code class="inline">width</code> mide solo el contenido, y el padding/borde se <strong>suman</strong> por fuera &mdash; una caja de <code class="inline">width: 300px</code> con <code class="inline">padding: 16px</code> mide en realidad 332px. Con <code class="inline">box-sizing: border-box</code>, <code class="inline">width</code> pasa a incluir padding y borde &mdash; la caja mide exactamente 300px. Por eso casi todo el mundo pone <code class="inline">box-sizing: border-box</code> en <code class="inline">*</code> al principio de cada hoja de estilos.</p>
+    </div>
+  </section>
+
+  <section class="tema" id="flexbox">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Flexbox</h2>
+    <p>Flexbox reparte espacio en <strong>una dimensión</strong> (fila o columna). Se activa en el contenedor padre; los hijos se acomodan solos.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="sel">.barra-botones</span> {
+  <span class="prop">display</span>: <span class="str">flex</span>;
+  <span class="prop">flex-direction</span>: <span class="str">row</span>;             <span class="com">/* row (defecto) o column */</span>
+  <span class="prop">justify-content</span>: <span class="str">space-between</span>; <span class="com">/* eje principal */</span>
+  <span class="prop">align-items</span>: <span class="str">center</span>;          <span class="com">/* eje cruzado */</span>
+  <span class="prop">gap</span>: <span class="hl">12px</span>;                     <span class="com">/* hueco entre hijos, sin márgenes sueltos */</span>
+}</code></pre>
+    </div>
+    <p><code class="inline">justify-content</code> reparte el espacio <em>sobrante</em> a lo largo del eje principal (<code class="inline">flex-start</code>, <code class="inline">center</code>, <code class="inline">space-between</code>, <code class="inline">space-around</code>&hellip;); <code class="inline">align-items</code> alinea en el eje perpendicular. Es la herramienta natural para una barra de navegación, una fila de tarjetas, o centrar cualquier cosa vertical y horizontalmente a la vez (<code class="inline">justify-content: center; align-items: center;</code>).</p>
+  </section>
+
+  <section class="tema" id="grid">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Grid</h2>
+    <p>Grid reparte espacio en <strong>dos dimensiones</strong> a la vez (filas y columnas). Ideal para la estructura general de una página, o una galería de tarjetas de tamaño uniforme.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="sel">.galeria</span> {
+  <span class="prop">display</span>: <span class="str">grid</span>;
+  <span class="prop">grid-template-columns</span>: <span class="str">repeat</span>(<span class="hl">3</span>, <span class="hl">1fr</span>); <span class="com">/* 3 columnas iguales */</span>
+  <span class="prop">gap</span>: <span class="hl">16px</span>;
+}
+<span class="sel">.pagina</span> {
+  <span class="prop">display</span>: <span class="str">grid</span>;
+  <span class="prop">grid-template-columns</span>: <span class="hl">240px</span> <span class="hl">1fr</span>;  <span class="com">/* menú fijo + contenido flexible */</span>
+  <span class="prop">grid-template-rows</span>: <span class="str">auto</span> <span class="hl">1fr</span> <span class="str">auto</span>; <span class="com">/* cabecera, cuerpo, pie */</span>
+  <span class="prop">min-height</span>: <span class="hl">100vh</span>;
+}</code></pre>
+    </div>
+    <p><code class="inline">1fr</code> significa "una fracción del espacio sobrante" &mdash; <code class="inline">repeat(3, 1fr)</code> crea tres columnas exactamente iguales sin calcular porcentajes a mano. Combinar una columna fija (<code class="inline">240px</code>) con una flexible (<code class="inline">1fr</code>) es el patrón típico de menú lateral + contenido.</p>
+    <p class="small" style="color:var(--muted);font-size:14px;">Regla práctica: Flexbox para una fila o columna de cosas; Grid para la estructura general de la página o una cuadrícula de verdad.</p>
+  </section>
+
+  <section class="tema" id="posicionamiento">
+    <span class="section-num">05</span>
+    <h2 class="section-title">Posicionamiento</h2>
+    <p>La propiedad <code class="inline">position</code> saca un elemento del flujo normal de la página para colocarlo con coordenadas exactas (<code class="inline">top</code>, <code class="inline">right</code>, <code class="inline">bottom</code>, <code class="inline">left</code>). Es la base de cualquier diseño tipo cartel, donde un texto se superpone a una imagen de fondo en un punto exacto.</p>
+    <table style="border-collapse:collapse;width:100%;font-size:14px;margin:14px 0;">
+      <tr style="background:var(--line-soft);"><th style="border:1px solid var(--line);padding:6px 10px;text-align:left;font-family:'Lexend',sans-serif;">Valor</th><th style="border:1px solid var(--line);padding:6px 10px;text-align:left;font-family:'Lexend',sans-serif;">Comportamiento</th></tr>
+      <tr><td style="border:1px solid var(--line);padding:6px 10px;"><code class="inline">static</code></td><td style="border:1px solid var(--line);padding:6px 10px;">Por defecto: flujo normal, <code class="inline">top</code>/<code class="inline">left</code> no hacen nada.</td></tr>
+      <tr><td style="border:1px solid var(--line);padding:6px 10px;"><code class="inline">relative</code></td><td style="border:1px solid var(--line);padding:6px 10px;">Sigue ocupando su hueco normal, pero se desplaza visualmente desde ahí, y se convierte en referencia para hijos <code class="inline">absolute</code>.</td></tr>
+      <tr><td style="border:1px solid var(--line);padding:6px 10px;"><code class="inline">absolute</code></td><td style="border:1px solid var(--line);padding:6px 10px;">Se posiciona respecto al ancestro <code class="inline">relative</code> más cercano (o al documento, si no hay ninguno) &mdash; deja de ocupar espacio en el flujo.</td></tr>
+      <tr><td style="border:1px solid var(--line);padding:6px 10px;"><code class="inline">fixed</code></td><td style="border:1px solid var(--line);padding:6px 10px;">Como <code class="inline">absolute</code>, pero respecto a la ventana &mdash; se queda quieto al hacer scroll.</td></tr>
+    </table>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="sel">.cartel</span> {
+  <span class="prop">position</span>: <span class="str">relative</span>; <span class="com">/* ancla para el texto de dentro */</span>
+  <span class="prop">width</span>: <span class="hl">800px</span>;
+  <span class="prop">background</span>: <span class="str">url</span>(<span class="str">"fondo.jpg"</span>) <span class="str">center/cover</span>;
+}
+<span class="sel">.cartel .titulo</span> {
+  <span class="prop">position</span>: <span class="str">absolute</span>;
+  <span class="prop">top</span>: <span class="hl">40px</span>;
+  <span class="prop">left</span>: <span class="hl">50%</span>;
+  <span class="prop">transform</span>: <span class="str">translateX</span>(<span class="hl">-50%</span>); <span class="com">/* centra el texto exactamente */</span>
+}</code></pre>
+    </div>
+    <p>El truco de <code class="inline">left: 50%; transform: translateX(-50%);</code> centra un elemento de ancho desconocido: primero lo mueve al 50% del padre, luego lo retrocede la mitad de <em>su propio</em> ancho.</p>
+  </section>
+
+  <section class="tema" id="responsive">
+    <span class="section-num">06</span>
+    <h2 class="section-title">Diseño responsive</h2>
+    <p>Una página responsive se adapta a cualquier tamaño de pantalla. La herramienta principal son las <strong>media queries</strong>: bloques de CSS que solo se aplican si se cumple una condición sobre la ventana.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="sel">.menu</span> {
+  <span class="prop">display</span>: <span class="str">flex</span>;
+}
+
+<span class="hl">@media</span> (<span class="prop">max-width</span>: <span class="hl">600px</span>) {
+  <span class="sel">.menu</span> {
+    <span class="prop">flex-direction</span>: <span class="str">column</span>; <span class="com">/* en pantallas pequeñas, apila el menú */</span>
+  }
+}</code></pre>
+    </div>
+    <p>Con Flexbox y Grid, muchas veces ni siquiera hace falta media queries: propiedades como <code class="inline">flex-wrap: wrap</code> o <code class="inline">grid-template-columns: repeat(auto-fit, minmax(200px, 1fr))</code> ya reparten el contenido solas según el espacio disponible.</p>
+    <p>Usa unidades relativas cuando tenga sentido: <code class="inline">%</code> o <code class="inline">fr</code> para anchos que dependen del contenedor, <code class="inline">rem</code> para tipografía (relativa al tamaño de fuente raíz, respeta si el usuario lo ha cambiado en su navegador), y reserva <code class="inline">px</code> para cosas que de verdad deben medir siempre lo mismo (un borde de 1px, por ejemplo).</p>
+  </section>
+
+  <section class="tema" id="clonar">
+    <span class="section-num">07</span>
+    <h2 class="section-title">Clonar una página con DevTools</h2>
+    <p>Para reproducir una página existente con precisión (como pide el desafío de las páginas gemelas), las herramientas de desarrollador del navegador (<code class="inline">F12</code> o clic derecho &rarr; Inspeccionar) son el mejor punto de partida.</p>
+    <ul>
+      <li><strong>Panel Elements/Inspector:</strong> selecciona cualquier elemento con el cursor y ve su HTML exacto.</li>
+      <li><strong>Panel Styles:</strong> muestra todas las reglas CSS que afectan al elemento seleccionado, tachadas las que pierden la cascada &mdash; así se ve qué valor gana y por qué.</li>
+      <li><strong>Computed:</strong> el valor final ya calculado de cada propiedad (color exacto en <code class="inline">rgb()</code>, tamaño de fuente en <code class="inline">px</code>&hellip;), aunque en el CSS original estuviera en otra unidad.</li>
+      <li><strong>Selector de color (icono de pipeta):</strong> al hacer clic en cualquier muestra de color en el panel Styles, se puede copiar su valor exacto en hexadecimal.</li>
+    </ul>
+    <div class="checkpoint">
+      <div class="checkpoint-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        Método recomendado para una réplica exacta
+      </div>
+      <p>Ve sección por sección: inspecciona un bloque, anota sus medidas y colores exactos desde Computed, replícalo en tu propio archivo, y compara ambas páginas una al lado de la otra antes de seguir con el siguiente bloque. Cambiar el zoom del navegador a 100% en ambas pestañas evita comparaciones falsas por diferencias de escala.</p>
+    </div>
+  </section>
+
+  <footer class="end">
+    <p>Con HTML y CSS ya se puede maquetar cualquier página estática. El siguiente paso es hacerlo más rápido con un sistema de componentes ya hecho: <a href="teoria-bootstrap.html">Bootstrap 5</a>.</p>
+  </footer>
+
+</div>

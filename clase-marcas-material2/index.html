@@ -1,0 +1,521 @@
+<title>Temario MAR</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #E44D26;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #FF7A50;
+      --accent-ink: #2B0D02;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #FF7A50;
+    --accent-ink: #2B0D02;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page { max-width: 780px; margin: 0 auto; padding: 56px 24px 96px; }
+
+  header.top { margin-bottom: 36px; }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.9rem, 4.5vw, 2.5rem);
+    line-height: 1.14;
+    letter-spacing: -0.01em;
+    margin: 16px 0 8px;
+    text-wrap: balance;
+  }
+
+  .lede { color: var(--muted); font-size: 1.05rem; max-width: 62ch; margin: 0; }
+
+  .meta-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .overview-wrap { overflow-x: auto; margin-top: 8px; }
+
+  table.overview {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    font-size: 14.5px;
+  }
+
+  table.overview th {
+    text-align: left;
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 12.5px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  table.overview td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--line-soft);
+    vertical-align: top;
+  }
+
+  table.overview tr:last-child td { border-bottom: none; }
+
+  table.overview td.num { font-variant-numeric: tabular-nums; color: var(--muted); }
+
+  table.overview .block-name { font-weight: 600; }
+  table.overview .block-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 8px;
+  }
+
+  section.phase { margin-top: 56px; }
+
+  .phase-head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+  }
+
+  .phase-num {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    color: var(--accent-2);
+    font-weight: 500;
+  }
+
+  h2.phase-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 1.4rem;
+    margin: 0;
+  }
+
+  .phase-meta {
+    color: var(--muted);
+    font-size: 13.5px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    margin-left: auto;
+    white-space: nowrap;
+  }
+
+  .phase-summary {
+    color: var(--muted);
+    font-size: 15px;
+    max-width: 62ch;
+    margin: 6px 0 24px;
+  }
+
+  .session {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-top: 12px;
+    box-shadow: var(--shadow);
+    display: flex;
+    gap: 14px;
+  }
+
+  .session-chip {
+    flex: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .session-body { flex: 1; min-width: 0; }
+
+  .session h3 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.02rem;
+    font-weight: 600;
+    margin: 0 0 5px;
+  }
+
+  .session h3 a {
+    color: inherit;
+    text-decoration: none;
+    background-image: linear-gradient(var(--accent-2), var(--accent-2));
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 0% 1.5px;
+    transition: background-size 0.15s ease;
+    padding-bottom: 1px;
+  }
+
+  .session h3 a:hover,
+  .session h3 a:focus-visible {
+    color: var(--accent-2);
+    background-size: 100% 1.5px;
+  }
+
+  .session h3 a::after {
+    content: " \2197";
+    font-size: 0.8em;
+    color: var(--muted);
+  }
+
+  .session p.objetivo {
+    margin: 0 0 8px;
+    color: var(--ink);
+    font-size: 14.5px;
+  }
+
+  .session .linea {
+    font-size: 13.5px;
+    color: var(--muted);
+    margin: 4px 0 0;
+  }
+
+  .session .linea strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .session .practica {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px dashed var(--line);
+    font-size: 13.5px;
+  }
+
+  .session .practica strong { color: var(--accent-2); }
+
+  .proximamente {
+    background: var(--surface);
+    border: 1px dashed var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-top: 12px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .proximamente strong { color: var(--ink); }
+
+  .proximamente ul { margin: 8px 0 0; padding-left: 20px; }
+  .proximamente li { margin-bottom: 4px; }
+
+  footer.end {
+    margin-top: 56px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+</style>
+
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">Temario de módulo &middot; 1&ordm; curso</span>
+    <h1>Lenguajes de Marcas</h1>
+    <p class="lede">De HTML y CSS a Bootstrap y JavaScript en el navegador, con proyectos completos &mdash; galerías, formularios encadenados, minijuegos, réplicas píxel a píxel &mdash; en vez de teoría abstracta de XML. Organizado en desafíos agrupados por resultado de aprendizaje (RA).</p>
+    <div class="meta-row">
+      <span class="meta-chip">4 bloques (RA1&ndash;RA7)</span>
+      <span class="meta-chip">10 desafíos</span>
+      <span class="meta-chip">Eval. 1 + 2 + 3</span>
+    </div>
+    <p style="margin-top:16px;"><a href="../clase-general-material2/index.html" style="color:var(--accent-2);font-family:'IBM Plex Mono',monospace;font-size:13px;text-decoration:none;">&rarr; Material general: Markdown y Git desde VS Code</a></p>
+  </header>
+
+  <div class="overview-wrap">
+    <table class="overview">
+      <thead>
+        <tr>
+          <th>Bloque</th>
+          <th>% eval.</th>
+          <th>Desafíos</th>
+          <th>Días</th>
+          <th>Evaluación</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="block-name"><span class="block-dot" style="background:#E44D26"></span>RA1 + RA2</td>
+          <td class="num">34%</td>
+          <td class="num">3</td>
+          <td class="num">21</td>
+          <td class="num">Eval. 1</td>
+        </tr>
+        <tr>
+          <td class="block-name"><span class="block-dot" style="background:#1572B6"></span>RA3 + RA4</td>
+          <td class="num">33%</td>
+          <td class="num">4</td>
+          <td class="num">28</td>
+          <td class="num">Eval. 2</td>
+        </tr>
+        <tr>
+          <td class="block-name"><span class="block-dot" style="background:#D7A32E"></span>RA5 + RA6</td>
+          <td class="num">33%</td>
+          <td class="num">3</td>
+          <td class="num">21</td>
+          <td class="num">Eval. 3</td>
+        </tr>
+        <tr>
+          <td class="block-name"><span class="block-dot" style="background:#7c6bd8"></span>RA7</td>
+          <td class="num">&mdash;</td>
+          <td class="num">&mdash;</td>
+          <td class="num">&mdash;</td>
+          <td class="num">&mdash;</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="color:var(--muted);font-size:13.5px;margin-top:10px;">Encaje orientativo, puede sufrir cambios. La duración estimada de cada desafío también es aproximada y puede ajustarse según el desarrollo real del curso.</p>
+
+  <!-- BLOQUE 1: RA1+RA2 -->
+  <section class="phase">
+    <div class="phase-head">
+      <span class="phase-num">Bloque 1 &middot; 34% de la evaluación</span>
+      <h2 class="phase-title">RA1 + RA2 &middot; Fundamentos de HTML y CSS</h2>
+      <span class="phase-meta">3 desafíos &middot; 21 días de grupo &middot; Eval. 1</span>
+    </div>
+    <p class="phase-summary"><strong>RA1.</strong> Reconoce las características de lenguajes de marcas analizando e interpretando fragmentos de código. <strong>RA2.</strong> Utiliza lenguajes de marcas para la transmisión de información a través de la Web analizando la estructura de los documentos e identificando sus elementos.</p>
+
+    <h3 style="font-family:'Lexend',sans-serif;font-weight:600;font-size:1.05rem;margin:28px 0 4px;">Teoría</h3>
+    <div class="session">
+      <div class="session-chip">T0</div>
+      <div class="session-body">
+        <h3><a href="teoria-html-fundamentos.html">Fundamentos de HTML</a></h3>
+        <p class="objetivo">Estructura básica, texto y semántica, enlaces, imágenes y multimedia (audio/vídeo), tablas, formularios, y buenas prácticas de accesibilidad.</p>
+      </div>
+    </div>
+    <div class="session">
+      <div class="session-chip">T1</div>
+      <div class="session-body">
+        <h3><a href="teoria-css-fundamentos.html">Fundamentos de CSS</a></h3>
+        <p class="objetivo">Selectores y cascada, el modelo de caja, Flexbox, Grid, posicionamiento (para carteles y réplicas exactas), diseño responsive, y cómo clonar una página con las DevTools.</p>
+      </div>
+    </div>
+    <div class="session">
+      <div class="session-chip">T2</div>
+      <div class="session-body">
+        <h3><a href="teoria-bootstrap.html">Bootstrap 5</a></h3>
+        <p class="objetivo">Instalación por CDN, el sistema de rejilla de 12 columnas, breakpoints responsive, componentes comunes (navbar, cards, botones) y clases de utilidad.</p>
+      </div>
+    </div>
+
+    <h3 style="font-family:'Lexend',sans-serif;font-weight:600;font-size:1.05rem;margin:28px 0 4px;">Desafíos</h3>
+    <div class="session">
+      <div class="session-chip">D1</div>
+      <div class="session-body">
+        <h3><a href="https://github.com/poliestireno/VARIOS_2026_P/blob/main/clase-marcas-material2/privado/desafio-extensiones-vsc.md" target="_blank" rel="noopener">RA12_EXTENSIONES_VSC</a></h3>
+        <p class="practica"><strong>Duración:</strong> 7 días</p>
+      </div>
+    </div>
+    <div class="session">
+      <div class="session-chip">D2</div>
+      <div class="session-body">
+        <h3><a href="https://github.com/poliestireno/VARIOS_2026_P/blob/main/clase-marcas-material2/privado/desafio-fotos-varias.md" target="_blank" rel="noopener">RA12_FOTOS_VARIAS</a></h3>
+        <p class="practica"><strong>Duración:</strong> 7 días</p>
+      </div>
+    </div>
+    <div class="session">
+      <div class="session-chip">D3</div>
+      <div class="session-body">
+        <h3><a href="https://github.com/poliestireno/VARIOS_2026_P/blob/main/clase-marcas-material2/privado/desafio-mi-garito.md" target="_blank" rel="noopener">RA12_MI_GARITO</a></h3>
+        <p class="practica"><strong>Duración:</strong> 7 días</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOQUE 2: RA3+RA4 -->
+  <section class="phase">
+    <div class="phase-head">
+      <span class="phase-num">Bloque 2 &middot; 33% de la evaluación</span>
+      <h2 class="phase-title">RA3 + RA4 &middot; JavaScript y proyectos con formularios</h2>
+      <span class="phase-meta">4 desafíos &middot; 28 días de grupo &middot; Eval. 2</span>
+    </div>
+    <p class="phase-summary"><strong>RA3.</strong> Genera canales de contenidos analizando y utilizando tecnologías de sindicación. <strong>RA4.</strong> Establece mecanismos de validación para documentos XML utilizando métodos para definir su sintaxis y estructura. En la práctica, este bloque se centra en JavaScript en el navegador (DOM, eventos, formularios) y en profundizar el HTML/CSS del bloque 1 con proyectos más creativos.</p>
+
+    <h3 style="font-family:'Lexend',sans-serif;font-weight:600;font-size:1.05rem;margin:28px 0 4px;">Teoría</h3>
+    <div class="session">
+      <div class="session-chip">T3</div>
+      <div class="session-body">
+        <h3><a href="teoria-javascript-dom-formularios.html">JavaScript, DOM y formularios</a></h3>
+        <p class="objetivo">Variables y funciones, seleccionar elementos del DOM, eventos, leer formularios, pasar datos entre páginas (localStorage y parámetros de URL), y reproducir sonido.</p>
+      </div>
+    </div>
+
+    <h3 style="font-family:'Lexend',sans-serif;font-weight:600;font-size:1.05rem;margin:28px 0 4px;">Desafíos</h3>
+    <div class="session">
+      <div class="session-chip">D4</div>
+      <div class="session-body">
+        <h3><a href="https://github.com/poliestireno/VARIOS_2026_P/blob/main/clase-marcas-material2/privado/desafio-nca-web-english-podcast.md" target="_blank" rel="noopener">RA34_NCA_WEB_ENGLISH_PODCAST</a></h3>
+        <p class="practica"><strong>Duración:</strong> 7 días</p>
+      </div>
+    </div>
+    <div class="session">
+      <div class="session-chip">D5</div>
+      <div class="session-body">
+        <h3><a href="https://github.com/poliestireno/VARIOS_2026_P/blob/main/clase-marcas-material2/privado/desafio-form-incrementales.md" target="_blank" rel="noopener">RA34_FORM_INCREMENTALES</a></h3>
+        <p class="practica"><strong>Duración:</strong> 7 días</p>
+      </div>
+    </div>
+    <div class="session">
+      <div class="session-chip">D6</div>
+      <div class="session-body">
+        <h3><a href="https://github.com/poliestireno/VARIOS_2026_P/blob/main/clase-marcas-material2/privado/desafio-cartel-monoterminos.md" target="_blank" rel="noopener">RA34_CARTEL_MONOTERMINOS</a></h3>
+        <p class="practica"><strong>Duración:</strong> 7 días</p>
+      </div>
+    </div>
+    <div class="session">
+      <div class="session-chip">D7</div>
+      <div class="session-body">
+        <h3><a href="https://github.com/poliestireno/VARIOS_2026_P/blob/main/clase-marcas-material2/privado/desafio-la-tira-maravillosa.md" target="_blank" rel="noopener">RA34_LA_TIRA_MARAVILLOSA</a></h3>
+        <p class="practica"><strong>Duración:</strong> 7 días</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOQUE 3: RA5+RA6 -->
+  <section class="phase">
+    <div class="phase-head">
+      <span class="phase-num">Bloque 3 &middot; 33% de la evaluación</span>
+      <h2 class="phase-title">RA5 + RA6 &middot; Proyectos avanzados: réplicas y minijuegos</h2>
+      <span class="phase-meta">3 desafíos &middot; 21 días de grupo &middot; Eval. 3</span>
+    </div>
+    <p class="phase-summary"><strong>RA5.</strong> Realiza conversiones sobre documentos XML utilizando técnicas y herramientas de procesamiento. <strong>RA6.</strong> Gestiona información en formato XML analizando y utilizando tecnologías de almacenamiento y lenguajes de consulta. En la práctica, este bloque no introduce teoría nueva: combina y exige más precisión en el HTML, CSS y JavaScript ya vistos en los bloques 1 y 2 &mdash; replicar una página al detalle, o programar el estado completo de un minijuego.</p>
+
+    <h3 style="font-family:'Lexend',sans-serif;font-weight:600;font-size:1.05rem;margin:28px 0 4px;">Desafíos</h3>
+    <div class="session">
+      <div class="session-chip">D8</div>
+      <div class="session-body">
+        <h3><a href="https://github.com/poliestireno/VARIOS_2026_P/blob/main/clase-marcas-material2/privado/desafio-twin-pages.md" target="_blank" rel="noopener">RA56_TWIN_PAGES</a></h3>
+        <p class="practica"><strong>Duración:</strong> 7 días</p>
+      </div>
+    </div>
+    <div class="session">
+      <div class="session-chip">D9</div>
+      <div class="session-body">
+        <h3><a href="https://github.com/poliestireno/VARIOS_2026_P/blob/main/clase-marcas-material2/privado/desafio-penaltic-game.md" target="_blank" rel="noopener">RA56_PENALTIC_GAME</a></h3>
+        <p class="practica"><strong>Duración:</strong> 7 días</p>
+      </div>
+    </div>
+    <div class="session">
+      <div class="session-chip">D10</div>
+      <div class="session-body">
+        <h3>RA56_DESAFIO_JUGAMOS</h3>
+        <p class="practica"><strong>Duración:</strong> 7 días</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOQUE 4: RA7 -->
+  <section class="phase">
+    <div class="phase-head">
+      <span class="phase-num">Bloque 4</span>
+      <h2 class="phase-title">RA7 &middot; Sistemas empresariales de gestión de información</h2>
+      <span class="phase-meta">Sin desafíos todavía &middot; sin % asignado</span>
+    </div>
+    <p class="phase-summary"><strong>RA7.</strong> Trabaja con sistemas empresariales de gestión de información realizando tareas de importación, integración, aseguramiento y extracción de la información.</p>
+    <div class="proximamente">
+      <strong>Sin actividades definidas todavía.</strong> Este bloque no tiene actividades ni porcentaje asignado en la planificación original.
+    </div>
+  </section>
+
+  <footer class="end">
+    <p>Cada bloque se cierra en su propia evaluación: RA1+RA2 en la Eval. 1, RA3+RA4 en la Eval. 2, RA5+RA6 en la Eval. 3. El bloque RA7 todavía no tiene desafíos ni porcentaje asignado.</p>
+    <p style="margin-top:10px;">Para referencia adicional durante los desafíos: <a href="https://www.w3schools.com/Html/" target="_blank" rel="noopener">w3schools HTML</a>, <a href="https://www.w3schools.com/css/" target="_blank" rel="noopener">w3schools CSS</a>, <a href="https://www.w3schools.com/js/" target="_blank" rel="noopener">w3schools JS</a> y la <a href="https://getbootstrap.com/" target="_blank" rel="noopener">documentación de Bootstrap</a>.</p>
+    <p style="margin-top:10px;color:var(--muted);font-size:13.5px;">El enunciado completo de cada desafío vive en un repositorio privado &mdash; los enlaces de esta página solo se abren con acceso a él.</p>
+  </footer>
+
+</div>

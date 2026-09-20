@@ -1,0 +1,395 @@
+<title>JavaScript, DOM y formularios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #E44D26;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #F2A65A;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #FF7A50;
+      --accent-ink: #2B0D02;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #FF7A50;
+    --accent-ink: #2B0D02;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page { max-width: 700px; margin: 0 auto; padding: 56px 24px 96px; }
+
+  header.top { margin-bottom: 40px; }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede { color: var(--muted); font-size: 1.08rem; max-width: 62ch; margin: 0; }
+
+  .meta-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+  .term-bar { display: flex; gap: 6px; padding: 9px 12px; border-bottom: 1px solid var(--code-line); }
+  .term-bar span { width: 9px; height: 9px; border-radius: 50%; background: var(--code-line); }
+  .code-panel pre { margin: 0; padding: 16px 18px 18px; overflow-x: auto; }
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+  .code-panel .tag { color: var(--accent-2); }
+  .code-panel .str { color: #C9D96B; }
+  .code-panel .kw { color: var(--code-accent); }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .prop { color: #8FB8FF; }
+  .code-panel .hl { color: var(--code-accent); }
+  .code-panel .fn { color: #C9A8FF; }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+  .checkpoint p { margin: 0; font-size: 14px; color: var(--ink); }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+
+  nav.toc {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 20px 0 0;
+    box-shadow: var(--shadow);
+  }
+  nav.toc .toc-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 12.5px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 10px;
+  }
+  nav.toc ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 24px; }
+  nav.toc li { font-size: 14px; margin-bottom: 6px; break-inside: avoid; }
+  nav.toc a { color: var(--ink); text-decoration: none; }
+  nav.toc a:hover { color: var(--accent-2); text-decoration: underline; }
+
+  h2.section-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 1.35rem;
+    margin: 0 0 4px;
+    scroll-margin-top: 24px;
+  }
+  .section-num { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 13px; color: var(--accent-2); display: block; margin-bottom: 4px; }
+  section.tema { margin-top: 52px; padding-top: 28px; border-top: 1px solid var(--line-soft); }
+  section.tema:first-of-type { border-top: none; }
+  section.tema p { margin: 0 0 14px; }
+  section.tema ul { margin: 0 0 14px; padding-left: 22px; }
+  section.tema li { margin-bottom: 6px; }
+
+  h3.subtema { font-family: "Lexend", ui-sans-serif, system-ui, sans-serif; font-weight: 600; font-size: 1.05rem; margin: 28px 0 8px; }
+</style>
+
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">RA3 + RA4 &middot; Teoría</span>
+    <h1>JavaScript, DOM y formularios</h1>
+    <p class="lede">Cómo hacer que una página reaccione: seleccionar elementos, escuchar eventos, leer formularios, pasar datos de una página a otra, y reproducir sonido &mdash; con JavaScript puro, sin frameworks.</p>
+    <div class="meta-row">
+      <span class="meta-chip">RA3 + RA4</span>
+      <span class="meta-chip">DOM + eventos</span>
+      <span class="meta-chip">localStorage</span>
+    </div>
+    <p style="margin-top:16px;"><a href="index.html" style="color:var(--accent-2);font-family:'IBM Plex Mono',monospace;font-size:13px;text-decoration:none;">&larr; Volver al índice del módulo</a></p>
+  </header>
+
+  <nav class="toc">
+    <p class="toc-title">Contenido</p>
+    <ol>
+      <li><a href="#basico">Variables y funciones</a></li>
+      <li><a href="#dom">Seleccionar elementos: el DOM</a></li>
+      <li><a href="#eventos">Eventos</a></li>
+      <li><a href="#formularios">Leer formularios</a></li>
+      <li><a href="#pasar-datos">Pasar datos entre páginas</a></li>
+      <li><a href="#audio">Reproducir sonido</a></li>
+    </ol>
+  </nav>
+
+  <section class="tema" id="basico">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Variables y funciones</h2>
+    <p>El script se enlaza con <code class="inline">&lt;script src="app.js"&gt;&lt;/script&gt;</code>, normalmente justo antes de <code class="inline">&lt;/body&gt;</code> &mdash; así, cuando se ejecuta, el HTML de encima ya existe en la página.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">let</span> <span class="prop">puntos</span> = <span class="hl">0</span>;              <span class="com">// variable que puede cambiar</span>
+<span class="kw">const</span> <span class="prop">MAX_INTENTOS</span> = <span class="hl">4</span>;     <span class="com">// constante, no se reasigna</span>
+
+<span class="kw">function</span> <span class="fn">sumarPunto</span>() {
+  <span class="prop">puntos</span> = <span class="prop">puntos</span> + <span class="hl">1</span>;
+  <span class="kw">console</span>.<span class="fn">log</span>(<span class="str">"Puntos:"</span>, <span class="prop">puntos</span>);
+}</code></pre>
+    </div>
+    <p><code class="inline">console.log()</code> es la herramienta de depuración más usada: escribe en la consola del navegador (pestaña <em>Console</em> de las DevTools, <code class="inline">F12</code>), sin interrumpir la página como haría un <code class="inline">alert()</code>.</p>
+  </section>
+
+  <section class="tema" id="dom">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Seleccionar elementos: el DOM</h2>
+    <p>El DOM (Document Object Model) es la representación del HTML como un árbol de objetos que JavaScript puede leer y modificar. <code class="inline">document.querySelector()</code> busca el primer elemento que coincida con un selector CSS &mdash; el mismo tipo de selector que en una hoja de estilos.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">const</span> <span class="prop">titulo</span> = <span class="kw">document</span>.<span class="fn">querySelector</span>(<span class="str">"h1"</span>);
+<span class="kw">const</span> <span class="prop">tarjeta</span> = <span class="kw">document</span>.<span class="fn">querySelector</span>(<span class="str">".tarjeta"</span>);
+<span class="kw">const</span> <span class="prop">marcador</span> = <span class="kw">document</span>.<span class="fn">querySelector</span>(<span class="str">"#marcador"</span>);
+<span class="kw">const</span> <span class="prop">todasLasTarjetas</span> = <span class="kw">document</span>.<span class="fn">querySelectorAll</span>(<span class="str">".tarjeta"</span>); <span class="com">// varias, como una lista</span>
+
+<span class="prop">marcador</span>.<span class="prop">textContent</span> = <span class="str">"3 - 2"</span>;        <span class="com">// cambia el texto</span>
+<span class="prop">tarjeta</span>.<span class="prop">style</span>.<span class="prop">display</span> = <span class="str">"none"</span>;   <span class="com">// la oculta</span>
+<span class="prop">tarjeta</span>.<span class="fn">classList</span>.<span class="fn">add</span>(<span class="str">"activa"</span>);     <span class="com">// añade una clase CSS</span>
+<span class="prop">tarjeta</span>.<span class="fn">classList</span>.<span class="fn">toggle</span>(<span class="str">"parpadea"</span>);  <span class="com">// la quita si la tiene, la pone si no</span></code></pre>
+    </div>
+    <p><code class="inline">classList.toggle()</code> es especialmente útil para animaciones con CSS: se define la animación (por ejemplo, un parpadeo) en una clase CSS, y JavaScript solo añade o quita esa clase según haga falta.</p>
+  </section>
+
+  <section class="tema" id="eventos">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Eventos</h2>
+    <p><code class="inline">addEventListener()</code> ejecuta una función cuando ocurre algo &mdash; un clic, el envío de un formulario, que termine de cargar la página&hellip;</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">const</span> <span class="prop">porteria</span> = <span class="kw">document</span>.<span class="fn">querySelector</span>(<span class="str">".porteria"</span>);
+
+<span class="prop">porteria</span>.<span class="fn">addEventListener</span>(<span class="str">"click"</span>, <span class="kw">function</span> (<span class="prop">evento</span>) {
+  <span class="kw">console</span>.<span class="fn">log</span>(<span class="str">"¡Gol!"</span>);
+});
+
+<span class="com">// forma corta, con función flecha</span>
+<span class="prop">porteria</span>.<span class="fn">addEventListener</span>(<span class="str">"click"</span>, () =&gt; {
+  <span class="prop">puntos</span>++;
+});</code></pre>
+    </div>
+    <p>Los dos ejemplos hacen lo mismo; la función flecha (<code class="inline">() =&gt; {}</code>) es solo una forma más corta de escribir una función, muy habitual como manejador de eventos.</p>
+  </section>
+
+  <section class="tema" id="formularios">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Leer formularios</h2>
+    <p>Para leer lo que el usuario ha escrito, primero se evita que el formulario recargue la página (<code class="inline">preventDefault()</code>), y después se lee cada campo por su <code class="inline">value</code>.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">const</span> <span class="prop">form</span> = <span class="kw">document</span>.<span class="fn">querySelector</span>(<span class="str">"form"</span>);
+
+<span class="prop">form</span>.<span class="fn">addEventListener</span>(<span class="str">"submit"</span>, (<span class="prop">evento</span>) =&gt; {
+  <span class="prop">evento</span>.<span class="fn">preventDefault</span>();  <span class="com">// evita que la página se recargue</span>
+
+  <span class="kw">const</span> <span class="prop">nombre</span> = <span class="kw">document</span>.<span class="fn">querySelector</span>(<span class="str">"#nombre"</span>).<span class="prop">value</span>;
+  <span class="kw">const</span> <span class="prop">clave</span> = <span class="kw">document</span>.<span class="fn">querySelector</span>(<span class="str">"#clave"</span>).<span class="prop">value</span>;
+
+  <span class="kw">console</span>.<span class="fn">log</span>(<span class="str">`Hola </span><span class="hl">${</span><span class="prop">nombre</span><span class="hl">}</span><span class="str">`</span>);
+});</code></pre>
+    </div>
+    <p>Las comillas invertidas (<code class="inline">`...`</code>) crean una <em>template string</em>: dentro se puede insertar cualquier variable con <code class="inline">${variable}</code>, sin concatenar con <code class="inline">+</code>.</p>
+  </section>
+
+  <section class="tema" id="pasar-datos">
+    <span class="section-num">05</span>
+    <h2 class="section-title">Pasar datos entre páginas</h2>
+    <p>Cuando el "siguiente paso" es otro archivo <code class="inline">.html</code> (navegación real, no una sola página que cambia de vista), las variables de JavaScript no sobreviven al cambio de página &mdash; hace falta guardarlas en algún sitio que si sobreviva.</p>
+    <h3 class="subtema">localStorage</h3>
+    <p>Guarda pares clave/valor en el navegador, que persisten aunque se cierre la pestaña. Solo admite texto, así que los datos que no sean cadenas se convierten con <code class="inline">JSON.stringify()</code> / <code class="inline">JSON.parse()</code>.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="com">// página 1: guardar</span>
+<span class="kw">const</span> <span class="prop">datos</span> = { <span class="prop">nombre</span>: <span class="str">"Ana"</span>, <span class="prop">contador1</span>: <span class="hl">5</span> };
+<span class="kw">localStorage</span>.<span class="fn">setItem</span>(<span class="str">"miApp"</span>, <span class="kw">JSON</span>.<span class="fn">stringify</span>(<span class="prop">datos</span>));
+<span class="kw">window</span>.<span class="prop">location</span>.<span class="prop">href</span> = <span class="str">"pagina2.html"</span>; <span class="com">// navega a la siguiente página</span>
+
+<span class="com">// página 2: leer y ampliar</span>
+<span class="kw">const</span> <span class="prop">datosPrevios</span> = <span class="kw">JSON</span>.<span class="fn">parse</span>(<span class="kw">localStorage</span>.<span class="fn">getItem</span>(<span class="str">"miApp"</span>));
+<span class="prop">datosPrevios</span>.<span class="prop">contador2</span> = <span class="hl">21</span>;
+<span class="kw">localStorage</span>.<span class="fn">setItem</span>(<span class="str">"miApp"</span>, <span class="kw">JSON</span>.<span class="fn">stringify</span>(<span class="prop">datosPrevios</span>));</code></pre>
+    </div>
+    <h3 class="subtema">Parámetros en la URL</h3>
+    <p>Alternativa sin guardar nada en el navegador: mandar los datos como parte de la propia URL (<code class="inline">?nombre=Ana&amp;edad=20</code>), y leerlos con <code class="inline">URLSearchParams</code>.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">const</span> <span class="prop">parametros</span> = <span class="kw">new</span> <span class="fn">URLSearchParams</span>(<span class="kw">window</span>.<span class="prop">location</span>.<span class="prop">search</span>);
+<span class="kw">const</span> <span class="prop">nombre</span> = <span class="prop">parametros</span>.<span class="fn">get</span>(<span class="str">"nombre"</span>); <span class="com">// "Ana"</span></code></pre>
+    </div>
+    <div class="checkpoint">
+      <div class="checkpoint-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        ¿Cuál usar?
+      </div>
+      <p><code class="inline">localStorage</code> es más cómodo cuantos más datos se acumulan (no hay que arrastrar una URL cada vez más larga entre 4 páginas), y no muestra la información en la barra de direcciones. Los parámetros de URL son más simples para un dato suelto y permiten compartir el enlace ya relleno.</p>
+    </div>
+  </section>
+
+  <section class="tema" id="audio">
+    <span class="section-num">06</span>
+    <h2 class="section-title">Reproducir sonido</h2>
+    <p>Más allá de la etiqueta <code class="inline">&lt;audio controls&gt;</code> (ver <a href="teoria-html-fundamentos.html#imagenes">Fundamentos de HTML</a>), JavaScript puede lanzar un sonido corto en el momento justo &mdash; por ejemplo, un gol o una parada en un minijuego.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">const</span> <span class="prop">sonidoGol</span> = <span class="kw">new</span> <span class="fn">Audio</span>(<span class="str">"sonidos/gol.mp3"</span>);
+
+<span class="fn">porteria</span>.<span class="fn">addEventListener</span>(<span class="str">"click"</span>, () =&gt; {
+  <span class="prop">sonidoGol</span>.<span class="fn">currentTime</span> = <span class="hl">0</span>; <span class="com">// rebobina, por si sonaba de un clic anterior</span>
+  <span class="prop">sonidoGol</span>.<span class="fn">play</span>();
+});</code></pre>
+    </div>
+    <p><code class="inline">currentTime = 0</code> antes de <code class="inline">play()</code> evita que, si el usuario dispara varias veces seguidas muy rápido, el sonido se quede a medias en vez de volver a sonar desde el principio.</p>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Autoplay bloqueado
+      </div>
+      <p>La mayoría de navegadores bloquean reproducir audio automáticamente al cargar la página, sin que el usuario haya interactuado antes. Si el sonido no sale al probarlo, comprueba que se está lanzando dentro de un evento de clic (o similar), no en el primer <code class="inline">load</code> de la página.</p>
+    </div>
+  </section>
+
+  <footer class="end">
+    <p>Con esto ya se puede construir cualquiera de los desafíos del módulo: formularios encadenados, un minijuego con estado y sonido, o una réplica interactiva de una página real.</p>
+  </footer>
+
+</div>

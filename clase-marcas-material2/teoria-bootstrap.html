@@ -1,0 +1,387 @@
+<title>Bootstrap 5</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #E44D26;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #F2A65A;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #FF7A50;
+      --accent-ink: #2B0D02;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #FF7A50;
+    --accent-ink: #2B0D02;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page { max-width: 700px; margin: 0 auto; padding: 56px 24px 96px; }
+
+  header.top { margin-bottom: 40px; }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede { color: var(--muted); font-size: 1.08rem; max-width: 62ch; margin: 0; }
+
+  .meta-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+  .term-bar { display: flex; gap: 6px; padding: 9px 12px; border-bottom: 1px solid var(--code-line); }
+  .term-bar span { width: 9px; height: 9px; border-radius: 50%; background: var(--code-line); }
+  .code-panel pre { margin: 0; padding: 16px 18px 18px; overflow-x: auto; }
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+  .code-panel .tag { color: var(--accent-2); }
+  .code-panel .str { color: #C9D96B; }
+  .code-panel .kw { color: var(--code-accent); }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .prop { color: #8FB8FF; }
+  .code-panel .hl { color: var(--code-accent); }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+  .checkpoint p { margin: 0; font-size: 14px; color: var(--ink); }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+
+  nav.toc {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 20px 0 0;
+    box-shadow: var(--shadow);
+  }
+  nav.toc .toc-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 12.5px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 10px;
+  }
+  nav.toc ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 24px; }
+  nav.toc li { font-size: 14px; margin-bottom: 6px; break-inside: avoid; }
+  nav.toc a { color: var(--ink); text-decoration: none; }
+  nav.toc a:hover { color: var(--accent-2); text-decoration: underline; }
+
+  h2.section-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 1.35rem;
+    margin: 0 0 4px;
+    scroll-margin-top: 24px;
+  }
+  .section-num { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 13px; color: var(--accent-2); display: block; margin-bottom: 4px; }
+  section.tema { margin-top: 52px; padding-top: 28px; border-top: 1px solid var(--line-soft); }
+  section.tema:first-of-type { border-top: none; }
+  section.tema p { margin: 0 0 14px; }
+  section.tema ul { margin: 0 0 14px; padding-left: 22px; }
+  section.tema li { margin-bottom: 6px; }
+
+  h3.subtema { font-family: "Lexend", ui-sans-serif, system-ui, sans-serif; font-weight: 600; font-size: 1.05rem; margin: 28px 0 8px; }
+
+  table.demo { border-collapse: collapse; width: 100%; font-size: 14px; margin: 14px 0; }
+  table.demo th, table.demo td { border: 1px solid var(--line); padding: 6px 10px; text-align: left; }
+  table.demo th { background: var(--line-soft); font-family: "Lexend", sans-serif; font-weight: 600; }
+  table.demo code { font-size: 0.85em; }
+</style>
+
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">RA1 + RA2 &middot; Teoría</span>
+    <h1>Bootstrap 5</h1>
+    <p class="lede">Un sistema de rejilla, componentes ya hechos (navbar, tarjetas, botones&hellip;) y clases de utilidad, para maquetar un sitio responsive de varias páginas sin escribir CSS desde cero.</p>
+    <div class="meta-row">
+      <span class="meta-chip">RA1 + RA2</span>
+      <span class="meta-chip">Grid de 12 columnas</span>
+      <span class="meta-chip">Sin escribir JS propio</span>
+    </div>
+    <p style="margin-top:16px;"><a href="index.html" style="color:var(--accent-2);font-family:'IBM Plex Mono',monospace;font-size:13px;text-decoration:none;">&larr; Volver al índice del módulo</a></p>
+  </header>
+
+  <nav class="toc">
+    <p class="toc-title">Contenido</p>
+    <ol>
+      <li><a href="#instalacion">Instalación por CDN</a></li>
+      <li><a href="#rejilla">El sistema de rejilla</a></li>
+      <li><a href="#breakpoints">Breakpoints responsive</a></li>
+      <li><a href="#componentes">Componentes comunes</a></li>
+      <li><a href="#utilidades">Clases de utilidad</a></li>
+      <li><a href="#consejos">Consejos finales</a></li>
+    </ol>
+  </nav>
+
+  <section class="tema" id="instalacion">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Instalación por CDN</h2>
+    <p>La forma más rápida de usar Bootstrap es enlazarlo desde un CDN, sin instalar nada: una línea de CSS en el <code class="inline">&lt;head&gt;</code>, y una de JavaScript justo antes de cerrar <code class="inline">&lt;/body&gt;</code> (necesaria para los componentes interactivos: menús desplegables, modales&hellip;).</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="tag">&lt;head&gt;</span>
+  ...
+  <span class="tag">&lt;link</span> <span class="prop">href</span>=<span class="str">"https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"</span> <span class="prop">rel</span>=<span class="str">"stylesheet"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/head&gt;</span>
+<span class="tag">&lt;body&gt;</span>
+  ...
+  <span class="tag">&lt;script</span> <span class="prop">src</span>=<span class="str">"https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"</span><span class="tag">&gt;</span><span class="tag">&lt;/script&gt;</span>
+<span class="tag">&lt;/body&gt;</span></code></pre>
+    </div>
+    <p>A partir de ahí, Bootstrap funciona con <strong>clases CSS</strong> sobre HTML normal &mdash; no hay que aprender una sintaxis nueva, solo memorizar (o buscar) los nombres de clase adecuados.</p>
+  </section>
+
+  <section class="tema" id="rejilla">
+    <span class="section-num">02</span>
+    <h2 class="section-title">El sistema de rejilla</h2>
+    <p>Bootstrap divide el ancho disponible en <strong>12 columnas</strong>. Tres niveles anidados: <code class="inline">container</code> (centra y limita el ancho máximo) &rarr; <code class="inline">row</code> (una fila) &rarr; <code class="inline">col-*</code> (cuánto ocupa cada columna, de 1 a 12).</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="tag">&lt;div</span> <span class="prop">class</span>=<span class="str">"container"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;div</span> <span class="prop">class</span>=<span class="str">"row"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;div</span> <span class="prop">class</span>=<span class="str">"col-4"</span><span class="tag">&gt;</span>Un tercio<span class="tag">&lt;/div&gt;</span>
+    <span class="tag">&lt;div</span> <span class="prop">class</span>=<span class="str">"col-8"</span><span class="tag">&gt;</span>Dos tercios<span class="tag">&lt;/div&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+  <span class="tag">&lt;div</span> <span class="prop">class</span>=<span class="str">"row"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;div</span> <span class="prop">class</span>=<span class="str">"col"</span><span class="tag">&gt;</span>Igual<span class="tag">&lt;/div&gt;</span>
+    <span class="tag">&lt;div</span> <span class="prop">class</span>=<span class="str">"col"</span><span class="tag">&gt;</span>Igual<span class="tag">&lt;/div&gt;</span>
+    <span class="tag">&lt;div</span> <span class="prop">class</span>=<span class="str">"col"</span><span class="tag">&gt;</span>Igual<span class="tag">&lt;/div&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;/div&gt;</span></code></pre>
+    </div>
+    <p><code class="inline">col-4</code> + <code class="inline">col-8</code> suman 12: el primer bloque ocupa un tercio, el segundo dos tercios. Un <code class="inline">col</code> sin número reparte el espacio a partes iguales entre todos los que haya en esa fila.</p>
+  </section>
+
+  <section class="tema" id="breakpoints">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Breakpoints responsive</h2>
+    <p>Cada clase <code class="inline">col-*</code> tiene variantes con infijo de tamaño de pantalla &mdash; se pueden combinar varias en el mismo elemento, y cada una manda a partir de su ancho mínimo hacia arriba (mobile-first).</p>
+    <table class="demo">
+      <tr><th>Infijo</th><th>Se activa desde&hellip;</th></tr>
+      <tr><td><code class="inline">col-</code></td><td>Siempre (móvil incluido).</td></tr>
+      <tr><td><code class="inline">col-sm-</code></td><td>&ge; 576px.</td></tr>
+      <tr><td><code class="inline">col-md-</code></td><td>&ge; 768px (tablet).</td></tr>
+      <tr><td><code class="inline">col-lg-</code></td><td>&ge; 992px (portátil).</td></tr>
+      <tr><td><code class="inline">col-xl-</code></td><td>&ge; 1200px (escritorio grande).</td></tr>
+    </table>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="tag">&lt;div</span> <span class="prop">class</span>=<span class="str">"col-12 col-md-6 col-lg-4"</span><span class="tag">&gt;</span>Tarjeta<span class="tag">&lt;/div&gt;</span></code></pre>
+    </div>
+    <p>Esta tarjeta ocupa todo el ancho en móvil (<code class="inline">col-12</code>), la mitad en tablet (<code class="inline">col-md-6</code>, dos por fila) y un tercio en pantallas grandes (<code class="inline">col-lg-4</code>, tres por fila) &mdash; sin escribir una sola media query.</p>
+  </section>
+
+  <section class="tema" id="componentes">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Componentes comunes</h2>
+    <h3 class="subtema">Navbar</h3>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="tag">&lt;nav</span> <span class="prop">class</span>=<span class="str">"navbar navbar-expand-lg navbar-dark bg-dark"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;div</span> <span class="prop">class</span>=<span class="str">"container"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;a</span> <span class="prop">class</span>=<span class="str">"navbar-brand"</span> <span class="prop">href</span>=<span class="str">"index.html"</span><span class="tag">&gt;</span>Mi Garito<span class="tag">&lt;/a&gt;</span>
+    <span class="tag">&lt;div</span> <span class="prop">class</span>=<span class="str">"navbar-nav"</span><span class="tag">&gt;</span>
+      <span class="tag">&lt;a</span> <span class="prop">class</span>=<span class="str">"nav-link"</span> <span class="prop">href</span>=<span class="str">"fiesta.html"</span><span class="tag">&gt;</span>La fiesta<span class="tag">&lt;/a&gt;</span>
+    <span class="tag">&lt;/div&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;/nav&gt;</span></code></pre>
+    </div>
+    <h3 class="subtema">Card (tarjeta)</h3>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="tag">&lt;div</span> <span class="prop">class</span>=<span class="str">"card"</span> <span class="prop">style</span>=<span class="str">"width: 18rem;"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;img</span> <span class="prop">src</span>=<span class="str">"cartel.jpg"</span> <span class="prop">class</span>=<span class="str">"card-img-top"</span> <span class="prop">alt</span>=<span class="str">"Cartel de la fiesta"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;div</span> <span class="prop">class</span>=<span class="str">"card-body"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;h5</span> <span class="prop">class</span>=<span class="str">"card-title"</span><span class="tag">&gt;</span>Noche de Halloween<span class="tag">&lt;/h5&gt;</span>
+    <span class="tag">&lt;p</span> <span class="prop">class</span>=<span class="str">"card-text"</span><span class="tag">&gt;</span>31 de octubre, 23:00.<span class="tag">&lt;/p&gt;</span>
+    <span class="tag">&lt;a</span> <span class="prop">href</span>=<span class="str">"#"</span> <span class="prop">class</span>=<span class="str">"btn btn-primary"</span><span class="tag">&gt;</span>Reservar<span class="tag">&lt;/a&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;/div&gt;</span></code></pre>
+    </div>
+    <p>Los botones (<code class="inline">btn</code>) llevan un color de la paleta del tema: <code class="inline">btn-primary</code>, <code class="inline">btn-danger</code>, <code class="inline">btn-success</code>, <code class="inline">btn-outline-dark</code> (solo borde)&hellip; La lista completa de componentes (modales, acordeones, carruseles, formularios con validación) está en la <a href="https://getbootstrap.com/docs/5.3/components/" target="_blank" rel="noopener">documentación oficial</a>.</p>
+  </section>
+
+  <section class="tema" id="utilidades">
+    <span class="section-num">05</span>
+    <h2 class="section-title">Clases de utilidad</h2>
+    <p>Además de componentes completos, Bootstrap trae cientos de clases sueltas de una sola propiedad &mdash; útiles para ajustes rápidos sin salir del HTML ni tocar una hoja de estilos.</p>
+    <table class="demo">
+      <tr><th>Clase</th><th>Equivale a</th></tr>
+      <tr><td><code class="inline">d-flex</code></td><td><code class="inline">display: flex</code></td></tr>
+      <tr><td><code class="inline">mt-3</code> / <code class="inline">mb-3</code> / <code class="inline">m-3</code></td><td>margen arriba / abajo / en todos los lados (escala 0&ndash;5)</td></tr>
+      <tr><td><code class="inline">p-4</code></td><td><code class="inline">padding</code> en los cuatro lados (escala 0&ndash;5)</td></tr>
+      <tr><td><code class="inline">text-center</code></td><td><code class="inline">text-align: center</code></td></tr>
+      <tr><td><code class="inline">fw-bold</code></td><td><code class="inline">font-weight: bold</code></td></tr>
+      <tr><td><code class="inline">rounded</code></td><td>esquinas redondeadas</td></tr>
+      <tr><td><code class="inline">shadow</code></td><td>sombra suave</td></tr>
+    </table>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="tag">&lt;div</span> <span class="prop">class</span>=<span class="str">"d-flex justify-content-center p-4 mt-3 rounded shadow"</span><span class="tag">&gt;</span>
+  Centrado, con aire y sombra &mdash; sin abrir un archivo .css
+<span class="tag">&lt;/div&gt;</span></code></pre>
+    </div>
+  </section>
+
+  <section class="tema" id="consejos">
+    <span class="section-num">06</span>
+    <h2 class="section-title">Consejos finales</h2>
+    <ul>
+      <li>No hace falta memorizar las clases: la <a href="https://getbootstrap.com/docs/5.3/" target="_blank" rel="noopener">documentación oficial</a> tiene ejemplos de copiar y pegar para cada componente.</li>
+      <li>Un sitio de varias páginas queda más coherente si la navbar y el pie de página se repiten <strong>idénticos</strong> en todas ellas &mdash; cópialos tal cual entre archivos.</li>
+      <li>Bootstrap no impide usar CSS propio encima &mdash; enlaza tu propia hoja de estilos <em>después</em> de la de Bootstrap para poder sobreescribir lo que haga falta.</li>
+      <li>El grid es <em>mobile-first</em>: diseña primero pensando en móvil (una columna, <code class="inline">col-12</code>) y añade breakpoints más grandes solo donde de verdad aporten algo.</li>
+    </ul>
+  </section>
+
+  <footer class="end">
+    <p>Con HTML, CSS y Bootstrap ya se puede montar cualquier sitio estático de varias páginas. El siguiente bloque añade interactividad real con <a href="teoria-javascript-dom-formularios.html">JavaScript en el navegador</a>.</p>
+  </footer>
+
+</div>

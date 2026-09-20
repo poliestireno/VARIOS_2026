@@ -1,0 +1,427 @@
+<title>Fundamentos de HTML</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F5F6FA;
+    --surface: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #5B6478;
+    --accent: #E44D26;
+    --accent-ink: #FFFFFF;
+    --accent-2: #0F8B8D;
+    --line: #DDE1EA;
+    --line-soft: #E9ECF3;
+    --code-bg: #171B26;
+    --code-ink: #E7E9F2;
+    --code-muted: #8890A6;
+    --code-accent: #F2A65A;
+    --code-line: #2A2F3D;
+    --shadow: 0 1px 2px rgba(28, 35, 51, 0.06), 0 6px 16px rgba(28, 35, 51, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12141C;
+      --surface: #1A1E29;
+      --ink: #E7E9F2;
+      --muted: #9AA1B4;
+      --accent: #FF7A50;
+      --accent-ink: #2B0D02;
+      --accent-2: #35C2BE;
+      --line: #2B3040;
+      --line-soft: #232838;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12141C;
+    --surface: #1A1E29;
+    --ink: #E7E9F2;
+    --muted: #9AA1B4;
+    --accent: #FF7A50;
+    --accent-ink: #2B0D02;
+    --accent-2: #35C2BE;
+    --line: #2B3040;
+    --line-soft: #232838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page { max-width: 700px; margin: 0 auto; padding: 56px 24px 96px; }
+
+  header.top { margin-bottom: 40px; }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+  }
+
+  .lede { color: var(--muted); font-size: 1.08rem; max-width: 62ch; margin: 0; }
+
+  .meta-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+
+  .meta-chip {
+    font-size: 13px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  code.inline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+
+  .code-panel {
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+    border-radius: 8px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+  .term-bar { display: flex; gap: 6px; padding: 9px 12px; border-bottom: 1px solid var(--code-line); }
+  .term-bar span { width: 9px; height: 9px; border-radius: 50%; background: var(--code-line); }
+  .code-panel pre { margin: 0; padding: 16px 18px 18px; overflow-x: auto; }
+  .code-panel code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--code-ink);
+    white-space: pre;
+  }
+  .code-panel .tag { color: var(--accent-2); }
+  .code-panel .str { color: #C9D96B; }
+  .code-panel .kw { color: var(--code-accent); }
+  .code-panel .com { color: var(--code-muted); font-style: italic; }
+  .code-panel .prop { color: #8FB8FF; }
+  .code-panel .hl { color: var(--code-accent); }
+
+  .callout {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+  .callout .callout-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  .callout .callout-title svg { width: 16px; height: 16px; flex: none; }
+  .callout p { margin: 0 0 8px; font-size: 14.5px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .checkpoint {
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+  .checkpoint .checkpoint-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--accent-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+  .checkpoint .checkpoint-title svg { width: 15px; height: 15px; flex: none; }
+  .checkpoint p { margin: 0; font-size: 14px; color: var(--ink); }
+
+  footer.end {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a { color: var(--accent-2); }
+
+  nav.toc {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 20px 0 0;
+    box-shadow: var(--shadow);
+  }
+  nav.toc .toc-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 12.5px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 10px;
+  }
+  nav.toc ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 24px; }
+  nav.toc li { font-size: 14px; margin-bottom: 6px; break-inside: avoid; }
+  nav.toc a { color: var(--ink); text-decoration: none; }
+  nav.toc a:hover { color: var(--accent-2); text-decoration: underline; }
+
+  h2.section-title {
+    font-family: "Lexend", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 1.35rem;
+    margin: 0 0 4px;
+    scroll-margin-top: 24px;
+  }
+  .section-num { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 13px; color: var(--accent-2); display: block; margin-bottom: 4px; }
+  section.tema { margin-top: 52px; padding-top: 28px; border-top: 1px solid var(--line-soft); }
+  section.tema:first-of-type { border-top: none; }
+  section.tema p { margin: 0 0 14px; }
+  section.tema ul { margin: 0 0 14px; padding-left: 22px; }
+  section.tema li { margin-bottom: 6px; }
+
+  h3.subtema { font-family: "Lexend", ui-sans-serif, system-ui, sans-serif; font-weight: 600; font-size: 1.05rem; margin: 28px 0 8px; }
+
+  table.demo { border-collapse: collapse; width: 100%; font-size: 14px; margin: 14px 0; }
+  table.demo th, table.demo td { border: 1px solid var(--line); padding: 6px 10px; text-align: left; }
+  table.demo th { background: var(--line-soft); font-family: "Lexend", sans-serif; font-weight: 600; }
+</style>
+
+<div class="page">
+
+  <header class="top">
+    <span class="eyebrow">RA1 + RA2 &middot; Teoría</span>
+    <h1>Fundamentos de HTML</h1>
+    <p class="lede">La estructura de una página web: etiquetas, semántica, texto, imágenes, tablas y formularios &mdash; lo mínimo para que cualquier desafío del módulo tenga un esqueleto correcto.</p>
+    <div class="meta-row">
+      <span class="meta-chip">RA1 + RA2</span>
+      <span class="meta-chip">Estructura y semántica</span>
+      <span class="meta-chip">Base de todos los desafíos</span>
+    </div>
+    <p style="margin-top:16px;"><a href="index.html" style="color:var(--accent-2);font-family:'IBM Plex Mono',monospace;font-size:13px;text-decoration:none;">&larr; Volver al índice del módulo</a></p>
+  </header>
+
+  <nav class="toc">
+    <p class="toc-title">Contenido</p>
+    <ol>
+      <li><a href="#estructura">Estructura básica</a></li>
+      <li><a href="#texto">Texto y semántica</a></li>
+      <li><a href="#enlaces">Enlaces y navegación</a></li>
+      <li><a href="#imagenes">Imágenes y multimedia</a></li>
+      <li><a href="#tablas">Tablas</a></li>
+      <li><a href="#formularios">Formularios</a></li>
+      <li><a href="#buenas-practicas">Buenas prácticas</a></li>
+    </ol>
+  </nav>
+
+  <section class="tema" id="estructura">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Estructura básica</h2>
+    <p>Todo documento HTML5 empieza con el mismo esqueleto: el <code class="inline">&lt;!DOCTYPE html&gt;</code> le dice al navegador que interprete la página en modo estándar, y dentro de <code class="inline">&lt;html&gt;</code> se separan los metadatos (<code class="inline">&lt;head&gt;</code>) del contenido visible (<code class="inline">&lt;body&gt;</code>).</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="kw">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;html</span> <span class="prop">lang</span>=<span class="str">"es"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;head&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="prop">charset</span>=<span class="str">"UTF-8"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="prop">name</span>=<span class="str">"viewport"</span> <span class="prop">content</span>=<span class="str">"width=device-width, initial-scale=1.0"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;title&gt;</span>Mi página<span class="tag">&lt;/title&gt;</span>
+<span class="tag">&lt;/head&gt;</span>
+<span class="tag">&lt;body&gt;</span>
+  <span class="tag">&lt;h1&gt;</span>Hola<span class="tag">&lt;/h1&gt;</span>
+<span class="tag">&lt;/body&gt;</span>
+<span class="tag">&lt;/html&gt;</span></code></pre>
+    </div>
+    <p>El <code class="inline">lang="es"</code> del <code class="inline">&lt;html&gt;</code> no es decorativo: se lo indica a lectores de pantalla y a herramientas de traducción. El <code class="inline">viewport</code> es imprescindible para que la página se vea bien en móvil &mdash; sin él, el navegador móvil simula una pantalla de escritorio y hace zoom-out.</p>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Atajo en VS Code
+      </div>
+      <p>Con la extensión Emmet (incluida por defecto en VS Code), escribe <code class="inline">!</code> al principio de un archivo <code class="inline">.html</code> vacío y pulsa Tab &mdash; genera todo este esqueleto automáticamente.</p>
+    </div>
+  </section>
+
+  <section class="tema" id="texto">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Texto y semántica</h2>
+    <p>Los encabezados (<code class="inline">h1</code> a <code class="inline">h6</code>) forman una jerarquía &mdash; un único <code class="inline">h1</code> por página, y el resto en orden descendente, sin saltarse niveles solo por el tamaño de letra. Los párrafos van en <code class="inline">&lt;p&gt;</code>, y las listas en <code class="inline">&lt;ul&gt;</code> (sin orden) u <code class="inline">&lt;ol&gt;</code> (numerada), cada elemento como <code class="inline">&lt;li&gt;</code>.</p>
+    <p>Además de las etiquetas de toda la vida (<code class="inline">div</code>, <code class="inline">span</code>), HTML5 añade etiquetas <strong>semánticas</strong> que describen el papel de cada bloque en vez de ser contenedores genéricos:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="tag">&lt;header&gt;</span>Cabecera con el logo y el título<span class="tag">&lt;/header&gt;</span>
+<span class="tag">&lt;nav&gt;</span>Menú de navegación entre páginas<span class="tag">&lt;/nav&gt;</span>
+<span class="tag">&lt;main&gt;</span>
+  <span class="tag">&lt;section&gt;</span>
+    <span class="tag">&lt;h2&gt;</span>Un bloque temático<span class="tag">&lt;/h2&gt;</span>
+    <span class="tag">&lt;article&gt;</span>Contenido independiente (un post, una tarjeta)<span class="tag">&lt;/article&gt;</span>
+  <span class="tag">&lt;/section&gt;</span>
+<span class="tag">&lt;/main&gt;</span>
+<span class="tag">&lt;footer&gt;</span>Pie de página<span class="tag">&lt;/footer&gt;</span></code></pre>
+    </div>
+    <p>Usarlas no cambia el aspecto visual (por defecto no llevan estilo propio), pero sí ayuda a lectores de pantalla, a buscadores, y a cualquiera que lea el código más tarde &mdash; incluido tú mismo dentro de una semana.</p>
+  </section>
+
+  <section class="tema" id="enlaces">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Enlaces y navegación</h2>
+    <p>El enlace es la etiqueta <code class="inline">&lt;a&gt;</code> con un atributo <code class="inline">href</code>. Puede apuntar a otra página del propio sitio (ruta relativa), a una URL externa, o abrir en una pestaña nueva.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="tag">&lt;a</span> <span class="prop">href</span>=<span class="str">"galeria.html"</span><span class="tag">&gt;</span>Ver galería<span class="tag">&lt;/a&gt;</span>
+<span class="tag">&lt;a</span> <span class="prop">href</span>=<span class="str">"index.html"</span><span class="tag">&gt;</span>&larr; Volver al inicio<span class="tag">&lt;/a&gt;</span>
+<span class="tag">&lt;a</span> <span class="prop">href</span>=<span class="str">"fotos/playa.jpg"</span> <span class="prop">target</span>=<span class="str">"_blank"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;img</span> <span class="prop">src</span>=<span class="str">"fotos/playa-mini.jpg"</span> <span class="prop">alt</span>=<span class="str">"Playa al atardecer"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/a&gt;</span></code></pre>
+    </div>
+    <p>El tercer ejemplo es un patrón habitual para una galería: una miniatura enlaza a la imagen a tamaño completo, abierta en una pestaña nueva (<code class="inline">target="_blank"</code>) para no perder la página de índice.</p>
+  </section>
+
+  <section class="tema" id="imagenes">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Imágenes y multimedia</h2>
+    <p>Una imagen es una etiqueta sin cierre, con <code class="inline">src</code> (la ruta) y <code class="inline">alt</code> (el texto alternativo, obligatorio por accesibilidad).</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="tag">&lt;img</span> <span class="prop">src</span>=<span class="str">"portada.jpg"</span> <span class="prop">alt</span>=<span class="str">"Portada del podcast"</span> <span class="prop">width</span>=<span class="str">"300"</span><span class="tag">&gt;</span></code></pre>
+    </div>
+    <p>Para reproducir audio o vídeo directamente en la página (sin depender de un reproductor externo), HTML5 trae etiquetas dedicadas:</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="tag">&lt;audio</span> <span class="prop">controls</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;source</span> <span class="prop">src</span>=<span class="str">"episodio1.mp3"</span> <span class="prop">type</span>=<span class="str">"audio/mpeg"</span><span class="tag">&gt;</span>
+  Tu navegador no soporta audio HTML5.
+<span class="tag">&lt;/audio&gt;</span>
+
+<span class="tag">&lt;video</span> <span class="prop">controls</span> <span class="prop">width</span>=<span class="str">"480"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;source</span> <span class="prop">src</span>=<span class="str">"clip.mp4"</span> <span class="prop">type</span>=<span class="str">"video/mp4"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/video&gt;</span></code></pre>
+    </div>
+    <p>El atributo <code class="inline">controls</code> añade los botones de reproducir/pausar/volumen sin escribir una sola línea de JavaScript. <code class="inline">&lt;source&gt;</code> permite ofrecer varios formatos del mismo archivo; el navegador usa el primero que entienda.</p>
+  </section>
+
+  <section class="tema" id="tablas">
+    <span class="section-num">05</span>
+    <h2 class="section-title">Tablas</h2>
+    <p>Una tabla es una fila de encabezado (<code class="inline">&lt;th&gt;</code>) y filas de datos (<code class="inline">&lt;td&gt;</code>), todas dentro de <code class="inline">&lt;tr&gt;</code> (table row). Sigue siendo la forma más directa de colocar contenido en una cuadrícula &mdash; por ejemplo, una galería de miniaturas en filas y columnas.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="tag">&lt;table&gt;</span>
+  <span class="tag">&lt;tr&gt;</span>
+    <span class="tag">&lt;td&gt;</span><span class="tag">&lt;img</span> <span class="prop">src</span>=<span class="str">"1.jpg"</span> <span class="prop">alt</span>=<span class="str">"Foto 1"</span><span class="tag">&gt;</span><span class="tag">&lt;/td&gt;</span>
+    <span class="tag">&lt;td&gt;</span><span class="tag">&lt;img</span> <span class="prop">src</span>=<span class="str">"2.jpg"</span> <span class="prop">alt</span>=<span class="str">"Foto 2"</span><span class="tag">&gt;</span><span class="tag">&lt;/td&gt;</span>
+  <span class="tag">&lt;/tr&gt;</span>
+  <span class="tag">&lt;tr&gt;</span>
+    <span class="tag">&lt;td</span> <span class="prop">colspan</span>=<span class="str">"2"</span><span class="tag">&gt;</span><span class="tag">&lt;img</span> <span class="prop">src</span>=<span class="str">"3.jpg"</span> <span class="prop">alt</span>=<span class="str">"Foto 3, panorámica"</span><span class="tag">&gt;</span><span class="tag">&lt;/td&gt;</span>
+  <span class="tag">&lt;/tr&gt;</span>
+<span class="tag">&lt;/table&gt;</span></code></pre>
+    </div>
+    <p><code class="inline">colspan</code> hace que una celda ocupe varias columnas (útil para una imagen panorámica que rompe la cuadrícula); <code class="inline">rowspan</code> hace lo mismo en vertical.</p>
+    <div class="checkpoint">
+      <div class="checkpoint-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        ¿Table o Flexbox/Grid?
+      </div>
+      <p>Para maquetar el diseño <em>general</em> de una página moderna, lo normal es usar CSS (Flexbox o Grid &mdash; ver <a href="teoria-css-fundamentos.html">Fundamentos de CSS</a>). Las tablas se reservan para datos que de verdad son tabulares: una cuadrícula de fotos, una hoja de resultados&hellip; Aun así, siguen siendo una herramienta perfectamente válida y rápida para una galería sencilla.</p>
+    </div>
+  </section>
+
+  <section class="tema" id="formularios">
+    <span class="section-num">06</span>
+    <h2 class="section-title">Formularios</h2>
+    <p>Un formulario agrupa campos de entrada dentro de <code class="inline">&lt;form&gt;</code>. Cada campo necesita un <code class="inline">&lt;label&gt;</code> asociado (por accesibilidad y usabilidad: al pulsar la etiqueta, el foco salta al campo) y el <code class="inline">type</code> de <code class="inline">&lt;input&gt;</code> adecuado a cada dato.</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="tag">&lt;form&gt;</span>
+  <span class="tag">&lt;label</span> <span class="prop">for</span>=<span class="str">"nombre"</span><span class="tag">&gt;</span>Nombre<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;input</span> <span class="prop">type</span>=<span class="str">"text"</span> <span class="prop">id</span>=<span class="str">"nombre"</span> <span class="prop">name</span>=<span class="str">"nombre"</span><span class="tag">&gt;</span>
+
+  <span class="tag">&lt;label</span> <span class="prop">for</span>=<span class="str">"clave"</span><span class="tag">&gt;</span>Contraseña<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;input</span> <span class="prop">type</span>=<span class="str">"password"</span> <span class="prop">id</span>=<span class="str">"clave"</span> <span class="prop">name</span>=<span class="str">"clave"</span><span class="tag">&gt;</span>
+
+  <span class="tag">&lt;label</span> <span class="prop">for</span>=<span class="str">"cumple"</span><span class="tag">&gt;</span>Fecha de nacimiento<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;input</span> <span class="prop">type</span>=<span class="str">"date"</span> <span class="prop">id</span>=<span class="str">"cumple"</span> <span class="prop">name</span>=<span class="str">"cumple"</span><span class="tag">&gt;</span>
+
+  <span class="tag">&lt;label</span> <span class="prop">for</span>=<span class="str">"pais"</span><span class="tag">&gt;</span>País<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;select</span> <span class="prop">id</span>=<span class="str">"pais"</span> <span class="prop">name</span>=<span class="str">"pais"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;option&gt;</span>España<span class="tag">&lt;/option&gt;</span>
+    <span class="tag">&lt;option&gt;</span>Francia<span class="tag">&lt;/option&gt;</span>
+  <span class="tag">&lt;/select&gt;</span>
+
+  <span class="tag">&lt;button</span> <span class="prop">type</span>=<span class="str">"submit"</span><span class="tag">&gt;</span>Enviar<span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;/form&gt;</span></code></pre>
+    </div>
+    <table class="demo">
+      <tr><th><code class="inline">type</code></th><th>Para qué sirve</th></tr>
+      <tr><td><code class="inline">text</code></td><td>Texto libre de una línea.</td></tr>
+      <tr><td><code class="inline">password</code></td><td>Texto oculto con puntos/asteriscos.</td></tr>
+      <tr><td><code class="inline">number</code></td><td>Solo números, con flechas de incremento.</td></tr>
+      <tr><td><code class="inline">date</code></td><td>Selector de fecha nativo del navegador.</td></tr>
+      <tr><td><code class="inline">email</code></td><td>Texto con validación básica de formato de email.</td></tr>
+      <tr><td><code class="inline">checkbox</code> / <code class="inline">radio</code></td><td>Casillas de marcar / opciones excluyentes.</td></tr>
+    </table>
+    <p>Elegir bien el <code class="inline">type</code> no es cosmético: en móvil cambia el teclado que aparece (numérico para <code class="inline">number</code>, con <code class="inline">@</code> a mano para <code class="inline">email</code>&hellip;), y activa validaciones del propio navegador sin escribir JavaScript.</p>
+  </section>
+
+  <section class="tema" id="buenas-practicas">
+    <span class="section-num">07</span>
+    <h2 class="section-title">Buenas prácticas</h2>
+    <ul>
+      <li>Un único <code class="inline">&lt;h1&gt;</code> por página &mdash; es el título principal, no una talla de letra.</li>
+      <li>Todo <code class="inline">&lt;img&gt;</code> lleva <code class="inline">alt</code>, aunque sea descriptivo y corto.</li>
+      <li>Todo campo de formulario lleva su <code class="inline">&lt;label&gt;</code> &mdash; nunca solo un placeholder, que desaparece al escribir.</li>
+      <li>Rutas relativas (<code class="inline">galeria.html</code>) entre páginas del mismo sitio; rutas completas (<code class="inline">https://...</code>) solo para enlaces externos.</li>
+      <li>Valida el HTML de vez en cuando con el <a href="https://validator.w3.org/" target="_blank" rel="noopener">validador de la W3C</a> &mdash; saca errores de etiquetas mal cerradas que el navegador perdona en silencio pero que dan problemas más adelante.</li>
+    </ul>
+  </section>
+
+  <footer class="end">
+    <p>Con esto ya se puede montar el esqueleto de cualquier página. El siguiente paso es darle estilo: <a href="teoria-css-fundamentos.html">Fundamentos de CSS</a>.</p>
+  </footer>
+
+</div>
