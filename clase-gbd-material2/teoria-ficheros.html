@@ -685,6 +685,28 @@ Salamanca
     <h2 class="section-title">Archivos de acceso aleatorio</h2>
     <p>Aparecen con los disquetes y los discos duros. A diferencia de la cinta, permiten colocar el cabezal de lectura directamente en una posición concreta. Para que esto funcione, el soporte se organiza en estructuras de tamaño fijo (sector o clúster), y dentro de cada una los datos ocupan también un número de bytes fijo y conocido de antemano.</p>
 
+    <h3 class="subtema">Los mismos datos, en aleatorio</h3>
+    <p>Los mismos tres registros del ejemplo secuencial anterior, ahora con cada campo recortado o rellenado hasta una longitud fija: Nombre a 20 bytes, Dirección a 25, Ciudad a 12. El carácter <code class="inline">&middot;</code> representa un relleno (normalmente espacios en blanco):</p>
+    <div class="code-panel">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre><code><span class="com">Nombre (20 bytes)   Dirección (25 bytes)      Ciudad (12 bytes)</span>
+Juan Martínez&middot;&middot;&middot;&middot;&middot;&middot;&middot;Calle del Pez, 5&middot;&middot;&middot;&middot;&middot;&middot;&middot;&middot;&middot;Madrid&middot;&middot;&middot;&middot;&middot;&middot;
+Comercial Martínez&middot;&middot;Calle de la cuesta, 10&middot;&middot;&middot;Sevilla&middot;&middot;&middot;&middot;&middot;
+José Sánchez&middot;&middot;&middot;&middot;&middot;&middot;&middot;&middot;Calle Mayor, 7&middot;&middot;&middot;&middot;&middot;&middot;&middot;&middot;&middot;&middot;&middot;Salamanca&middot;&middot;&middot;</code></pre>
+    </div>
+    <p>Ya no hace falta ninguna marca de fin de registro como <code class="inline">&lt;FIN&gt;</code>: si el registro completo mide siempre <strong>20 + 25 + 12 = 57 bytes</strong>, el programa sabe exactamente dónde termina uno y empieza el siguiente con solo contar bytes &mdash; sin necesidad de leer nada para averiguarlo.</p>
+    <table style="border-collapse:collapse;width:100%;font-size:14px;margin:14px 0;">
+      <tr style="background:var(--line-soft);">
+        <th style="border:1px solid var(--line);padding:6px 10px;text-align:left;font-family:'Lexend',sans-serif;">Registro</th>
+        <th style="border:1px solid var(--line);padding:6px 10px;text-align:left;font-family:'Lexend',sans-serif;">Nombre</th>
+        <th style="border:1px solid var(--line);padding:6px 10px;text-align:left;font-family:'Lexend',sans-serif;">Posición (bytes)</th>
+      </tr>
+      <tr><td style="border:1px solid var(--line);padding:6px 10px;">0</td><td style="border:1px solid var(--line);padding:6px 10px;">Juan Martínez</td><td style="border:1px solid var(--line);padding:6px 10px;">0 &ndash; 56</td></tr>
+      <tr><td style="border:1px solid var(--line);padding:6px 10px;">1</td><td style="border:1px solid var(--line);padding:6px 10px;">Comercial Martínez</td><td style="border:1px solid var(--line);padding:6px 10px;">57 &ndash; 113</td></tr>
+      <tr><td style="border:1px solid var(--line);padding:6px 10px;">2</td><td style="border:1px solid var(--line);padding:6px 10px;">José Sánchez</td><td style="border:1px solid var(--line);padding:6px 10px;">114 &ndash; 170</td></tr>
+    </table>
+    <p>Para ir directamente al registro 2 (José Sánchez) no hace falta leer los dos anteriores: basta con saltar a la posición <code class="inline">2 &times; 57 = 114</code> y leer 57 bytes desde ahí. Justo lo contrario del archivo secuencial, donde llegar a José obligaba a leer antes a Juan y a Comercial Martínez.</p>
+
     <h3 class="subtema">Cálculo de la posición de un registro</h3>
     <p>Si se usan caracteres ANSI (1 byte cada uno) y un registro tiene estos campos:</p>
     <ul>
@@ -731,6 +753,40 @@ Salamanca
     <h2 class="section-title">Archivos indexados</h2>
     <p>Son una variante de los archivos de acceso aleatorio. En vez de calcular la posición de un registro a partir de su número de orden, se le añade una <strong>clave</strong> (un campo del propio registro) que permite localizarlo directamente.</p>
     <p>Para ello se guarda una relación entre esa clave y la posición real del registro dentro del archivo &mdash; esta relación (la tabla de índice) se mantiene en memoria RAM para que la búsqueda sea rápida. Una forma habitual de organizar esa tabla es un <strong>árbol binario</strong>, en el que cada nodo guarda una clave y apunta como máximo a dos hijos: el de menor valor a la izquierda, el de mayor valor a la derecha. Tienes ejemplos completos de árboles binarios de índice en el <a href="https://github.com/poliestireno/VARIOS_2026_P/blob/main/clase-gbd-material2/privado/desafio-ficheros-y-mas.md" target="_blank" rel="noopener">desafío FICHEROS_Y_MAS</a>.</p>
+
+    <h3 class="subtema">Los mismos datos, indexados por nombre</h3>
+    <p>El archivo en disco es exactamente el mismo archivo aleatorio de antes &mdash; los tres registros de 57 bytes, en el mismo orden de entrada (Juan, Comercial Martínez, José). Lo único que cambia es que ahora, en memoria, se mantiene además una <strong>tabla de índice</strong> que relaciona el nombre (la clave) con la posición real del registro:</p>
+    <table style="border-collapse:collapse;width:100%;font-size:14px;margin:14px 0;">
+      <tr style="background:var(--line-soft);">
+        <th style="border:1px solid var(--line);padding:6px 10px;text-align:left;font-family:'Lexend',sans-serif;">Clave (nombre)</th>
+        <th style="border:1px solid var(--line);padding:6px 10px;text-align:left;font-family:'Lexend',sans-serif;">Posición en el archivo</th>
+      </tr>
+      <tr><td style="border:1px solid var(--line);padding:6px 10px;">Comercial Martínez</td><td style="border:1px solid var(--line);padding:6px 10px;">57</td></tr>
+      <tr><td style="border:1px solid var(--line);padding:6px 10px;">José Sánchez</td><td style="border:1px solid var(--line);padding:6px 10px;">114</td></tr>
+      <tr><td style="border:1px solid var(--line);padding:6px 10px;">Juan Martínez</td><td style="border:1px solid var(--line);padding:6px 10px;">0</td></tr>
+    </table>
+    <p>Organizada como árbol binario ordenado alfabéticamente por la clave (menor a la izquierda, mayor a la derecha), con José Sánchez como raíz por quedar en medio:</p>
+    <div class="diagram">
+      <svg viewBox="0 0 560 210" font-family="IBM Plex Sans, sans-serif">
+        <line x1="280" y1="75" x2="140" y2="130" stroke="var(--muted)" stroke-width="1.5"/>
+        <line x1="280" y1="75" x2="420" y2="130" stroke="var(--muted)" stroke-width="1.5"/>
+        <text x="195" y="98" text-anchor="middle" font-size="12" fill="var(--muted)">menor</text>
+        <text x="365" y="98" text-anchor="middle" font-size="12" fill="var(--muted)">mayor</text>
+
+        <rect x="205" y="20" width="150" height="55" rx="8" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
+        <text x="280" y="44" text-anchor="middle" font-size="14" fill="var(--ink)">José Sánchez</text>
+        <text x="280" y="63" text-anchor="middle" font-size="12.5" fill="var(--accent-2)">pos 114</text>
+
+        <rect x="45" y="130" width="170" height="55" rx="8" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.5"/>
+        <text x="130" y="154" text-anchor="middle" font-size="14" fill="var(--ink)">Comercial Martínez</text>
+        <text x="130" y="173" text-anchor="middle" font-size="12.5" fill="var(--accent-2)">pos 57</text>
+
+        <rect x="345" y="130" width="170" height="55" rx="8" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.5"/>
+        <text x="430" y="154" text-anchor="middle" font-size="14" fill="var(--ink)">Juan Martínez</text>
+        <text x="430" y="173" text-anchor="middle" font-size="12.5" fill="var(--accent-2)">pos 0</text>
+      </svg>
+    </div>
+    <p>Buscar a &ldquo;Comercial Martínez&rdquo; ya no es leer registro a registro (como en el secuencial) ni calcular una fórmula sobre su número de orden (como en el aleatorio puro): es recorrer el árbol en memoria &mdash; ¿es menor que José? sí, se va a la izquierda &mdash; hasta encontrar la clave, y solo entonces saltar directamente a la posición 57 del archivo en disco. El coste de la búsqueda ya no depende del tamaño del archivo, sino de la altura del árbol.</p>
   </section>
 
   <section class="tema" id="sgbd">
