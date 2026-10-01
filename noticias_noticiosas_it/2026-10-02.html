@@ -1,0 +1,70 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Informe 02/10/2026</title></head><body style="margin:0;padding:12px">
+<p style="max-width:820px;margin:8px auto;font-family:Arial"><a href="index.html" style="color:#0b5cad">← Volver al índice</a></p>
+<div style="max-width:820px;margin:0 auto;font-family:Arial,Helvetica,sans-serif;color:#222;line-height:1.5">
+<h1 style="color:#0b3d6e">Informe diario de ciberseguridad y tecnología – 02/10/2026</h1>
+<p style="font-size:13px;color:#555">Noticias publicadas entre el 1 y el 2 de octubre de 2026. Se omiten las ya cubiertas ayer (Apple CVE-2026-86950, Citrix NetScaler, Cisco SD-WAN, WatchGuard/HPE, Chrome/Firefox/Vite).</p>
+<div style="background:#fff4e5;border-left:6px solid #e67e00;padding:10px 16px;margin:16px 0">
+<h2 style="margin:0 0 8px;color:#b35c00;font-size:18px">⚠ Lo imprescindible de hoy</h2>
+<ol style="margin:0;padding-left:22px">
+<li><b>FortiMail (CVE-2026-104286, CVSS 9.8):</b> escritura arbitraria de ficheros sin autenticar, explotada como zero-day. Aplicar las mitigaciones de Fortinet y actualizar; CISA da de plazo hasta el 04/10.</li>
+<li><b>Next.js autoalojado:</b> actualizar a 16.3.6 / 15.5.26 (CVE-2026-94545, CVSS 9.5, RCE en ImageResponse); INCIBE lo ha avisado como crítico.</li>
+<li><b>Revisar la exposición de FortiMail</b> (versiones 7.2 a 8.0.1): si la interfaz de gestión está accesible desde Internet, restringirla ya y buscar ficheros nuevos o anómalos.</li>
+<li><b>Ransomware KillSec:</b> tras la operación KillSwitch, comprobar si hay datos propios en filtraciones del grupo y mantener copias de seguridad fuera de línea.</li>
+</ol></div>
+<h2 style="color:#0b3d6e">⭐ Destacadas</h2>
+<ol>
+<li><b>Fortinet confirma un zero-day crítico en FortiMail</b> – CVSS 9.8, ya en el catálogo KEV de CISA.</li>
+<li><b>Detenido en Alicante un joven de 16 años presunto líder de KillSec</b> – operación internacional con 10 países y 110 TB de datos asegurados.</li>
+<li><b>Google lanza Gemini 4 Argon y OpenAI GPT-6.1 Sol</b> – nuevos modelos, el primero con acceso inicial para defensores cibernéticos.</li>
+</ol>
+<h2 style="color:#0b3d6e;border-bottom:2px solid #0b3d6e">🔐 Ciberseguridad</h2>
+<h3 style="color:#0b3d6e">Vulnerabilidades críticas y explotadas</h3>
+<ul>
+<li style="margin-bottom:12px"><b>FortiMail: zero-day de escritura arbitraria de ficheros (CVE-2026-104286)</b><br>Un fallo de path traversal con inyección de byte nulo en la interfaz de gestión permite a un atacante sin autenticar escribir ficheros en el sistema mediante peticiones HTTP(S) manipuladas y ejecutar código. Afecta a FortiMail 8.0.0–8.0.1, 7.6.0–7.6.6, 7.4.0–7.4.8 y 7.2.0–7.2.9. CISA lo incluyó en KEV con plazo hasta el 4 de octubre; no consta uso en ransomware.<br><i>Por qué importa: los gateways de correo son objetivo habitual y el fallo ya se explota; hay que aplicar las mitigaciones aunque el parche definitivo tarde.</i><br><a href="https://www.bleepingcomputer.com/news/security/fortinet-warns-of-critical-fortimail-flaw-exploited-in-zero-day-attacks/" style="color:#0b5cad">BleepingComputer</a> · <a href="https://securityonline.info/fortimail-vulnerability-cve-2026-104286/" style="color:#0b5cad">SecurityOnline</a> · <a href="https://www.rapid7.com/db/vulnerabilities/cve-2026-104286/" style="color:#0b5cad">Rapid7</a></li>
+<li style="margin-bottom:12px"><b>Next.js: RCE crítica en ImageResponse (CVE-2026-94545)</b><br>Vercel publicó el 22/09 un parche fuera de ciclo (16.3.6 / 15.5.26) para un fallo de ejecución remota de código con CVSS 9.5 mediante contenido SVG. Se suma a otros dos fallos críticos de agosto (AVIF y ruta en Windows, corregidos en 15.5.24 / 16.3.3). Las aplicaciones alojadas en Vercel están protegidas; las autoalojadas, no.<br><i>Por qué importa: Next.js es muy usado en desarrollo web y las instalaciones propias dependen de que alguien actualice.</i><br><a href="https://securityonline.info/nextjs-rce-vulnerability-cve-2026-94545/" style="color:#0b5cad">SecurityOnline</a> · <a href="https://thehackernews.com/2026/08/nextjs-patches-critical-avif-and.html" style="color:#0b5cad">The Hacker News</a></li>
+</ul>
+<h3 style="color:#0b3d6e">Avisos INCIBE-CERT / CCN-CERT</h3>
+<ul>
+<li style="margin-bottom:12px"><b>INCIBE-CERT publica el 1/10 un aviso crítico de RCE en Next.js y varios fallos medios en Entradium</b><br>El catálogo de alerta temprana incorpora el fallo de Next.js (Vercel) y cuatro vulnerabilidades de gravedad media en Entradium (Crocantickets). No he podido abrir el detalle de los avisos, así que conviene consultarlos en origen.<br><i>Por qué importa: confirma que el fallo de Next.js es relevante para organizaciones españolas.</i><br><a href="https://www.incibe.es/incibe-cert/alerta-temprana/avisos" style="color:#0b5cad">INCIBE-CERT avisos</a></li>
+</ul>
+<h3 style="color:#0b3d6e">Brechas, ransomware y APT</h3>
+<ul>
+<li style="margin-bottom:12px"><b>Operación KillSwitch desarticula el ransomware KillSec</b><br>Policías de 10 países, con dirección alemana y apoyo de Europol, intervinieron el 30/09 la web de filtraciones del grupo y aseguraron al menos 110 TB de datos robados. Se le atribuyen cerca de 1.000 ciberataques desde 2024. Hubo detenciones también en Reino Unido y Rumanía, y EE. UU. acusó a un neerlandés de ayudar a extorsionar a víctimas.<br><i>Por qué importa: es un golpe real a una operación de ransomware como servicio, aunque sus afiliados pueden reagruparse bajo otra marca.</i><br><a href="https://therecord.media/killsec-ransomware-raas-arrests-europe" style="color:#0b5cad">The Record</a> · <a href="https://www.darkreading.com/cyberattacks-data-breaches/killsec-ransomware-mastermind-16-year-old" style="color:#0b5cad">Dark Reading</a></li>
+<li style="margin-bottom:12px"><b>Zscaler: el robo de datos por ransomware crece un 275 % interanual</b><br>El informe 2026 de ThreatLabz cifra en 896,2 TB los datos exfiltrados por los grupos principales, con administraciones, educación y sanidad entre los mayores afectados.<br><i>Por qué importa: la extorsión por filtración pesa ya más que el cifrado, así que no basta con tener copias de seguridad.</i><br><a href="https://securityboulevard.com/2026/10/ransomware-data-theft-surged-275-in-2026-schools-hospitals-and-government-agencies-had-some-of-the-largest-claims" style="color:#0b5cad">Security Boulevard</a></li>
+</ul>
+<h3 style="color:#0b3d6e">España y UE</h3>
+<ul>
+<li style="margin-bottom:12px"><b>Guardia Civil y Mossos detienen en Alicante al presunto administrador de KillSec</b><br>La investigación arrancó en 2025 junto con la oficina del FBI en Puerto Rico. Según Reuters, el detenido, de 16 años, es de nacionalidad rumana.<br><i>Por qué importa: muestra la cooperación policial española e internacional frente al cibercrimen.</i><br><a href="https://www.bankinfosecurity.com/spain-arrests-teen-suspected-running-killsec-ransomware-a-33002" style="color:#0b5cad">BankInfoSecurity</a> · <a href="https://www.scworld.com/brief/teenager-arrested-in-spain-suspected-of-leading-killsec-ransomware-group" style="color:#0b5cad">SC World</a></li>
+<li style="margin-bottom:12px"><b>NIS2 en España: sigue sin ley publicada, según las últimas fuentes localizadas</b><br>Las fuentes más recientes que he encontrado (julio de 2026) indican que la ley no se había publicado en el BOE y apuntan a octubre como horizonte estimado, sin compromiso oficial. No he podido confirmar novedades de esta semana.<br><i>Por qué importa: las entidades esenciales e importantes deben ir preparando medidas aunque falte la norma.</i><br><a href="https://ciberseguridad.creandopatria.com/noticia/nis2-sigue-sin-publicarse-en-el-boe-en-julio-de-2026-espana-encara-la-recta-final-antes-de-la-aplicacion-plena-prevista-para-octubre-2" style="color:#0b5cad">Cyber Seguridad Creando Patria</a></li>
+</ul>
+<h2 style="color:#0b3d6e;border-bottom:2px solid #0b3d6e">🤖 Inteligencia artificial</h2>
+<ul>
+<li style="margin-bottom:12px"><b>Google presenta Gemini 4 Argon</b><br>Ofrece un límite de salida de 1 millón de tokens y precio introductorio de 2 $ por millón de tokens de entrada y 10 $ por millón de salida. La primera cohorte son gobiernos y defensores cibernéticos de confianza, dentro del programa Fairwind.<br><i>Por qué importa: acceso escalonado a modelos potentes para defensa antes que para el público, un patrón creciente en IA y ciberseguridad.</i><br><a href="https://llm-stats.com/ai-news" style="color:#0b5cad">LLM Stats</a></li>
+<li style="margin-bottom:12px"><b>OpenAI lanza GPT-6.1 Sol y la función Dots</b><br>Mejora a GPT-6 Sol en programación agéntica, uso del ordenador y trabajo profesional, y llega a ChatGPT Work y Codex empezando por Pro. Dots permite que el asistente siga avanzando entre conversaciones.<br><i>Por qué importa: agentes que trabajan de forma autónoma ampliarán lo que se delega a la IA y los riesgos asociados.</i><br><a href="https://releasebot.io/updates/openai" style="color:#0b5cad">Releasebot</a></li>
+<li style="margin-bottom:12px"><b>Regulación: el «ómnibus digital» retrasa las obligaciones de alto riesgo del AI Act</b><br>El Consejo adoptó el ómnibus de IA el 29/06, con efectos desde julio y aplazamiento hacia 2027; la parte de datos (RGPD, NIS2, DORA) sigue en negociación. No es novedad de hoy, se recuerda como contexto.<br><i>Por qué importa: cambia el calendario de cumplimiento para empresas españolas.</i><br><a href="https://lexquark.com/es/ai-act-2026-estado-digital-omnibus-obligaciones.html" style="color:#0b5cad">Lexquark</a></li>
+</ul>
+<h2 style="color:#0b3d6e;border-bottom:2px solid #0b3d6e">💻 Informática en general</h2>
+<ul>
+<li style="margin-bottom:12px"><b>Ubuntu 26.10 beta con Linux 7.3 y GNOME 51</b><br>Publicada el 1/10, incluye Mesa 26.2 y coreutils migradas por completo a Rust. Linux 7.3 va por la segunda RC y se espera estable a finales de octubre.<br><i>Por qué importa: anticipa el panorama Linux de otoño, con Rust cada vez más presente en el sistema base.</i><br><a href="https://news.tuxmachines.org/n/2026/10/01/Ubuntu_26_10_Beta_Released_with_Linux_Kernel_7_3_and_GNOME_51.shtml" style="color:#0b5cad">Tux Machines</a></li>
+</ul>
+<p style="font-size:12px;color:#555">Nota: varias fuentes (Moncloa, BleepingComputer, Dark Reading) no se pudieron abrir directamente desde el entorno; los datos proceden de los resúmenes de búsqueda y de otras fuentes enlazadas.</p>
+<h2 style="color:#0b3d6e">📚 Fuentes</h2>
+<ul style="font-size:12px;color:#555">
+<li><a href="https://www.bleepingcomputer.com/news/security/fortinet-warns-of-critical-fortimail-flaw-exploited-in-zero-day-attacks/" style="color:#0b5cad">BleepingComputer – FortiMail</a></li>
+<li><a href="https://securityonline.info/fortimail-vulnerability-cve-2026-104286/" style="color:#0b5cad">SecurityOnline – FortiMail</a></li>
+<li><a href="https://www.rapid7.com/db/vulnerabilities/cve-2026-104286/" style="color:#0b5cad">Rapid7 – CVE-2026-104286</a></li>
+<li><a href="https://securityonline.info/nextjs-rce-vulnerability-cve-2026-94545/" style="color:#0b5cad">SecurityOnline – Next.js</a></li>
+<li><a href="https://thehackernews.com/2026/08/nextjs-patches-critical-avif-and.html" style="color:#0b5cad">The Hacker News – Next.js</a></li>
+<li><a href="https://www.incibe.es/incibe-cert/alerta-temprana/avisos" style="color:#0b5cad">INCIBE-CERT</a></li>
+<li><a href="https://therecord.media/killsec-ransomware-raas-arrests-europe" style="color:#0b5cad">The Record – KillSec</a></li>
+<li><a href="https://www.darkreading.com/cyberattacks-data-breaches/killsec-ransomware-mastermind-16-year-old" style="color:#0b5cad">Dark Reading – KillSec</a></li>
+<li><a href="https://www.bankinfosecurity.com/spain-arrests-teen-suspected-running-killsec-ransomware-a-33002" style="color:#0b5cad">BankInfoSecurity</a></li>
+<li><a href="https://www.scworld.com/brief/teenager-arrested-in-spain-suspected-of-leading-killsec-ransomware-group" style="color:#0b5cad">SC World</a></li>
+<li><a href="https://securityboulevard.com/2026/10/ransomware-data-theft-surged-275-in-2026-schools-hospitals-and-government-agencies-had-some-of-the-largest-claims" style="color:#0b5cad">Security Boulevard – Zscaler</a></li>
+<li><a href="https://ciberseguridad.creandopatria.com/noticia/nis2-sigue-sin-publicarse-en-el-boe-en-julio-de-2026-espana-encara-la-recta-final-antes-de-la-aplicacion-plena-prevista-para-octubre-2" style="color:#0b5cad">Creando Patria – NIS2</a></li>
+<li><a href="https://llm-stats.com/ai-news" style="color:#0b5cad">LLM Stats</a></li>
+<li><a href="https://releasebot.io/updates/openai" style="color:#0b5cad">Releasebot – OpenAI</a></li>
+<li><a href="https://lexquark.com/es/ai-act-2026-estado-digital-omnibus-obligaciones.html" style="color:#0b5cad">Lexquark – AI Act</a></li>
+<li><a href="https://news.tuxmachines.org/n/2026/10/01/Ubuntu_26_10_Beta_Released_with_Linux_Kernel_7_3_and_GNOME_51.shtml" style="color:#0b5cad">Tux Machines – Ubuntu 26.10</a></li>
+</ul></div>
+<p style="max-width:820px;margin:8px auto;font-family:Arial"><a href="index.html" style="color:#0b5cad">← Volver al índice</a></p></body></html>
