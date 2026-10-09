@@ -791,7 +791,13 @@ drwxr-xr-t 1 usuario grupo 0 date directorio
 
 <span class="prompt">$</span> grep -v "^#" main.py
 <span class="com"># -v: invierte la búsqueda (líneas que NO coinciden)</span>
-<span class="com"># ^# : expresión regular, "empieza por #"</span></code></pre>
+<span class="com"># ^# : expresión regular, "empieza por #"</span>
+
+<span class="prompt">$</span> ls -l | grep ".txt"
+<span class="com"># el pipe | envía la salida de ls -l como entrada de grep: solo las líneas con ".txt"</span>
+
+<span class="prompt">$</span> ps aux | grep firefox
+<span class="com"># busca "firefox" entre la lista de procesos en ejecución</span></code></pre>
     </div>
   </section>
 
