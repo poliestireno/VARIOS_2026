@@ -360,6 +360,55 @@
   .callout p { margin: 0 0 8px; font-size: 14.5px; }
   .callout p:last-child { margin-bottom: 0; }
 
+  .ejemplo-card {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--surface);
+    padding: 16px 18px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .ejemplo-num {
+    flex: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--accent-ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  .ejemplo-card p { margin: 0 0 6px; font-size: 14.5px; }
+  .ejemplo-card p:last-child { margin-bottom: 0; }
+
+  .ejemplo-title {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--ink);
+  }
+
+  .ejemplo-rel {
+    font-weight: 400;
+    color: var(--muted);
+    font-size: 13.5px;
+  }
+
+  .ejemplo-formula {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    color: var(--accent-2);
+  }
+
   .checkpoint {
     border-radius: 10px;
     border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
@@ -906,6 +955,72 @@
       </svg>
     </div>
     <p class="diagram-caption">Un alumno puede no estar matriculado en ninguna asignatura todavía, o estarlo en varias; una asignatura puede no tener alumnos aún, o tener varios &mdash; el patrón típico de una relación muchos a muchos sin restricciones.</p>
+
+    <h3 class="subtema">Banco de ejemplos, para dummies</h3>
+    <p>7 casos más, cada uno con el mismo truco de siempre aplicado paso a paso: fija una instancia del lado de enfrente y pregúntate con cuántas del otro lado se puede relacionar &mdash; mínimo y máximo. El número que sale es el que se escribe junto a la entidad que <strong>no</strong> has fijado.</p>
+
+    <div class="ejemplo-card">
+      <div class="ejemplo-num">1</div>
+      <div>
+        <p class="ejemplo-title">DNI &ndash; Persona <span class="ejemplo-rel">(Identifica)</span></p>
+        <p class="ejemplo-formula">DNI (1,1) &mdash; Persona (1,1)</p>
+        <p>Uno a uno, obligatorio en los dos lados. Fija una persona: &iquest;cuántos DNIs tiene? Uno, ni más ni menos &mdash; <code class="inline">(1,1)</code> junto a DNI. Fija un DNI: &iquest;a cuántas personas identifica? A una sola &mdash; <code class="inline">(1,1)</code> junto a Persona.</p>
+      </div>
+    </div>
+
+    <div class="ejemplo-card">
+      <div class="ejemplo-num">2</div>
+      <div>
+        <p class="ejemplo-title">Departamento &ndash; Empleado <span class="ejemplo-rel">(Dirige)</span></p>
+        <p class="ejemplo-formula">Departamento (0,1) &mdash; Empleado (0,N)</p>
+        <p>Fija un empleado: &iquest;cuántos departamentos dirige? Puede que ninguno, puede que varios a la vez &mdash; <code class="inline">(0,N)</code> junto a Departamento. Fija un departamento: &iquest;cuántos empleados lo dirigen? Como mucho uno, y puede estar vacante &mdash; <code class="inline">(0,1)</code> junto a Empleado.</p>
+      </div>
+    </div>
+
+    <div class="ejemplo-card">
+      <div class="ejemplo-num">3</div>
+      <div>
+        <p class="ejemplo-title">Hotel &ndash; Habitación <span class="ejemplo-rel">(Tiene)</span></p>
+        <p class="ejemplo-formula">Hotel (1,1) &mdash; Habitación (1,N)</p>
+        <p>Fija una habitación: &iquest;a cuántos hoteles pertenece? A uno solo &mdash; <code class="inline">(1,1)</code> junto a Hotel. Fija un hotel: &iquest;cuántas habitaciones tiene? Al menos una, si no, no sería hotel &mdash; <code class="inline">(1,N)</code> junto a Habitación.</p>
+      </div>
+    </div>
+
+    <div class="ejemplo-card">
+      <div class="ejemplo-num">4</div>
+      <div>
+        <p class="ejemplo-title">Multa &ndash; Vehículo <span class="ejemplo-rel">(Impuesta_a)</span></p>
+        <p class="ejemplo-formula">Multa (1,1) &mdash; Vehículo (0,N)</p>
+        <p>Fija un vehículo: &iquest;cuántas multas tiene? Ninguna, o varias &mdash; <code class="inline">(0,N)</code> junto a Multa. Fija una multa: &iquest;a cuántos vehículos se le impone? A uno solo, siempre &mdash; <code class="inline">(1,1)</code> junto a Vehículo.</p>
+      </div>
+    </div>
+
+    <div class="ejemplo-card">
+      <div class="ejemplo-num">5</div>
+      <div>
+        <p class="ejemplo-title">Plaza_de_aparcamiento &ndash; Empleado <span class="ejemplo-rel">(Ocupa)</span></p>
+        <p class="ejemplo-formula">Plaza (1,1) &mdash; Empleado (0,1)</p>
+        <p>Fija un empleado: &iquest;cuántas plazas ocupa? Ninguna, o como mucho una &mdash; <code class="inline">(0,1)</code> junto a Plaza. Fija una plaza: &iquest;a cuántos empleados pertenece? Siempre a uno, nunca queda sin dueño &mdash; <code class="inline">(1,1)</code> junto a Empleado.</p>
+      </div>
+    </div>
+
+    <div class="ejemplo-card">
+      <div class="ejemplo-num">6</div>
+      <div>
+        <p class="ejemplo-title">Actor &ndash; Película <span class="ejemplo-rel">(Actúa_en)</span></p>
+        <p class="ejemplo-formula">Actor (1,N) &mdash; Película (1,N)</p>
+        <p>Muchos a muchos, pero obligatorio en los dos lados. Fija una película: &iquest;cuántos actores tiene? Al menos uno, normalmente varios &mdash; <code class="inline">(1,N)</code> junto a Actor. Fija un actor: &iquest;en cuántas películas ha actuado? Al menos en una (si no, no sería actor en nuestra base de datos) &mdash; <code class="inline">(1,N)</code> junto a Película.</p>
+      </div>
+    </div>
+
+    <div class="ejemplo-card">
+      <div class="ejemplo-num">7</div>
+      <div>
+        <p class="ejemplo-title">Proyecto &ndash; Trabajador <span class="ejemplo-rel">(Participa_en)</span></p>
+        <p class="ejemplo-formula">Proyecto (0,N) &mdash; Trabajador (1,N)</p>
+        <p>Fija un trabajador: &iquest;en cuántos proyectos participa? Puede que en ninguno todavía, o en varios &mdash; <code class="inline">(0,N)</code> junto a Proyecto. Fija un proyecto: &iquest;cuántos trabajadores participan en él? Al menos uno &mdash; no puede haber un proyecto sin nadie trabajando &mdash; <code class="inline">(1,N)</code> junto a Trabajador.</p>
+      </div>
+    </div>
   </section>
 
   <section class="tema" id="recursivas">
@@ -1015,6 +1130,36 @@
       </svg>
     </div>
     <p class="diagram-caption">Hace falta proveedor, producto y almacén a la vez para que <code class="inline">cantidad</code> tenga sentido &mdash; el mismo proveedor puede llevar el mismo producto a almacenes distintos, en cantidades distintas. Por eso es una ternaria genuina, no tres binarias sueltas.</p>
+
+    <h3 class="subtema">Más ejemplos con tres entidades, para dummies</h3>
+    <p>El truco con tres entidades es el mismo que con dos, solo que ahora fijas <strong>dos a la vez</strong> y preguntas por la tercera: &ldquo;fijando estas dos instancias concretas, &iquest;con cuántas de la que falta me puedo relacionar &mdash; como mínimo y como máximo?&rdquo;.</p>
+
+    <div class="ejemplo-card">
+      <div class="ejemplo-num">1</div>
+      <div>
+        <p class="ejemplo-title">Alumno &ndash; Módulo &ndash; Convocatoria <span class="ejemplo-rel">(Se_presenta_a)</span></p>
+        <p class="ejemplo-formula">Alumno (0,N) &mdash; Módulo (1,N) &mdash; Convocatoria (1,1)</p>
+        <p>Un alumno se presenta a un módulo en una convocatoria concreta (ordinaria, extraordinaria&hellip;), con una nota asociada a ese hecho. Fijando Módulo y Convocatoria: &iquest;cuántos alumnos se presentan? Ninguno o varios &mdash; <code class="inline">(0,N)</code> junto a Alumno. Fijando Alumno y Convocatoria: &iquest;a cuántos módulos se presenta ese alumno en esa convocatoria? Al menos a uno, puede que a varios &mdash; <code class="inline">(1,N)</code> junto a Módulo. Fijando Alumno y Módulo: &iquest;en cuántas convocatorias a la vez consta esa presentación concreta? Siempre en una &mdash; <code class="inline">(1,1)</code> junto a Convocatoria.</p>
+      </div>
+    </div>
+
+    <div class="ejemplo-card">
+      <div class="ejemplo-num">2</div>
+      <div>
+        <p class="ejemplo-title">Médico &ndash; Paciente &ndash; Centro_de_salud <span class="ejemplo-rel">(Atiende)</span></p>
+        <p class="ejemplo-formula">Médico (1,1) &mdash; Paciente (0,N) &mdash; Centro (1,N)</p>
+        <p>Un médico atiende a un paciente en un centro de salud concreto &mdash; el mismo médico puede trabajar en varios centros, y el mismo par médico&ndash;paciente puede repetirse en centros distintos en fechas distintas. Fijando Paciente y Centro: &iquest;a cuántos médicos ve ahí? A uno &mdash; <code class="inline">(1,1)</code> junto a Médico. Fijando Médico y Centro: &iquest;a cuántos pacientes atiende? Ninguno todavía, o varios &mdash; <code class="inline">(0,N)</code> junto a Paciente. Fijando Médico y Paciente: &iquest;en cuántos centros se repite ese mismo par? En uno o en varios &mdash; <code class="inline">(1,N)</code> junto a Centro.</p>
+      </div>
+    </div>
+
+    <div class="ejemplo-card">
+      <div class="ejemplo-num">3</div>
+      <div>
+        <p class="ejemplo-title">Equipo &ndash; Jugador &ndash; Temporada <span class="ejemplo-rel">(Forma_parte_de)</span></p>
+        <p class="ejemplo-formula">Equipo (1,N) &mdash; Jugador (1,N) &mdash; Temporada (1,N)</p>
+        <p>Un jugador forma parte de la plantilla de un equipo durante una temporada concreta. Fijando Jugador y Temporada: &iquest;en cuántos equipos juega esa temporada? Normalmente en uno, pero permitimos cesión a mitad de temporada &mdash; <code class="inline">(1,N)</code> junto a Equipo. Fijando Equipo y Temporada: &iquest;cuántos jugadores tiene la plantilla? Varios, nunca ninguno &mdash; <code class="inline">(1,N)</code> junto a Jugador. Fijando Equipo y Jugador: &iquest;en cuántas temporadas se repite ese mismo par? Puede repetirse varios años seguidos &mdash; <code class="inline">(1,N)</code> junto a Temporada.</p>
+      </div>
+    </div>
   </section>
 
   <section class="tema" id="debiles">
