@@ -409,6 +409,42 @@
     color: var(--accent-2);
   }
 
+  .tabla-cardinalidad {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0;
+    font-size: 14px;
+  }
+
+  .tabla-cardinalidad th, .tabla-cardinalidad td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--line);
+    text-align: left;
+  }
+
+  .tabla-cardinalidad th {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    color: var(--muted);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .tabla-cardinalidad td.formula {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    color: var(--ink);
+    font-size: 13px;
+  }
+
+  .tabla-cardinalidad td.general {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 600;
+    color: var(--accent-2);
+  }
+
+  .tabla-cardinalidad tr:last-child td { border-bottom: none; }
+
   .checkpoint {
     border-radius: 10px;
     border: 1px solid color-mix(in srgb, var(--accent-2) 35%, var(--line));
@@ -1021,6 +1057,39 @@
         <p>Fija un trabajador: &iquest;en cuántos proyectos participa? Puede que en ninguno todavía, o en varios &mdash; <code class="inline">(0,N)</code> junto a Proyecto. Fija un proyecto: &iquest;cuántos trabajadores participan en él? Al menos uno &mdash; no puede haber un proyecto sin nadie trabajando &mdash; <code class="inline">(1,N)</code> junto a Trabajador.</p>
       </div>
     </div>
+
+    <h3 class="subtema" id="cardinalidad-general">Cardinalidad general de la relación</h3>
+    <p>Una vez puestas las dos cardinalidades de los extremos, suele pedirse un dato más que las resume: la <strong>cardinalidad general</strong> de la relación, que la clasifica en uno de tres tipos &mdash; <code class="inline">1:1</code>, <code class="inline">1:N</code> o <code class="inline">N:M</code>.</p>
+    <p>Se obtiene mirando <strong>solo los máximos</strong> de cada extremo &mdash; el mínimo no interviene aquí, porque solo dice si la participación es opcional u obligatoria, no cuántas instancias máximas entran en juego.</p>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        La regla
+      </div>
+      <p>Coge el máximo de cada extremo (el segundo número de cada par) y combínalos:</p>
+      <p><code class="inline">1</code> con <code class="inline">1</code> &rarr; relación <code class="inline">1:1</code>.</p>
+      <p><code class="inline">1</code> con <code class="inline">N</code> (en cualquier orden) &rarr; relación <code class="inline">1:N</code>; el lado cuyo máximo es 1 es el lado &ldquo;1&rdquo; de la relación, el lado cuyo máximo es N es el lado &ldquo;N&rdquo;.</p>
+      <p><code class="inline">N</code> con <code class="inline">N</code> &rarr; relación <code class="inline">N:M</code>.</p>
+    </div>
+    <p>Aplicado a los ejemplos ya vistos en este apartado, sin tener que volver a razonar nada &mdash; basta con mirar el máximo que ya tiene cada extremo:</p>
+    <table class="tabla-cardinalidad">
+      <thead>
+        <tr><th>Relación</th><th>Cardinalidades en los extremos</th><th>Cardinalidad general</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Persona &ndash; Coche <span class="ejemplo-rel">(Conduce)</span></td><td class="formula">Persona (1,N) &mdash; Coche (1,N)</td><td class="general">N:M</td></tr>
+        <tr><td>Edificio &ndash; Sala <span class="ejemplo-rel">(Está)</span></td><td class="formula">Edificio (1,1) &mdash; Sala (1,N)</td><td class="general">1:N</td></tr>
+        <tr><td>Alumno &ndash; Asignatura <span class="ejemplo-rel">(Se_matricula)</span></td><td class="formula">Alumno (0,N) &mdash; Asignatura (0,N)</td><td class="general">N:M</td></tr>
+        <tr><td>DNI &ndash; Persona <span class="ejemplo-rel">(Identifica)</span></td><td class="formula">DNI (1,1) &mdash; Persona (1,1)</td><td class="general">1:1</td></tr>
+        <tr><td>Departamento &ndash; Empleado <span class="ejemplo-rel">(Dirige)</span></td><td class="formula">Departamento (0,1) &mdash; Empleado (0,N)</td><td class="general">1:N</td></tr>
+        <tr><td>Hotel &ndash; Habitación <span class="ejemplo-rel">(Tiene)</span></td><td class="formula">Hotel (1,1) &mdash; Habitación (1,N)</td><td class="general">1:N</td></tr>
+        <tr><td>Multa &ndash; Vehículo <span class="ejemplo-rel">(Impuesta_a)</span></td><td class="formula">Multa (1,1) &mdash; Vehículo (0,N)</td><td class="general">1:N</td></tr>
+        <tr><td>Plaza_de_aparcamiento &ndash; Empleado <span class="ejemplo-rel">(Ocupa)</span></td><td class="formula">Plaza (1,1) &mdash; Empleado (0,1)</td><td class="general">1:1</td></tr>
+        <tr><td>Actor &ndash; Película <span class="ejemplo-rel">(Actúa_en)</span></td><td class="formula">Actor (1,N) &mdash; Película (1,N)</td><td class="general">N:M</td></tr>
+        <tr><td>Proyecto &ndash; Trabajador <span class="ejemplo-rel">(Participa_en)</span></td><td class="formula">Proyecto (0,N) &mdash; Trabajador (1,N)</td><td class="general">N:M</td></tr>
+      </tbody>
+    </table>
+    <p>Fíjate en el patrón: en <strong>Edificio&ndash;Sala</strong>, <strong>Departamento&ndash;Empleado</strong>, <strong>Hotel&ndash;Habitación</strong> y <strong>Multa&ndash;Vehículo</strong> el lado &ldquo;1&rdquo; de la relación es siempre el que tiene máximo 1 (Edificio, Departamento, Hotel, Multa) &mdash; aunque el mínimo de ese mismo lado cambie de un caso a otro (1, 0, 1, 1 respectivamente). El mínimo decide si la participación es opcional; no cambia si la relación en conjunto es 1:1, 1:N o N:M.</p>
   </section>
 
   <section class="tema" id="recursivas">
