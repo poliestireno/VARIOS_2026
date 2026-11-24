@@ -629,25 +629,72 @@
     <div class="step">
       <div class="step-chip">2</div>
       <div class="step-body">
-        <h3>Crea el proyecto con Vite</h3>
-        <p>Vite es la herramienta que compila el JSX y TypeScript y te sirve la página en local. Crea el proyecto con la plantilla <code class="inline">react-ts</code> (React + TypeScript):</p>
+        <h3>Crea el proyecto (se hace una sola vez)</h3>
+        <p>Abre una terminal en la carpeta donde quieras guardar tus proyectos, escribe <strong>solo esta línea</strong> y pulsa Enter. Crea una carpeta nueva llamada <code class="inline">fichas-equipo</code> con todos los archivos básicos de un proyecto React + TypeScript:</p>
         <div class="term">
 <div class="term-bar"><span></span><span></span><span></span></div>
-<pre><code><span class="prompt">$ </span>npm create vite@latest fichas-equipo -- --template react-ts
-<span class="prompt">$ </span>cd fichas-equipo
-<span class="prompt">$ </span>npm install
-<span class="prompt">$ </span>npm run dev</code></pre>
-</div>        <p class="small">Si Vite te pregunta si quiere instalar y arrancar «ahora», puedes decir que no y ejecutar tú los dos últimos comandos. Deja <code class="inline">npm run dev</code> corriendo en esa terminal durante toda la sesión.</p>
-        <p class="small">Si te pregunta por el <em>linter</em> (la herramienta que avisa de posibles errores de código), elige <strong>ESLint</strong>, que es el estándar y el que verás en la mayoría de tutoriales y proyectos. Oxlint también funciona, pero para esta sesión no cambia nada. Ante cualquier otra pregunta del asistente, deja la opción que viene marcada por defecto.</p>
+<pre><code><span class="prompt">$ </span>npm create vite@latest fichas-equipo -- --template react-ts</code></pre>
+</div>
+        <p>Es como «dar de alta» el proyecto: este comando <strong>no se vuelve a escribir nunca más</strong> para este proyecto. Durante el proceso el asistente te hará algunas preguntas; contéstalas así:</p>
+        <ul>
+          <li>Si pregunta por el <em>linter</em> (la herramienta que avisa de posibles errores de código): <strong>ESLint</strong>, el estándar. Oxlint también funciona, pero hoy no cambia nada.</li>
+          <li>Si pregunta si quieres usar una versión experimental (por ejemplo, <em>rolldown-vite</em>): <strong>No</strong>.</li>
+          <li>Si pregunta <em>«Install with npm and start now?»</em> (instalar y arrancar ahora): <strong>No</strong>. Lo haremos nosotros a mano en los pasos siguientes para entender qué hace cada cosa.</li>
+        </ul>
+        <div class="callout">
+          <div class="callout-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg> Me he quedado con la terminal «colgada» y no puedo escribir</div>
+          <p>Si contestaste que sí (o tu versión no preguntó), Vite instala todo y <strong>arranca el servidor en esa misma terminal</strong>, y verás algo como <code class="inline">Local: http://localhost:5173/</code>. Es normal: esa terminal queda «ocupada» mientras el servidor está encendido, y por eso, si escribes ahí <code class="inline">cd fichas-equipo</code>, no pasa nada. Para pararlo pulsa <strong>Ctrl + C</strong> (con la terminal seleccionada). Volverá a aparecer el símbolo <code class="inline">$</code> y ya puedes seguir con el paso 3. <strong>No repitas el comando de crear</strong>: el proyecto ya existe.</p>
+        </div>
         <div class="checkpoint">
           <div class="checkpoint-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Deberías ver esto</div>
-          <p>La terminal muestra una dirección como <code class="inline">http://localhost:5173</code>. Al abrirla en el navegador aparece la página de ejemplo de Vite con los logos y un contador.</p>
+          <p>Una carpeta nueva <code class="inline">fichas-equipo</code> dentro de la carpeta donde estabas. Compruébalo con <code class="inline">ls</code> (en Windows, <code class="inline">dir</code>).</p>
         </div>
       </div>
     </div>
 
     <div class="step">
       <div class="step-chip">3</div>
+      <div class="step-body">
+        <h3>Entra en la carpeta e instala las dependencias</h3>
+        <p>Ahora hay que meterse dentro de la carpeta del proyecto e instalar las librerías que necesita (React, Vite, etc.):</p>
+        <div class="term">
+<div class="term-bar"><span></span><span></span><span></span></div>
+<pre><code><span class="prompt">$ </span>cd fichas-equipo
+<span class="prompt">$ </span>npm install</code></pre>
+</div>
+        <ul>
+          <li><code class="inline">cd fichas-equipo</code> significa «entra en esa carpeta». Todos los comandos siguientes se ejecutan <strong>desde dentro de ella</strong>. Si dice que no encuentra la carpeta, estás en otro sitio: usa <code class="inline">ls</code> para ver qué hay.</li>
+          <li><code class="inline">npm install</code> descarga las librerías en una carpeta nueva llamada <code class="inline">node_modules</code> (es enorme, no la toques). Tarda unos segundos o un par de minutos según tu conexión. Solo hace falta <strong>una vez por proyecto</strong>.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">4</div>
+      <div class="step-body">
+        <h3>Arranca la página, y cómo pararla</h3>
+        <p>Con todo instalado, enciende el servidor de desarrollo:</p>
+        <div class="term">
+<div class="term-bar"><span></span><span></span><span></span></div>
+<pre><code><span class="prompt">$ </span>npm run dev</code></pre>
+</div>
+        <p>Esto <strong>enciende un pequeño servidor en tu ordenador</strong> que te muestra la página en el navegador y la actualiza sola cada vez que guardas un archivo. La terminal se queda «ocupada» mostrando algo como <code class="inline">Local: http://localhost:5173/</code>: es lo normal, <strong>no la cierres y no escribas más comandos en ella</strong> mientras trabajas.</p>
+        <div class="checkpoint">
+          <div class="checkpoint-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Deberías ver esto</div>
+          <p>Abre esa dirección en el navegador (Ctrl + clic sobre el enlace de la terminal, o cópiala en la barra de direcciones). Aparece la página de ejemplo de Vite con los logos y un contador.</p>
+        </div>
+        <p>Resumen para no perderte:</p>
+        <ul>
+          <li><strong>Parar el servidor:</strong> <strong>Ctrl + C</strong> en la terminal donde corre. La página del navegador deja de funcionar, es lo esperado.</li>
+          <li><strong>Volver a arrancarlo</strong> otro día o tras pararlo: entra en la carpeta (<code class="inline">cd fichas-equipo</code>) y ejecuta <code class="inline">npm run dev</code>. No hace falta volver a crear ni a instalar nada.</li>
+          <li><strong>Necesito escribir otro comando mientras corre el servidor:</strong> abre una <strong>segunda terminal</strong> (en VS Code: menú Terminal → New Terminal, o el botón <code class="inline">+</code>) y deja la primera trabajando.</li>
+        </ul>
+        <p class="small">Truco: abre la carpeta del proyecto en VS Code (<code class="inline">code .</code> desde dentro de ella). Así editas los archivos y tienes la terminal en el mismo sitio.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">5</div>
       <div class="step-body">
         <h3>Déjalo limpio</h3>
         <p>Para partir de cero, vacía el archivo <code class="inline">src/index.css</code> (la plantilla trae estilos que centran todo), borra <code class="inline">src/App.css</code> y su <code class="inline">import</code>, y deja <code class="inline">src/App.tsx</code> así:</p>
