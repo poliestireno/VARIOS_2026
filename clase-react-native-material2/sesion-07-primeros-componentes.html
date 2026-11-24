@@ -605,7 +605,72 @@
       <li>Qué es JSX y en qué se diferencia de verdad de escribir HTML.</li>
       <li>Cómo crear un componente funcional y cómo le llegan datos desde fuera (props).</li>
       <li>Cómo convertir un array de datos en una lista de componentes en pantalla, y por qué React exige la prop <code class="inline">key</code>.</li>
+      <li>Cómo montar un proyecto React con Vite y verlo funcionar en el navegador.</li>
     </ul>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title">Antes de empezar: prepara tu proyecto</h2>
+    <p>Hoy no solo vas a leer: vas a ir construyendo un proyecto React real, paso a paso. Cada bloque de teoría termina con un recuadro <strong>«Pruébalo en tu proyecto»</strong>: copia el código, guarda y mira qué pasa en el navegador. Al final harás la práctica sobre ese mismo proyecto.</p>
+
+    <div class="step">
+      <div class="step-chip">1</div>
+      <div class="step-body">
+        <h3>Comprueba que tienes Node.js</h3>
+        <p>Vite necesita Node.js 18 o superior. Compruébalo en una terminal:</p>
+        <div class="term">
+<div class="term-bar"><span></span><span></span><span></span></div>
+<pre><code><span class="prompt">$ </span>node -v
+<span class="cmt"># v18 o más = perfecto; si no, instala la LTS de nodejs.org</span></code></pre>
+</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">2</div>
+      <div class="step-body">
+        <h3>Crea el proyecto con Vite</h3>
+        <p>Vite es la herramienta que compila el JSX y TypeScript y te sirve la página en local. Crea el proyecto con la plantilla <code class="inline">react-ts</code> (React + TypeScript):</p>
+        <div class="term">
+<div class="term-bar"><span></span><span></span><span></span></div>
+<pre><code><span class="prompt">$ </span>npm create vite@latest fichas-equipo -- --template react-ts
+<span class="prompt">$ </span>cd fichas-equipo
+<span class="prompt">$ </span>npm install
+<span class="prompt">$ </span>npm run dev</code></pre>
+</div>        <p class="small">Si Vite te pregunta si quiere instalar y arrancar «ahora», puedes decir que no y ejecutar tú los dos últimos comandos. Deja <code class="inline">npm run dev</code> corriendo en esa terminal durante toda la sesión.</p>
+        <div class="checkpoint">
+          <div class="checkpoint-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Deberías ver esto</div>
+          <p>La terminal muestra una dirección como <code class="inline">http://localhost:5173</code>. Al abrirla en el navegador aparece la página de ejemplo de Vite con los logos y un contador.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-chip">3</div>
+      <div class="step-body">
+        <h3>Déjalo limpio</h3>
+        <p>Para partir de cero, vacía el archivo <code class="inline">src/index.css</code> (la plantilla trae estilos que centran todo), borra <code class="inline">src/App.css</code> y su <code class="inline">import</code>, y deja <code class="inline">src/App.tsx</code> así:</p>
+        <div class="code-panel">
+<div class="term-bar"><span></span><span></span><span></span></div>
+<pre><code><span class="kw">export</span> <span class="kw">default</span> <span class="kw">function</span> <span class="tag">App</span>() {
+  <span class="kw">return</span> &lt;<span class="tag">h1</span>&gt;Hola, React&lt;/<span class="tag">h1</span>&gt;;
+}</code></pre>
+</div>
+        <div class="checkpoint">
+          <div class="checkpoint-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Deberías ver esto</div>
+          <p>Un «Hola, React» en el navegador. Cambia el texto y guarda: la página se actualiza sola, sin recargar (eso es el <em>hot reload</em> de Vite).</p>
+        </div>
+        <p class="small">A partir de aquí, <strong>todo el código de la sesión va en <code class="inline">src/App.tsx</code></strong> (los componentes, los datos y el <code class="inline">App</code> que los muestra) y los estilos en <code class="inline">src/index.css</code>. Cada vez que un ejemplo defina un componente nuevo, tienes que usarlo dentro de <code class="inline">App</code> para verlo en pantalla.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Alternativa sin instalar nada: online
+      </div>
+      <p>Si no puedes instalar Node (equipo del aula, por ejemplo), abre <strong>https://stackblitz.com</strong> y crea un proyecto con la plantilla <strong>React + TypeScript</strong> (también vale https://codesandbox.io). Obtendrás el mismo <code class="inline">src/App.tsx</code> y una vista previa a la derecha; el resto de la sesión es idéntico. Ojo: en el online los cambios se pierden si no guardas el proyecto con tu cuenta.</p>
+    </div>
   </section>
 
   <section class="block prose">
@@ -633,6 +698,29 @@
       </div>
       <p>Si necesitas dos elementos hermanos, tienen que ir envueltos en un contenedor. Si no quieres añadir un <code class="inline">div</code> de más solo para eso, usa un fragmento vacío: <code class="inline">&lt;&gt;...&lt;/&gt;</code>.</p>
     </div>
+    <div class="checkpoint">
+      <div class="checkpoint-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Pruébalo en tu proyecto: JSX</div>
+      <p>Sustituye el contenido de <code class="inline">src/App.tsx</code> por el componente <code class="inline">Saludo</code> de arriba y úsalo desde <code class="inline">App</code>:</p>
+      <div class="code-panel">
+<div class="term-bar"><span></span><span></span><span></span></div>
+<pre><code><span class="kw">function</span> <span class="tag">Saludo</span>() {
+  <span class="kw">const</span> nombre = <span class="str">"Ana"</span>;
+  <span class="kw">const</span> esDeManana = <span class="kw">new</span> Date().getHours() &lt; 12;
+
+  <span class="kw">return</span> (
+    &lt;<span class="tag">div</span> <span class="prop">className</span>=<span class="str">"saludo"</span>&gt;
+      &lt;<span class="tag">h2</span>&gt;Hola, {nombre}&lt;/<span class="tag">h2</span>&gt;
+      &lt;<span class="tag">p</span>&gt;{esDeManana ? <span class="str">"Buenos días"</span> : <span class="str">"Buenas tardes"</span>}&lt;/<span class="tag">p</span>&gt;
+    &lt;/<span class="tag">div</span>&gt;
+  );
+}
+
+<span class="kw">export</span> <span class="kw">default</span> <span class="kw">function</span> <span class="tag">App</span>() {
+  <span class="kw">return</span> &lt;<span class="tag">Saludo</span> /&gt;;
+}</code></pre>
+</div>
+      <p>Cambia <code class="inline">nombre</code> por el tuyo. Luego cambia <code class="inline">className</code> por <code class="inline">class</code> y mira el aviso que sale en la consola del navegador (F12). Prueba también a devolver dos elementos hermanos sin envolverlos: el editor te marcará el error.</p>
+    </div>
   </section>
 
   <section class="block prose">
@@ -659,21 +747,52 @@
 &lt;<span class="tag">TarjetaPerfil</span> <span class="prop">nombre</span>=<span class="str">"Marta López"</span> <span class="prop">rol</span>=<span class="str">"Diseñadora UX"</span> /&gt;</code></pre>
     </div>
     <p>Escribirlo así tiene una ventaja inmediata frente a dejarlo sin tipar: si en algún sitio usas <code class="inline">&lt;TarjetaPerfil nombre="Ana" /&gt;</code> olvidando <code class="inline">rol</code>, el editor lo subraya en el momento &mdash; antes te habrías enterado con la pantalla mostrando <code class="inline">undefined</code>. Un detalle importante: las props son de solo lectura. <code class="inline">TarjetaPerfil</code> nunca debería reasignar <code class="inline">nombre</code> o <code class="inline">rol</code> &mdash; si necesita cambiar algo con el tiempo, eso es <strong>estado</strong>, y lo veremos en la próxima sesión.</p>
+    <div class="checkpoint">
+      <div class="checkpoint-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Pruébalo en tu proyecto: props</div>
+      <p>Añade el tipo y el componente <code class="inline">TarjetaPerfil</code> a <code class="inline">App.tsx</code> y úsalo varias veces desde <code class="inline">App</code>:</p>
+      <div class="code-panel">
+<div class="term-bar"><span></span><span></span><span></span></div>
+<pre><code><span class="kw">type</span> <span class="tag">TarjetaPerfilProps</span> = {
+  nombre: string;
+  rol: string;
+};
+
+<span class="kw">function</span> <span class="tag">TarjetaPerfil</span>({ nombre, rol }: <span class="tag">TarjetaPerfilProps</span>) {
+  <span class="kw">return</span> (
+    &lt;<span class="tag">div</span> <span class="prop">className</span>=<span class="str">"tarjeta"</span>&gt;
+      &lt;<span class="tag">h3</span>&gt;{nombre}&lt;/<span class="tag">h3</span>&gt;
+      &lt;<span class="tag">p</span>&gt;{rol}&lt;/<span class="tag">p</span>&gt;
+    &lt;/<span class="tag">div</span>&gt;
+  );
+}
+
+<span class="kw">export</span> <span class="kw">default</span> <span class="kw">function</span> <span class="tag">App</span>() {
+  <span class="kw">return</span> (
+    &lt;&gt;
+      &lt;<span class="tag">TarjetaPerfil</span> <span class="prop">nombre</span>=<span class="str">"Marta López"</span> <span class="prop">rol</span>=<span class="str">"Diseñadora UX"</span> /&gt;
+      &lt;<span class="tag">TarjetaPerfil</span> <span class="prop">nombre</span>=<span class="str">"Carlos Ruiz"</span> <span class="prop">rol</span>=<span class="str">"Desarrollador backend"</span> /&gt;
+    &lt;/&gt;
+  );
+}</code></pre>
+</div>
+      <p>Ahora borra <code class="inline">rol="Diseñadora UX"</code> de la primera tarjeta: el editor subraya el error en rojo antes de que guardes. Ese es el beneficio de tipar las props.</p>
+    </div>
     <div class="callout">
       <div class="callout-title">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
         Ejemplo real: la página «Quiénes somos»
       </div>
       <p>El mismo componente sirve para toda la web de una empresa: lo importas en la página del equipo, en el pie de un artículo (autor) o en un panel de administración, y siempre se ve igual porque el diseño vive en un único sitio.</p>
+      <p>Para verlo en tu proyecto, deja <code class="inline">TarjetaPerfil</code> en <code class="inline">App.tsx</code>, añade estas dos funciones y haz que <code class="inline">App</code> devuelva <code class="inline">&lt;&gt;&lt;QuienesSomos /&gt;&lt;hr /&gt;&lt;PieDeArticulo /&gt;&lt;/&gt;</code>.</p>
       <div class="code-panel">
 <div class="term-bar"><span></span><span></span><span></span></div>
 <pre><code><span class="kw">function</span> <span class="tag">QuienesSomos</span>() {
   <span class="kw">return</span> (
-    &lt;section&gt;
-      &lt;h2&gt;<span class="tag">Nuestro</span> equipo&lt;/h2&gt;
+    &lt;<span class="tag">section</span>&gt;
+      &lt;<span class="tag">h2</span>&gt;Nuestro equipo&lt;/<span class="tag">h2</span>&gt;
       &lt;<span class="tag">TarjetaPerfil</span> <span class="prop">nombre</span>=<span class="str">"Marta López"</span> <span class="prop">rol</span>=<span class="str">"Diseñadora UX"</span> /&gt;
       &lt;<span class="tag">TarjetaPerfil</span> <span class="prop">nombre</span>=<span class="str">"Carlos Ruiz"</span> <span class="prop">rol</span>=<span class="str">"Desarrollador backend"</span> /&gt;
-    &lt;/section&gt;
+    &lt;/<span class="tag">section</span>&gt;
   );
 }
 
@@ -711,6 +830,37 @@
 }</code></pre>
     </div>
     <p>React necesita <code class="inline">key</code> para saber qué elemento es cuál entre un render y el siguiente: sin ella, si la lista cambia de orden o pierde un elemento en el medio, React puede confundir dos tarjetas distintas y arrastrar estado o inputs al elemento equivocado. La <code class="inline">key</code> debe ser algo estable y único &mdash; un id de verdad, nunca algo que se recalcule cada vez (como <code class="inline">Math.random()</code>) ni, salvo listas totalmente estáticas, la posición en el array.</p>
+    <div class="checkpoint">
+      <div class="checkpoint-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Pruébalo en tu proyecto: listas y key</div>
+      <p>Deja <code class="inline">TarjetaPerfil</code> como está y añade, encima de <code class="inline">App</code>, el array y <code class="inline">ListaPerfiles</code>. Después cambia el <code class="inline">App</code> para que muestre la lista:</p>
+      <div class="code-panel">
+<div class="term-bar"><span></span><span></span><span></span></div>
+<pre><code><span class="kw">const</span> personas = [
+  { id: 1, nombre: <span class="str">"Marta López"</span>, rol: <span class="str">"Diseñadora UX"</span> },
+  { id: 2, nombre: <span class="str">"Carlos Ruiz"</span>, rol: <span class="str">"Desarrollador backend"</span> },
+  { id: 3, nombre: <span class="str">"Elena Gómez"</span>, rol: <span class="str">"Product manager"</span> },
+];
+
+<span class="kw">function</span> <span class="tag">ListaPerfiles</span>() {
+  <span class="kw">return</span> (
+    &lt;<span class="tag">div</span> <span class="prop">className</span>=<span class="str">"lista"</span>&gt;
+      {personas.map((persona) =&gt; (
+        &lt;<span class="tag">TarjetaPerfil</span>
+          <span class="prop">key</span>={persona.id}
+          <span class="prop">nombre</span>={persona.nombre}
+          <span class="prop">rol</span>={persona.rol}
+        /&gt;
+      ))}
+    &lt;/<span class="tag">div</span>&gt;
+  );
+}
+
+<span class="kw">export</span> <span class="kw">default</span> <span class="kw">function</span> <span class="tag">App</span>() {
+  <span class="kw">return</span> &lt;<span class="tag">ListaPerfiles</span> /&gt;;
+}</code></pre>
+</div>
+      <p>Comprueba que salen tres tarjetas. Ahora quita la línea <code class="inline">key={persona.id}</code>, guarda y abre la consola (F12): verás el aviso de React sobre las <em>keys</em>. Vuelve a ponerla. Por último, añade un cuarto objeto al array y observa cómo aparece una tarjeta nueva sin tocar nada más.</p>
+    </div>
     <div class="callout">
       <div class="callout-title">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
@@ -801,6 +951,7 @@
 
   <section class="block">
     <h2 class="block-title">Práctica: fichas de equipo</h2>
+    <p>Trabaja sobre el mismo proyecto <code class="inline">fichas-equipo</code>: los componentes y los datos en <code class="inline">src/App.tsx</code> y los estilos en <code class="inline">src/index.css</code>. Cada paso tiene su solución desplegable, pero intenta resolverlo tú antes de abrirla. Si algo no se ve, revisa la terminal donde corre <code class="inline">npm run dev</code> y la consola del navegador (F12).</p>
 
     <div class="step">
       <div class="step-chip">1</div>
@@ -818,10 +969,10 @@
 
 <span class="kw">function</span> <span class="tag">TarjetaPerfil</span>({ nombre, rol }: <span class="tag">TarjetaPerfilProps</span>) {
   <span class="kw">return</span> (
-    &lt;div <span class="prop">className</span>=<span class="str">"tarjeta"</span>&gt;
-      &lt;h3&gt;{nombre}&lt;/h3&gt;
-      &lt;p&gt;{rol}&lt;/p&gt;
-    &lt;/div&gt;
+    &lt;<span class="tag">div</span> <span class="prop">className</span>=<span class="str">"tarjeta"</span>&gt;
+      &lt;<span class="tag">h3</span>&gt;{nombre}&lt;/<span class="tag">h3</span>&gt;
+      &lt;<span class="tag">p</span>&gt;{rol}&lt;/<span class="tag">p</span>&gt;
+    &lt;/<span class="tag">div</span>&gt;
   );
 }</code></pre>
 </div>
@@ -869,7 +1020,7 @@
 <div class="term-bar"><span></span><span></span><span></span></div>
 <pre><code><span class="kw">function</span> <span class="tag">ListaPerfiles</span>() {
   <span class="kw">return</span> (
-    &lt;div <span class="prop">className</span>=<span class="str">"lista"</span>&gt;
+    &lt;<span class="tag">div</span> <span class="prop">className</span>=<span class="str">"lista"</span>&gt;
       {personas.map((persona) =&gt; (
         &lt;<span class="tag">TarjetaPerfil</span>
           <span class="prop">key</span>={persona.id}
@@ -877,7 +1028,7 @@
           <span class="prop">rol</span>={persona.rol}
         /&gt;
       ))}
-    &lt;/div&gt;
+    &lt;/<span class="tag">div</span>&gt;
   );
 }</code></pre>
 </div>
@@ -936,13 +1087,13 @@
 
 <span class="kw">function</span> <span class="tag">TarjetaPerfil</span>({ nombre, rol, foto, destacado }: <span class="tag">TarjetaPerfilProps</span>) {
   <span class="kw">return</span> (
-    &lt;div <span class="prop">className</span>=<span class="str">"tarjeta"</span>&gt;
-      &lt;img <span class="prop">src</span>={foto} <span class="prop">alt</span>={nombre} <span class="prop">width</span>={80} <span class="prop">height</span>={80} /&gt;
-      &lt;h3&gt;
-        {nombre} {destacado &amp;&amp; &lt;span&gt;⭐&lt;/span&gt;}
-      &lt;/h3&gt;
-      &lt;p&gt;{rol}&lt;/p&gt;
-    &lt;/div&gt;
+    &lt;<span class="tag">div</span> <span class="prop">className</span>=<span class="str">"tarjeta"</span>&gt;
+      &lt;<span class="tag">img</span> <span class="prop">src</span>={foto} <span class="prop">alt</span>={nombre} <span class="prop">width</span>={80} <span class="prop">height</span>={80} /&gt;
+      &lt;<span class="tag">h3</span>&gt;
+        {nombre} {destacado &amp;&amp; &lt;<span class="tag">span</span>&gt;⭐&lt;/<span class="tag">span</span>&gt;}
+      &lt;/<span class="tag">h3</span>&gt;
+      &lt;<span class="tag">p</span>&gt;{rol}&lt;/<span class="tag">p</span>&gt;
+    &lt;/<span class="tag">div</span>&gt;
   );
 }
 
