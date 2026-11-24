@@ -318,6 +318,25 @@
   .code-panel .prop { color: #8FB8FF; }
   .code-panel .hl { color: var(--code-accent); }
 
+  details.solucion {
+    margin: 14px 0 4px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--surface);
+    padding: 0 16px;
+  }
+  details.solucion summary {
+    cursor: pointer;
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--accent);
+    padding: 12px 0;
+  }
+  details.solucion[open] summary { border-bottom: 1px solid var(--line); margin-bottom: 14px; }
+  details.solucion .code-panel { margin: 0 0 14px; }
+  details.solucion .real { font-size: 14.5px; padding-bottom: 14px; }
+
   .callout {
     border-radius: 10px;
     border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
@@ -640,6 +659,30 @@
 &lt;<span class="tag">TarjetaPerfil</span> <span class="prop">nombre</span>=<span class="str">"Marta López"</span> <span class="prop">rol</span>=<span class="str">"Diseñadora UX"</span> /&gt;</code></pre>
     </div>
     <p>Escribirlo así tiene una ventaja inmediata frente a dejarlo sin tipar: si en algún sitio usas <code class="inline">&lt;TarjetaPerfil nombre="Ana" /&gt;</code> olvidando <code class="inline">rol</code>, el editor lo subraya en el momento &mdash; antes te habrías enterado con la pantalla mostrando <code class="inline">undefined</code>. Un detalle importante: las props son de solo lectura. <code class="inline">TarjetaPerfil</code> nunca debería reasignar <code class="inline">nombre</code> o <code class="inline">rol</code> &mdash; si necesita cambiar algo con el tiempo, eso es <strong>estado</strong>, y lo veremos en la próxima sesión.</p>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Ejemplo real: la página «Quiénes somos»
+      </div>
+      <p>El mismo componente sirve para toda la web de una empresa: lo importas en la página del equipo, en el pie de un artículo (autor) o en un panel de administración, y siempre se ve igual porque el diseño vive en un único sitio.</p>
+      <div class="code-panel">
+<div class="term-bar"><span></span><span></span><span></span></div>
+<pre><code><span class="kw">function</span> <span class="tag">QuienesSomos</span>() {
+  <span class="kw">return</span> (
+    &lt;section&gt;
+      &lt;h2&gt;<span class="tag">Nuestro</span> equipo&lt;/h2&gt;
+      &lt;<span class="tag">TarjetaPerfil</span> <span class="prop">nombre</span>=<span class="str">"Marta López"</span> <span class="prop">rol</span>=<span class="str">"Diseñadora UX"</span> /&gt;
+      &lt;<span class="tag">TarjetaPerfil</span> <span class="prop">nombre</span>=<span class="str">"Carlos Ruiz"</span> <span class="prop">rol</span>=<span class="str">"Desarrollador backend"</span> /&gt;
+    &lt;/section&gt;
+  );
+}
+
+<span class="kw">function</span> <span class="tag">PieDeArticulo</span>() {
+  <span class="kw">return</span> &lt;<span class="tag">TarjetaPerfil</span> <span class="prop">nombre</span>=<span class="str">"Elena Gómez"</span> <span class="prop">rol</span>=<span class="str">"Autora del artículo"</span> /&gt;;
+}</code></pre>
+</div>
+    </div>
+
   </section>
 
   <section class="block prose">
@@ -668,6 +711,26 @@
 }</code></pre>
     </div>
     <p>React necesita <code class="inline">key</code> para saber qué elemento es cuál entre un render y el siguiente: sin ella, si la lista cambia de orden o pierde un elemento en el medio, React puede confundir dos tarjetas distintas y arrastrar estado o inputs al elemento equivocado. La <code class="inline">key</code> debe ser algo estable y único &mdash; un id de verdad, nunca algo que se recalcule cada vez (como <code class="inline">Math.random()</code>) ni, salvo listas totalmente estáticas, la posición en el array.</p>
+    <div class="callout">
+      <div class="callout-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Ejemplo real: datos que llegan de un servidor
+      </div>
+      <p>En una app real el array no se escribe a mano: llega de una API y su contenido cambia (alguien entra al equipo, otro se va). El <code class="inline">.map()</code> no cambia en nada, y la <code class="inline">key</code> es el <code class="inline">id</code> que ya trae cada registro de la base de datos.</p>
+      <div class="code-panel">
+<div class="term-bar"><span></span><span></span><span></span></div>
+<pre><code><span class="com">// respuesta de GET /api/equipo</span>
+[
+  { <span class="str">"id"</span>: 17, <span class="str">"nombre"</span>: <span class="str">"Marta López"</span>, <span class="str">"rol"</span>: <span class="str">"Diseñadora UX"</span> },
+  { <span class="str">"id"</span>: 18, <span class="str">"nombre"</span>: <span class="str">"Carlos Ruiz"</span>, <span class="str">"rol"</span>: <span class="str">"Desarrollador backend"</span> }
+]
+
+<span class="com">// el mismo ListaPerfiles de arriba la pinta sin tocar nada;</span>
+<span class="com">// si Carlos sale del equipo, React solo elimina su tarjeta</span>
+<span class="com">// gracias a que key={persona.id} identifica cada elemento.</span></code></pre>
+</div>
+    </div>
+
     <div class="checkpoint">
       <div class="checkpoint-title">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
@@ -744,6 +807,26 @@
       <div class="step-body">
         <h3>Crea el componente <code class="inline">TarjetaPerfil</code></h3>
         <p>Debe recibir por props al menos <code class="inline">nombre</code> y <code class="inline">rol</code>, y mostrarlos dentro de algo de estructura (un <code class="inline">div</code> con una clase te vale para darle estilo después).</p>
+        <details class="solucion">
+          <summary>Ver solución</summary>
+          <div class="code-panel">
+<div class="term-bar"><span></span><span></span><span></span></div>
+<pre><code><span class="kw">type</span> <span class="tag">TarjetaPerfilProps</span> = {
+  nombre: string;
+  rol: string;
+};
+
+<span class="kw">function</span> <span class="tag">TarjetaPerfil</span>({ nombre, rol }: <span class="tag">TarjetaPerfilProps</span>) {
+  <span class="kw">return</span> (
+    &lt;div <span class="prop">className</span>=<span class="str">"tarjeta"</span>&gt;
+      &lt;h3&gt;{nombre}&lt;/h3&gt;
+      &lt;p&gt;{rol}&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+</div>
+          <div class="real"><strong>Ejemplo real: la página «Quiénes somos» de una web.</strong> Ese mismo componente se escribe una vez y se reutiliza para cada miembro del equipo: si mañana quieres cambiar el diseño de todas las fichas, tocas un solo sitio. Es el mismo patrón de una ficha de producto en una tienda online o de un contacto en una agenda.</div>
+        </details>
       </div>
     </div>
 
@@ -752,6 +835,19 @@
       <div class="step-body">
         <h3>Prepara un array de datos</h3>
         <p>Crea un array con 3 o 4 objetos <code class="inline">{'{ id, nombre, rol }'}</code>, con datos inventados de un equipo de trabajo.</p>
+        <details class="solucion">
+          <summary>Ver solución</summary>
+          <div class="code-panel">
+<div class="term-bar"><span></span><span></span><span></span></div>
+<pre><code><span class="kw">const</span> personas = [
+  { id: 1, nombre: <span class="str">"Marta López"</span>, rol: <span class="str">"Diseñadora UX"</span> },
+  { id: 2, nombre: <span class="str">"Carlos Ruiz"</span>, rol: <span class="str">"Desarrollador backend"</span> },
+  { id: 3, nombre: <span class="str">"Elena Gómez"</span>, rol: <span class="str">"Product manager"</span> },
+  { id: 4, nombre: <span class="str">"Pablo Sanz"</span>, rol: <span class="str">"QA tester"</span> },
+];</code></pre>
+</div>
+          <div class="real"><strong>Ejemplo real: la respuesta de una API.</strong> Cuando tu app pida el equipo a un servidor (<code class="inline">fetch("/api/equipo")</code>), recibirá un JSON con exactamente esta forma: una lista de objetos, cada uno con el <code class="inline">id</code> que le puso la base de datos. Por eso el array de práctica es un buen simulacro de los datos reales.</div>
+        </details>
       </div>
     </div>
 
@@ -767,6 +863,26 @@
           </div>
           <p>Tantas tarjetas en pantalla como personas en el array, y ningún aviso amarillo en la consola sobre <code class="inline">key</code>.</p>
         </div>
+        <details class="solucion">
+          <summary>Ver solución</summary>
+          <div class="code-panel">
+<div class="term-bar"><span></span><span></span><span></span></div>
+<pre><code><span class="kw">function</span> <span class="tag">ListaPerfiles</span>() {
+  <span class="kw">return</span> (
+    &lt;div <span class="prop">className</span>=<span class="str">"lista"</span>&gt;
+      {personas.map((persona) =&gt; (
+        &lt;<span class="tag">TarjetaPerfil</span>
+          <span class="prop">key</span>={persona.id}
+          <span class="prop">nombre</span>={persona.nombre}
+          <span class="prop">rol</span>={persona.rol}
+        /&gt;
+      ))}
+    &lt;/div&gt;
+  );
+}</code></pre>
+</div>
+          <div class="real"><strong>Ejemplo real: un listado de contactos o de mensajes.</strong> La lista de chats de WhatsApp, el feed de Instagram o los resultados de una búsqueda se construyen igual: un array de datos que se convierte en componentes con <code class="inline">.map()</code>. En React Native el equivalente optimizado para listas largas será <code class="inline">FlatList</code>, que usa la misma idea (y también necesita una clave por elemento).</div>
+        </details>
       </div>
     </div>
 
@@ -775,6 +891,28 @@
       <div class="step-body">
         <h3>Dale un mínimo de estilo</h3>
         <p>Con CSS normal (una clase <code class="inline">.tarjeta</code> te sirve): borde, espaciado interior, quizá una disposición en fila con <code class="inline">display: flex</code> y <code class="inline">gap</code> para que las tarjetas queden una junto a otra.</p>
+        <details class="solucion">
+          <summary>Ver solución</summary>
+          <div class="code-panel">
+<div class="term-bar"><span></span><span></span><span></span></div>
+<pre><code>.lista {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.tarjeta {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 16px;
+  min-width: 180px;
+}
+
+.tarjeta h3 { margin: 0 0 4px; }
+.tarjeta p  { margin: 0; color: #666; }</code></pre>
+</div>
+          <div class="real"><strong>Ejemplo real: una cuadrícula de equipo en una web corporativa.</strong> <code class="inline">flex</code> + <code class="inline">gap</code> + <code class="inline">flex-wrap</code> es la receta habitual para las secciones «Nuestro equipo» o «Nuestros clientes»: las tarjetas se colocan en fila y saltan de línea solas cuando no caben, sin escribir media queries.</div>
+        </details>
       </div>
     </div>
 
@@ -785,6 +923,42 @@
       </div>
       <p>Añade una prop <code class="inline">foto</code> con una URL y muestra una <code class="inline">&lt;img&gt;</code> en la tarjeta (búscate avatares de prueba en <code class="inline">https://i.pravatar.cc/150?img=N</code>).</p>
       <p>Añade una prop booleana <code class="inline">destacado</code> y, cuando sea <code class="inline">true</code>, muestra una estrella ⭐ junto al nombre usando un <code class="inline">{'{destacado && <span>⭐</span>}'}</code> dentro del JSX.</p>
+      <details class="solucion">
+          <summary>Ver solución</summary>
+          <div class="code-panel">
+<div class="term-bar"><span></span><span></span><span></span></div>
+<pre><code><span class="kw">type</span> <span class="tag">TarjetaPerfilProps</span> = {
+  nombre: string;
+  rol: string;
+  foto: string;
+  destacado?: boolean;
+};
+
+<span class="kw">function</span> <span class="tag">TarjetaPerfil</span>({ nombre, rol, foto, destacado }: <span class="tag">TarjetaPerfilProps</span>) {
+  <span class="kw">return</span> (
+    &lt;div <span class="prop">className</span>=<span class="str">"tarjeta"</span>&gt;
+      &lt;img <span class="prop">src</span>={foto} <span class="prop">alt</span>={nombre} <span class="prop">width</span>={80} <span class="prop">height</span>={80} /&gt;
+      &lt;h3&gt;
+        {nombre} {destacado &amp;&amp; &lt;span&gt;⭐&lt;/span&gt;}
+      &lt;/h3&gt;
+      &lt;p&gt;{rol}&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}
+
+<span class="kw">const</span> personas = [
+  { id: 1, nombre: <span class="str">"Marta López"</span>, rol: <span class="str">"Diseñadora UX"</span>,
+    foto: <span class="str">"https://i.pravatar.cc/150?img=1"</span>, destacado: true },
+  { id: 2, nombre: <span class="str">"Carlos Ruiz"</span>, rol: <span class="str">"Desarrollador backend"</span>,
+    foto: <span class="str">"https://i.pravatar.cc/150?img=12"</span> },
+];
+
+<span class="com">// en el .map(), pasa también foto y destacado:</span>
+<span class="com">// &lt;TarjetaPerfil key={p.id} nombre={p.nombre} rol={p.rol}</span>
+<span class="com">//                foto={p.foto} destacado={p.destacado} /&gt;</span></code></pre>
+</div>
+          <div class="real"><strong>Ejemplo real: un perfil de usuario con insignia.</strong> Un comentario en un foro o una red social con la foto del autor y una marca de «verificado» o «autor destacado» funciona igual: una prop booleana que activa o no un trozo de JSX con <code class="inline">&amp;&amp;</code>. Si no se pasa, <code class="inline">destacado</code> vale <code class="inline">undefined</code> y no se pinta nada.</div>
+        </details>
     </div>
   </section>
 
